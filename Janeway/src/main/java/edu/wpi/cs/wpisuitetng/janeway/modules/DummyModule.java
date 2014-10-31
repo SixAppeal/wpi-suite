@@ -42,8 +42,8 @@ public class DummyModule implements IJanewayModule {
 		// Setup button panel
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new FlowLayout());
-		buttonPanel.add(new JButton("Func A"));
-		buttonPanel.add(new JButton("Func B"));
+		buttonPanel.add(new JButton("Func FOO"));
+		buttonPanel.add(new JButton("Func BAR"));
 		
 		// Setup the main panel
 		JPanel mainPanel = new JPanel();
