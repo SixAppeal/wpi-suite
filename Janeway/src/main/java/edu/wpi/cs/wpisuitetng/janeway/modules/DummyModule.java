@@ -43,7 +43,7 @@ public class DummyModule implements IJanewayModule {
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new FlowLayout());
 		buttonPanel.add(new JButton("Func FOO"));
-		buttonPanel.add(new JButton("Func BAR"));
+		buttonPanel.add(new JButton("A COOL BUTTON"));
 		
 		// Setup the main panel
 		JPanel mainPanel = new JPanel();
