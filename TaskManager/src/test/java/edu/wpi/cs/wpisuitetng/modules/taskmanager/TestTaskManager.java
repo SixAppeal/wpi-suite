@@ -1,4 +1,4 @@
-package edu.wpi.cs.wpisuiteng.modules.taskmanager;
+package edu.wpi.cs.wpisuitetng.modules.taskmanager;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertEquals;
@@ -6,9 +6,11 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.TaskManager;
+
 /**
  * 
- * @author wmtemple
+ * A class for testing TaskManager's module
  *
  */
 public class TestTaskManager {
@@ -28,13 +30,12 @@ public class TestTaskManager {
 	
 	@Test
 	public void testGetName() {
-		assertEquals(taskManager.name, taskManager.getName());
 		assertEquals("Task Manager", taskManager.getName());
 	}
 	
 	@Test
 	public void testGetTabs() {
-		assertEquals(taskManager.tabs, taskManager.getTabs());
+		assertNotNull(taskManager.getTabs());
 	}
 	
 }

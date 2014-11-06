@@ -1,4 +1,4 @@
-package edu.wpi.cs.wpisuiteng.modules.taskmanager;
+package edu.wpi.cs.wpisuitetng.modules.taskmanager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +11,7 @@ import edu.wpi.cs.wpisuitetng.janeway.modules.JanewayTabModel;
 
 /**
  * 
- * @author wmtemple
+ * @author SixAppeal
  *
  * A module for managing tasks within Teams
  *
