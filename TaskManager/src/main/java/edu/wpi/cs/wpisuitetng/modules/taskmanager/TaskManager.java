@@ -6,12 +6,14 @@ import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
+import edu.wpi.cs.wpisuite.modules.taskmanager.view.TaskDetailView;
 import edu.wpi.cs.wpisuitetng.janeway.modules.IJanewayModule;
 import edu.wpi.cs.wpisuitetng.janeway.modules.JanewayTabModel;
 
 /**
  * 
- * @author SixAppeal
+ * @author SixAppeal, tmeehan
+ * 
  *
  * A module for managing tasks within Teams
  *
@@ -33,7 +35,7 @@ public class TaskManager implements IJanewayModule {
 				name,
 				new ImageIcon(),
 				new JPanel(),
-				new JPanel()));
+				new TaskDetailView()));
 		
 	}
 	
