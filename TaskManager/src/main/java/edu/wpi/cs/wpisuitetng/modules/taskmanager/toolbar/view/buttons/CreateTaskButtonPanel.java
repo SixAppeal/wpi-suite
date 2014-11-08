@@ -9,6 +9,7 @@
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.toolbar.view.buttons;
 
 
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
@@ -25,11 +26,14 @@ import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.ToolbarGroupView;
 
 
 /**
+ * @author troyhughes
+ * @author Raywang
+ * 
  * @author justinhess
  * @version $Revision: 1.0 $
  */
 @SuppressWarnings("serial")
-public class RequirementButtonsPanel extends ToolbarGroupView {
+public class CreateTaskButtonPanel extends ToolbarGroupView {
 	
 	// Initialize the buttons for the toolbar
 	private JButton createTaskButton = new JButton("<html>Create<br />Task</html>");
@@ -40,24 +44,36 @@ public class RequirementButtonsPanel extends ToolbarGroupView {
 	// Initialize the panel for everything to be held
 	private final JPanel contentPanel = new JPanel();
 	
-	public RequirementButtonsPanel() {
+	public CreateTaskButtonPanel() {
 		super(""); //TODO What is this??? I'm so confused. Is this dead code?
+					// Yes, the code is dead :P
 		SpringLayout springLayout = new SpringLayout();
 		
 		// Define the size and layout of the content panel
 		//this.contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.X_AXIS));
 		this.contentPanel.setLayout(springLayout);
-		this.setPreferredWidth(700);
+		this.setPreferredWidth(570);
 		
 		// Set the alignment of the First button (task button)
 		//this.createTaskButton.setHorizontalAlignment(SwingConstants.CENTER);
 		springLayout.putConstraint(SpringLayout.NORTH, createTaskButton, 10, SpringLayout.NORTH, this.contentPanel);
 		springLayout.putConstraint(SpringLayout.WEST, createTaskButton, 10, SpringLayout.WEST, this.contentPanel);
-		springLayout.putConstraint(SpringLayout.SOUTH, createTaskButton, 10, SpringLayout.SOUTH, this.contentPanel);
+		springLayout.putConstraint(SpringLayout.SOUTH, createTaskButton, -10, SpringLayout.SOUTH, this.contentPanel);
+		// Set the width of createTaskButton
+		Dimension d_task = createTaskButton.getPreferredSize();
+		d_task.width = 250;
+		createTaskButton.setPreferredSize(d_task); 
 		
+		
+		
+		// Layout of the create Panel Button
 		springLayout.putConstraint(SpringLayout.NORTH, createPanelButton, 10, SpringLayout.NORTH, this.contentPanel);
 		springLayout.putConstraint(SpringLayout.WEST, createPanelButton, 10, SpringLayout.EAST, createTaskButton);
-		springLayout.putConstraint(SpringLayout.SOUTH, createPanelButton, 10, SpringLayout.SOUTH, this.contentPanel);
+		springLayout.putConstraint(SpringLayout.SOUTH, createPanelButton, -10, SpringLayout.SOUTH, this.contentPanel);
+//		springLayout.putConstraint(SpringLayout.EAST, createPanelButton, 40, SpringLayout.EAST, this.contentPanel);
+		
+		createPanelButton.setPreferredSize(d_task); 
+		
 		
 		// the action listener for the Create Requirement Button
 		createTaskButton.setAction(createTask);
@@ -67,6 +83,7 @@ public class RequirementButtonsPanel extends ToolbarGroupView {
 		
 		contentPanel.add(createTaskButton);
 		contentPanel.add(createPanelButton);
+		// set opaque is for the weird gradient toggle thing that it does when you hover over the pannel that the buttons are on
 		contentPanel.setOpaque(false);
 		// Put everything above on the pannel
 		this.add(contentPanel);
@@ -92,14 +109,16 @@ public class RequirementButtonsPanel extends ToolbarGroupView {
 	
 	private class CreateTaskAction extends AbstractAction {
 		/**
-		 * 
+		 * @author troyhughes
+		 * This is an action listener for the button Create Task - this should communicate with the 
+		 * controller to make new tasks etc. 
 		 */
 		private static final long serialVersionUID = 2L;
 		private boolean decision = false;
 		
 		public CreateTaskAction() {
 			putValue(NAME, "Create Task");
-			putValue(SHORT_DESCRIPTION, "Some short description");
+			putValue(SHORT_DESCRIPTION, "FUCK YEA, I'M HOVER TEXT");
 		}
 		public void actionPerformed(ActionEvent e) {
 			if(decision){
@@ -114,14 +133,16 @@ public class RequirementButtonsPanel extends ToolbarGroupView {
 	}
 	private class CreatePanelAction extends AbstractAction {
 		/**
-		 * 
+		 * @author troyhughes
+		 * This is an action listener for the button Create panel - this should communicate with the 
+		 * controller to make new panels that tasks will be stored on. 
 		 */
 		private static final long serialVersionUID = 2L;
 		private boolean decision = false;
 		
 		public CreatePanelAction() {
 			putValue(NAME, "Create Panel");
-			putValue(SHORT_DESCRIPTION, "Some short description");
+			putValue(SHORT_DESCRIPTION, "and I'm not :(");
 		}
 		public void actionPerformed(ActionEvent e) {
 			if(decision){

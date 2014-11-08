@@ -19,7 +19,7 @@ import javax.swing.border.EtchedBorder;
 
 import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.DefaultToolbarView;
 import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.ToolbarGroupView;
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.toolbar.view.buttons.RequirementButtonsPanel;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.toolbar.view.buttons.CreateTaskButtonPanel;
 
 /**
  * Sets up upper toolbar of RequirementManager tab
@@ -30,7 +30,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.toolbar.view.buttons.Requireme
  */
 public class ToolbarView  extends DefaultToolbarView {
 
-	public RequirementButtonsPanel reqButton = new RequirementButtonsPanel();
+	public CreateTaskButtonPanel reqButton = new CreateTaskButtonPanel();
 	
 	/**
 	 * Creates and positions option buttons in upper toolbar
@@ -47,7 +47,7 @@ public class ToolbarView  extends DefaultToolbarView {
 	 * Method getReqButton.
 	
 	 * @return RequirementButtonsPanel */
-	public RequirementButtonsPanel getReqButton() {
+	public CreateTaskButtonPanel getReqButton() {
 		return reqButton;
 	}
 }
