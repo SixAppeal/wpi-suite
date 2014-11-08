@@ -25,10 +25,10 @@ public class TestGateway {
 	@Before
 	public void setup() {
 		gateway = new Gateway();
-		presenter1 = new TestPresenter(gateway);
-		presenter2 = new TestPresenter(gateway);
-		view1 = new TestView(gateway);
-		view2 = new TestView(gateway);
+		presenter1 = new TestPresenter();
+		presenter2 = new TestPresenter();
+		view1 = new TestView();
+		view2 = new TestView();
 		
 		gateway.addPresenter("presenter1", presenter1);
 		gateway.addPresenter("presenter2", presenter2);

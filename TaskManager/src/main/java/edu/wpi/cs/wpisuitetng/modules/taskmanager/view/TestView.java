@@ -6,16 +6,23 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
  * This class exists for the sole purpose of testing the gateway
  * @author Will Van Rensselaer, Dan Seaman
  */
-public class TestView extends AbsView {
+public class TestView implements IView {
 	int number;
+	Gateway gateway;
 	
 	/**
 	 * Constructs a TestView
 	 */
-	public TestView(Gateway gateway) {
-		super(gateway);
-		
+	public TestView() {
 		this.number = 0;
+	}
+	
+	/**
+	 * @see IView.setGateway
+	 */
+	@Override
+	public void setGateway(Gateway gateway) {
+		this.gateway = gateway;
 	}
 	
 	/**

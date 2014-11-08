@@ -1,0 +1,14 @@
+package edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter;
+
+/**
+ * Presenter interface that all presenters implement
+ * 
+ * @author Will Van Rensselaer, Dan Seaman
+ */
+public interface IPresenter {
+	/**
+	 * This should set the gateway to be used by the presenter
+	 * @param gateway A Gateway object
+	 */
+	public void setGateway(Gateway gateway);
+}

@@ -2,22 +2,25 @@ package edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter;
 
 import java.util.HashMap;
 import java.lang.reflect.Method;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
 
 /**
  * A gateway that allows indirect communication between presenters and views.
+ * All presenters should implement IPresenter and all views should implement
+ * IView.
  * 
  * @author Will Van Rensselaer, Dan Seaman
  */
 public class Gateway {
-	HashMap<String, Object> presenters;
-	HashMap<String, Object> views;
+	HashMap<String, IPresenter> presenters;
+	HashMap<String, IView> views;
 	
 	/**
 	 * Constructs a Gateway
 	 */
 	public Gateway() {
-		this.presenters = new HashMap<String, Object>();
-		this.views = new HashMap<String, Object>();
+		this.presenters = new HashMap<String, IPresenter>();
+		this.views = new HashMap<String, IView>();
 	}
 	
 	/**
@@ -25,7 +28,8 @@ public class Gateway {
 	 * @param name The name of the presenter
 	 * @param presenter The presenter to route to
 	 */
-	public void addPresenter(String name, Object presenter) {
+	public void addPresenter(String name, IPresenter presenter) {
+		presenter.setGateway(this);
 		this.presenters.put(name, presenter);
 	}
 	
@@ -34,7 +38,8 @@ public class Gateway {
 	 * @param name The name of the view
 	 * @param view The view to route to
 	 */
-	public void addView(String name, Object view) {
+	public void addView(String name, IView view) {
+		view.setGateway(this);
 		this.views.put(name, view);
 	}
 	
