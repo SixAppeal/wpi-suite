@@ -1,5 +1,6 @@
 package edu.wpi.cs.wpisuitetng.modules.taskmanager;
 
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,7 +9,7 @@ import javax.swing.JPanel;
 
 import edu.wpi.cs.wpisuitetng.janeway.modules.IJanewayModule;
 import edu.wpi.cs.wpisuitetng.janeway.modules.JanewayTabModel;
-
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.toolbar.*;
 /**
  * 
  * @author SixAppeal
@@ -22,6 +23,8 @@ public class TaskManager implements IJanewayModule {
 	String name;
 	List<JanewayTabModel> tabs;
 	
+	TestToolbar attempt = new TestToolbar();
+	
 	/**
 	 * Constructs a TaskManager module and its tabs for the Janeway client.
 	 */
@@ -32,8 +35,9 @@ public class TaskManager implements IJanewayModule {
 		tabs.add(new JanewayTabModel(
 				name,
 				new ImageIcon(),
-				new JPanel(),
+				attempt,
 				new JPanel()));
+				//new JPanel()));
 		
 	}
 	
