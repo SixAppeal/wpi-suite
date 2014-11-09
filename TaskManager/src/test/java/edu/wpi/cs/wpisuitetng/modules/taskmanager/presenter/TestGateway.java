@@ -86,13 +86,15 @@ public class TestGateway {
 	 */
 	@Test
 	public void testToPresenter() {
-		gateway.toPresenter("presenter1", "testMethod", 1);
+		gateway.toPresenter("presenter1", "testMethod", 1, false);
 		assertEquals(1, presenter1.getNumber());
-		gateway.toPresenter("presenter2", "testMethod", 4);
+		assertEquals(false, presenter1.getBool());
+		gateway.toPresenter("presenter2", "testMethod", 4, false);
 		assertEquals(4, presenter2.getNumber());
+		assertEquals(false, presenter2.getBool());
 		
 		// Should throw exception
-		gateway.toPresenter("presenter3", "testMethod", 4);
-		gateway.toPresenter("presenter2", "otherMethod", 5);
+		gateway.toPresenter("presenter3", "testMethod", 4, true);
+		gateway.toPresenter("presenter2", "otherMethod", 5, false);
 	}
 }

@@ -29,8 +29,8 @@ public class TestView implements IView {
 	 * A method to call from the gateway
 	 * @param data The data passed to this view from a presenter
 	 */
-	public void testMethod(Object data) {
-		this.number = ((Integer) data).intValue();
+	public void testMethod(Integer data) {
+		this.number = data.intValue();
 	}
 	
 	/**

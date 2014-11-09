@@ -8,6 +8,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
  */
 public class TestPresenter implements IPresenter {
 	int number;
+	boolean bool;
 	Gateway gateway;
 	
 	/**
@@ -15,6 +16,7 @@ public class TestPresenter implements IPresenter {
 	 */
 	public TestPresenter() {
 		this.number = 0;
+		this.bool = true;
 	}
 	
 	/**
@@ -29,15 +31,24 @@ public class TestPresenter implements IPresenter {
 	 * A test method for a view to call through the gateway
 	 * @param data Data passed to the presenter
 	 */
-	public void testMethod(Object data) {
-		this.number = ((Integer) data).intValue();
+	public void testMethod(Integer data, Boolean bool) {
+		this.number = data.intValue();
+		this.bool = bool;
 	}
 	
 	/**
-	 * Gets the number passed to this presenter from the gateway
+	 * Gets the number passed to this presenter from the gateway.
 	 * @return A number
 	 */
 	public int getNumber() {
 		return this.number;
+	}
+	
+	/**
+	 * Gets the boolean passed to this presenter from the gateway.
+	 * @return A boolean
+	 */
+	public boolean getBool() {
+		return this.bool;
 	}
 }

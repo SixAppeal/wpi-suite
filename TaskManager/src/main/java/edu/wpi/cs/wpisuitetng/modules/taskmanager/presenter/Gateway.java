@@ -45,52 +45,55 @@ public class Gateway {
 	}
 	
 	/**
-	 * Calls a method of the specified view and passes it an object.
-	 * @param name The name of the view
-	 * @param methodName The method on the view to call
-	 * @param data Some data to pass to the view
+	 * Helper function to toView and toPresenter.
+	 * @param obj The presenter or view object
+	 * @param name The name of the view or presenter
+	 * @param methodName The name of the method to call
+	 * @param args Arguments to pass to the method
 	 */
-	public void toView(String name, String methodName, Object data) {
-		Object view = this.views.get(name);
-		if (view == null) {
-			System.err.println("View [" + name + "] is not assigned to this gateway.");
-			return;
-		}
+	private void toObject(Object obj, String name, String methodName, Object[] args) {
+		Class<?>[] classes = new Class[args.length];
 		
 		try {
-			Method method = view.getClass().getDeclaredMethod(methodName, Object.class);
-			method.invoke(view, data);
-		} catch (NoSuchMethodException e) {
-			System.err.println("Method [" + methodName + "(Object)] does not exist on view [" + name + "].");
-			// e.printStackTrace();
+			for (int i = 0; i < args.length; i++) {
+				classes[i] = args[i].getClass();
+			}
+			
+			Method method = obj.getClass().getDeclaredMethod(methodName, classes);
+			method.invoke(obj, args);
 		} catch (Exception e) {
-			System.err.println("Error routing to " + name + "." + methodName);
-			// e.printStackTrace();
+			System.err.print("Gateway Error: " + name + "." + methodName + "(");
+			for (int i = 0; i < classes.length; i++) {
+				if (i != 0) {
+					System.err.print(", ");
+				}
+				System.err.print(classes[i].getName());
+			}
+			System.err.println("): " + e.getClass().getName());
 		}
 	}
 	
 	/**
-	 * Calls a method of the specified presenter and passes it an object.
+	 * Calls a method of the specified view and passes it some arguments.
+	 * @param name The name of the view
+	 * @param methodName The method on the view to call
+	 * @param args Arguments to pass to the view method
+	 */
+	public void toView(String name, String methodName, Object... args) {
+		Object view = this.views.get(name);
+		
+		toObject(view, name, methodName, args);
+	}
+	
+	/**
+	 * Calls a method of the specified presenter and passes it some arguments.
 	 * @param name The name of the presenter
 	 * @param methodName The method on the presenter to call
-	 * @param data Some data to pass to the presenter
+	 * @param args Arguments to pass to the method
 	 */
-	public void toPresenter(String name, String methodName, Object data) {
+	public void toPresenter(String name, String methodName, Object... args) {
 		Object presenter = this.presenters.get(name);
-		if (presenter == null) {
-			System.err.println("Presenter [" + name + "] is not assigned to this gateway.");
-			return;
-		}
 		
-		try {
-			Method method = presenter.getClass().getDeclaredMethod(methodName, Object.class);
-			method.invoke(presenter, data);
-		} catch (NoSuchMethodException e) {
-			System.err.println("Method [" + methodName + "(Object)] does not exist on presenter [" + name + "].");
-			// e.printStackTrace();
-		} catch (Exception e) {
-			System.err.println("Error routing to " + name + "." + methodName);
-			// e.printStackTrace();
-		}
+		toObject(presenter, name, methodName, args);
 	}
 }
