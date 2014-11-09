@@ -132,9 +132,38 @@ static final long serialVersionUID = 8609340016893431330L;
 
     /**
      * Sets the instance of TaskModel
-     * @param instance
+     * @param instance 
      */
 	public static void setInstance(TaskModel instance) {
 	    TaskModel.instance = instance;
     }
+	
+	/**
+	 * Tells you which tasks are in what column
+	 * @param columnID Number column that the task is in
+	 * @return all the tasks in the given column
+	 */
+	public List<Task> getTaskFromColumn(Integer columnID){
+		List<Task> tasksInColumn = new ArrayList<Task>();
+		for(Task t : Tasks){
+			if (t.getColumn() == columnID){
+				tasksInColumn.add(t);
+			}
+		}
+		return tasksInColumn;
+	}
+	
+	/**
+	 * Allows a tasks to be put in a different column
+	 * @param taskID The ID number of the Task to be returned
+	 * @param columnID Number of the column you want to put the task in
+	 */
+	public void changeColumn(int taskID, int columnID){
+		for(Task t : Tasks){
+			if (t.getId() == taskID){
+				t.setColumn(columnID);
+				break;
+			}
+		}
+	}
 }

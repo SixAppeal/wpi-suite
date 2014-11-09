@@ -29,6 +29,7 @@ public class Task extends AbstractModel {
 	Integer actualEffort;
 	Date dueDate;
 	List<Activity> activities;
+	Integer column;
 	//List<Requirement> associatedRequirement;
 
 
@@ -48,6 +49,7 @@ public class Task extends AbstractModel {
 		this.actualEffort = -1;
 		this.dueDate = null;
 		this.activities = new LinkedList<Activity>();
+		this.column = 0;
 	}
 
 
@@ -75,6 +77,7 @@ public class Task extends AbstractModel {
 		this.actualEffort = actualEffort;
 		this.dueDate = dueDate;
 		this.activities = activities;
+		this.column = 0;
 	}
 
 	/**
@@ -100,6 +103,7 @@ public class Task extends AbstractModel {
 		this.actualEffort = actualEffort;
 		this.dueDate = dueDate;
 		this.activities = new LinkedList<Activity>();
+		this.column = 0;
 	}
 
 	/**
@@ -116,6 +120,7 @@ public class Task extends AbstractModel {
 		this.actualEffort = -1;
 		this.dueDate = null;
 		this.activities = new LinkedList<Activity>();
+		this.column = 0;
 	}
 
 
@@ -171,6 +176,7 @@ public class Task extends AbstractModel {
         this.status = toCopyFrom.status;
         this.dueDate = toCopyFrom.dueDate;
         this.activities = toCopyFrom.activities;
+        this.column = toCopyFrom.column;
        
     }
 	
@@ -286,5 +292,15 @@ public class Task extends AbstractModel {
 	public void setActivities(List<Activity> activities) {
 		this.activities = activities;
 	}
+	
+	public Integer getColumn() {
+		return column;
+	}
+
+
+	public void setColumn(Integer column) {
+		this.column = column;
+	}
+
 
 }
