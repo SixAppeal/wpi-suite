@@ -65,7 +65,7 @@ public class Task extends AbstractModel {
 	 * @param dueDate when the task is due
 	 * @param activities list of activities (comments that members can put) for the task
 	 */
-	Task(String title, String description, TaskStatus status,
+	public Task(String title, String description, TaskStatus status,
 			List<Member> assignedTo, Integer estimatedEffort,
 			Integer actualEffort, Date dueDate, List<Activity> activities) {
 		super();

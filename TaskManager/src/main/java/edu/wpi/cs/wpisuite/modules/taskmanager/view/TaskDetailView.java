@@ -10,6 +10,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
+
 /**
  * 
  * @author tmeehan
@@ -19,8 +21,7 @@ import javax.swing.SwingConstants;
  *
  */
 
-class TaskModel{}
-
+@SuppressWarnings("unused")
 public class TaskDetailView extends JPanel {
 
 	/**
@@ -28,10 +29,16 @@ public class TaskDetailView extends JPanel {
 	 */
 	private static final long serialVersionUID = -3161594397243801607L;
 
-	private TaskModel task;
+	private Task task;
 	JLabel idLabel;
+	JLabel nameLabel;
+	JLabel dateLabel;
+	JLabel desLabel;
+	JLabel statLabel;
+	JLabel estLabel;
+	JLabel actLabel;
 	
-	public TaskDetailView(TaskModel task){
+	public TaskDetailView(Task task){
 		
 		this.task = task;
 		
@@ -41,11 +48,49 @@ public class TaskDetailView extends JPanel {
 		
 		//Start sticking contents in Panel
 		
-		idLabel = new JLabel("Task ID: " + task.id.toString() + " ");
+		
+		idLabel = new JLabel("Task ID: " + task.getId());
 		idLabel.setAlignmentX(RIGHT_ALIGNMENT);
 		idLabel.setForeground(new Color(155, 155, 155));
 		
 		this.add(idLabel);
+		
+		nameLabel = new JLabel("Task name: " + task.getTitle());
+		nameLabel.setAlignmentX(LEFT_ALIGNMENT);
+		nameLabel.setForeground(new Color(0, 0, 0));
+		
+		this.add(nameLabel);
+		
+		dateLabel = new JLabel ("Task due date: " + task.getDueDate().toString());
+		dateLabel.setAlignmentX(LEFT_ALIGNMENT);
+		dateLabel.setForeground(new Color(0, 0, 0));
+		
+		this.add(dateLabel);
+		
+		desLabel = new JLabel ("Task description: " + task.getDescription());
+		desLabel.setAlignmentX(LEFT_ALIGNMENT);
+		desLabel.setForeground(new Color (0, 0, 0));
+		
+		this.add(desLabel);
+		
+		statLabel = new JLabel ("Task status: " + task.getStatus().toString());
+		statLabel.setAlignmentX(LEFT_ALIGNMENT);
+		statLabel.setForeground(new Color (0, 0, 0));
+		
+		this.add(statLabel);
+		
+		estLabel = new JLabel ("Estimated effort: " + task.getEstimatedEffort().toString());
+		estLabel.setAlignmentX(LEFT_ALIGNMENT);
+		estLabel.setForeground(new Color (0, 0, 0));
+		
+		this.add(estLabel);
+		
+		actLabel = new JLabel ("Actual effort: " + task.getActualEffort().toString());
+		actLabel.setAlignmentX(LEFT_ALIGNMENT);
+		actLabel.setForeground(new Color (0, 0, 0));
+		
+		this.add(actLabel);
+
 		//this.add(new JLabel("Title", SwingConstants.LEFT));
 		
 	}
