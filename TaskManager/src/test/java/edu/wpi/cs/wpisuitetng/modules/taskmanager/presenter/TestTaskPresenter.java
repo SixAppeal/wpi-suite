@@ -7,8 +7,9 @@ import org.junit.Test;
 
 /**
  * Tests for the TaskPresenter class
- * @author Will Van Rensselaer, Dan Seaman
- *
+ * 
+ * @author wavanrensselaer
+ * @author dpseaman
  */
 public class TestTaskPresenter {
 

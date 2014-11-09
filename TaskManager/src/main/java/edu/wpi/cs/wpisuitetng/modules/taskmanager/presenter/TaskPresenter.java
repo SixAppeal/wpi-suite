@@ -8,7 +8,9 @@ import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
 
 /**
  * A presenter that handles updating of task models and task-related views
- * @author Will Van Rensselaer, Dan Seaman
+ *
+ * @author wavanrensselaer
+ * @author dpseaman
  */
 
 public class TaskPresenter implements IPresenter{

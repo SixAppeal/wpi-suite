@@ -10,7 +10,9 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.TestView;
 
 /**
  * Tests the methods of the Gateway class
- * @author Will Van Rensselaer, Dan Seaman
+ * 
+ * @author wavanrensselaer
+ * @author dpseaman
  */
 public class TestGateway {
 	TestPresenter presenter1;

@@ -3,7 +3,8 @@ package edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter;
 /**
  * Presenter interface that all presenters implement
  * 
- * @author Will Van Rensselaer, Dan Seaman
+ * @author wavanrensselaer
+ * @author dpseaman
  */
 public interface IPresenter {
 	/**

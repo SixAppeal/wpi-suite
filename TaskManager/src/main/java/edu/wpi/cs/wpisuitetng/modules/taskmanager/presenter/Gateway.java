@@ -10,7 +10,8 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
  * All presenters should implement IPresenter and all views should implement
  * IView.
  * 
- * @author Will Van Rensselaer, Dan Seaman
+ * @author wavanrensselaer
+ * @author dpseaman
  */
 public class Gateway {
 	HashMap<String, IPresenter> presenters;

@@ -5,7 +5,8 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
 /**
  * View interface that all views implement
  * 
- * @author Will Van Rensselaer, Dan Seaman
+ * @author wavanrensselaer
+ * @author dpseaman
  */
 public interface IView {
 	/**

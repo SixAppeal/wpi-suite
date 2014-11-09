@@ -4,7 +4,9 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
 
 /**
  * This class exists for the sole purpose of testing the Gateway.
- * @author Will Van Rensselaer, Dan Seaman
+ * 
+ * @author wavanrensselaer
+ * @author dpseaman
  */
 public class TestPresenter implements IPresenter {
 	int number;

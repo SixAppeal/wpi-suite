@@ -7,8 +7,9 @@ import com.google.gson.Gson;
 
 /**
  * An observer for a request made to get all the tasks over the network
- * @author Will Van Rensselaer, Dan Seaman
- *
+ * 
+ * @author wavanrensselaer
+ * @author dpseaman
  */
 public class GetAllTasksObserver implements RequestObserver{
 	
