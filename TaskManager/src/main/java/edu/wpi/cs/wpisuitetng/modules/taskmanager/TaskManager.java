@@ -8,7 +8,7 @@ import javax.swing.JPanel;
 
 import edu.wpi.cs.wpisuitetng.janeway.modules.IJanewayModule;
 import edu.wpi.cs.wpisuitetng.janeway.modules.JanewayTabModel;
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.*;
 
 /**
  * 
@@ -39,6 +39,8 @@ public class TaskManager implements IJanewayModule {
 				new JPanel(),
 				new JPanel()));
 		
+		TaskPresenter taskPresenter = new TaskPresenter();
+		gateway.addPresenter("TaskPresenter", taskPresenter);
 	}
 	
 	/**
