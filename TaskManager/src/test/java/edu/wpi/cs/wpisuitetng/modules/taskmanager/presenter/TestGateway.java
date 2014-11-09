@@ -75,6 +75,10 @@ public class TestGateway {
 		assertEquals(2, view1.getNumber());
 		gateway.toView("view2", "testMethod", 3);
 		assertEquals(3, view2.getNumber());
+		
+		// Should throw exception
+		gateway.toView("view3", "testMethod", 4);
+		gateway.toView("view2", "otherMethod", 5);
 	}
 	
 	/**
@@ -86,5 +90,9 @@ public class TestGateway {
 		assertEquals(1, presenter1.getNumber());
 		gateway.toPresenter("presenter2", "testMethod", 4);
 		assertEquals(4, presenter2.getNumber());
+		
+		// Should throw exception
+		gateway.toPresenter("presenter3", "testMethod", 4);
+		gateway.toPresenter("presenter2", "otherMethod", 5);
 	}
 }

@@ -2,6 +2,7 @@ package edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter;
 
 import java.util.HashMap;
 import java.lang.reflect.Method;
+
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
 
 /**
@@ -51,12 +52,20 @@ public class Gateway {
 	 */
 	public void toView(String name, String methodName, Object data) {
 		Object view = this.views.get(name);
+		if (view == null) {
+			System.err.println("View [" + name + "] is not assigned to this gateway.");
+			return;
+		}
 		
 		try {
 			Method method = view.getClass().getDeclaredMethod(methodName, Object.class);
 			method.invoke(view, data);
+		} catch (NoSuchMethodException e) {
+			System.err.println("Method [" + methodName + "(Object)] does not exist on view [" + name + "].");
+			// e.printStackTrace();
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.err.println("Error routing to " + name + "." + methodName);
+			// e.printStackTrace();
 		}
 	}
 	
@@ -68,12 +77,20 @@ public class Gateway {
 	 */
 	public void toPresenter(String name, String methodName, Object data) {
 		Object presenter = this.presenters.get(name);
+		if (presenter == null) {
+			System.err.println("Presenter [" + name + "] is not assigned to this gateway.");
+			return;
+		}
 		
 		try {
 			Method method = presenter.getClass().getDeclaredMethod(methodName, Object.class);
 			method.invoke(presenter, data);
+		} catch (NoSuchMethodException e) {
+			System.err.println("Method [" + methodName + "(Object)] does not exist on presenter [" + name + "].");
+			// e.printStackTrace();
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.err.println("Error routing to " + name + "." + methodName);
+			// e.printStackTrace();
 		}
 	}
 }
