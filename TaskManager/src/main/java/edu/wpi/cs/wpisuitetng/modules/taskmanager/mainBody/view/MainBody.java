@@ -11,23 +11,12 @@ package edu.wpi.cs.wpisuitetng.modules.taskmanager.mainBody.view;
 
 
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.GridLayout;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextField;
-import javax.swing.border.EtchedBorder;
+import java.awt.FlowLayout;
+import javax.swing.border.LineBorder;
 
 import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.DefaultToolbarView;
-import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.ToolbarGroupView;
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.toolbar.view.buttons.CreateTaskButtonPanel;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.mainBody.components.view.TaskHolder;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.mainBody.components.view.testTask;
 
 /**
  * Sets up upper toolbar of RequirementManager tab
@@ -36,69 +25,57 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.toolbar.view.buttons.CreateTas
  * @version $Revision: 1.0 $
  * @author justinhess
  */
+@SuppressWarnings("serial")
 public class MainBody  extends DefaultToolbarView {
-	private List<JTextField> fields = new ArrayList<JTextField>();
-//	
-//	public static JPanel cyanA;
-//	public static JPanel cyanB;
-//	public static JPanel cyanC;
-	
 
+	// Below are the default holders - need to include names for them
+	// Wasnt sure what their names should be to start with. 
+	private static TaskHolder default_1 = new TaskHolder("Holder One");
+	private static TaskHolder default_2 = new TaskHolder("Holder Two");
+	private static TaskHolder default_3 = new TaskHolder("Holder Three");
+	private static TaskHolder default_4 = new TaskHolder("Holder Four");
+	// Test Tasks
+	private static testTask tTask_1 = new testTask("The Name", "data");
+	private static testTask tTask_2 = new testTask("Meow", "data");
+	private static testTask tTask_3 = new testTask("i Think it's working!", "data");
+	private static testTask tTask_4 = new testTask("Much name, wow", "data");
+	
+	
 	/**
-	 * Creates and positions option buttons in upper toolbar
+	 * Creates and positions the task panel container in the main body panel
 	 * @param visible boolean
 	 */
 	public MainBody(boolean visible) {
-		JPanel body = new JPanel();
-		body.setLayout(new BoxLayout(body, BoxLayout.X_AXIS));
-		JPanel spacing = new JPanel();
-//		cyanA = createPane(5, "Four", Color.cyan);
-//		cyanB = createPane(5, "Four", Color.red);
-//		cyanC = createPane(5, "Four", Color.green);
-		DoubleBox newTest = new DoubleBox();
-		body.add(spacing);
-		body.add(newTest);
+		setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		this.setLayout(new FlowLayout(FlowLayout.LEFT));
+		testingSetup();
 		
-		
-		
-		JScrollPane jsp = new JScrollPane(body,
-			JScrollPane.VERTICAL_SCROLLBAR_NEVER,
-			JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-		this.validate();
-//		Dimension d = this.getPreferredSize();
-//		d.height /= 2;
-//		jsp.getViewport().setPreferredSize(d);
-		jsp.getVerticalScrollBar().setUnitIncrement(5);
-//	            this.getPreferredSize().height / fields.size());
-        this.add(jsp);
-        this.setVisible(true);
+		this.add(default_1);
+		this.add(default_2);
+		this.add(default_3);
+		this.add(default_4);
 
-        
-        
+
+		
         
 	}
 	
-	public void addBox(JPanel toAdd){
+	public void addPane(TaskHolder toAdd){
 		this.add(toAdd);
 	}
 	
-    public JPanel createPane(int n, String s, Color c) {
-        JPanel outer = new JPanel();
-        outer.setLayout(new BoxLayout(outer, BoxLayout.Y_AXIS));
-        outer.setBorder(BorderFactory.createLineBorder(c, 2));
-        for (int i = 0; i < n; i++) {
-            JPanel inner = new JPanel();
-            inner.setLayout(new BoxLayout(inner, BoxLayout.X_AXIS));
-            JLabel label = new JLabel(s + i + ":", JLabel.RIGHT);
-            label.setPreferredSize(new Dimension(80, 32));
-            inner.add(label);
-            JTextField tf = new JTextField("Stackoverflow!", 32);
-            inner.add(tf);
-            fields.add(tf);
-            outer.add(inner);
-        }
-        return outer;
-    }
+	private void testingSetup(){
+		default_1.addTask(tTask_1);
+		default_1.addTask(tTask_1);
+		default_2.addTask(tTask_3);
+		default_2.addTask(tTask_3);
+		default_2.addTask(tTask_3);
+		default_2.addTask(tTask_3);
+		default_4.addTask(tTask_4);
+		default_4.addTask(tTask_2);
+		default_4.addTask(tTask_3);
+	}
+
 
 
 }

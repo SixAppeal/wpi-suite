@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.ImageIcon;
-import javax.swing.JPanel;
 
 import edu.wpi.cs.wpisuitetng.janeway.modules.IJanewayModule;
 import edu.wpi.cs.wpisuitetng.janeway.modules.JanewayTabModel;
@@ -42,7 +41,7 @@ public class TaskManager implements IJanewayModule {
 				attempt,
 				mb_attempt
 				));
-				//new JPanel()));
+
 		
 	}
 	
