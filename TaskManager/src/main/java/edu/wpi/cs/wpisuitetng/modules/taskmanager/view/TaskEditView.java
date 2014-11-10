@@ -1,15 +1,24 @@
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view;
 
-import java.awt.GridLayout;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Properties;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
 import javax.swing.BorderFactory;
+import javax.swing.text.DateFormatter;
 
+import org.jdatepicker.JDateComponentFactory;
+import org.jdatepicker.impl.JDatePickerImpl;
+
+import net.miginfocom.swing.MigLayout;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.TaskStatus;
 
 /**
@@ -27,45 +36,66 @@ public class TaskEditView extends JPanel {
 	private static final long serialVersionUID = -8331650108561001757L;
 	
 	JTextField titleEntry;
-	JTextField descEntry;
+	JTextArea descEntry;
 	JComboBox<TaskStatus> statusBox;
 	JSpinner estEffortSpinner; 
-	//JDatePicker dueDate;
+	JDatePickerImpl dueDatePicker;
 	
 	/**
-	 * Create a new TaskEditView, and assume that it is NOT for a new task.
+	 * Create a new TaskEditView
 	 */
-	public TaskEditView () {
-		this(false);
-	}
-	
-	/**
-	 * Create a new Task Edit View
-	 * 
-	 * @param isNewTask Defines whether or not the task being edited is a new task (cosmetic)
-	 */
-	public TaskEditView (boolean isNewTask) {
+	protected TaskEditView (boolean isCreatePanel) {
 		
-		String paneTitle = isNewTask?"New Task":"Edit Task";
+		//If this is a task creation panel, use a different title text
+		String paneTitle = isCreatePanel?"New Task":"Edit Task";
 		
-		// This layout will give us a 2 wide grid with n rows
-		GridLayout layout = new GridLayout(0,2);
+		// MigLayout gives us the easiest layout with best flexibility
+		MigLayout layout = new MigLayout(
+				"wrap 2",						//Layout constraints
+				"[right][left, 100::, grow]", 	//Column constraints
+				"");							//Row Constraints
 		
 		this.setBorder(BorderFactory.createTitledBorder(paneTitle));
 		this.setLayout(layout);
 		
-		JLabel titleLabel = new JLabel("Title :");
-		titleLabel.setAlignmentX(RIGHT_ALIGNMENT);
-		JLabel descLabel = new JLabel("Description :");
-		descLabel.setAlignmentX(RIGHT_ALIGNMENT);
-		
 		titleEntry = new JTextField();
-		descEntry = new JTextField();
 		
-		this.add( titleLabel );
-		this.add( titleEntry );
-		this.add( descLabel );
-		this.add( descEntry );
+		descEntry = new JTextArea(5,0);
+		descEntry.setLineWrap(true);
+		descEntry.setWrapStyleWord(true);
+		
+		dueDatePicker = (JDatePickerImpl) new JDateComponentFactory().createJDatePicker();
+
+		this.add( new JLabel("Title :"), "top" );
+		this.add( titleEntry, "wrap, width 150:200:300, growx" );
+		
+		this.add( new JLabel("Description :"), "top" );
+		this.add( new JScrollPane(descEntry), "wrap, grow");
+		
+		this.add( new JLabel("Due Date :") );
+		this.add( dueDatePicker, "wrap" );
 		
 	}
+	
+	/**
+	 * Create a new TaskEditView, editing the given task
+	 * 
+	 * @param task the task object with which to populate the field
+	 */
+	public TaskEditView (Task task) {
+		
+		this(false);
+		
+	}
+	
+	/**
+	 * Create a new TaskEditView, assuming that it is for a New task.
+	 */
+	public TaskEditView() {
+		
+		this(true);
+		
+	}
+	
+	
 }
