@@ -61,6 +61,7 @@ public class TaskEntityManager implements EntityManager<Task>{
 	@Override
 	public Task makeEntity(Session s, String content) throws WPISuiteException {
 		final Task newTask = Task.fromJson(content);
+		newTask.id = this.Count();
 		if(!db.save(newTask, s.getProject())) {
 			throw new WPISuiteException();
 		}
@@ -69,12 +70,9 @@ public class TaskEntityManager implements EntityManager<Task>{
 	
 	/**
 	 * Retrieves a single Task from the database
+	 * 
 	 * @param s the session
 	 * @param id the id number of the Task to retrieve
-	
-	
-	
-	
 	 * @return the Task matching the given id * @throws NotFoundException * @throws NotFoundException * @throws NotFoundException
 	 * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#getEntity(Session, String) */
 	@Override
@@ -97,10 +95,8 @@ public class TaskEntityManager implements EntityManager<Task>{
 
 	/**
 	 * Retrieves all Tasks from the database
+	 * 
 	 * @param s the session
-	
-	
-	
 	 * @return array of all stored Tasks * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#getAll(Session) * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#getAll(Session) * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#getAll(Session)
 	 */
 	@Override
@@ -110,19 +106,21 @@ public class TaskEntityManager implements EntityManager<Task>{
 
 	/**
 	 * Saves a data model to the database
+	 * 
 	 * @param s the session
 	 * @param model the model to be saved
+	 * @throws WPISuiteException 
 	 */
 	@Override
-	public void save(Session s, Task model) {
-		db.save(model, s.getProject());
+	public void save(Session s, Task model) throws WPISuiteException {
+		db.save(model);
 	}
 	
 	/**
 	 * Ensures that a user is of the specified role
+	 * 
 	 * @param session the session
 	 * @param role the role being verified
-	
 	 * @throws WPISuiteException user isn't authorized for the given role */
 	private void ensureRole(Session session, Role role) throws WPISuiteException {
 		User user = (User) db.retrieve(User.class, "username", session.getUsername()).get(0);
@@ -133,39 +131,36 @@ public class TaskEntityManager implements EntityManager<Task>{
 	
 	/**
 	 * Deletes a Task from the database
+	 * 
 	 * @param s the session
-	 * @param id the id of the Task to delete
-	
-	
-	
-	public 
+	 * @param id the id of the Task to delete 
 	 * @return true if the deletion was successful * @throws WPISuiteException * @throws WPISuiteException * @throws WPISuiteException
 	 * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#deleteEntity(Session, String) */
 	@Override
 	public boolean deleteEntity(Session s, String id) throws WPISuiteException {
-		ensureRole(s, Role.ADMIN);
-		return (db.delete(getEntity(s, id)[0]) != null) ? true : false;
+		/*ensureRole(s, Role.ADMIN);
+		return (db.delete(getEntity(s, id)[0]) != null) ? true : false;*/
+		throw new NotImplementedException();
+		//TODO Implement this
 	}
 	
 	/**
 	 * Deletes all Tasks from the database
+	 * 
 	 * @param s the session
-	
-	
 	 * @throws WPISuiteException * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#deleteAll(Session) * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#deleteAll(Session)
 	 */
 	@Override
 	public void deleteAll(Session s) throws WPISuiteException {
-		ensureRole(s, Role.ADMIN);
-		db.deleteAll(new Task(), s.getProject());
+		/*ensureRole(s, Role.ADMIN);
+		db.deleteAll(new Task(), s.getProject());*/
+		throw new NotImplementedException();
+		//TODO Implement this
 	}
 	
 	/**
 	 * Returns the number of Tasks in the database
-	
-	
-	
-	
+	 * 
 	 * @return number of Tasks stored * @throws WPISuiteException * @throws WPISuiteException * @throws WPISuiteException
 	 * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#Count() */
 	@Override
@@ -177,9 +172,6 @@ public class TaskEntityManager implements EntityManager<Task>{
 	 * Method update.
 	 * @param session Session
 	 * @param content String
-	
-	
-	
 	 * @return Task * @throws WPISuiteException * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#update(Session, String) * @throws WPISuiteException
 	 * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#update(Session, String)
 	 */
@@ -187,11 +179,8 @@ public class TaskEntityManager implements EntityManager<Task>{
 	public Task update(Session session, String content) throws WPISuiteException {
 		
 		Task updatedTask = Task.fromJson(content);
-		/*
-		 * Because of the disconnected objects problem in db4o, we can't just save Tasks.
-		 * We have to get the original defect from db4o, copy properties from updatedTask,
-		 * then save the original Task again.
-		 */
+		
+		//Gets old task, modifies it, and saves it again
 		List<Model> oldTasks = db.retrieve(Task.class, "id", updatedTask.getId(), session.getProject());
 		if(oldTasks.size() < 1 || oldTasks.get(0) == null) {
 			throw new BadRequestException("Task with ID does not exist.");
@@ -213,9 +202,6 @@ public class TaskEntityManager implements EntityManager<Task>{
 	 * Method advancedGet.
 	 * @param arg0 Session
 	 * @param arg1 String[]
-	
-	
-	
 	 * @return String * @throws NotImplementedException * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#advancedGet(Session, String[]) * @throws NotImplementedException
 	 * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#advancedGet(Session, String[])
 	 */
@@ -229,9 +215,6 @@ public class TaskEntityManager implements EntityManager<Task>{
 	 * @param arg0 Session
 	 * @param arg1 String
 	 * @param arg2 String
-	
-	
-	
 	 * @return String * @throws NotImplementedException * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#advancedPost(Session, String, String) * @throws NotImplementedException
 	 * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#advancedPost(Session, String, String)
 	 */
@@ -245,9 +228,6 @@ public class TaskEntityManager implements EntityManager<Task>{
 	 * @param arg0 Session
 	 * @param arg1 String[]
 	 * @param arg2 String
-	
-	
-	
 	 * @return String * @throws NotImplementedException * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#advancedPut(Session, String[], String) * @throws NotImplementedException
 	 * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#advancedPut(Session, String[], String)
 	 */
@@ -255,5 +235,4 @@ public class TaskEntityManager implements EntityManager<Task>{
 	public String advancedPut(Session arg0, String[] arg1, String arg2) throws NotImplementedException {
 		throw new NotImplementedException();
 	}
-	
 }

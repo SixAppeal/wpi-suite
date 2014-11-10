@@ -55,6 +55,16 @@ static final long serialVersionUID = 8609340016893431330L;
         return instance;
     }
 
+    /**
+     * 
+     * Adds new task to the model and updates ID
+     * 
+     * @param newTask Task to add
+     */
+    public void addTask(Task newTask) {
+    	this.Tasks.add(newTask);
+    }
+    
     
     /**
      * Returns the Task with the given ID
@@ -130,9 +140,6 @@ static final long serialVersionUID = 8609340016893431330L;
         return Tasks;
     }
     
-   
-
-
 
     /**
      * Sets the instance of TaskModel
@@ -147,7 +154,7 @@ static final long serialVersionUID = 8609340016893431330L;
 	 * @param columnID Number column that the task is in
 	 * @return all the tasks in the given column
 	 */
-	public List<Task> getTaskFromColumn(Integer columnID){
+	public List<Task> getTasksFromColumn(Integer columnID){
 		List<Task> tasksInColumn = new ArrayList<Task>();
 		for(Task t : Tasks){
 			if (t.getColumn() == columnID){
