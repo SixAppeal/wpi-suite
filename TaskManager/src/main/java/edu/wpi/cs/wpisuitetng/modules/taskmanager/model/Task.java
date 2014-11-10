@@ -10,11 +10,18 @@ import java.util.List;
 import com.google.gson.Gson;
 
 import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
+
+//For some reason can't import Requirement class that is necessary for associated requirement feature
+
+//TODO Fix import error
 //import edu.wpi.cs.wpisuitetng.modules.requirementmanager.models.Requirement; // ???? is happening here
 
 
 /**
- * @author nathan
+ * 
+ * The model we will be using to store in the database.  Contains all necessary information about a task
+ * 
+ * @author nhhuges
  * @author santiago
  * @author jill
  */

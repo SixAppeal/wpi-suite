@@ -8,7 +8,6 @@ import java.util.List;
 import edu.wpi.cs.wpisuitetng.Session;
 import edu.wpi.cs.wpisuitetng.database.Data;
 import edu.wpi.cs.wpisuitetng.exceptions.BadRequestException;
-import edu.wpi.cs.wpisuitetng.exceptions.ConflictException;
 import edu.wpi.cs.wpisuitetng.exceptions.NotFoundException;
 import edu.wpi.cs.wpisuitetng.exceptions.NotImplementedException;
 import edu.wpi.cs.wpisuitetng.exceptions.UnauthorizedException;
@@ -17,10 +16,13 @@ import edu.wpi.cs.wpisuitetng.modules.EntityManager;
 import edu.wpi.cs.wpisuitetng.modules.Model;
 import edu.wpi.cs.wpisuitetng.modules.core.models.Role;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
-//import edu.wpi.cs.wpisuitetng.modules.Taskmanager.models.Task;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 
 
 /**
+ * Entity Manager for the Task Model.  This is responsible for storing and retrieving all data requests
+ * from the client (i.e. Janeway).
+ * 
  * @author nathan
  * @author santiago
  * @author jill
