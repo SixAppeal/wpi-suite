@@ -64,14 +64,14 @@ public class TestTaskEntityManager {
         				  ":[],\"estimatedEffort\":-1,\"actualEffort\":-1," +
         				  "\"activities\":[],\"column\":0,\"permissionMap\":{}}";
        
-        System.out.println(task1.toJson());
         when(mockDb.save(taskCaptor.capture(), eq(mockProject))).thenReturn(true);
         
         Task result = entityManager.makeEntity(mockSession, taskJson);
-        assertEquals(task1, result);
-        //assertEquals(task1, taskCaptor.getValue());
         
-        //verify(mockDb, times(1)).save(task1, mockProject);
+        assertEquals(task1, result); 
+        assertEquals(task1, taskCaptor.getValue());
+
+        verify(mockDb, times(1)).save(task1, mockProject);
     }
    
 	

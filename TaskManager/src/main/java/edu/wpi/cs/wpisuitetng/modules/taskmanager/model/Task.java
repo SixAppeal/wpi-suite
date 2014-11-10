@@ -203,7 +203,7 @@ public class Task extends AbstractModel {
          if (this.id != other.id) {
         	 return false;
          }
-         if (this.title != other.title) {
+         if (this.title.compareTo(other.title) != 0) {
         	 return false;
          }
          
