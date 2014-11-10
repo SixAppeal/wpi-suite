@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 
 import edu.wpi.cs.wpisuitetng.janeway.modules.IJanewayModule;
 import edu.wpi.cs.wpisuitetng.janeway.modules.JanewayTabModel;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.TaskEditView;
 
 /**
  * 
@@ -33,7 +34,7 @@ public class TaskManager implements IJanewayModule {
 				name,
 				new ImageIcon(),
 				new JPanel(),
-				new JPanel()));
+				new TaskEditView()));
 		
 	}
 	
