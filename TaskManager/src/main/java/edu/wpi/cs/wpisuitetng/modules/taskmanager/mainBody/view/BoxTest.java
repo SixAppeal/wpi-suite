@@ -4,7 +4,14 @@ import java.util.List;
 import java.util.ArrayList;
 import javax.swing.*;
 
-// From: http://stackoverflow.com/questions/3174765/variable-layout-in-swing
+/*
+ * From: http://stackoverflow.com/questions/3174765/variable-layout-in-swing
+ * 
+ * @author StackOverflow
+ * 
+ * This was used as examples of GUI scroll bar's to help form the task display, and the Task Holder's. 
+ * 
+ */
 
 
 public class BoxTest extends JPanel {
@@ -19,10 +26,6 @@ public class BoxTest extends JPanel {
         this.add(createPane(3, "One ", Color.red));
         this.add(createPane(3, "Two ", Color.green));
         this.add(createPane(10, "Three ", Color.blue));
-		Dimension d = this.getPreferredSize();
-		d.height = d.height/2;
-		d.width = 200;
-		this.setPreferredSize(d);
         cyanP = createPane(5, "Four", Color.cyan);
     }
 
@@ -72,9 +75,7 @@ public class BoxTest extends JPanel {
             public void run() {
             	BoxTest test = new BoxTest();
                 test.display();
-                test.addBox(cyanP);
-                test.display();
-                
+
             }
         });
     }

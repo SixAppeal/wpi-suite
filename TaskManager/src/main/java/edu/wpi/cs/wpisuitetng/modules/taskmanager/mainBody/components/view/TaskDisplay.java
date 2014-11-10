@@ -22,7 +22,7 @@ public class TaskDisplay extends JPanel {
 		this.tTask = tTask;
 		
 		// Set the Border of the panel 
-		setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		//setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
 	
 		// Set the layout of this pannel
 		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));

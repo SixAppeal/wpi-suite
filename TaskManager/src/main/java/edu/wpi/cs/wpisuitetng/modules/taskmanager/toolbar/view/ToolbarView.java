@@ -1,15 +1,7 @@
-/*******************************************************************************
- * Copyright (c) 2013 WPI-Suite
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors: Team Rolling Thunder
- ******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.toolbar.view;
 
 
+import java.awt.Color;
 import java.awt.GridLayout;
 
 import javax.swing.BorderFactory;
@@ -26,11 +18,12 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.toolbar.view.buttons.CreateTas
  * 
  *
  * @version $Revision: 1.0 $
- * @author justinhess
+ * @author thhughes
+ * @author rwang
  */
-public class ToolbarView  extends DefaultToolbarView {
+public class ToolbarView extends DefaultToolbarView {
 
-	public CreateTaskButtonPanel reqButton = new CreateTaskButtonPanel();
+	public CreateTaskButtonPanel addButtons = new CreateTaskButtonPanel();
 	
 	/**
 	 * Creates and positions option buttons in upper toolbar
@@ -38,7 +31,7 @@ public class ToolbarView  extends DefaultToolbarView {
 	 */
 	public ToolbarView(boolean visible) {
 
-		this.addGroup(reqButton);
+		this.addGroup(addButtons);
 
 	}
 	
@@ -47,7 +40,12 @@ public class ToolbarView  extends DefaultToolbarView {
 	 * Method getReqButton.
 	
 	 * @return RequirementButtonsPanel */
-	public CreateTaskButtonPanel getReqButton() {
-		return reqButton;
+	public CreateTaskButtonPanel getaddButton() {
+		return addButtons;
 	}
+	
+
+	
+	
+	
 }
