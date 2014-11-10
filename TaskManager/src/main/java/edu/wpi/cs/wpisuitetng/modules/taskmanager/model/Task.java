@@ -10,6 +10,7 @@ import java.util.List;
 import com.google.gson.Gson;
 
 import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
+import edu.wpi.cs.wpisuitetng.modules.postboard.model.PostBoardMessage;
 
 //For some reason can't import Requirement class that is necessary for associated requirement feature
 
@@ -187,7 +188,29 @@ public class Task extends AbstractModel {
        
     }
 	
-
+    /**
+     * Checks to see if the objects are equal by first checking the Task id then the title.
+     */
+    public boolean equals(Object obj) {
+    	 if (this == obj)
+             return true;
+         if (obj == null)
+             return false;
+         if (getClass() != obj.getClass())
+             return false;
+         
+         Task other = (Task) obj;
+         
+         if (this.id != other.id) {
+        	 return false;
+         }
+         if (this.title != other.title) {
+        	 return false;
+         }
+         
+         return true;
+    }
+    
 	//ignore this, don't delete 
 	@Override
 	public void save() {

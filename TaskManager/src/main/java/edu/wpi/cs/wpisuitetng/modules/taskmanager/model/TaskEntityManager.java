@@ -45,6 +45,15 @@ public class TaskEntityManager implements EntityManager<Task>{
 	}
 	
 	/**
+	 * Gets the instance of the database that this EntityManager uses
+	 * 
+	 * @return Data db
+	 */
+	public Data getDb() {
+		return this.db;
+	}
+	
+	/**
 	 * Saves a Task when it is received from a client
 	 * 
 	 * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#makeEntity(edu.wpi.cs.wpisuitetng.Session, java.lang.String)
