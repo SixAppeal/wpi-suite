@@ -10,7 +10,6 @@ import java.util.List;
 import com.google.gson.Gson;
 
 import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
-import edu.wpi.cs.wpisuitetng.modules.postboard.model.PostBoardMessage;
 
 //For some reason can't import Requirement class that is necessary for associated requirement feature
 

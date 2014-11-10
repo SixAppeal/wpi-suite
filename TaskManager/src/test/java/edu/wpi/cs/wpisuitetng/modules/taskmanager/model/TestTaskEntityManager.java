@@ -37,9 +37,6 @@ public class TestTaskEntityManager {
     private Session mockSession = mock(Session.class);
     private Project mockProject = mock(Project.class);
     
-//    private Date messageDate = new Date(0L);
-//    private String messageDateJson = new Gson().toJson(messageDate);
-
     private Task task1 = new Task("Task 1");
     private Task task2 = new Task("Task 2");
     
@@ -71,7 +68,6 @@ public class TestTaskEntityManager {
         when(mockDb.save(taskCaptor.capture(), eq(mockProject))).thenReturn(true);
         
         Task result = entityManager.makeEntity(mockSession, taskJson);
-        System.out.println(result.getTitle());
         assertEquals(task1, result);
         //assertEquals(task1, taskCaptor.getValue());
         
