@@ -21,9 +21,9 @@ import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
  * 
  * The model we will be using to store in the database.  Contains all necessary information about a task
  * 
- * @author nhhuges
- * @author santiago
- * @author jill
+ * @author nhhughes
+ * @author srojas
+ * @author jrhennessy
  */
 public class Task extends AbstractModel {
 
@@ -42,8 +42,6 @@ public class Task extends AbstractModel {
 
 	/**
 	 * Empty constructor for the Task class
-	 * 
-	 *
 	 */
 
 	Task() {
@@ -76,12 +74,33 @@ public class Task extends AbstractModel {
 			List<Member> assignedTo, Integer estimatedEffort,
 			Integer actualEffort, Date dueDate, List<Activity> activities) {
 		super();
-		this.title = title;
+		//TODO Srojas will check that substring works (Santiago will use JUnit test)
+		if (title.length() > 100 ){
+			this.title = title.substring(0, 100);
+		}
+		else {
+			this.title = title;
+		}
 		this.description = description;
 		this.status = status;
 		this.assignedTo = assignedTo;
-		this.estimatedEffort = estimatedEffort;
-		this.actualEffort = actualEffort;
+
+
+		//check that estimatedEffort is positive
+		if (estimatedEffort > 0){
+			this.estimatedEffort = estimatedEffort;
+		}
+		else {
+			this.estimatedEffort = -1;
+		}
+		//if negative,  -1
+		if (actualEffort > 0){
+			this.actualEffort = actualEffort;
+		}
+		else {
+			this.actualEffort = -1;
+		}
+
 		this.dueDate = dueDate;
 		this.activities = activities;
 		this.column = 0;
@@ -102,12 +121,30 @@ public class Task extends AbstractModel {
 	Task(String title, String description, TaskStatus status, Integer estimatedEffort,
 			Integer actualEffort, Date dueDate) {
 		super();
-		this.title = title;
+		
+		if (title.length() > 100 ){
+			this.title = title.substring(0, 99);
+		}
+		else {
+			this.title = title;
+		}
 		this.description = description;
 		this.status = status;
 		this.assignedTo = new LinkedList<Member>();
-		this.estimatedEffort = estimatedEffort;
-		this.actualEffort = actualEffort;
+		//checks that estimatedEffort is positive
+		if (estimatedEffort > 0){
+			this.estimatedEffort = estimatedEffort;
+		}
+		else {
+			this.estimatedEffort = -1;
+		}
+		//checks that actualEffort is positive
+		if (actualEffort > 0){
+			this.actualEffort = actualEffort;
+		}
+		else {
+			this.actualEffort = -1;
+		}
 		this.dueDate = dueDate;
 		this.activities = new LinkedList<Activity>();
 		this.column = 0;
@@ -119,7 +156,13 @@ public class Task extends AbstractModel {
 	 */
 	Task(String title) {
 		super();
-		this.title = title;
+		//TODO Srojas will check that substring works (Santiago will use JUnit test)
+		if (title.length() > 100 ){
+			this.title = title.substring(0, 99);
+		}
+		else {
+			this.title = title;
+		}
 		this.description = "";
 		this.status = null;
 		this.assignedTo = new LinkedList<Member>();
@@ -162,54 +205,54 @@ public class Task extends AbstractModel {
 	}
 
 
-	
 
-	 /**
-     * Copies all of the values from the given requirement to this requirement.
-     * 
-     * @param toCopyFrom
-     *            the requirement to copy from.
-     */
-    public void copyFrom(Task toCopyFrom) {
-        //TODO Can't this be replaced by a default Java method?
-        //If not it can be with Requirement.fromJson(requirement.toJson)
-        this.description = toCopyFrom.description;
-        this.title = toCopyFrom.title;
-        this.status = toCopyFrom.status;
-        this.assignedTo = toCopyFrom.assignedTo;
-        this.id = toCopyFrom.id;
-        this.estimatedEffort = toCopyFrom.estimatedEffort;
-        this.actualEffort = toCopyFrom.actualEffort;
-        this.status = toCopyFrom.status;
-        this.dueDate = toCopyFrom.dueDate;
-        this.activities = toCopyFrom.activities;
-        this.column = toCopyFrom.column;
-       
-    }
-	
-    /**
-     * Checks to see if the objects are equal by first checking the Task id then the title.
-     */
-    public boolean equals(Object obj) {
-    	 if (this == obj)
-             return true;
-         if (obj == null)
-             return false;
-         if (getClass() != obj.getClass())
-             return false;
-         
-         Task other = (Task) obj;
-         
-         if (this.id != other.id) {
-        	 return false;
-         }
-         if (this.title.compareTo(other.title) != 0) {
-        	 return false;
-         }
-         
-         return true;
-    }
-    
+
+	/**
+	 * Copies all of the values from the given requirement to this requirement.
+	 * 
+	 * @param toCopyFrom
+	 *            the requirement to copy from.
+	 */
+	public void copyFrom(Task toCopyFrom) {
+		//
+		//If not it can be with Requirement.fromJson(requirement.toJson)
+		this.description = toCopyFrom.description;
+		this.title = toCopyFrom.title;
+		this.status = toCopyFrom.status;
+		this.assignedTo = toCopyFrom.assignedTo;
+		this.id = toCopyFrom.id;
+		this.estimatedEffort = toCopyFrom.estimatedEffort;
+		this.actualEffort = toCopyFrom.actualEffort;
+		this.status = toCopyFrom.status;
+		this.dueDate = toCopyFrom.dueDate;
+		this.activities = toCopyFrom.activities;
+		this.column = toCopyFrom.column;
+
+	}
+
+	/**
+	 * Checks to see if the objects are equal by first checking the Task id then the title.
+	 */
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+
+		Task other = (Task) obj;
+
+		if (this.id != other.id) {
+			return false;
+		}
+		if (this.title.compareTo(other.title) != 0) {
+			return false;
+		}
+
+		return true;
+	}
+
 	//ignore this, don't delete 
 	@Override
 	public void save() {
@@ -231,7 +274,7 @@ public class Task extends AbstractModel {
 	}
 
 
-	
+
 	//GETTERS AND SETTERS 
 	public String getTitle() {
 		return title;
@@ -239,7 +282,13 @@ public class Task extends AbstractModel {
 
 
 	public void setTitle(String title) {
-		this.title = title;
+		//TODO Srojas will check that substring works (Santiago will use JUnit test)
+		if (title.length() > 100 ){
+			this.title = title.substring(0, 99);
+		}
+		else {
+			this.title = title;
+		}
 	}
 
 
@@ -289,7 +338,13 @@ public class Task extends AbstractModel {
 
 
 	public void setEstimatedEffort(Integer estimatedEffort) {
-		this.estimatedEffort = estimatedEffort;
+		//checks that estimatedEffort is positive
+		if (estimatedEffort > 0){
+			this.estimatedEffort = estimatedEffort;
+		}
+		else {
+			this.estimatedEffort = -1;
+		}
 	}
 
 
@@ -299,7 +354,13 @@ public class Task extends AbstractModel {
 
 
 	public void setActualEffort(Integer actualEffort) {
-		this.actualEffort = actualEffort;
+		// making sure that the inputted value is positive
+		if (actualEffort > 0){
+			this.actualEffort = actualEffort;
+		}
+		else {
+			this.actualEffort = -1;
+		}
 	}
 
 
@@ -321,7 +382,7 @@ public class Task extends AbstractModel {
 	public void setActivities(List<Activity> activities) {
 		this.activities = activities;
 	}
-	
+
 	public Integer getColumn() {
 		return column;
 	}
