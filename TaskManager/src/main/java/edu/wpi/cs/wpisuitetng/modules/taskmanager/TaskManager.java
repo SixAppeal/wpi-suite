@@ -10,14 +10,11 @@ import javax.swing.JPanel;
 import edu.wpi.cs.wpisuite.modules.taskmanager.view.TaskDetailView;
 import edu.wpi.cs.wpisuitetng.janeway.modules.IJanewayModule;
 import edu.wpi.cs.wpisuitetng.janeway.modules.JanewayTabModel;
-<<<<<<< HEAD
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Activity;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Member;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.TaskStatus;
-=======
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.TaskEditView;
->>>>>>> refs/remotes/origin/task-edit-view
 
 /**
  * 
@@ -33,13 +30,20 @@ public class TaskManager implements IJanewayModule {
 	String name;
 	List<JanewayTabModel> tabs;
 	
+	/**
+	 * Creates a list of members for dummyTask
+	 */
 	Member jill = new Member("jill");
 	Member jack = new Member("jack");
 	Member bob = new Member("bob");
+	ArrayList<Member> peasants = new ArrayList<Member>();
+	
+	/**
+	 * Creates a list of Activities for dummyTask
+	 */
 	Activity start = new Activity (jill, "jill got this party swingn'");
 	Activity mid = new Activity (jack, "jack killed the bean stalk");
 	Activity end = new Activity (bob, "cleaned it up");
-	ArrayList<Member> peasants = new ArrayList<Member>();
 	ArrayList<Activity> chores = new ArrayList<Activity>();
 	
 
@@ -54,22 +58,6 @@ public class TaskManager implements IJanewayModule {
 	 */
 	public TaskManager() {
 		
-		
-		
-		name = "Task Manager";
-		tabs = new ArrayList<JanewayTabModel>();
-		
-		Task dummyTask = new Task("new title ", "this is a desc", new TaskStatus("cookies"), 
-				peasants, 3, 9000, apoc, chores);
-		
-		tabs.add(new JanewayTabModel(
-				name,
-				new ImageIcon(),
-				new JPanel(),
-<<<<<<< HEAD
-				new TaskDetailView(dummyTask)));
-		
-		
 		peasants.add(jill);
 		peasants.add(jack);
 		peasants.add(bob);
@@ -77,10 +65,23 @@ public class TaskManager implements IJanewayModule {
 		chores.add(mid);
 		chores.add(end);
 		
+		name = "Task Manager";
+		tabs = new ArrayList<JanewayTabModel>();
 		
-=======
-				new TaskEditView()));
->>>>>>> refs/remotes/origin/task-edit-view
+		/**
+		 * Constructs dummyTask used for testing the Detail Pane
+		 */
+		Task dummyTask = new Task("new title ", "this is a desc", new TaskStatus("cookies"), 
+				peasants, 3, 9000, apoc, chores);
+		
+		tabs.add(new JanewayTabModel(
+				name,
+				new ImageIcon(),
+				new JPanel(),
+				new TaskDetailView(dummyTask)));
+		
+		
+
 		
 	}
 	

@@ -10,6 +10,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+import net.miginfocom.swing.MigLayout;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 
 /**
@@ -25,75 +26,119 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 @SuppressWarnings("unused")
 public class TaskDetailView extends JPanel {
 
+
 	/**
-	 * Eclipse generated Serial Version UID
+	 * Generated Serial Number
 	 */
-	private static final long serialVersionUID = -3161594397243801607L;
+	private static final long serialVersionUID = -8972626054612267276L;
+
 
 	private Task task;
+	
+	/**
+	 * Declare all the JLabels the detail view will need
+	 */
 	JLabel idLabel;
+	JLabel taskIdLabel;			//Displays the Task's ID
+	
 	JLabel nameLabel;
+	JLabel taskNameLabel;		//Displays the Task's Title
+	
 	JLabel dateLabel;
+	JLabel taskDateLabel;		//Displays the Task's Due Date
+	
 	JLabel desLabel;
+	JLabel taskDesLabel;		//Displays the Task's Description
+	
 	JLabel statLabel;
+	JLabel taskStatLabel;		//Displays the Task's Status
+	
 	JLabel estLabel;
+	JLabel taskEstLabel;		//Displays the Task's Estimated Effort value
+	
 	JLabel actLabel;
+	JLabel taskActLabel;		//Displays the Task's Actual Effor Value
+	
+	JLabel assignedToLabel;
+	JLabel taskAssignedToLabel;	//Displays the Task's Assigned Members in a single string
 	
 	public TaskDetailView(Task task){
 		
 		this.task = task;
+		String paneTitle = "Detail Pane";
 		
-		//Prep JPanel with formatting
-		this.setBorder(BorderFactory.createTitledBorder("Task Detail"));
-		this.setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
+		/**
+		 * Declares the MiGLayout
+		 * "wrap 2" Says the layout can only have 2 columns
+		 * [right] The right column's size grows as needed
+		 * [left, 100::, grow] The left column has a base size of 100, but can grow if needed
+		 * "" Row settings are left empty for our purpose
+		 */
+		MigLayout detailView = new MigLayout(
+				"wrap 2",
+				"[right] [left, 100::, grow]",
+				"");
 		
-		//Start sticking contents in Panel
+		/**
+		 * Creates the pane border and title
+		 * Sets the current layout to the previously declared MiGLayout
+		 */
+		this.setBorder(BorderFactory.createTitledBorder(paneTitle));
+		this.setLayout(detailView);
 		
+		/**
+		 * creates all the JLabels for the given task
+		 */
+		idLabel = new JLabel("Task ID: ");
+		taskIdLabel = new JLabel(String.valueOf(task.getId()));				
 		
-		idLabel = new JLabel("Task ID: " + task.getId());
-		idLabel.setAlignmentY(CENTER_ALIGNMENT);
-		idLabel.setForeground(new Color(155, 155, 155));
+		nameLabel = new JLabel("Task name:");
+		taskNameLabel = new JLabel(task.getTitle());						
 		
+		dateLabel = new JLabel ("Task due date:");
+		taskDateLabel = new JLabel (task.getDueDate().toString());			
+		
+		desLabel = new JLabel ("Task Description:");
+		taskDesLabel = new JLabel (task.getDescription());					
+		
+		statLabel = new JLabel ("Task Status:");
+		taskStatLabel = new JLabel(task.getStatus().toString());			
+		
+		estLabel = new JLabel ("Estimated Effort:");
+		taskEstLabel = new JLabel(task.getEstimatedEffort().toString());
+		
+		actLabel = new JLabel ("Actual Effort:");
+		taskActLabel = new JLabel (task.getActualEffort().toString());
+		
+		assignedToLabel = new JLabel("Members Assigned:");
+		taskAssignedToLabel = new JLabel(task.getMemberList());
+		
+		/**
+		 * Adds all the JLabels to the MiGLayout
+		 */
 		this.add(idLabel);
-		
-		nameLabel = new JLabel("Task name: " + task.getTitle());
-		nameLabel.setAlignmentY(LEFT_ALIGNMENT);
-		nameLabel.setForeground(new Color(0, 0, 0));
+		this.add(taskIdLabel);
 		
 		this.add(nameLabel);
-		
-		dateLabel = new JLabel ("Task due date: " + task.getDueDate().toString());
-		dateLabel.setAlignmentY(LEFT_ALIGNMENT);
-		dateLabel.setForeground(new Color(0, 0, 0));
+		this.add(taskNameLabel);
 		
 		this.add(dateLabel);
-		
-		desLabel = new JLabel ("Task description: " + task.getDescription());
-		desLabel.setAlignmentY(LEFT_ALIGNMENT);
-		desLabel.setForeground(new Color (0, 0, 0));
+		this.add(taskDateLabel);
 		
 		this.add(desLabel);
-		
-		statLabel = new JLabel ("Task status: " + task.getStatus().toString());
-		statLabel.setAlignmentY(LEFT_ALIGNMENT);
-		statLabel.setForeground(new Color (0, 0, 0));
+		this.add(taskDesLabel);
 		
 		this.add(statLabel);
-		
-		estLabel = new JLabel ("Estimated effort: " + task.getEstimatedEffort().toString());
-		estLabel.setAlignmentY(LEFT_ALIGNMENT);
-		estLabel.setForeground(new Color (0, 0, 0));
+		this.add(taskStatLabel);
 		
 		this.add(estLabel);
-		
-		actLabel = new JLabel ("Actual effort: " + task.getActualEffort().toString());
-		actLabel.setAlignmentY(LEFT_ALIGNMENT);
-		actLabel.setForeground(new Color (0, 0, 0));
+		this.add(taskEstLabel);
 		
 		this.add(actLabel);
-
-		//this.add(new JLabel("Title", SwingConstants.LEFT));
+		this.add(taskActLabel);
 		
+		this.add(assignedToLabel);
+		this.add(taskAssignedToLabel);	
 	}
 	
 	

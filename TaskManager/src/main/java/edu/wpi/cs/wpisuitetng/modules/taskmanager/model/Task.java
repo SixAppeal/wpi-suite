@@ -201,7 +201,18 @@ public class Task extends AbstractModel {
 		return null;
 	}
 
-
+	/**
+	 * Returns a Concantenated String of all the members in the assignedTo List
+	 * String memberList
+	 * @return memberList
+	 */
+	public String getMemberList() {
+		StringBuilder memberList = new StringBuilder();
+		for (Member m: this.assignedTo){
+			memberList.append(m.getName()).append(", ");
+		}
+		return memberList.toString();
+	}
 	
 	//GETTERS AND SETTERS 
 	public String getTitle() {
