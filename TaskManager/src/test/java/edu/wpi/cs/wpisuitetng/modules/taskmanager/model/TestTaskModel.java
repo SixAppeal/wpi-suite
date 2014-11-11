@@ -1,6 +1,3 @@
-/**
- * 
- */
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.model;
 
 import static org.junit.Assert.assertEquals;
@@ -123,7 +120,7 @@ public class TestTaskModel {
 	}
 	
 	/**
-	 * Get all tasks in model
+	 * Test getting all tasks in model
 	 */
 	@Test
 	public void getTasks() {

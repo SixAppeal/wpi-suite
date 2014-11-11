@@ -1,9 +1,8 @@
-/**
- * 
- */
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.model;
 
 /**
+ * Class to capture a user responsible for a task
+ * 
  * @author nhhughes
  * @author srojas
  * @author jrhennessy
@@ -15,13 +14,10 @@ public class Member {
 	 * Constructor for the member class
 	 * @param name username or full name of the member
 	 */
-	Member (String name){
+	public Member (String name){
 		this.name = name;
 	}
-	
-	
-	
-	
+
 	//Getters and Setters
 	/**
 	 * @return the name
@@ -35,6 +31,4 @@ public class Member {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
-	
 }

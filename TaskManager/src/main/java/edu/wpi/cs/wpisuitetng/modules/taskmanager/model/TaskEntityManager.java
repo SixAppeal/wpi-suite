@@ -1,6 +1,3 @@
-/**
- * 
- */
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.model;
 
 import java.util.List;
@@ -18,10 +15,10 @@ import edu.wpi.cs.wpisuitetng.modules.core.models.Role;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 
-
 /**
  * Entity Manager for the Task Model.  This is responsible for storing and retrieving all data requests
- * from the client (i.e. Janeway).
+ * from the client (i.e. Janeway). WPI Suite, when it receives a request, finds this entity manager and calls
+ * the correct method.
  * 
  * @author nathan
  * @author santiago
@@ -31,7 +28,7 @@ public class TaskEntityManager implements EntityManager<Task>{
 
 	/** The database */
 	Data db;
-	
+
 	/**
 	 * Constructs the entity manager. This constructor is called by
 	 * {@link edu.wpi.cs.wpisuitetng.ManagerLayer#ManagerLayer()}. To make sure
@@ -43,7 +40,7 @@ public class TaskEntityManager implements EntityManager<Task>{
 	public TaskEntityManager(Data db) {
 		this.db = db; 
 	}
-	
+
 	/**
 	 * Gets the instance of the database that this EntityManager uses
 	 * 
@@ -52,7 +49,7 @@ public class TaskEntityManager implements EntityManager<Task>{
 	public Data getDb() {
 		return this.db;
 	}
-	
+
 	/**
 	 * Saves a Task when it is received from a client
 	 * 
@@ -67,7 +64,7 @@ public class TaskEntityManager implements EntityManager<Task>{
 		}
 		return newTask;
 	}
-	
+
 	/**
 	 * Retrieves a single Task from the database
 	 * 
@@ -115,7 +112,7 @@ public class TaskEntityManager implements EntityManager<Task>{
 	public void save(Session s, Task model) throws WPISuiteException {
 		db.save(model);
 	}
-	
+
 	/**
 	 * Ensures that a user is of the specified role
 	 * 
@@ -128,7 +125,7 @@ public class TaskEntityManager implements EntityManager<Task>{
 			throw new UnauthorizedException();
 		}
 	}
-	
+
 	/**
 	 * Deletes a Task from the database
 	 * 
@@ -143,7 +140,7 @@ public class TaskEntityManager implements EntityManager<Task>{
 		throw new NotImplementedException();
 		//TODO Implement this
 	}
-	
+
 	/**
 	 * Deletes all Tasks from the database
 	 * 
@@ -157,7 +154,7 @@ public class TaskEntityManager implements EntityManager<Task>{
 		throw new NotImplementedException();
 		//TODO Implement this
 	}
-	
+
 	/**
 	 * Returns the number of Tasks in the database
 	 * 
@@ -177,24 +174,24 @@ public class TaskEntityManager implements EntityManager<Task>{
 	 */
 	@Override
 	public Task update(Session session, String content) throws WPISuiteException {
-		
+
 		Task updatedTask = Task.fromJson(content);
-		
+
 		//Gets old task, modifies it, and saves it again
 		List<Model> oldTasks = db.retrieve(Task.class, "id", updatedTask.getId(), session.getProject());
 		if(oldTasks.size() < 1 || oldTasks.get(0) == null) {
 			throw new BadRequestException("Task with ID does not exist.");
 		}
-				
+
 		Task existingTask = (Task)oldTasks.get(0);		
 
 		// copy values to old Task and fill in our changeset appropriately
 		existingTask.copyFrom(updatedTask);
-		
+
 		if(!db.save(existingTask, session.getProject())) {
 			throw new WPISuiteException();
 		}
-		
+
 		return existingTask;
 	}
 

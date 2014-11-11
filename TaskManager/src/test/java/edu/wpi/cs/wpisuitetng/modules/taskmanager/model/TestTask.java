@@ -1,20 +1,13 @@
-/**
- * 
- */
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.model;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
-import edu.wpi.cs.wpisuitetng.exceptions.WPISuiteException;
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.TaskManager;
-
 /**
+ * Test Suite to test Task Class
+ * 
  * @author nhhughes
  * @author srojas
  * @author jrhennessy
@@ -31,6 +24,7 @@ public class TestTask {
 	public void setup() {
 		this.task = new Task("testing da tasks");
 	}
+	
 	/**
 	 * Tests that the constructor works properly
 	 */
@@ -51,6 +45,7 @@ public class TestTask {
 		assertEquals(newTask.status, null);
 
 	}
+	
 	/**
 	 * tests the copy from function. makes sure constructor with no title initializes to ""
 	 * copies the title from another one and makes sure it changed
@@ -63,14 +58,15 @@ public class TestTask {
 		assertEquals(newTask.title, "testing da tasks");
 	}
 
-	/*
-	 * 
+	/**
+	 * Placeholder for future tests
 	 */
 	@Test
 	public void testSetActivities() {
 		//TODO Write Comprehensive Tests once we start using activities
 		assertEquals(1, 1); 
 	}
+	
 	/**
 	 * tests that the title truncates if you use one longer than 99 chars
 	 */
@@ -97,6 +93,7 @@ public class TestTask {
 		assertEquals(newTask.actualEffort, new Integer(-1));
 
 	}
+	
 	/**
 	 * Function to test that the estimated effort changes with the set method and is not negative
 	 */
@@ -111,7 +108,4 @@ public class TestTask {
 		newTask.setEstimatedEffort(-50);
 		assertEquals(newTask.estimatedEffort, new Integer(-1));
 	}
-	
-
-
 }

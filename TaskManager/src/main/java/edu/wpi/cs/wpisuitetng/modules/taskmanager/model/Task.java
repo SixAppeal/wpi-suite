@@ -1,6 +1,3 @@
-/**
- * 
- */
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.model;
 
 import java.util.Date;
@@ -11,11 +8,8 @@ import com.google.gson.Gson;
 
 import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
 
-//For some reason can't import Requirement class that is necessary for associated requirement feature
-
 //TODO Fix import error
-//import edu.wpi.cs.wpisuitetng.modules.requirementmanager.models.Requirement; // ???? is happening here
-
+//import edu.wpi.cs.wpisuitetng.modules.requirementmanager.models.Requirement;
 
 /**
  * 
@@ -39,12 +33,10 @@ public class Task extends AbstractModel {
 	Integer column;
 	//List<Requirement> associatedRequirement;
 
-
 	/**
 	 * Empty constructor for the Task class
 	 */
-
-	Task() {
+	public Task() {
 		super();
 		this.title = "";
 		this.description = "";
@@ -56,7 +48,6 @@ public class Task extends AbstractModel {
 		this.activities = new LinkedList<Activity>();
 		this.column = 0;
 	}
-
 
 	/**
 	 * Constructor for a task that has all of the fields
@@ -70,7 +61,7 @@ public class Task extends AbstractModel {
 	 * @param dueDate when the task is due
 	 * @param activities list of activities (comments that members can put) for the task
 	 */
-	Task(String title, String description, TaskStatus status,
+	public Task(String title, String description, TaskStatus status,
 			List<Member> assignedTo, Integer estimatedEffort,
 			Integer actualEffort, Date dueDate, List<Activity> activities) {
 		super();
@@ -84,7 +75,6 @@ public class Task extends AbstractModel {
 		this.description = description;
 		this.status = status;
 		this.assignedTo = assignedTo;
-
 
 		//check that estimatedEffort is positive
 		if (estimatedEffort > 0){
@@ -118,10 +108,10 @@ public class Task extends AbstractModel {
 	 * @param dueDate when the task is due
 	 */
 
-	Task(String title, String description, TaskStatus status, Integer estimatedEffort,
+	public Task(String title, String description, TaskStatus status, Integer estimatedEffort,
 			Integer actualEffort, Date dueDate) {
 		super();
-		
+
 		if (title.length() > 100 ){
 			throw new IllegalArgumentException("Title Too Long!");
 		}
@@ -154,7 +144,7 @@ public class Task extends AbstractModel {
 	 * Constructor for a task with only a title
 	 * @param title name for the task
 	 */
-	Task(String title) {
+	public Task(String title) {
 		super();
 		//TODO Srojas will check that substring works (Santiago will use JUnit test)
 		if (title.length() > 100 ){
@@ -173,9 +163,6 @@ public class Task extends AbstractModel {
 		this.column = 0;
 	}
 
-
-
-	//database methods
 	/**
 	 * Returns an instance of Requirement constructed using the given
 	 * Requirement encoded as a JSON string.
@@ -204,9 +191,6 @@ public class Task extends AbstractModel {
 		return new Gson().toJson(this, Task.class);
 	}
 
-
-
-
 	/**
 	 * Copies all of the values from the given requirement to this requirement.
 	 * 
@@ -227,11 +211,12 @@ public class Task extends AbstractModel {
 		this.dueDate = toCopyFrom.dueDate;
 		this.activities = toCopyFrom.activities;
 		this.column = toCopyFrom.column;
-
 	}
 
 	/**
 	 * Checks to see if the objects are equal by first checking the Task id then the title.
+	 * 
+	 * @param obj:  Object to compare against
 	 */
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -253,7 +238,6 @@ public class Task extends AbstractModel {
 		return true;
 	}
 
-	//ignore this, don't delete 
 	@Override
 	public void save() {
 		// TODO Auto-generated method stub
@@ -263,9 +247,7 @@ public class Task extends AbstractModel {
 	@Override
 	public void delete() {
 		// TODO Auto-generated method stub
-
 	}
-
 
 	@Override
 	public Boolean identify(Object o) {
@@ -273,13 +255,10 @@ public class Task extends AbstractModel {
 		return null;
 	}
 
-
-
 	//GETTERS AND SETTERS 
 	public String getTitle() {
 		return title;
 	}
-
 
 	public void setTitle(String title) {
 		if (title.length() > 100 ){
@@ -290,51 +269,41 @@ public class Task extends AbstractModel {
 		}
 	}
 
-
 	public String getDescription() {
 		return description;
 	}
-
 
 	public void setDescription(String description) {
 		this.description = description;
 	}
 
-
 	public TaskStatus getStatus() {
 		return status;
 	}
-
 
 	public void setStatus(TaskStatus status) {
 		this.status = status;
 	}
 
-
 	public List<Member> getAssignedTo() {
 		return assignedTo;
 	}
-
 
 	public void setAssignedTo(List<Member> assignedTo) {
 		this.assignedTo = assignedTo;
 	}
 
-
 	public int getId() {
 		return id;
 	}
-
 
 	public void setId(int id) {
 		this.id = id;
 	}
 
-
 	public Integer getEstimatedEffort() {
 		return estimatedEffort;
 	}
-
 
 	public void setEstimatedEffort(Integer estimatedEffort) {
 		//checks that estimatedEffort is positive
@@ -346,11 +315,9 @@ public class Task extends AbstractModel {
 		}
 	}
 
-
 	public Integer getActualEffort() {
 		return actualEffort;
 	}
-
 
 	public void setActualEffort(Integer actualEffort) {
 		// making sure that the inputted value is positive
@@ -362,21 +329,17 @@ public class Task extends AbstractModel {
 		}
 	}
 
-
 	public Date getDueDate() {
 		return dueDate;
 	}
-
 
 	public void setDueDate(Date dueDate) {
 		this.dueDate = dueDate;
 	}
 
-
 	public List<Activity> getActivities() {
 		return activities;
 	}
-
 
 	public void setActivities(List<Activity> activities) {
 		this.activities = activities;
@@ -386,10 +349,7 @@ public class Task extends AbstractModel {
 		return column;
 	}
 
-
 	public void setColumn(Integer column) {
 		this.column = column;
 	}
-
-
 }

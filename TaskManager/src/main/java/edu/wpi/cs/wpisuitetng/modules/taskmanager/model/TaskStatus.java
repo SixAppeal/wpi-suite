@@ -1,15 +1,13 @@
-/**
- * 
- */
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.model;
 
 /**
+ * Class to capture the status of a task
+ * 
  * @author nhhughes
  * @author srojas
  * @author jrhennessy
  */
 public class TaskStatus {
-
 
 	String status;
 	
@@ -17,7 +15,7 @@ public class TaskStatus {
 	 * Constructor for the task status class. 
 	 * @param status what point the task is at (in progress, not started, etc.)
 	 */
-	TaskStatus (String status) {
+	public TaskStatus (String status) {
 		this.status = status;
 	}
 	
