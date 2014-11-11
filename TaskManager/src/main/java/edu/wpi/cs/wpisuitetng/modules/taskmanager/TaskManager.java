@@ -5,11 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.ImageIcon;
+import javax.swing.JPanel;
 
 import edu.wpi.cs.wpisuitetng.janeway.modules.IJanewayModule;
 import edu.wpi.cs.wpisuitetng.janeway.modules.JanewayTabModel;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.toolbar.view.*;
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.mainBody.view.*;
+
 
 
 /**
@@ -26,7 +27,6 @@ public class TaskManager implements IJanewayModule {
 	List<JanewayTabModel> tabs;
 	
 	ToolbarView attempt = new ToolbarView(true);
-	MainBodyContent mb_attempt = new MainBodyContent(true);
 	
 	/**
 	 * Constructs a TaskManager module and its tabs for the Janeway client.
@@ -39,7 +39,7 @@ public class TaskManager implements IJanewayModule {
 				name,
 				new ImageIcon(),
 				attempt,
-				mb_attempt
+				new JPanel()
 				));
 
 		

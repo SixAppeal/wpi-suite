@@ -19,13 +19,18 @@ import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.ToolbarGroupView;
 
 /**
  * @author 
- * @author troyhughes
- * @author Raywang
+ * @author thhughes
+ * @author rwang3
  * 
  * @author justinhess
  * @version $Revision: 1.0 $
  */
 @SuppressWarnings("serial")
+/**
+ * 
+ * Creates a container that holds tasks.
+ * 
+ */
 public class CreateTaskButtonPanel extends ToolbarGroupView {
 	
 	// Initialize the buttons for the toolbar
@@ -37,9 +42,9 @@ public class CreateTaskButtonPanel extends ToolbarGroupView {
 	// Initialize the panel for everything to be held
 	private final JPanel contentPanel = new JPanel();
 	
+	
 	public CreateTaskButtonPanel() {
-		super(""); //TODO What is this??? I'm so confused. Is this dead code?
-					// Yes, the code is dead :P
+		super(""); //Will not run without this
 		SpringLayout springLayout = new SpringLayout();
 		
 		// Define the size and layout of the content panel
@@ -103,7 +108,8 @@ public class CreateTaskButtonPanel extends ToolbarGroupView {
 	/**
 	 * Called when the mouse enters this toolbar group
 	 * 
-	 * Delete this override to get the hover effects back
+	 * @Override - is suppressing parent class functionality
+	 * 
 	 */
 	@Override
 	public void mouseEntered() {
@@ -127,7 +133,7 @@ public class CreateTaskButtonPanel extends ToolbarGroupView {
 	
 	private class CreateTaskAction extends AbstractAction {
 		/**
-		 * @author troyhughes
+		 * @author thhughes
 		 * This is an action listener for the button Create Task - this should communicate with the 
 		 * controller to make new tasks etc. 
 		 */
@@ -151,7 +157,7 @@ public class CreateTaskButtonPanel extends ToolbarGroupView {
 	}
 	private class CreatePanelAction extends AbstractAction {
 		/**
-		 * @author troyhughes
+		 * @author thhughes
 		 * This is an action listener for the button Create panel - this should communicate with the 
 		 * controller to make new panels that tasks will be stored on. 
 		 */
