@@ -22,13 +22,20 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
  * @author thhughes
  * @author rwang
  */
+@SuppressWarnings("serial")
+/**
+ * @see DefaultToolbarView
+ * @author thhughes
+ * @author rwang3
+ *
+ */
 public class ToolbarView extends DefaultToolbarView implements IView {
 
 	public CreateTaskButtonPanel addButtons = new CreateTaskButtonPanel();
 	private Gateway gateway;
 	
 	/**
-	 * Creates and positions option buttons in upper toolbar
+	 * Constructs a ToolbarView object with an option that togles visibility
 	 * @param visible boolean
 	 */
 	public ToolbarView(boolean visible) {
@@ -51,8 +58,7 @@ public class ToolbarView extends DefaultToolbarView implements IView {
 	 */
 	@Override
 	public void setGateway(Gateway gateway) {
-		this.gateway = gateway;
-		
+		this.gateway = gateway;	
 	}
 	
 
