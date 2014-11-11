@@ -1,4 +1,4 @@
-package edu.wpi.cs.wpisuitetng.modules.taskmanager.toolbar.view;
+package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.toolbar;
 
 
 import java.awt.Color;
@@ -11,7 +11,8 @@ import javax.swing.border.EtchedBorder;
 
 import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.DefaultToolbarView;
 import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.ToolbarGroupView;
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.toolbar.view.buttons.CreateTaskButtonPanel;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
 
 /**
  * Sets up upper toolbar of RequirementManager tab
@@ -21,9 +22,10 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.toolbar.view.buttons.CreateTas
  * @author thhughes
  * @author rwang
  */
-public class ToolbarView extends DefaultToolbarView {
+public class ToolbarView extends DefaultToolbarView implements IView {
 
 	public CreateTaskButtonPanel addButtons = new CreateTaskButtonPanel();
+	private Gateway gateway;
 	
 	/**
 	 * Creates and positions option buttons in upper toolbar
@@ -42,6 +44,15 @@ public class ToolbarView extends DefaultToolbarView {
 	 * @return RequirementButtonsPanel */
 	public CreateTaskButtonPanel getaddButton() {
 		return addButtons;
+	}
+
+	/**
+	 * @see IView.setGateway
+	 */
+	@Override
+	public void setGateway(Gateway gateway) {
+		this.gateway = gateway;
+		
 	}
 	
 

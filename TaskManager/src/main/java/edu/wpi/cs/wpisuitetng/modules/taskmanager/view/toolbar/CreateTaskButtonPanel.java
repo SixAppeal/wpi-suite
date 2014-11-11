@@ -1,8 +1,9 @@
-package edu.wpi.cs.wpisuitetng.modules.taskmanager.toolbar.view.buttons;
+package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.toolbar;
 
 
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -13,8 +14,10 @@ import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
 
 import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.ToolbarGroupView;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
 //import edu.wpi.cs.wpisuitetng.modules.taskmanager.toolbar.view.TestToolbar.SwingAction;
 //import edu.wpi.cs.wpisuitetng.modules.taskmanager.toolbar.view.TestToolbar.SwingAction_1;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
 
 
 /**
@@ -31,7 +34,7 @@ import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.ToolbarGroupView;
  * Creates a container that holds tasks.
  * 
  */
-public class CreateTaskButtonPanel extends ToolbarGroupView {
+public class CreateTaskButtonPanel extends ToolbarGroupView implements ActionListener, IView{
 	
 	// Initialize the buttons for the toolbar
 	private JButton createTaskButton = new JButton("<html>Create<br />Task</html>");
@@ -41,6 +44,7 @@ public class CreateTaskButtonPanel extends ToolbarGroupView {
 	private final Action createPanel = new CreatePanelAction();
 	// Initialize the panel for everything to be held
 	private final JPanel contentPanel = new JPanel();
+	private Gateway gateway;
 	
 	
 	public CreateTaskButtonPanel() {
@@ -80,11 +84,15 @@ public class CreateTaskButtonPanel extends ToolbarGroupView {
 		
 		
 		contentPanel.add(createTaskButton);
-		contentPanel.add(createPanelButton);
-		// set opaque is for the weird gradient toggle thing that it does when you hover over the pannel that the buttons are on
+		//contentPanel.add(createPanelButton);
+		// set opaque is for the weird gradient toggle thing that it does when you hover over the panel that the buttons are on
 		contentPanel.setOpaque(false);
-		// Put everything above on the pannel
+		// Put everything above on the panel
 		this.add(contentPanel);
+	}
+	
+	public void actionPerformed (ActionEvent e){
+		gateway.toPresenter("TaskPresenter", "toolbarCreate");
 	}
 	
 	/**
@@ -125,59 +133,43 @@ public class CreateTaskButtonPanel extends ToolbarGroupView {
 	public void mouseExited() {
 
 	}
+
+	@Override
+	public void setGateway(Gateway gateway) {
+		this.gateway = gateway;
+	}
+		
+	}
 	
-	
-	
-	
-	
-	
-	private class CreateTaskAction extends AbstractAction {
+	class CreateTaskAction extends AbstractAction {
 		/**
 		 * @author thhughes
 		 * This is an action listener for the button Create Task - this should communicate with the 
 		 * controller to make new tasks etc. 
 		 */
 		private static final long serialVersionUID = 2L;
-		private boolean decision = false;
 		
 		public CreateTaskAction() {
 			putValue(NAME, "Create Task");
 			putValue(SHORT_DESCRIPTION, "FUCK YEA, I'M HOVER TEXT");
 		}
 		public void actionPerformed(ActionEvent e) {
-			if(decision){
-				putValue(NAME, "Action Occured!");
-				decision = !decision;
-			}
-			else {
-				putValue(NAME, "Occurance Two!");
-				decision = !decision;
-			}
+			//gateway.toPresenter("Task", "taskCreate");
 		}
 	}
-	private class CreatePanelAction extends AbstractAction {
+	class CreatePanelAction extends AbstractAction {
 		/**
 		 * @author thhughes
 		 * This is an action listener for the button Create panel - this should communicate with the 
 		 * controller to make new panels that tasks will be stored on. 
 		 */
 		private static final long serialVersionUID = 2L;
-		private boolean decision = false;
 		
 		public CreatePanelAction() {
 			putValue(NAME, "Create Panel");
-			putValue(SHORT_DESCRIPTION, "and I'm not :(");
+			putValue(SHORT_DESCRIPTION, "FUCK YEAH, I'M HOVER TEXT TOO");
 		}
 		public void actionPerformed(ActionEvent e) {
-			if(decision){
-				putValue(NAME, "Action Occured!");
-				decision = !decision;
-			}
-			else {
-				putValue(NAME, "Occurance Two!");
-				decision = !decision;
-			}
+			
 		}
 	}
-	
-}
