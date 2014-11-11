@@ -60,12 +60,12 @@ public class Task extends AbstractModel {
 	 * @param actualEffort number that represents the actual effort
 	 * @param dueDate when the task is due
 	 * @param activities list of activities (comments that members can put) for the task
+	 * @throws IllegalArgumentException
 	 */
 	public Task(String title, String description, TaskStatus status,
 			List<Member> assignedTo, Integer estimatedEffort,
-			Integer actualEffort, Date dueDate, List<Activity> activities) {
+			Integer actualEffort, Date dueDate, List<Activity> activities) throws IllegalArgumentException {
 		super();
-		//TODO Srojas will check that substring works (Santiago will use JUnit test)
 		if (title.length() > 100 ){
 			throw new IllegalArgumentException("Title Too Long!");
 		}
@@ -106,10 +106,11 @@ public class Task extends AbstractModel {
 	 * @param estimatedEffort number that represents how much effort (units of work)
 	 * @param actualEffort number that represents the actual effort
 	 * @param dueDate when the task is due
+	 * @throws IllegalArgumentException
 	 */
 
 	public Task(String title, String description, TaskStatus status, Integer estimatedEffort,
-			Integer actualEffort, Date dueDate) {
+			Integer actualEffort, Date dueDate) throws IllegalArgumentException {
 		super();
 
 		if (title.length() > 100 ){
@@ -143,10 +144,10 @@ public class Task extends AbstractModel {
 	/**
 	 * Constructor for a task with only a title
 	 * @param title name for the task
+	 * @throws IllegalArgumentException
 	 */
-	public Task(String title) {
+	public Task(String title) throws IllegalArgumentException{
 		super();
-		//TODO Srojas will check that substring works (Santiago will use JUnit test)
 		if (title.length() > 100 ){
 			throw new IllegalArgumentException("Title Too Long!");
 		}
@@ -238,29 +239,46 @@ public class Task extends AbstractModel {
 		return true;
 	}
 
+	/**
+	 * Necessary Method Implementation
+	 */
 	@Override
 	public void save() {
 		// TODO Auto-generated method stub
 
 	}
 
+	/**
+	 * Necessary Method Implementation
+	 */
 	@Override
 	public void delete() {
 		// TODO Auto-generated method stub
 	}
 
+	/**
+	 * Necessary Method Implementation
+	 * 
+	 */
 	@Override
 	public Boolean identify(Object o) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	//GETTERS AND SETTERS 
+	/**
+	 * @return Title of taskk
+	 */
 	public String getTitle() {
 		return title;
 	}
 
-	public void setTitle(String title) {
+	/**
+	 * Setter for title.  If title is too long, throws an exception
+	 * @param title
+	 * @throws IllegalArgumentException
+	 */
+	public void setTitle(String title) throws IllegalArgumentException {
 		if (title.length() > 100 ){
 			throw new IllegalArgumentException("Title Too Long!");
 		}
@@ -269,43 +287,83 @@ public class Task extends AbstractModel {
 		}
 	}
 
+	/**
+	 * @return Description of task
+	 */
 	public String getDescription() {
 		return description;
 	}
 
+	/**
+	 * 
+	 * @param description Description of task
+	 */
 	public void setDescription(String description) {
 		this.description = description;
 	}
 
+	/**
+	 * 
+	 * @return status of task
+	 */
 	public TaskStatus getStatus() {
 		return status;
 	}
 
+	/**
+	 * 
+	 * @param status status of task
+	 */
 	public void setStatus(TaskStatus status) {
 		this.status = status;
 	}
 
+	/**
+	 * 
+	 * @return members associated with task
+	 */
 	public List<Member> getAssignedTo() {
 		return assignedTo;
 	}
 
+	/**
+	 * 
+	 * @param assignedTo members associated with task
+	 */
 	public void setAssignedTo(List<Member> assignedTo) {
 		this.assignedTo = assignedTo;
 	}
 
+	/**
+	 * 
+	 * @return Task ID (used to discriminate between different tasks)
+	 */
 	public int getId() {
 		return id;
 	}
 
+	/**
+	 * 
+	 * @param id Task ID (used to discriminate between different tasks)
+	 */
 	public void setId(int id) {
 		this.id = id;
 	}
 
+	/**
+	 * 
+	 * @return estimated effort for the task
+	 */
 	public Integer getEstimatedEffort() {
 		return estimatedEffort;
 	}
 
-	public void setEstimatedEffort(Integer estimatedEffort) {
+	/**
+	 * This setter checks to make sure that the estimated effort is a positive integer and throws an error otherwise
+	 * @param estimatedEffort estimated effort for the task
+	 * @throws IllegalArgumentException
+	 */
+	public void setEstimatedEffort(Integer estimatedEffort) throws IllegalArgumentException {
 		//checks that estimatedEffort is positive
 		if (estimatedEffort > 0){
 			this.estimatedEffort = estimatedEffort;
@@ -315,11 +373,20 @@ public class Task extends AbstractModel {
 		}
 	}
 
+	/**
+	 * 
+	 * @return actual effort for the task
+	 */
 	public Integer getActualEffort() {
 		return actualEffort;
 	}
 
-	public void setActualEffort(Integer actualEffort) {
+	/**
+	 * This setter checks to make sure that the actual effort is a positive integer and throws an error otherwise
+	 * @param actualEffort actual effort for task
+	 * @throws IllegalArgumentException
+	 */
+	public void setActualEffort(Integer actualEffort) throws IllegalArgumentException {
 		// making sure that the inputted value is positive
 		if (actualEffort > 0){
 			this.actualEffort = actualEffort;
@@ -329,26 +396,50 @@ public class Task extends AbstractModel {
 		}
 	}
 
+	/**
+	 * 
+	 * @return due date for the task
+	 */
 	public Date getDueDate() {
 		return dueDate;
 	}
 
+	/**
+	 * 
+	 * @param dueDate due date for the task
+	 */
 	public void setDueDate(Date dueDate) {
 		this.dueDate = dueDate;
 	}
 
+	/**
+	 * 
+	 * @return list of comments on the task
+	 */
 	public List<Activity> getActivities() {
 		return activities;
 	}
 
+	/**
+	 * 
+	 * @param activities list of comments on the task
+	 */
 	public void setActivities(List<Activity> activities) {
 		this.activities = activities;
 	}
 
+	/**
+	 * 
+	 * @return column task is associated with
+	 */
 	public Integer getColumn() {
 		return column;
 	}
 
+	/**
+	 * 
+	 * @param column column task is associated with
+	 */
 	public void setColumn(Integer column) {
 		this.column = column;
 	}

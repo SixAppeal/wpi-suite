@@ -20,9 +20,9 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
  * from the client (i.e. Janeway). WPI Suite, when it receives a request, finds this entity manager and calls
  * the correct method.
  * 
- * @author nathan
- * @author santiago
- * @author jill
+ * @author nhhughes
+ * @author srojas
+ * @author jrhennessy
  */
 public class TaskEntityManager implements EntityManager<Task>{
 
