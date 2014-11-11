@@ -8,7 +8,11 @@ import javax.swing.JPanel;
 
 import edu.wpi.cs.wpisuitetng.janeway.modules.IJanewayModule;
 import edu.wpi.cs.wpisuitetng.janeway.modules.JanewayTabModel;
+<<<<<<< HEAD
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.TaskEditView;
+=======
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.*;
+>>>>>>> refs/remotes/origin/task_presenters
 
 /**
  * 
@@ -22,6 +26,7 @@ public class TaskManager implements IJanewayModule {
 	//Access Level: Package
 	String name;
 	List<JanewayTabModel> tabs;
+	Gateway gateway;
 	
 	/**
 	 * Constructs a TaskManager module and its tabs for the Janeway client.
@@ -30,12 +35,16 @@ public class TaskManager implements IJanewayModule {
 		
 		name = "Task Manager";
 		tabs = new ArrayList<JanewayTabModel>();
+		gateway = new Gateway();
+		
 		tabs.add(new JanewayTabModel(
 				name,
 				new ImageIcon(),
 				new JPanel(),
 				new TaskEditView()));
 		
+		TaskPresenter taskPresenter = new TaskPresenter();
+		gateway.addPresenter("TaskPresenter", taskPresenter);
 	}
 	
 	/**

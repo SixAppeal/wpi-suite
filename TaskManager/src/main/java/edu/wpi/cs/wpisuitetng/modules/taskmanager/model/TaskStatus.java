@@ -17,8 +17,15 @@ public class TaskStatus {
 	 * Constructor for the task status class. 
 	 * @param status what point the task is at (in progress, not started, etc.)
 	 */
-	TaskStatus (String status) {
+	public TaskStatus (String status) {
 		this.status = status;
+	}
+	
+	@Override
+	public String toString() {
+		
+		return status;
+		
 	}
 	
 }

@@ -4,15 +4,16 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Properties;
 
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
 import javax.swing.BorderFactory;
-import javax.swing.text.DateFormatter;
 
 import org.jdatepicker.JDateComponentFactory;
 import org.jdatepicker.impl.JDatePickerImpl;
@@ -38,8 +39,13 @@ public class TaskEditView extends JPanel {
 	JTextField titleEntry;
 	JTextArea descEntry;
 	JComboBox<TaskStatus> statusBox;
-	JSpinner estEffortSpinner; 
+	JSpinner estEffortSpinner;
 	JDatePickerImpl dueDatePicker;
+	JTextArea membersTextArea;
+	JTextField newMemberField;
+	JButton addNewMemberButton;
+	JButton saveButton;
+	
 	
 	/**
 	 * Create a new TaskEditView
@@ -66,14 +72,36 @@ public class TaskEditView extends JPanel {
 		
 		dueDatePicker = (JDatePickerImpl) new JDateComponentFactory().createJDatePicker();
 
+		estEffortSpinner = new JSpinner( new SpinnerNumberModel(1, 1, null, 1) );
+		
+		statusBox = new JComboBox<TaskStatus>();
+		statusBox.addItem(new TaskStatus("Backlog"));
+		statusBox.addItem(new TaskStatus("Development"));
+		statusBox.addItem(new TaskStatus("Testing"));
+		statusBox.addItem(new TaskStatus("Live"));
+		
+		membersTextArea = new JTextArea(5,0);
+		membersTextArea.setLineWrap(true);
+		membersTextArea.setWrapStyleWord(true);
+		
+		saveButton = new JButton("Save");
+		
 		this.add( new JLabel("Title :"), "top" );
-		this.add( titleEntry, "wrap, width 150:200:300, growx" );
+		this.add( titleEntry, "wrap, width 100:150, growx" );
 		
 		this.add( new JLabel("Description :"), "top" );
 		this.add( new JScrollPane(descEntry), "wrap, grow");
 		
 		this.add( new JLabel("Due Date :") );
-		this.add( dueDatePicker, "wrap" );
+		this.add( dueDatePicker, "wrap, width 120:120:200, growx" );
+		
+		this.add( new JLabel("Est. Effort :") );
+		this.add( estEffortSpinner, "wrap, width 50:120:150" );
+		
+		this.add( new JLabel("Task Status :") );
+		this.add( statusBox, "wrap, width 50:120:150" );
+		
+		this.add( saveButton, "span 2, wrap, right" );
 		
 	}
 	
