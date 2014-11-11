@@ -14,11 +14,15 @@ import javax.swing.ListModel;
 
 
 /**
-  * @author nathan
+ * Responsible for acting as a interface between Janeway and the entity manager? Currently 
+ * using this as a way of managing columns tasks are assigned to.
+ * 
+ * @author nhhughes
  * @author santiago
  * @author jill
  */
 public class TaskModel {
+//TODO Figure out how to calculate this.
 static final long serialVersionUID = 8609340016893431330L;
     
     /**
