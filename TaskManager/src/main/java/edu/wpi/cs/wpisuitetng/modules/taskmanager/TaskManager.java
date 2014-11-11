@@ -10,10 +10,14 @@ import javax.swing.JPanel;
 import edu.wpi.cs.wpisuite.modules.taskmanager.view.TaskDetailView;
 import edu.wpi.cs.wpisuitetng.janeway.modules.IJanewayModule;
 import edu.wpi.cs.wpisuitetng.janeway.modules.JanewayTabModel;
+<<<<<<< HEAD
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Activity;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Member;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.TaskStatus;
+=======
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.TaskEditView;
+>>>>>>> refs/remotes/origin/task-edit-view
 
 /**
  * 
@@ -62,6 +66,7 @@ public class TaskManager implements IJanewayModule {
 				name,
 				new ImageIcon(),
 				new JPanel(),
+<<<<<<< HEAD
 				new TaskDetailView(dummyTask)));
 		
 		
@@ -73,6 +78,9 @@ public class TaskManager implements IJanewayModule {
 		chores.add(end);
 		
 		
+=======
+				new TaskEditView()));
+>>>>>>> refs/remotes/origin/task-edit-view
 		
 	}
 	

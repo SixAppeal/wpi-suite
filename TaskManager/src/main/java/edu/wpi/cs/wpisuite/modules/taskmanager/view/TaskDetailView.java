@@ -16,6 +16,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
  * 
  * @author tmeehan
  * @author wmtemple
+ * @author krpeffer
  * 
  * A view for Task Details
  *
@@ -50,43 +51,43 @@ public class TaskDetailView extends JPanel {
 		
 		
 		idLabel = new JLabel("Task ID: " + task.getId());
-		idLabel.setAlignmentX(RIGHT_ALIGNMENT);
+		idLabel.setAlignmentY(CENTER_ALIGNMENT);
 		idLabel.setForeground(new Color(155, 155, 155));
 		
 		this.add(idLabel);
 		
 		nameLabel = new JLabel("Task name: " + task.getTitle());
-		nameLabel.setAlignmentX(LEFT_ALIGNMENT);
+		nameLabel.setAlignmentY(LEFT_ALIGNMENT);
 		nameLabel.setForeground(new Color(0, 0, 0));
 		
 		this.add(nameLabel);
 		
 		dateLabel = new JLabel ("Task due date: " + task.getDueDate().toString());
-		dateLabel.setAlignmentX(LEFT_ALIGNMENT);
+		dateLabel.setAlignmentY(LEFT_ALIGNMENT);
 		dateLabel.setForeground(new Color(0, 0, 0));
 		
 		this.add(dateLabel);
 		
 		desLabel = new JLabel ("Task description: " + task.getDescription());
-		desLabel.setAlignmentX(LEFT_ALIGNMENT);
+		desLabel.setAlignmentY(LEFT_ALIGNMENT);
 		desLabel.setForeground(new Color (0, 0, 0));
 		
 		this.add(desLabel);
 		
 		statLabel = new JLabel ("Task status: " + task.getStatus().toString());
-		statLabel.setAlignmentX(LEFT_ALIGNMENT);
+		statLabel.setAlignmentY(LEFT_ALIGNMENT);
 		statLabel.setForeground(new Color (0, 0, 0));
 		
 		this.add(statLabel);
 		
 		estLabel = new JLabel ("Estimated effort: " + task.getEstimatedEffort().toString());
-		estLabel.setAlignmentX(LEFT_ALIGNMENT);
+		estLabel.setAlignmentY(LEFT_ALIGNMENT);
 		estLabel.setForeground(new Color (0, 0, 0));
 		
 		this.add(estLabel);
 		
 		actLabel = new JLabel ("Actual effort: " + task.getActualEffort().toString());
-		actLabel.setAlignmentX(LEFT_ALIGNMENT);
+		actLabel.setAlignmentY(LEFT_ALIGNMENT);
 		actLabel.setForeground(new Color (0, 0, 0));
 		
 		this.add(actLabel);
