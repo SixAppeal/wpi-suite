@@ -24,6 +24,7 @@ public class ColumnView extends JPanel implements IView {
 	private String title;
 	private JPanel columnPanel;
 	private JLabel titleLabel;
+	private JPanel titlePanel;
 	private ArrayList<TaskView> tasks;
 	
 	/**
@@ -35,24 +36,27 @@ public class ColumnView extends JPanel implements IView {
 		this.title = title;
 		this.columnPanel = new JPanel();
 		this.titleLabel = new JLabel(this.title, JLabel.LEFT);
+		this.titlePanel = new JPanel();
 		this.tasks = new ArrayList<TaskView>();
 		
-		this.tasks.add(new TaskView("Task 1"));
-		this.tasks.add(new TaskView("Task 2"));
-		this.tasks.add(new TaskView("Task 3"));
+		this.tasks.add(new TaskView("Some Task"));
 		
 		this.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 20));
 		this.setOpaque(false);
 		this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-		this.setPreferredSize(new Dimension(260, 500));
-		this.setMaximumSize(new Dimension(260, Integer.MAX_VALUE));
 		
-		this.titleLabel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+		this.titlePanel.setOpaque(false);
+		this.titlePanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+		this.titlePanel.setLayout(new BoxLayout(this.titlePanel, BoxLayout.X_AXIS));
+		this.titlePanel.add(this.titleLabel);
 		
-		this.columnPanel.setBackground(new Color(200, 200, 200));
+		this.columnPanel.setBackground(new Color(220, 220, 220));
 		this.columnPanel.setLayout(new BoxLayout(this.columnPanel, BoxLayout.Y_AXIS));
+		this.columnPanel.setMinimumSize(new Dimension(260, 0));
+		this.columnPanel.setPreferredSize(new Dimension(260, 0));
+		this.columnPanel.setMaximumSize(new Dimension(260, Integer.MAX_VALUE));
 		
-		this.columnPanel.add(this.titleLabel);
+		this.columnPanel.add(this.titlePanel);
 		for (TaskView task : this.tasks) {
 			this.columnPanel.add(task);
 		}

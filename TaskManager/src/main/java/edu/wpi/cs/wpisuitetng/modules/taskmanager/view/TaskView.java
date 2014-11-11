@@ -34,6 +34,7 @@ public class TaskView extends JPanel implements IView {
 		this.setBorder(BorderFactory.createEmptyBorder(0, 20, 20, 20));
 		this.setOpaque(false);
 		this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+		this.taskPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 100));
 		
 		this.taskPanel.setBackground(new Color(255, 255, 255));
 		

@@ -1,5 +1,10 @@
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view;
 
+import java.awt.Color;
+import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
@@ -46,11 +51,12 @@ public class MultiColumnView extends JPanel implements IView {
 		
 		this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		this.setOpaque(false);
+		
 		this.multiColumnPanel.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 0));
 		this.multiColumnPanel.setLayout(new BoxLayout(this.multiColumnPanel, BoxLayout.X_AXIS));
 		
-		for (ColumnView column : columns) {
-			this.multiColumnPanel.add(column);
+		for (int i = 0; i < columns.size(); i++) {
+			this.multiColumnPanel.add(columns.get(i));//, gbc);
 		}
 		this.add(this.scrollPane);
 	}
