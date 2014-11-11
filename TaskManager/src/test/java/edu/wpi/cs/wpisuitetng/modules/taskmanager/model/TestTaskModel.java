@@ -27,6 +27,10 @@ public class TestTaskModel {
 	List<Task> tasks2 = new ArrayList<Task>();
 	
 	TaskModel model;
+	
+	/**
+	 * Create sample tasks for tests
+	 */
 	@Before
 	public void setup() {
 		task1.id = 0;
@@ -38,6 +42,9 @@ public class TestTaskModel {
 		model = new TaskModel();
 	}
 	
+	/**
+	 * Test that tasks can be added to the model
+	 */
 	@Test
 	public void testAddTask() {
 		model.addTask(task1);
@@ -46,6 +53,9 @@ public class TestTaskModel {
 		assertEquals(model.getTasks(), tasks2);
 	}
 	
+	/**
+	 * Test that task columns can be changed
+	 */
 	@Test
 	public void testChangeColumn() {
 		model.addTask(task1);
@@ -55,6 +65,9 @@ public class TestTaskModel {
 		assertEquals(result.getColumn(), new Integer(5));
 	}
 	
+	/**
+	 * Test that you can get tasks at specific indexes of the list
+	 */
 	@Test
 	public void testGetElementAt() {
 		model.addTask(task1);
@@ -63,6 +76,9 @@ public class TestTaskModel {
 		assertEquals(model.getElementAt(1), task1);
 	}
 	
+	/**
+	 * Test getting ID's of tasks
+	 */
 	@Test
 	public void testGetNextID() {
 		assertEquals(model.getNextID(), 0);
@@ -70,6 +86,9 @@ public class TestTaskModel {
 		assertEquals(model.getNextID(), 1);
 	}
 	
+	/**
+	 * Test getting number of tasks
+	 */
 	@Test
 	public void testGetSize() {
 		assertEquals(model.getSize(), 0);
@@ -79,6 +98,9 @@ public class TestTaskModel {
 		assertEquals(model.getSize(), 2);
 	}
 	
+	/**
+	 * Test getting task from the list by a id
+	 */
 	@Test
 	public void testGetTask() {
 		model.addTask(task1);
@@ -87,6 +109,9 @@ public class TestTaskModel {
 		assertEquals(task1, result);
 	}
 	
+	/**
+	 * Test get tasks in the specific columns
+	 */
 	@Test
 	public void testGetTasksFromColumn() {
 		model.addTask(task1);
@@ -97,6 +122,9 @@ public class TestTaskModel {
 		assertEquals(model.getTasksFromColumn(5).get(0),task1);
 	}
 	
+	/**
+	 * Get all tasks in model
+	 */
 	@Test
 	public void getTasks() {
 		model.addTask(task1);

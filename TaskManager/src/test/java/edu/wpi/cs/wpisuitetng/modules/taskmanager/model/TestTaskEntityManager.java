@@ -47,6 +47,14 @@ public class TestTaskEntityManager {
 
 	private TaskEntityManager entityManager = new TaskEntityManager(mockDb);
 
+	
+	/**
+	 * Checks to see if a task is in an array of tasks
+	 * 
+	 * @param container
+	 * @param t
+	 * @return
+	 */
 	public boolean contains(Task[] container, Task t) {
 		for (Task q: container) {
 			if (t == q) {
@@ -56,6 +64,9 @@ public class TestTaskEntityManager {
 		return false;
 	}
 
+	/**
+	 * The setup method for all the tests
+	 */
 	@Before
 	public void setup() {
 		task1.id = 0;
@@ -66,11 +77,19 @@ public class TestTaskEntityManager {
 		when(mockSession.getProject()).thenReturn(mockProject);
 	}
 
+	
+	/**
+	 * Make sure constructor works
+	 */
 	@Test
 	public void testConstructor() {
 		assertEquals(mockDb, entityManager.getDb());
 	}
 
+	/**
+	 * Make sure database can create and store a task
+	 * @throws WPISuiteException
+	 */
 	@Test
 	public void testMakeEntity() throws WPISuiteException {
 		ArgumentCaptor<Task> taskCaptor = ArgumentCaptor.forClass(Task.class);
@@ -88,7 +107,10 @@ public class TestTaskEntityManager {
 		verify(mockDb, times(1)).save(task1, mockProject);
 	}
 
-
+	/**
+	 * Make an Invalid entity
+	 * @throws WPISuiteException
+	 */
 	@Test(expected = WPISuiteException.class)
 	public void testMakeEntity_Exception() throws WPISuiteException {
 		ArgumentCaptor<Task> taskCaptor = ArgumentCaptor.forClass(Task.class);
@@ -105,12 +127,19 @@ public class TestTaskEntityManager {
 		assertNull(result);
 	}
 
-
+	/**
+	 * Test what happens when a task isn't in the database
+	 * @throws WPISuiteException
+	 */
 	@Test(expected = WPISuiteException.class)
 	public void testGetEntity() throws WPISuiteException {
 		entityManager.getEntity(mockSession, "2");
 	}
 
+	/**
+	 * Test getting all the tasks from the database
+	 * @throws WPISuiteException
+	 */
 	@Test
 	public void testGetAll() throws WPISuiteException {
 		List<Model> mockModelList = new ArrayList<Model>(tasks);
@@ -124,6 +153,10 @@ public class TestTaskEntityManager {
 		assertTrue(contains(result, task2));
 	}
 
+	/**
+	 * Test what happens when an update fails
+	 * @throws WPISuiteException
+	 */
 	@Test(expected = WPISuiteException.class)
 	public void testUpdate() throws WPISuiteException {
 		String taskJson = "{\"title\":\"Task 1\",\"description\":\"\",\"assignedTo\"" +
@@ -132,6 +165,10 @@ public class TestTaskEntityManager {
 		entityManager.update(mockSession, taskJson);
 	}
 
+	/**
+	 * Test saving a task in the database
+	 * @throws WPISuiteException
+	 */
 	@Test
 	public void testSave() throws WPISuiteException {
 		entityManager.save(mockSession, task1);
@@ -140,16 +177,28 @@ public class TestTaskEntityManager {
 	}
 
 
+	/**
+	 * Not Implemented yet
+	 * @throws WPISuiteException
+	 */
 	@Test(expected = NotImplementedException.class)
 	public void testDeleteEntity() throws WPISuiteException {
 		entityManager.deleteEntity(mockSession, "2");
 	}
 
+	/**
+	 * Not Implemented yet
+	 * @throws WPISuiteException
+	 */
 	@Test(expected = NotImplementedException.class)
 	public void testDeleteAll() throws WPISuiteException {
 		entityManager.deleteAll(mockSession);
 	}
 
+	/**
+	 * Test counting of database members
+	 * @throws WPISuiteException
+	 */
 	@Test
 	public void testCount() throws WPISuiteException {
 		when(mockDb.retrieveAll(any(Task.class))).thenReturn(tasks);
@@ -161,16 +210,28 @@ public class TestTaskEntityManager {
 		verify(mockDb, times(1)).retrieveAll(any(Task.class));
 	}
 
+	/**
+	 * Not implemented
+	 * @throws WPISuiteException
+	 */
 	@Test(expected = NotImplementedException.class)
 	public void testAdvancedGet() throws WPISuiteException {
 		entityManager.advancedGet(mockSession, new String[] { "Test String 1", "Test String 2" });
 	}
 
+	/** 
+	 * Not implemented
+	 * @throws WPISuiteException
+	 */
 	@Test(expected = NotImplementedException.class)
 	public void testAdvancedPut() throws WPISuiteException {
 		entityManager.advancedPut(mockSession, new String[] { "Test Arg1", "Test Arg2" }, "Test Content");
 	}
 
+	/**
+	 * Not implemented
+	 * @throws WPISuiteException
+	 */
 	@Test(expected = NotImplementedException.class)
 	public void testAdvancedPost() throws WPISuiteException {
 		entityManager.advancedPost(mockSession, "Test String", "Test Content");

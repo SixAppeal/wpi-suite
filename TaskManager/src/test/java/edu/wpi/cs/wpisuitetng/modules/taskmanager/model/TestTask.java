@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import edu.wpi.cs.wpisuitetng.exceptions.WPISuiteException;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.TaskManager;
 
 /**
@@ -73,7 +74,7 @@ public class TestTask {
 	/**
 	 * tests that the title truncates if you use one longer than 99 chars
 	 */
-	@Test
+	@Test(expected = IllegalArgumentException.class)
 	public void testSetTitle(){
 		Task newTask = new Task();
 		assertEquals(newTask.title,"");
@@ -85,7 +86,7 @@ public class TestTask {
 	/**
 	 * Function to test that the actual effort changes with the set method and is NOT negative 
 	 */
-	@Test
+	@Test(expected = IllegalArgumentException.class)
 	public void testSetActualEffort() {
 
 		Task newTask = new Task();
@@ -99,7 +100,7 @@ public class TestTask {
 	/**
 	 * Function to test that the estimated effort changes with the set method and is not negative
 	 */
-	@Test
+	@Test(expected = IllegalArgumentException.class)
 	public void testSetEstimatedEffort() {
 		//TODO Write Comprehensive Tests once we start using actual effort
 

@@ -76,7 +76,7 @@ public class Task extends AbstractModel {
 		super();
 		//TODO Srojas will check that substring works (Santiago will use JUnit test)
 		if (title.length() > 100 ){
-			this.title = title.substring(0, 100);
+			throw new IllegalArgumentException("Title Too Long!");
 		}
 		else {
 			this.title = title;
@@ -91,14 +91,14 @@ public class Task extends AbstractModel {
 			this.estimatedEffort = estimatedEffort;
 		}
 		else {
-			this.estimatedEffort = -1;
+			throw new IllegalArgumentException("Estimated Effort Must Be Greater Than Zero!");
 		}
 		//if negative,  -1
 		if (actualEffort > 0){
 			this.actualEffort = actualEffort;
 		}
 		else {
-			this.actualEffort = -1;
+			throw new IllegalArgumentException("Actual Effort Must Be Greater Than Zero!");
 		}
 
 		this.dueDate = dueDate;
@@ -123,7 +123,7 @@ public class Task extends AbstractModel {
 		super();
 		
 		if (title.length() > 100 ){
-			this.title = title.substring(0, 99);
+			throw new IllegalArgumentException("Title Too Long!");
 		}
 		else {
 			this.title = title;
@@ -136,14 +136,14 @@ public class Task extends AbstractModel {
 			this.estimatedEffort = estimatedEffort;
 		}
 		else {
-			this.estimatedEffort = -1;
+			throw new IllegalArgumentException("Estimated Effort Must Be Greater Than Zero!");
 		}
 		//checks that actualEffort is positive
 		if (actualEffort > 0){
 			this.actualEffort = actualEffort;
 		}
 		else {
-			this.actualEffort = -1;
+			throw new IllegalArgumentException("Actual Effort Must Be Greater Than Zero!");
 		}
 		this.dueDate = dueDate;
 		this.activities = new LinkedList<Activity>();
@@ -158,7 +158,7 @@ public class Task extends AbstractModel {
 		super();
 		//TODO Srojas will check that substring works (Santiago will use JUnit test)
 		if (title.length() > 100 ){
-			this.title = title.substring(0, 99);
+			throw new IllegalArgumentException("Title Too Long!");
 		}
 		else {
 			this.title = title;
@@ -282,9 +282,8 @@ public class Task extends AbstractModel {
 
 
 	public void setTitle(String title) {
-		//TODO Srojas will check that substring works (Santiago will use JUnit test)
 		if (title.length() > 100 ){
-			this.title = title.substring(0, 99);
+			throw new IllegalArgumentException("Title Too Long!");
 		}
 		else {
 			this.title = title;
@@ -343,7 +342,7 @@ public class Task extends AbstractModel {
 			this.estimatedEffort = estimatedEffort;
 		}
 		else {
-			this.estimatedEffort = -1;
+			throw new IllegalArgumentException("Estimated Effort Must Be Greater Than Zero!");
 		}
 	}
 
@@ -359,7 +358,7 @@ public class Task extends AbstractModel {
 			this.actualEffort = actualEffort;
 		}
 		else {
-			this.actualEffort = -1;
+			throw new IllegalArgumentException("Actual Effort Must Be Greater Than Zero!");
 		}
 	}
 

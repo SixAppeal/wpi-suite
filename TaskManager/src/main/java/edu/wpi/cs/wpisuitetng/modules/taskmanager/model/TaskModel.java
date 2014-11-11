@@ -18,8 +18,8 @@ import javax.swing.ListModel;
  * using this as a way of managing columns tasks are assigned to.
  * 
  * @author nhhughes
- * @author santiago
- * @author jill
+ * @author srojas
+ * @author jrhennessy
  */
 public class TaskModel {
 //TODO Figure out how to calculate this.
