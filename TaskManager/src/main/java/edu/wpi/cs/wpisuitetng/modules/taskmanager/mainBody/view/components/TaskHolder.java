@@ -1,4 +1,4 @@
-package edu.wpi.cs.wpisuitetng.modules.taskmanager.mainBody.components.view;
+package edu.wpi.cs.wpisuitetng.modules.taskmanager.mainBody.view.components;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -9,11 +9,25 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
-
+/**
+ * This class creates a task holder to be placed in the workflow
+ * 
+ * @author thhughes
+ * @author rwang
+ *
+ */
 
 
 @SuppressWarnings("serial")
 public class TaskHolder extends JPanel{
+	/*	This class creates the task holders
+	 * 		It is also the thing to 
+	 * 	
+	 * 	Future Edits:
+	 * 		Consider making this class a singleton
+	 * 		Create an organizational method to allow us to find a specific TaskHolder and add a TaskDisplay to it. 
+	 * 		Create a method to add a taskHolder in between any two task holders. 
+	 */
 	private static testTask tTask_1 = new testTask("The Name", "data");
 	private static testTask tTask_2 = new testTask("two Name", "data");
 	

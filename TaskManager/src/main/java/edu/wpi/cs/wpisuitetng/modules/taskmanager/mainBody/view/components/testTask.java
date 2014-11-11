@@ -1,4 +1,4 @@
-package edu.wpi.cs.wpisuitetng.modules.taskmanager.mainBody.components.view;
+package edu.wpi.cs.wpisuitetng.modules.taskmanager.mainBody.view.components;
 
 public class testTask {
 	String name = new String();

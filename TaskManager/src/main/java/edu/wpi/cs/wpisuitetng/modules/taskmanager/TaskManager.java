@@ -26,7 +26,7 @@ public class TaskManager implements IJanewayModule {
 	List<JanewayTabModel> tabs;
 	
 	ToolbarView attempt = new ToolbarView(true);
-	MainBody mb_attempt = new MainBody(true);
+	MainBodyContent mb_attempt = new MainBodyContent(true);
 	
 	/**
 	 * Constructs a TaskManager module and its tabs for the Janeway client.
