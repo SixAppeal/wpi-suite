@@ -15,7 +15,6 @@ public class Member {
 	 * @param name username or full name of the member
 	 */
 	public Member (String name){
-<<<<<<< HEAD
 		this.name = name;
 	}
 	
@@ -23,23 +22,10 @@ public class Member {
 		return this.name;
 	}
 	
-	
-=======
-		this.name = name;
-	}
-
-	//Getters and Setters
-	/**
-	 * @return the name
-	 */
-	public String getName() {
-		return name;
-	}
 	/**
 	 * @param name the name to set
 	 */
 	public void setName(String name) {
 		this.name = name;
 	}
->>>>>>> origin/devel_task_backend
 }

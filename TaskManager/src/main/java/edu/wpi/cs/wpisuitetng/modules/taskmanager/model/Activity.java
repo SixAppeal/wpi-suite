@@ -9,7 +9,6 @@ package edu.wpi.cs.wpisuitetng.modules.taskmanager.model;
  */
 public class Activity {
 
-<<<<<<< HEAD
 		Member member;
 		String comment;
 		
@@ -22,19 +21,7 @@ public class Activity {
 			this.member = member;
 			this.comment = comment;
 		}
-=======
-	Member member;
-	String comment;
 
-	/**
-	 *  Constructor for an activity
-	 * @param member member that made the comment
-	 * @param comment comment that the member made
-	 */
-	public Activity(Member member, String comment){
-		this.member = member;
-		this.comment = comment;
-	}
 
 	//Getters and Setters
 	/**
@@ -64,5 +51,4 @@ public class Activity {
 	public void setComment(String comment) {
 		this.comment = comment;
 	}
->>>>>>> origin/devel_task_backend
 }

@@ -36,10 +36,6 @@ public class Task extends AbstractModel {
 	/**
 	 * Empty constructor for the Task class
 	 */
-<<<<<<< HEAD
-
-=======
->>>>>>> origin/devel_task_backend
 	public Task() {
 		super();
 		this.title = "";
@@ -271,7 +267,6 @@ public class Task extends AbstractModel {
 	}
 
 	/**
-<<<<<<< HEAD
 	 * Returns a Concantenated String of all the members in the assignedTo List
 	 * String memberList
 	 * @return memberList
@@ -283,12 +278,10 @@ public class Task extends AbstractModel {
 		}
 		return memberList.toString();
 	}
-	
-	//GETTERS AND SETTERS 
-=======
+
+	/**
 	 * @return Title of taskk
 	 */
->>>>>>> origin/devel_task_backend
 	public String getTitle() {
 		return title;
 	}

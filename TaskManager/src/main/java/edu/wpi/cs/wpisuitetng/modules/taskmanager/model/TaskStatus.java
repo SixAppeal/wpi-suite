@@ -16,8 +16,6 @@ public class TaskStatus {
 	 * @param status what point the task is at (in progress, not started, etc.)
 	 */
 	public TaskStatus (String status) {
-<<<<<<< HEAD
-=======
 		this.status = status;
 	}
 	
@@ -35,7 +33,6 @@ public class TaskStatus {
 	 * @param status the status to set
 	 */
 	public void setStatus(String status) {
->>>>>>> origin/devel_task_backend
 		this.status = status;
 	}
 	
