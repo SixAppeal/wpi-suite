@@ -1,6 +1,3 @@
-/**
- * 
- */
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.model;
 
 import java.util.ArrayList;

@@ -8,11 +8,8 @@ import javax.swing.JPanel;
 
 import edu.wpi.cs.wpisuitetng.janeway.modules.IJanewayModule;
 import edu.wpi.cs.wpisuitetng.janeway.modules.JanewayTabModel;
-<<<<<<< HEAD
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.TaskEditView;
-=======
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.*;
->>>>>>> refs/remotes/origin/task_presenters
 
 /**
  * 

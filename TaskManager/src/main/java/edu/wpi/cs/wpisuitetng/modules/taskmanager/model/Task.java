@@ -46,7 +46,7 @@ public class Task extends AbstractModel {
 	 *
 	 */
 
-	Task() {
+	public Task() {
 		super();
 		this.title = "";
 		this.description = "";
@@ -72,7 +72,7 @@ public class Task extends AbstractModel {
 	 * @param dueDate when the task is due
 	 * @param activities list of activities (comments that members can put) for the task
 	 */
-	Task(String title, String description, TaskStatus status,
+	public Task(String title, String description, TaskStatus status,
 			List<Member> assignedTo, Integer estimatedEffort,
 			Integer actualEffort, Date dueDate, List<Activity> activities) {
 		super();
@@ -99,7 +99,7 @@ public class Task extends AbstractModel {
 	 * @param dueDate when the task is due
 	 */
 
-	Task(String title, String description, TaskStatus status, Integer estimatedEffort,
+	public Task(String title, String description, TaskStatus status, Integer estimatedEffort,
 			Integer actualEffort, Date dueDate) {
 		super();
 		this.title = title;
@@ -117,7 +117,7 @@ public class Task extends AbstractModel {
 	 * Constructor for a task with only a title
 	 * @param title name for the task
 	 */
-	Task(String title) {
+	public Task(String title) {
 		super();
 		this.title = title;
 		this.description = "";
@@ -132,7 +132,7 @@ public class Task extends AbstractModel {
 
 
 
-	//database methods
+	//database methodsnew Integer()
 	/**
 	 * Returns an instance of Requirement constructed using the given
 	 * Requirement encoded as a JSON string.
