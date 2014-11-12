@@ -27,6 +27,13 @@ public class TaskPresenter implements IPresenter{
 	}
 	
 	/**
+	 * Tells the SidebarView to show the form for creating a task
+	 */
+	public void toolbarCreate() {
+		this.gateway.toView("SidebarView", "showCreatePanel");
+	}
+	
+	/**
 	 * Creates a new task in the database 
 	 * @param task Task to create
 	 */

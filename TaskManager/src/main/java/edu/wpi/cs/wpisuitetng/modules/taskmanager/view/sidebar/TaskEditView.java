@@ -24,6 +24,7 @@ import net.miginfocom.swing.MigLayout;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.TaskStatus;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
 
 /**
  * 
@@ -153,6 +154,7 @@ public class TaskEditView extends JPanel implements IView {
 	/**
 	 * @see edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView#setGateway()
 	 */
+	@Override
 	public void setGateway(Gateway gateway) {
 		this.gateway = gateway;
 	}

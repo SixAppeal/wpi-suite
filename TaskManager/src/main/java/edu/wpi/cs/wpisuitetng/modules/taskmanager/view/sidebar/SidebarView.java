@@ -19,8 +19,10 @@ public class SidebarView extends JPanel implements IView {
 	Gateway gateway;
 	
 	private JPanel container;
+	private JPanel curPanel;
 	private TaskDetailView detailView;
 	private TaskEditView editView;
+	private TaskEditView createView;
 	
 	/**
 	 * Constructs a sidebar view
@@ -28,19 +30,24 @@ public class SidebarView extends JPanel implements IView {
 	public SidebarView() {
 		this.container = new JPanel();
 		this.detailView = new TaskDetailView(new Task());
+		this.createView = new TaskEditView();
 		this.editView = new TaskEditView();
 		
 		this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		
 		this.container.setLayout(new BoxLayout(this.container, BoxLayout.X_AXIS));
-		this.container.setMinimumSize(new Dimension(300, 0));
-		//this.container.setMaximumSize(new Dimension(300, Integer.MAX_VALUE));
 		
-		//this.detailView.setVisible(false);
-		
-		//this.container.add(detailView);
+		this.curPanel = this.editView;
 		this.container.add(editView);
 		this.add(container);
+	}
+	
+	/**
+	 * Shows the creation panel 
+	 */
+	public void showCreatePanel() {
+		this.container.remove(this.curPanel);
+		//this.container.add(this.createPanel);
 	}
 	
 	/**
@@ -49,6 +56,8 @@ public class SidebarView extends JPanel implements IView {
 	@Override
 	public void setGateway(Gateway gateway) {
 		this.gateway = gateway;
+		this.detailView.setGateway(this.gateway);
+		this.editView.setGateway(this.gateway);
 	}
 
 }

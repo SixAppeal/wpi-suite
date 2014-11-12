@@ -58,7 +58,8 @@ public class ToolbarView extends DefaultToolbarView implements IView {
 	 */
 	@Override
 	public void setGateway(Gateway gateway) {
-		this.gateway = gateway;	
+		this.gateway = gateway;
+		this.addButtons.setGateway(this.gateway);
 	}
 	
 

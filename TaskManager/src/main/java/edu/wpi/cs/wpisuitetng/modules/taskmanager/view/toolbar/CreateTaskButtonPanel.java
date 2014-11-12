@@ -12,6 +12,7 @@ import javax.swing.SpringLayout;
 
 import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.ToolbarGroupView;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
 
 
 /**
@@ -29,7 +30,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
 * there are two button: Create Task, and Create Panel
 *
 */
-public class CreateTaskButtonPanel extends ToolbarGroupView {
+public class CreateTaskButtonPanel extends ToolbarGroupView implements IView {
 	private JButton createTaskButton = new JButton("<html>Create<br />Task<html>");
 	private JButton createPanelButton = new JButton("<html>Create<br />Panel<html>");
 	private final Action createTask = new CreateTaskAction();
@@ -151,7 +152,15 @@ public class CreateTaskButtonPanel extends ToolbarGroupView {
 		}
 
 		public void actionPerformed(ActionEvent e) {
-			gateway.toPresenter("Task", "taskCreate");
+			gateway.toPresenter("TaskPresenter", "toolbarCreate");
 		}
+	}
+
+	/**
+	 * @see IView.setGateway
+	 */
+	@Override
+	public void setGateway(Gateway gateway) {
+		this.gateway = gateway;
 	}
 }

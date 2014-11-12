@@ -12,6 +12,8 @@ import javax.swing.SwingConstants;
 
 import net.miginfocom.swing.MigLayout;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
 
 /**
  * 
@@ -24,7 +26,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
  */
 
 @SuppressWarnings("unused")
-public class TaskDetailView extends JPanel {
+public class TaskDetailView extends JPanel implements IView {
 
 
 	/**
@@ -33,6 +35,7 @@ public class TaskDetailView extends JPanel {
 	private static final long serialVersionUID = -8972626054612267276L;
 
 
+	private Gateway gateway;
 	private Task task;
 	
 	/**
@@ -140,6 +143,12 @@ public class TaskDetailView extends JPanel {
 		this.add(assignedToLabel);
 		this.add(taskAssignedToLabel);	
 	}
-	
-	
+
+	/**
+	 * @see IView.setGateway
+	 */
+	@Override
+	public void setGateway(Gateway gateway) {
+		this.gateway = gateway;
+	}
 }

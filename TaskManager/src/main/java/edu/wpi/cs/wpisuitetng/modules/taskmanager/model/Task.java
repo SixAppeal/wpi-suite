@@ -36,10 +36,6 @@ public class Task extends AbstractModel {
 	/**
 	 * Empty constructor for the Task class
 	 */
-<<<<<<< HEAD
-=======
-
->>>>>>> origin/task-edit-view
 	public Task() {
 		super();
 		this.title = "";
@@ -114,11 +110,7 @@ public class Task extends AbstractModel {
 	 */
 
 	public Task(String title, String description, TaskStatus status, Integer estimatedEffort,
-<<<<<<< HEAD
 			Integer actualEffort, Date dueDate) throws IllegalArgumentException {
-=======
-			Integer actualEffort, Date dueDate) {
->>>>>>> origin/task-edit-view
 		super();
 
 		if (title.length() > 100 ){
@@ -154,15 +146,11 @@ public class Task extends AbstractModel {
 	 * @param title name for the task
 	 * @throws IllegalArgumentException
 	 */
-<<<<<<< HEAD
-	public Task(String title) throws IllegalArgumentException{
-=======
-	public Task(String title) {
->>>>>>> origin/task-edit-view
+	public Task(String title) throws IllegalArgumentException {
 		super();
 		if (title.length() > 100 ){
 			throw new IllegalArgumentException("Title Too Long!");
-		}
+		} 
 		else {
 			this.title = title;
 		}
@@ -176,12 +164,7 @@ public class Task extends AbstractModel {
 		this.column = 0;
 	}
 
-<<<<<<< HEAD
-=======
 
-
-	//database methodsnew Integer()
->>>>>>> origin/task-edit-view
 	/**
 	 * Returns an instance of Requirement constructed using the given
 	 * Requirement encoded as a JSON string.

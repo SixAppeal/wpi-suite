@@ -16,7 +16,6 @@ public class TaskStatus {
 	 * @param status what point the task is at (in progress, not started, etc.)
 	 */
 	public TaskStatus (String status) {
-<<<<<<< HEAD
 		this.status = status;
 	}
 	
@@ -34,20 +33,12 @@ public class TaskStatus {
 	 * @param status the status to set
 	 */
 	public void setStatus(String status) {
-=======
->>>>>>> origin/task-edit-view
 		this.status = status;
 	}
 	
 	@Override
 	public String toString() {
-<<<<<<< HEAD
 		return status;
-=======
-		
-		return status;
-		
->>>>>>> origin/task-edit-view
 	}
 	
 }
