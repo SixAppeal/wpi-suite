@@ -71,6 +71,7 @@ public class TaskEditView extends JPanel implements IView {
 				"[right][left, 100::, grow]", 	//Column constraints
 				"");							//Row Constraints
 		
+		this.setOpaque(false);
 		this.setBorder(BorderFactory.createTitledBorder(paneTitle));
 		this.setLayout(layout);
 		
@@ -169,7 +170,6 @@ public class TaskEditView extends JPanel implements IView {
 	}
 	
 	private void processTask() {
-		System.out.println("processTask");
 		if( t == null) t = new Task();
 		
 		String title = titleEntry.getText();

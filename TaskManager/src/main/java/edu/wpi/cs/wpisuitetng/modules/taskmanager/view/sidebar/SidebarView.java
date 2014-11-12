@@ -1,5 +1,6 @@
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
 
+import java.awt.Color;
 import java.awt.Dimension;
 
 import javax.swing.BoxLayout;
@@ -36,6 +37,7 @@ public class SidebarView extends JPanel implements IView {
 		this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		
 		this.container.setLayout(new BoxLayout(this.container, BoxLayout.X_AXIS));
+		this.container.setBackground(new Color(220, 220, 220));
 		
 		this.curView = this.createView;
 		this.editView.setVisible(false);

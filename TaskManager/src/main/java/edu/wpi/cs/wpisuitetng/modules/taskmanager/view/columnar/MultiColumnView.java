@@ -81,6 +81,7 @@ public class MultiColumnView extends JPanel implements IView {
 	public void addTask(Task task) {
 		if (task.getColumn() < this.columns.size() && task.getColumn() >= 0) {
 			this.columns.get(task.getColumn()).addTask(task);
+			this.scrollPane.revalidate();
 		}
 	}
 	
