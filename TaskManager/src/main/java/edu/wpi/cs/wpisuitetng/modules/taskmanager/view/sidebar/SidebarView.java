@@ -14,6 +14,8 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
  * @author wavanrensselaer
  */
 public class SidebarView extends JPanel implements IView {
+	private static final long serialVersionUID = -9157611802121055998L;
+
 	Gateway gateway;
 	
 	private JPanel container;

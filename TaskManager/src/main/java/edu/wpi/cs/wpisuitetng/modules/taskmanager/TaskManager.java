@@ -1,9 +1,7 @@
  package edu.wpi.cs.wpisuitetng.modules.taskmanager;
 
 
-import java.awt.Dimension;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.swing.BoxLayout;
@@ -15,13 +13,7 @@ import edu.wpi.cs.wpisuitetng.janeway.modules.JanewayTabModel;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.*;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar.MultiColumnView;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar.SidebarView;
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar.TaskDetailView;
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar.TaskEditView;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.toolbar.ToolbarView;
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Activity;
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Member;
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.TaskStatus;
 
 /**
  * 
