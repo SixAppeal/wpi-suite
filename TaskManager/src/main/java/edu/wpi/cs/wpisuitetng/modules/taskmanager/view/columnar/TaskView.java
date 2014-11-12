@@ -60,12 +60,12 @@ public class TaskView extends JPanel implements IView {
 
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				
+				taskPanel.setBackground(new Color(245, 245, 245));
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e) {
-				
+				taskPanel.setBackground(new Color(255, 255, 255));
 			}
 		});
 		
