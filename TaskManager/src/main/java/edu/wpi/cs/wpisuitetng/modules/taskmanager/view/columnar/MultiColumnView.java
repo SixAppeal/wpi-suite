@@ -56,8 +56,8 @@ public class MultiColumnView extends JPanel implements IView {
 		this.multiColumnPanel.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 0));
 		this.multiColumnPanel.setLayout(new BoxLayout(this.multiColumnPanel, BoxLayout.X_AXIS));
 		
-		for (int i = 0; i < columns.size(); i++) {
-			this.multiColumnPanel.add(columns.get(i));
+		for (ColumnView column : this.columns) {
+			this.multiColumnPanel.add(column);
 		}
 		this.add(this.scrollPane);
 	}
@@ -91,5 +91,8 @@ public class MultiColumnView extends JPanel implements IView {
 	@Override
 	public void setGateway(Gateway gateway) {
 		this.gateway = gateway;
+		for (ColumnView column : this.columns) {
+			column.setGateway(gateway);;
+		}
 	}
 }

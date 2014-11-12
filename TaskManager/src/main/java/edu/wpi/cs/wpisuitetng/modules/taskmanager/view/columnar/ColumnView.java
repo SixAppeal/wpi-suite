@@ -39,8 +39,6 @@ public class ColumnView extends JPanel implements IView {
 		this.titlePanel = new JPanel();
 		this.tasks = new ArrayList<TaskView>();
 		
-		this.tasks.add(new TaskView("Some Task"));
-		
 		this.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 20));
 		this.setOpaque(false);
 		this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
@@ -68,7 +66,8 @@ public class ColumnView extends JPanel implements IView {
 	 * @param task A task model
 	 */
 	public void addTask(Task task) {
-		TaskView taskView = new TaskView(task.getTitle());
+		TaskView taskView = new TaskView(task);
+		taskView.setGateway(this.gateway);
 		tasks.add(taskView);
 		this.columnPanel.add(taskView);
 	}
@@ -79,6 +78,9 @@ public class ColumnView extends JPanel implements IView {
 	@Override
 	public void setGateway(Gateway gateway) {
 		this.gateway = gateway;
+		for (TaskView taskView : this.tasks) {
+			taskView.setGateway(this.gateway);
+		}
 	}
 
 }

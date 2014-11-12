@@ -45,6 +45,14 @@ public class TaskPresenter implements IPresenter{
 	}
 	
 	/**
+	 * Shows the details of a specific task
+	 * @param task Task to view
+	 */
+	public void viewTask(Task task) {
+		this.gateway.toView("SidebarView", "showDetailPanel", task);
+	}
+	
+	/**
 	 * Updates a task in the database
 	 * @param task Task to update
 	 */

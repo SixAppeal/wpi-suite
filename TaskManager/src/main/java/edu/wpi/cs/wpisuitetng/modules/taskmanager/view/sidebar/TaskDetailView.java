@@ -34,7 +34,6 @@ public class TaskDetailView extends JPanel implements IView {
 	 */
 	private static final long serialVersionUID = -8972626054612267276L;
 
-
 	private Gateway gateway;
 	private Task task;
 	
@@ -65,10 +64,9 @@ public class TaskDetailView extends JPanel implements IView {
 	JLabel assignedToLabel;
 	JLabel taskAssignedToLabel;	//Displays the Task's Assigned Members in a single string
 	
-	public TaskDetailView(Task task){
+	public TaskDetailView() {
 		
-		this.task = task;
-		String paneTitle = "Detail Pane";
+		String paneTitle = "Task Detail";
 		
 		/**
 		 * Declares the MiGLayout
@@ -88,34 +86,33 @@ public class TaskDetailView extends JPanel implements IView {
 		 */
 		this.setBorder(BorderFactory.createTitledBorder(paneTitle));
 		this.setLayout(detailView);
-		this.setOpaque(false);
 		
 		/**
 		 * creates all the JLabels for the given task
 		 */
 		idLabel = new JLabel("Task ID: ");
-		taskIdLabel = new JLabel(String.valueOf(task.getId()));				
+		taskIdLabel = new JLabel();				
 		
 		nameLabel = new JLabel("Task name:");
-		taskNameLabel = new JLabel(task.getTitle());						
+		taskNameLabel = new JLabel();						
 		
-		dateLabel = new JLabel("Task due date:");
-		taskDateLabel = new JLabel(""); // TODO: task.getDueDate().toString());			
+		dateLabel = new JLabel ("Task due date:");
+		taskDateLabel = new JLabel ();			
 		
 		desLabel = new JLabel ("Task Description:");
-		taskDesLabel = new JLabel (task.getDescription());					
+		taskDesLabel = new JLabel ();					
 		
 		statLabel = new JLabel ("Task Status:");
-		taskStatLabel = new JLabel(""); // TODO: task.getStatus().toString());			
+		taskStatLabel = new JLabel();			
 		
 		estLabel = new JLabel ("Estimated Effort:");
-		taskEstLabel = new JLabel(task.getEstimatedEffort().toString());
+		taskEstLabel = new JLabel();
 		
 		actLabel = new JLabel ("Actual Effort:");
-		taskActLabel = new JLabel (task.getActualEffort().toString());
+		taskActLabel = new JLabel ();
 		
 		assignedToLabel = new JLabel("Members Assigned:");
-		taskAssignedToLabel = new JLabel(task.getMemberList());
+		taskAssignedToLabel = new JLabel();
 		
 		/**
 		 * Adds all the JLabels to the MiGLayout
@@ -144,12 +141,32 @@ public class TaskDetailView extends JPanel implements IView {
 		this.add(assignedToLabel);
 		this.add(taskAssignedToLabel);	
 	}
+	
+	/**
+	 * Update the view to display the info for a different task
+	 * @param t The new task to display.
+	 */
+	public void updateView( Task t ) {
+		this.task = t;
+		
+		taskIdLabel.setText(String.valueOf(task.getId()));
+		taskNameLabel.setText(task.getTitle());
+		taskDateLabel.setText(task.getDueDate().toString());
+		taskDesLabel.setText(task.getDescription());
+		taskStatLabel.setText(task.getStatus().toString());
+		taskEstLabel.setText(task.getEstimatedEffort().toString());
+		taskActLabel.setText(task.getActualEffort().toString());
+		taskAssignedToLabel.setText(task.getMemberList());
+		
+	}
 
 	/**
 	 * @see IView.setGateway
+	 * @param gateway
 	 */
 	@Override
 	public void setGateway(Gateway gateway) {
 		this.gateway = gateway;
 	}
+	
 }

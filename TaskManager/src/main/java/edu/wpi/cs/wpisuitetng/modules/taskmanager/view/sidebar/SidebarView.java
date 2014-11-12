@@ -30,7 +30,7 @@ public class SidebarView extends JPanel implements IView {
 	 */
 	public SidebarView() {
 		this.container = new JPanel();
-		this.detailView = new TaskDetailView(new Task());
+		this.detailView = new TaskDetailView();
 		this.createView = new TaskCreateView();
 		this.editView = new TaskEditView();
 		
@@ -75,6 +75,7 @@ public class SidebarView extends JPanel implements IView {
 	public void showDetailPanel(Task task) {
 		this.curView.setVisible(false);
 		this.curView = this.detailView;
+		this.detailView.updateView(task);
 		this.curView.setVisible(true);
 	}
 	
