@@ -63,7 +63,7 @@ public class TaskEditView extends JPanel implements IView {
 	public TaskEditView () {
 		
 		//If this is a task creation panel, use a different title text
-		String paneTitle = "Edit Task";
+		String paneTitle = getTitle();
 		
 		// MigLayout gives us the easiest layout with best flexibility
 		MigLayout layout = new MigLayout(
@@ -85,7 +85,7 @@ public class TaskEditView extends JPanel implements IView {
 		estEffortSpinnerModel = new SpinnerNumberModel(1, 1, null, 1);
 		estEffortSpinner = new JSpinner( estEffortSpinnerModel );
 		
-		actEffortSpinnerModel = new SpinnerNumberModel(-1, -1, null, 1);
+		actEffortSpinnerModel = new SpinnerNumberModel(0, 0, null, 1);
 		actEffortSpinner = new JSpinner( actEffortSpinnerModel );
 		actEffortSpinner.setEnabled(false);
 		
@@ -117,6 +117,9 @@ public class TaskEditView extends JPanel implements IView {
 		
 		this.add( new JLabel("Est. Effort :") );
 		this.add( estEffortSpinner, "wrap, width 50:120:150" );
+		
+		this.add( new JLabel("Act. Effort :") );
+		this.add( actEffortSpinner, "wrap, width 50:120:150" );
 		
 		this.add( new JLabel("Task Status :") );
 		this.add( statusBox, "wrap, width 50:120:150" );
@@ -166,7 +169,7 @@ public class TaskEditView extends JPanel implements IView {
 	}
 	
 	private void processTask() {
-		
+		System.out.println("processTask");
 		if( t == null) t = new Task();
 		
 		String title = titleEntry.getText();
@@ -174,7 +177,6 @@ public class TaskEditView extends JPanel implements IView {
 		TaskStatus st = (TaskStatus)statusBox.getSelectedItem();
 		int est = (Integer)estEffortSpinnerModel.getValue();
 		int act = (Integer)actEffortSpinnerModel.getValue();
-		int actual = -1;
 		int year = dueDatePicker.getJDateInstantPanel().getModel().getYear();
 		int month = dueDatePicker.getJDateInstantPanel().getModel().getMonth();
 		int day = dueDatePicker.getJDateInstantPanel().getModel().getDay();
@@ -185,10 +187,11 @@ public class TaskEditView extends JPanel implements IView {
 			t.setDescription(desc);
 			t.setStatus(st);
 			t.setEstimatedEffort(est);
-			t.setActualEffort(actual);
+			t.setActualEffort(act);
 			t.setDueDate(new Date(year, month, day));
-			
+			t.setColumn(statusBox.getSelectedIndex());
 		} catch (IllegalArgumentException ex) {
+			System.out.println(ex.getMessage());
 			return;
 		}
 		
@@ -196,7 +199,16 @@ public class TaskEditView extends JPanel implements IView {
 		
 	}
 	
+	/**
+	 * Gets the title for this view
+	 * @return A title
+	 */
+	protected String getTitle() {
+		return "Edit Task";
+	}
+	
 	protected void taskOut() {
+		System.out.println("EditView taskOut");
 		gateway.toPresenter("TaskPresenter", "updateTask", t);
 	}
 	

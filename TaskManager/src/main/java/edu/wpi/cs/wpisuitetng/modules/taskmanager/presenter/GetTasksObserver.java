@@ -11,7 +11,7 @@ import com.google.gson.Gson;
  * @author wavanrensselaer
  * @author dpseaman
  */
-public class GetAllTasksObserver implements RequestObserver{
+public class GetTasksObserver implements RequestObserver {
 	
 	private int id;
 
@@ -21,7 +21,7 @@ public class GetAllTasksObserver implements RequestObserver{
 	 * Constructs an observer for a request that gets all the tasks
 	 * @param presenter The presenter that's sending the request 
 	 */
-	public GetAllTasksObserver(TaskPresenter presenter) {
+	public GetTasksObserver(TaskPresenter presenter) {
 		this.presenter = presenter;
 		id = -1;
 	}
@@ -31,7 +31,7 @@ public class GetAllTasksObserver implements RequestObserver{
 	 * @param presenter The presenter that's sending the request
 	 * @param id ID of the specific task
 	 */
-	public GetAllTasksObserver(TaskPresenter presenter, int id) {
+	public GetTasksObserver(TaskPresenter presenter, int id) {
 		this.presenter = presenter;
 		this.id = id;
 	}
@@ -44,7 +44,6 @@ public class GetAllTasksObserver implements RequestObserver{
 	public void responseSuccess(IRequest iReq) {
 		Task[] tasks = new Gson().fromJson(iReq.getResponse().getBody(), Task[].class);
 		presenter.tasks = tasks;
-		presenter.gateway.toView("TaskView", "init", tasks);
 		if (id >= 0) {
 			presenter.getTask(id);
 		}

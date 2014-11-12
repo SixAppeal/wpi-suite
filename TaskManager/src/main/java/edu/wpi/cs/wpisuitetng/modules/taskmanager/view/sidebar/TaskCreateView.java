@@ -36,6 +36,11 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
 public class TaskCreateView extends TaskEditView implements IView {
 	
 	@Override
+	protected String getTitle() {
+		return "New Task";
+	}
+	
+	@Override
 	protected void taskOut() {
 		gateway.toPresenter("TaskPresenter", "createTask", t);
 	}

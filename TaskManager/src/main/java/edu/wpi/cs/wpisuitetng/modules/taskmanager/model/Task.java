@@ -83,12 +83,12 @@ public class Task extends AbstractModel {
 		else {
 			throw new IllegalArgumentException("Estimated Effort Must Be Greater Than Zero!");
 		}
-		//if negative,  -1
-		if (actualEffort > 0){
+		
+		if (actualEffort >= 0){
 			this.actualEffort = actualEffort;
 		}
 		else {
-			throw new IllegalArgumentException("Actual Effort Must Be Greater Than Zero!");
+			throw new IllegalArgumentException("Actual Effort Must Be Greater Than Or Equal To Zero!");
 		}
 
 		this.dueDate = dueDate;
@@ -402,11 +402,11 @@ public class Task extends AbstractModel {
 	 */
 	public void setActualEffort(Integer actualEffort) throws IllegalArgumentException {
 		// making sure that the inputted value is positive
-		if (actualEffort > 0){
+		if (actualEffort >= 0){
 			this.actualEffort = actualEffort;
 		}
 		else {
-			throw new IllegalArgumentException("Actual Effort Must Be Greater Than Zero!");
+			throw new IllegalArgumentException("Actual Effort Must Be Greater Than Or Equal To Zero!");
 		}
 	}
 

@@ -57,7 +57,7 @@ public class MultiColumnView extends JPanel implements IView {
 		this.multiColumnPanel.setLayout(new BoxLayout(this.multiColumnPanel, BoxLayout.X_AXIS));
 		
 		for (int i = 0; i < columns.size(); i++) {
-			this.multiColumnPanel.add(columns.get(i));//, gbc);
+			this.multiColumnPanel.add(columns.get(i));
 		}
 		this.add(this.scrollPane);
 	}

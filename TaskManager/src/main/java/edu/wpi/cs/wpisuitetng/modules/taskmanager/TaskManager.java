@@ -32,6 +32,7 @@ public class TaskManager implements IJanewayModule {
 	JPanel mainPanel;
 	MultiColumnView columnView;
 	SidebarView sidebarView;
+	TaskPresenter taskPresenter;
 	
 	ToolbarView toolbarview = new ToolbarView(true);
 	
@@ -41,6 +42,8 @@ public class TaskManager implements IJanewayModule {
 	public TaskManager() {
 		name = "Task Manager";
 		tabs = new ArrayList<JanewayTabModel>();
+		
+		taskPresenter = new TaskPresenter();
 
 		gateway = new Gateway();
 		mainPanel = new JPanel();
@@ -57,7 +60,6 @@ public class TaskManager implements IJanewayModule {
 				toolbarview,
 				mainPanel));
 		
-		TaskPresenter taskPresenter = new TaskPresenter();
 		gateway.addPresenter("TaskPresenter", taskPresenter);
 		gateway.addView("SidebarView", sidebarView);
 		gateway.addView("ColumnView", columnView);

@@ -38,9 +38,10 @@ public class TaskPresenter implements IPresenter{
 	 * @param task Task to create
 	 */
 	public void createTask(Task task) {
-		final Request request = Network.getInstance().makeRequest("taskmanager/task", HttpMethod.PUT);
+		/*final Request request = Network.getInstance().makeRequest("taskmanager/task", HttpMethod.PUT);
 		request.setBody(task.toJson());
-		request.send();
+		request.send();*/
+		this.gateway.toView("ColumnView", "addTask", task);
 	}
 	
 	/**
@@ -58,7 +59,7 @@ public class TaskPresenter implements IPresenter{
 	 */
 	public void getAllTasks() {
 		final Request request = Network.getInstance().makeRequest("taskmanager/task", HttpMethod.GET);
-		request.addObserver(new GetAllTasksObserver(this));
+		request.addObserver(new GetTasksObserver(this));
 		request.send();
 	}
 	
@@ -69,7 +70,7 @@ public class TaskPresenter implements IPresenter{
 	public void getTask(int id){
 		if (tasks == null){
 			final Request request = Network.getInstance().makeRequest("taskmanager/task", HttpMethod.GET);
-			request.addObserver(new GetAllTasksObserver(this, id));
+			request.addObserver(new GetTasksObserver(this, id));
 			request.send();
 		} else {
 			for (int i = 0; i < tasks.length; i++) {

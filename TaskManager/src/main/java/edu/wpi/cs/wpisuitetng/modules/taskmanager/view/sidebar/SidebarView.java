@@ -30,15 +30,20 @@ public class SidebarView extends JPanel implements IView {
 	public SidebarView() {
 		this.container = new JPanel();
 		this.detailView = new TaskDetailView(new Task());
-		this.createView = new TaskEditView();
+		this.createView = new TaskCreateView();
 		this.editView = new TaskEditView();
 		
 		this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		
 		this.container.setLayout(new BoxLayout(this.container, BoxLayout.X_AXIS));
 		
-		this.curView = this.editView;
-		this.container.add(editView);
+		this.curView = this.createView;
+		this.editView.setVisible(false);
+		this.detailView.setVisible(false);
+		
+		this.container.add(this.createView);
+		this.container.add(this.editView);
+		this.container.add(this.detailView);
 		this.add(container);
 	}
 	
@@ -46,8 +51,9 @@ public class SidebarView extends JPanel implements IView {
 	 * Shows the creation panel 
 	 */
 	public void showCreatePanel() {
-		this.container.remove(this.curView);
-		this.container.add(this.curView = this.createView);
+		this.curView.setVisible(false);
+		this.curView = this.createView;
+		this.curView.setVisible(true);
 	}
 	
 	/**
@@ -55,8 +61,9 @@ public class SidebarView extends JPanel implements IView {
 	 * @param task The task to edit
 	 */
 	public void showEditPanel(Task task) {
-		this.container.remove(this.curView);
-		this.container.add(this.curView = this.editView);
+		this.curView.setVisible(false);
+		this.curView = this.editView;
+		this.curView.setVisible(true);
 	}
 	
 	/**
@@ -64,8 +71,9 @@ public class SidebarView extends JPanel implements IView {
 	 * @param task The task to display
 	 */
 	public void showDetailPanel(Task task) {
-		this.container.remove(this.curView);
-		this.container.add(this.curView = this.detailView);
+		this.curView.setVisible(false);
+		this.curView = this.detailView;
+		this.curView.setVisible(true);
 	}
 	
 	/**
@@ -76,6 +84,7 @@ public class SidebarView extends JPanel implements IView {
 		this.gateway = gateway;
 		this.detailView.setGateway(this.gateway);
 		this.editView.setGateway(this.gateway);
+		this.createView.setGateway(this.gateway);
 	}
 
 }
