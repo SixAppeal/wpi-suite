@@ -62,10 +62,9 @@ public class TaskDetailView extends JPanel {
 	JLabel assignedToLabel;
 	JLabel taskAssignedToLabel;	//Displays the Task's Assigned Members in a single string
 	
-	public TaskDetailView(Task task){
+	public TaskDetailView() {
 		
-		this.task = task;
-		String paneTitle = "Detail Pane";
+		String paneTitle = "Task Detail";
 		
 		/**
 		 * Declares the MiGLayout
@@ -90,28 +89,28 @@ public class TaskDetailView extends JPanel {
 		 * creates all the JLabels for the given task
 		 */
 		idLabel = new JLabel("Task ID: ");
-		taskIdLabel = new JLabel(String.valueOf(task.getId()));				
+		taskIdLabel = new JLabel();				
 		
 		nameLabel = new JLabel("Task name:");
-		taskNameLabel = new JLabel(task.getTitle());						
+		taskNameLabel = new JLabel();						
 		
 		dateLabel = new JLabel ("Task due date:");
-		taskDateLabel = new JLabel (task.getDueDate().toString());			
+		taskDateLabel = new JLabel ();			
 		
 		desLabel = new JLabel ("Task Description:");
-		taskDesLabel = new JLabel (task.getDescription());					
+		taskDesLabel = new JLabel ();					
 		
 		statLabel = new JLabel ("Task Status:");
-		taskStatLabel = new JLabel(task.getStatus().toString());			
+		taskStatLabel = new JLabel();			
 		
 		estLabel = new JLabel ("Estimated Effort:");
-		taskEstLabel = new JLabel(task.getEstimatedEffort().toString());
+		taskEstLabel = new JLabel();
 		
 		actLabel = new JLabel ("Actual Effort:");
-		taskActLabel = new JLabel (task.getActualEffort().toString());
+		taskActLabel = new JLabel ();
 		
 		assignedToLabel = new JLabel("Members Assigned:");
-		taskAssignedToLabel = new JLabel(task.getMemberList());
+		taskAssignedToLabel = new JLabel();
 		
 		/**
 		 * Adds all the JLabels to the MiGLayout
@@ -141,5 +140,21 @@ public class TaskDetailView extends JPanel {
 		this.add(taskAssignedToLabel);	
 	}
 	
+	/**
+	 * Update the view to display the info for a different task
+	 * @param t The new task to display.
+	 */
+	public void updateView( Task t ) {
+		
+		taskIdLabel.setText(String.valueOf(task.getId()));
+		taskNameLabel.setText(task.getTitle());
+		taskDateLabel.setText(task.getDueDate().toString());
+		taskDesLabel.setText(task.getDescription());
+		taskStatLabel.setText(task.getStatus().toString());
+		taskEstLabel.setText(task.getEstimatedEffort().toString());
+		taskActLabel.setText(task.getActualEffort().toString());
+		taskAssignedToLabel.setText(task.getMemberList());
+		
+	}
 	
 }
