@@ -2,6 +2,7 @@ package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
 
 import java.awt.Dimension;
 
+import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
@@ -27,12 +28,15 @@ public class SidebarView extends JPanel implements IView {
 		this.detailView = new TaskDetailView(new Task());
 		this.editView = new TaskEditView();
 		
+		this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+		
+		this.container.setLayout(new BoxLayout(this.container, BoxLayout.X_AXIS));
 		this.container.setMinimumSize(new Dimension(300, 0));
-		this.container.setMaximumSize(new Dimension(300, Integer.MAX_VALUE));
+		//this.container.setMaximumSize(new Dimension(300, Integer.MAX_VALUE));
 		
-		this.detailView.setVisible(false);
+		//this.detailView.setVisible(false);
 		
-		this.container.add(detailView);
+		//this.container.add(detailView);
 		this.container.add(editView);
 		this.add(container);
 	}

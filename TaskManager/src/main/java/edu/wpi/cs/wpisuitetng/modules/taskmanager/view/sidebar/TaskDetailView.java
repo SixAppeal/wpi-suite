@@ -95,14 +95,14 @@ public class TaskDetailView extends JPanel {
 		nameLabel = new JLabel("Task name:");
 		taskNameLabel = new JLabel(task.getTitle());						
 		
-		dateLabel = new JLabel ("Task due date:");
-		taskDateLabel = new JLabel (task.getDueDate().toString());			
+		dateLabel = new JLabel("Task due date:");
+		taskDateLabel = new JLabel(""); // TODO: task.getDueDate().toString());			
 		
 		desLabel = new JLabel ("Task Description:");
 		taskDesLabel = new JLabel (task.getDescription());					
 		
 		statLabel = new JLabel ("Task Status:");
-		taskStatLabel = new JLabel(task.getStatus().toString());			
+		taskStatLabel = new JLabel(""); // TODO: task.getStatus().toString());			
 		
 		estLabel = new JLabel ("Estimated Effort:");
 		taskEstLabel = new JLabel(task.getEstimatedEffort().toString());
