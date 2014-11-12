@@ -1,12 +1,11 @@
-/**
- * 
- */
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.model;
 
 /**
- * @author nathan
- * @author santiago
- * @author jill
+ * Class to capture a user responsible for a task
+ * 
+ * @author nhhughes
+ * @author srojas
+ * @author jrhennessy
  */
 public class Member {
 
@@ -16,6 +15,7 @@ public class Member {
 	 * @param name username or full name of the member
 	 */
 	public Member (String name){
+<<<<<<< HEAD
 		this.name = name;
 	}
 	
@@ -24,4 +24,22 @@ public class Member {
 	}
 	
 	
+=======
+		this.name = name;
+	}
+
+	//Getters and Setters
+	/**
+	 * @return the name
+	 */
+	public String getName() {
+		return name;
+	}
+	/**
+	 * @param name the name to set
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
+>>>>>>> origin/devel_task_backend
 }
