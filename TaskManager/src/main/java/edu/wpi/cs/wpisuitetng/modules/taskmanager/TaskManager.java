@@ -18,7 +18,9 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.TaskEditView;
 
 /**
  * 
- * @author SixAppeal, tmeehan
+ * @author SixAppeal
+ * @author tmeehan
+ * @author krpeffer
  * 
  *
  * A module for managing tasks within Teams
