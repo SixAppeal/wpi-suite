@@ -65,7 +65,7 @@ public class Task extends AbstractModel {
 	 * @param dueDate when the task is due
 	 * @param activities list of activities (comments that members can put) for the task
 	 */
-	Task(String title, String description, TaskStatus status,
+	public Task(String title, String description, TaskStatus status,
 			List<Member> assignedTo, Integer estimatedEffort,
 			Integer actualEffort, Date dueDate, List<Activity> activities) {
 		super();
@@ -201,7 +201,18 @@ public class Task extends AbstractModel {
 		return null;
 	}
 
-
+	/**
+	 * Returns a Concantenated String of all the members in the assignedTo List
+	 * String memberList
+	 * @return memberList
+	 */
+	public String getMemberList() {
+		StringBuilder memberList = new StringBuilder();
+		for (Member m: this.assignedTo){
+			memberList.append(m.getName()).append(", ");
+		}
+		return memberList.toString();
+	}
 	
 	//GETTERS AND SETTERS 
 	public String getTitle() {

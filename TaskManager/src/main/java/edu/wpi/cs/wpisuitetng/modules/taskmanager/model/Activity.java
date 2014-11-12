@@ -18,7 +18,7 @@ public class Activity {
 		 * @param member member that made the comment
 		 * @param comment comment that the member made
 		 */
-		Activity(Member member, String comment){
+		public Activity(Member member, String comment){
 			this.member = member;
 			this.comment = comment;
 		}
