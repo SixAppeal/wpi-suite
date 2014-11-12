@@ -39,7 +39,7 @@ public class Task extends AbstractModel {
 	 *
 	 */
 
-	Task() {
+	public Task() {
 		super();
 		this.title = "";
 		this.description = "";

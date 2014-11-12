@@ -1,4 +1,4 @@
-package edu.wpi.cs.wpisuitetng.modules.taskmanager.view;
+package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

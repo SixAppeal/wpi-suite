@@ -1,4 +1,4 @@
-package edu.wpi.cs.wpisuite.modules.taskmanager.view;
+package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
 
 import java.awt.Color;
 import java.awt.Font;

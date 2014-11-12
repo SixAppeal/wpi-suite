@@ -1,4 +1,4 @@
-package edu.wpi.cs.wpisuitetng.modules.taskmanager.view;
+package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar;
 
 import java.awt.Color;
 import java.awt.FlowLayout;
@@ -14,6 +14,7 @@ import javax.swing.JScrollPane;
 
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
 
 /**
  * View for displaying multiple horizontal columns
