@@ -63,6 +63,14 @@ public class TaskPresenter implements IPresenter{
 	}
 	
 	/**
+	 * Opens a task for editing
+	 * @param task Task to edit
+	 */
+	public void editTask(Task task) {
+		this.gateway.toView("SidebarView", "showEditPanel", task);
+	}
+	
+	/**
 	 * Retrieves all tasks from the database and caches the results and sends them to the task view
 	 */
 	public void getAllTasks() {

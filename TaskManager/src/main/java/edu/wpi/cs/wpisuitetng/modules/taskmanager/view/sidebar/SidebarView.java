@@ -66,6 +66,7 @@ public class SidebarView extends JPanel implements IView {
 	 * @param task The task to edit
 	 */
 	public void showEditPanel(Task task) {
+		this.editView.updateView(task);
 		this.curView.setVisible(false);
 		this.curView = this.editView;
 		this.curView.setVisible(true);

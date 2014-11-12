@@ -2,10 +2,13 @@ package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
@@ -36,6 +39,8 @@ public class TaskDetailView extends JPanel implements IView {
 
 	private Gateway gateway;
 	
+	private Task t;
+	
 	/**
 	 * Declare all the JLabels the detail view will need
 	 */
@@ -62,6 +67,8 @@ public class TaskDetailView extends JPanel implements IView {
 	
 	JLabel assignedToLabel;
 	JLabel taskAssignedToLabel;	//Displays the Task's Assigned Members in a single string
+	
+	JButton editButton; //Opens the task for editing.
 	
 	public TaskDetailView() {
 		
@@ -114,6 +121,14 @@ public class TaskDetailView extends JPanel implements IView {
 		assignedToLabel = new JLabel("Members Assigned:");
 		taskAssignedToLabel = new JLabel();
 		
+		editButton = new JButton("Edit");
+		editButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				editTask();
+			}
+		});
+		editButton.setEnabled(false);
+		
 		/**
 		 * Adds all the JLabels to the MiGLayout
 		 */
@@ -139,7 +154,9 @@ public class TaskDetailView extends JPanel implements IView {
 		this.add(taskActLabel);
 		
 		this.add(assignedToLabel);
-		this.add(taskAssignedToLabel);	
+		this.add(taskAssignedToLabel);
+		
+		this.add( editButton, "span 2, wrap, right" );
 	}
 	
 	/**
@@ -147,15 +164,26 @@ public class TaskDetailView extends JPanel implements IView {
 	 * @param t The new task to display.
 	 */
 	public void updateView( Task t ) {
-		taskIdLabel.setText(String.valueOf(t.getId()));
-		taskNameLabel.setText(t.getTitle());
-		taskDateLabel.setText(t.getDueDate().toString());
-		taskDesLabel.setText(t.getDescription());
-		taskStatLabel.setText(t.getStatus().toString());
-		taskEstLabel.setText(t.getEstimatedEffort().toString());
-		taskActLabel.setText(t.getActualEffort().toString());
-		taskAssignedToLabel.setText(t.getMemberList());
+		
+		this.t = t;
+		
+		taskIdLabel.setText(String.valueOf(this.t.getId()));
+		taskNameLabel.setText(this.t.getTitle());
+		taskDateLabel.setText(this.t.getDueDate().toString());
+		taskDesLabel.setText(this.t.getDescription());
+		taskStatLabel.setText(this.t.getStatus().toString());
+		taskEstLabel.setText(this.t.getEstimatedEffort().toString());
+		taskActLabel.setText(this.t.getActualEffort().toString());
+		taskAssignedToLabel.setText(this.t.getMemberList());
+		editButton.setEnabled(true);
 		this.revalidate();
+	}
+	
+	/**
+	 * Opens a task for editing in the parent view
+	 */
+	public void editTask() {
+		this.gateway.toPresenter("TaskPresenter", "editTask", t);
 	}
 
 	/**
