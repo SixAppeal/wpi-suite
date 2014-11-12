@@ -19,7 +19,7 @@ public class SidebarView extends JPanel implements IView {
 	Gateway gateway;
 	
 	private JPanel container;
-	private JPanel curPanel;
+	private JPanel curView;
 	private TaskDetailView detailView;
 	private TaskEditView editView;
 	private TaskEditView createView;
@@ -37,7 +37,7 @@ public class SidebarView extends JPanel implements IView {
 		
 		this.container.setLayout(new BoxLayout(this.container, BoxLayout.X_AXIS));
 		
-		this.curPanel = this.editView;
+		this.curView = this.editView;
 		this.container.add(editView);
 		this.add(container);
 	}
@@ -46,8 +46,26 @@ public class SidebarView extends JPanel implements IView {
 	 * Shows the creation panel 
 	 */
 	public void showCreatePanel() {
-		this.container.remove(this.curPanel);
-		//this.container.add(this.createPanel);
+		this.container.remove(this.curView);
+		this.container.add(this.curView = this.createView);
+	}
+	
+	/**
+	 * Shows the edit panel
+	 * @param task The task to edit
+	 */
+	public void showEditPanel(Task task) {
+		this.container.remove(this.curView);
+		this.container.add(this.curView = this.editView);
+	}
+	
+	/**
+	 * Shows the detail panel
+	 * @param task The task to display
+	 */
+	public void showDetailPanel(Task task) {
+		this.container.remove(this.curView);
+		this.container.add(this.curView = this.detailView);
 	}
 	
 	/**
