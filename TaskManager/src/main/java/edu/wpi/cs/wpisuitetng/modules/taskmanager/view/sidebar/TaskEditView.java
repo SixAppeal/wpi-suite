@@ -170,7 +170,7 @@ public class TaskEditView extends JPanel implements IView {
 	}
 	
 	private void processTask() {
-		if( t == null) t = new Task();
+		t = new Task();
 		
 		String title = titleEntry.getText();
 		String desc = descEntry.getText();
@@ -208,7 +208,6 @@ public class TaskEditView extends JPanel implements IView {
 	}
 	
 	protected void taskOut() {
-		System.out.println("EditView taskOut");
 		gateway.toPresenter("TaskPresenter", "updateTask", t);
 	}
 	

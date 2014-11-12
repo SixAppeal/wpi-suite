@@ -35,7 +35,6 @@ public class TaskDetailView extends JPanel implements IView {
 	private static final long serialVersionUID = -8972626054612267276L;
 
 	private Gateway gateway;
-	private Task task;
 	
 	/**
 	 * Declare all the JLabels the detail view will need
@@ -148,17 +147,15 @@ public class TaskDetailView extends JPanel implements IView {
 	 * @param t The new task to display.
 	 */
 	public void updateView( Task t ) {
-		this.task = t;
-		
-		taskIdLabel.setText(String.valueOf(task.getId()));
-		taskNameLabel.setText(task.getTitle());
-		taskDateLabel.setText(task.getDueDate().toString());
-		taskDesLabel.setText(task.getDescription());
-		taskStatLabel.setText(task.getStatus().toString());
-		taskEstLabel.setText(task.getEstimatedEffort().toString());
-		taskActLabel.setText(task.getActualEffort().toString());
-		taskAssignedToLabel.setText(task.getMemberList());
-		
+		taskIdLabel.setText(String.valueOf(t.getId()));
+		taskNameLabel.setText(t.getTitle());
+		taskDateLabel.setText(t.getDueDate().toString());
+		taskDesLabel.setText(t.getDescription());
+		taskStatLabel.setText(t.getStatus().toString());
+		taskEstLabel.setText(t.getEstimatedEffort().toString());
+		taskActLabel.setText(t.getActualEffort().toString());
+		taskAssignedToLabel.setText(t.getMemberList());
+		this.revalidate();
 	}
 
 	/**

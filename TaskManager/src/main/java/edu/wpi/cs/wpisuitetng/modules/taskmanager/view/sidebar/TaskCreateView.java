@@ -1,29 +1,5 @@
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Properties;
-
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSpinner;
-import javax.swing.SpinnerNumberModel;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.JComboBox;
-import javax.swing.BorderFactory;
-
-import org.jdatepicker.JDateComponentFactory;
-import org.jdatepicker.impl.JDatePickerImpl;
-
-import net.miginfocom.swing.MigLayout;
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.TaskStatus;
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
 
 /**
@@ -34,14 +10,32 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
  *
  */
 public class TaskCreateView extends TaskEditView implements IView {
-	
+	private static final long serialVersionUID = -1055431537990755671L;
+
+	/**
+	 * Gets the title of this view
+	 */
 	@Override
 	protected String getTitle() {
 		return "New Task";
 	}
 	
+	/**
+	 * Clears the creation form
+	 */
+	public void clearForm() {
+		this.titleEntry.setText("");
+		this.descEntry.setText("");
+		this.estEffortSpinner.setValue(1);
+		this.actEffortSpinner.setValue(0);
+	}
+	
+	/**
+	 * Passes the task to the presenter to be stored
+	 */
 	@Override
 	protected void taskOut() {
+		this.clearForm();
 		gateway.toPresenter("TaskPresenter", "createTask", t);
 	}
 	
