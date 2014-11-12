@@ -86,6 +86,7 @@ public class TaskDetailView extends JPanel implements IView {
 		 */
 		this.setBorder(BorderFactory.createTitledBorder(paneTitle));
 		this.setLayout(detailView);
+		this.setOpaque(false);
 		
 		/**
 		 * creates all the JLabels for the given task
