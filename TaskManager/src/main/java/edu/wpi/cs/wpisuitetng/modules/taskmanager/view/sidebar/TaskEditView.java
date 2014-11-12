@@ -40,9 +40,8 @@ public class TaskEditView extends JPanel implements IView {
 	 */
 	private static final long serialVersionUID = -8331650108561001757L;
 	
-	private Gateway gateway;
-	private boolean create;
-	private Task t;
+	protected Gateway gateway;
+	protected Task t;
 	
 	JTextField titleEntry;
 	JTextArea descEntry;
@@ -61,12 +60,10 @@ public class TaskEditView extends JPanel implements IView {
 	/**
 	 * Create a new TaskEditView
 	 */
-	protected TaskEditView (boolean isCreatePanel) {
-		
-		create = isCreatePanel;
+	public TaskEditView () {
 		
 		//If this is a task creation panel, use a different title text
-		String paneTitle = isCreatePanel?"New Task":"Edit Task";
+		String paneTitle = "Edit Task";
 		
 		// MigLayout gives us the easiest layout with best flexibility
 		MigLayout layout = new MigLayout(
@@ -126,29 +123,6 @@ public class TaskEditView extends JPanel implements IView {
 		
 		this.add( saveButton, "span 2, wrap, right" );
 		
-	}
-	
-	/**
-	 * Create a new TaskEditView, editing the given task
-	 * 
-	 * @param task the task object with which to populate the field
-	 */
-	public TaskEditView (Task task) {
-		
-		this(false);
-		t = task;
-		
-		populate();
-		
-	}
-	
-	/**
-	 * Create a new TaskEditView, assuming that it is for a New task.
-	 */
-	public TaskEditView() {
-		
-		this(true);
-		 
 	}
 	
 	/**
@@ -218,21 +192,12 @@ public class TaskEditView extends JPanel implements IView {
 			return;
 		}
 		
-		if( create ) createTask(t); 
-		else saveTask(t);
+		taskOut();
 		
 	}
 	
-	private void saveTask(Task t) {
-		
+	protected void taskOut() {
 		gateway.toPresenter("TaskPresenter", "updateTask", t);
-		
-	}
-	
-	private void createTask(Task t) {
-		
-		gateway.toPresenter("TaskPresenter", "createTask", t);
-		
 	}
 	
 	
