@@ -1,6 +1,7 @@
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -9,6 +10,7 @@ import javax.swing.JScrollPane;
 
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.TaskPresenter;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
 
 /**
@@ -19,6 +21,7 @@ public class MultiColumnView extends JPanel implements IView {
 	private static final long serialVersionUID = 7965275386426411767L;
 
 	private Gateway gateway;
+	private TaskPresenter presenter;
 	JScrollPane scrollPane;
 	JPanel container;
 	JPanel multiColumnPanel;
@@ -57,6 +60,9 @@ public class MultiColumnView extends JPanel implements IView {
 		this.add(this.scrollPane);
 	}
 	
+	public void updateFromOldTasks() {
+	}
+	
 	/**
 	 * Adds an array of tasks to their respective columns
 	 * @param tasks An array of tasks to add
@@ -69,6 +75,20 @@ public class MultiColumnView extends JPanel implements IView {
 		}
 	}
 	
+	public void removeTask(Task task) {
+		/*if (task.getColumn() < this.columns.size() && task.getColumn() >= 0) {
+			this.columns.get(task.getColumn()).removeTask(task);
+			this.scrollPane.revalidate();
+		}*/
+		
+		for( ColumnView c : columns ) {
+			c.removeTask(task);
+			c.revalidate();
+		}
+		
+		this.scrollPane.revalidate();
+	}
+	
 	/**
 	 * Adds a single task to it's column
 	 * @param task The task to add
@@ -76,8 +96,8 @@ public class MultiColumnView extends JPanel implements IView {
 	public void addTask(Task task) {
 		if (task.getColumn() < this.columns.size() && task.getColumn() >= 0) {
 			this.columns.get(task.getColumn()).addTask(task);
-			this.scrollPane.revalidate();
 		}
+		this.scrollPane.revalidate();
 	}
 	
 	/**

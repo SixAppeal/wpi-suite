@@ -1,6 +1,9 @@
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter;
 
+import java.util.List;
+
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.TaskModel;
 import edu.wpi.cs.wpisuitetng.network.Request;
 import edu.wpi.cs.wpisuitetng.network.Network;
 import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
@@ -17,6 +20,7 @@ public class TaskPresenter implements IPresenter{
 
 	Gateway gateway;
 	Task[] tasks;
+	TaskModel tm;
 	
 	/**
 	 * @see IPresenter.setGateway
@@ -38,9 +42,14 @@ public class TaskPresenter implements IPresenter{
 	 * @param task Task to create
 	 */
 	public void createTask(Task task) {
-		/*final Request request = Network.getInstance().makeRequest("taskmanager/task", HttpMethod.PUT);
+		
+		if( tm == null ) tm = new TaskModel();
+		
+		task.setId(tm.getNextID());
+		
+		final Request request = Network.getInstance().makeRequest("taskmanager/task", HttpMethod.PUT);
 		request.setBody(task.toJson());
-		request.send();*/
+		request.send();
 		this.gateway.toView("ColumnView", "addTask", task);
 	}
 	
@@ -60,6 +69,8 @@ public class TaskPresenter implements IPresenter{
 		final Request request = Network.getInstance().makeRequest("taskmanager/task", HttpMethod.POST);
 		request.setBody(task.toJson());
 		request.send();
+		this.gateway.toView("ColumnView", "removeTask", task);
+		this.gateway.toView("ColumnView", "addTask", task);
 	}
 	
 	/**
@@ -72,9 +83,12 @@ public class TaskPresenter implements IPresenter{
 	
 	/**
 	 * Retrieves all tasks from the database and caches the results and sends them to the task view
+	 * @return 
 	 */
 	public void getAllTasks() {
+		System.out.println("Got Here!");
 		final Request request = Network.getInstance().makeRequest("taskmanager/task", HttpMethod.GET);
+		System.out.println("Got Here Too!");
 		request.addObserver(new GetTasksObserver(this));
 		request.send();
 	}

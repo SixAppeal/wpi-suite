@@ -80,5 +80,9 @@ public class TaskView extends JPanel implements IView {
 	public void setGateway(Gateway gateway) {
 		this.gateway = gateway;
 	}
+	
+	public int getTaskID() {
+		return this.task.getId();
+	}
 
 }
