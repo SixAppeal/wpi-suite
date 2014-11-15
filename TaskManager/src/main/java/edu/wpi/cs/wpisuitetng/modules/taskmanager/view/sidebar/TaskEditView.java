@@ -7,7 +7,6 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Properties;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -22,8 +21,7 @@ import javax.swing.JComboBox;
 import javax.swing.BorderFactory;
 import javax.swing.text.JTextComponent;
 
-import org.jdatepicker.JDateComponentFactory;
-import org.jdatepicker.impl.JDatePickerImpl;
+import org.jdesktop.swingx.JXDatePicker;
 
 import net.miginfocom.swing.MigLayout;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
@@ -58,7 +56,7 @@ public class TaskEditView extends JPanel implements IView {
 	JSpinner actEffortSpinner;
 	SpinnerNumberModel estEffortSpinnerModel;
 	SpinnerNumberModel actEffortSpinnerModel;
-	JDatePickerImpl dueDatePicker;
+	JXDatePicker dueDatePicker;
 	JTextArea membersTextArea;
 	JTextField newMemberField;
 	JButton addNewMemberButton;
@@ -106,7 +104,7 @@ public class TaskEditView extends JPanel implements IView {
 		}
 		);
 		
-		dueDatePicker = (JDatePickerImpl) new JDateComponentFactory().createJDatePicker();
+		dueDatePicker = new JXDatePicker( new Date(System.currentTimeMillis()));
 
 		estEffortSpinnerModel = new SpinnerNumberModel(1, 1, null, 1);
 		estEffortSpinner = new JSpinner( estEffortSpinnerModel );
@@ -187,8 +185,7 @@ public class TaskEditView extends JPanel implements IView {
 		descEntry.setText(t.getDescription());
 		estEffortSpinnerModel.setValue(t.getEstimatedEffort());
 		actEffortSpinnerModel.setValue(t.getActualEffort());
-		dueDatePicker.getJDateInstantPanel().getModel().setDate(d.getYear() + 1900,
-				d.getMonth(), d.getDay());
+		dueDatePicker.setDate( d );
 		statusBox.setSelectedItem(t.getStatus());
 		
 		String stat = t.getStatus().toString();
@@ -205,9 +202,6 @@ public class TaskEditView extends JPanel implements IView {
 		TaskStatus st = (TaskStatus)statusBox.getSelectedItem();
 		int est = (Integer)estEffortSpinnerModel.getValue();
 		int act = (Integer)actEffortSpinnerModel.getValue();
-		int year = dueDatePicker.getJDateInstantPanel().getModel().getYear();
-		int month = dueDatePicker.getJDateInstantPanel().getModel().getMonth();
-		int day = dueDatePicker.getJDateInstantPanel().getModel().getDay();
 		
 		updateBorder(titleEntry, titleEntry.getText());
 		updateBorder(descEntryScoller, descEntry.getText());
@@ -224,7 +218,7 @@ public class TaskEditView extends JPanel implements IView {
 			t.setStatus(st);
 			t.setEstimatedEffort(est);
 			t.setActualEffort(act);
-			t.setDueDate(new Date(year - 1900, month, day));
+			t.setDueDate( dueDatePicker.getDate() );
 			t.setColumn(statusBox.getSelectedIndex());
 		} catch (IllegalArgumentException ex) {
 			System.out.println(ex.getMessage());
