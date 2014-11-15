@@ -272,12 +272,11 @@ public class TaskEditView extends JPanel implements IView {
 		}
 		else
 		{	
-			//TODO this is ugly, but it will work so....
-			if(someComponent.getClass().equals((new JTextField()).getClass()))
+			if(someComponent instanceof JTextField)
 			{
 				someComponent.setBorder((new JTextField()).getBorder());
 			}
-			else if(someComponent.getClass().equals((new JScrollPane()).getClass()))
+			else if(someComponent instanceof JScrollPane)
 			{
 				someComponent.setBorder((new JScrollPane()).getBorder());
 			}
