@@ -1,12 +1,16 @@
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Properties;
 
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -16,6 +20,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
 import javax.swing.BorderFactory;
+import javax.swing.text.JTextComponent;
 
 import org.jdatepicker.JDateComponentFactory;
 import org.jdatepicker.impl.JDatePickerImpl;
@@ -29,6 +34,8 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
 /**
  * 
  * @author wmtemple
+ * @author akshoop
+ * @author rnorlando
  *
  * A view to be displayed when creating or modifying a task object in the GUI.
  *
@@ -45,6 +52,7 @@ public class TaskEditView extends JPanel implements IView {
 	
 	JTextField titleEntry;
 	JTextArea descEntry;
+	JScrollPane descEntryScoller;
 	JComboBox<TaskStatus> statusBox;
 	JSpinner estEffortSpinner;
 	JSpinner actEffortSpinner;
@@ -55,6 +63,9 @@ public class TaskEditView extends JPanel implements IView {
 	JTextField newMemberField;
 	JButton addNewMemberButton;
 	JButton saveButton;
+	// TODO: There is a better datastucture out there to do this
+	boolean[] requiredFieldFlags = {false , false};
+	String[] requiredFieldNames = {"titleEntry", "descEntry"};
 	
 	
 	/**
@@ -76,10 +87,24 @@ public class TaskEditView extends JPanel implements IView {
 		this.setLayout(layout);
 		
 		titleEntry = new JTextField();
+		titleEntry.addKeyListener(new KeyAdapter() {
+			public void keyReleased(KeyEvent e)
+			{
+				checkValidField(titleEntry, titleEntry.getText(), "titleEntry");
+			}
+		}
+		);
 		
 		descEntry = new JTextArea(5,0);
 		descEntry.setLineWrap(true);
 		descEntry.setWrapStyleWord(true);
+		descEntry.addKeyListener(new KeyAdapter() {
+			public void keyReleased(KeyEvent e)
+			{
+				checkValidField(descEntryScoller, descEntry.getText(), "descEntry");
+			}
+		}
+		);
 		
 		dueDatePicker = (JDatePickerImpl) new JDateComponentFactory().createJDatePicker();
 
@@ -101,17 +126,20 @@ public class TaskEditView extends JPanel implements IView {
 		membersTextArea.setWrapStyleWord(true);
 		
 		saveButton = new JButton("Save");
+		saveButton.setEnabled(false);
 		saveButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				processTask();
 			}
 		});
 		
+		this.descEntryScoller = new JScrollPane(descEntry);
+		
 		this.add( new JLabel("Title :"), "top" );
 		this.add( titleEntry, "wrap, width 100:150, growx" );
 		
 		this.add( new JLabel("Description :"), "top" );
-		this.add( new JScrollPane(descEntry), "wrap, grow");
+		this.add( descEntryScoller, "wrap, grow");
 		
 		this.add( new JLabel("Due Date :") );
 		this.add( dueDatePicker, "wrap, width 120:120:200, growx" );
@@ -181,6 +209,14 @@ public class TaskEditView extends JPanel implements IView {
 		int month = dueDatePicker.getJDateInstantPanel().getModel().getMonth();
 		int day = dueDatePicker.getJDateInstantPanel().getModel().getDay();
 		
+		updateBorder(titleEntry, titleEntry.getText());
+		updateBorder(descEntryScoller, descEntry.getText());
+		
+		if(title.isEmpty() || desc.isEmpty())
+		{
+			return;
+		}
+		
 		try {
 			
 			t.setTitle(title);
@@ -211,5 +247,90 @@ public class TaskEditView extends JPanel implements IView {
 		gateway.toPresenter("TaskPresenter", "updateTask", t);
 	}
 	
+	/**
+	 * Highlights the text field if attribute is required
+	 * to show the user that they did not fill out the text field.
+	 * @param someComponent Text area they did not fill out.
+	 */
+	protected void indicateRequiredField(JComponent someComponent)
+	{
+		someComponent.setBorder(BorderFactory.createLineBorder(Color.RED));
+	}
 	
+	/**
+	 * Updates the board of the JTextComponents, 
+	 * if it is empty it will indicate that it is a required field.
+	 * updates the borders based of whether the text is empty or has something
+	 * @param someComponent Text area that gets updated.
+	 * @param text The text relating to the field.
+	 */
+	protected void updateBorder(JComponent someComponent, String text)
+	{
+		if(text.isEmpty())
+		{
+			indicateRequiredField(someComponent);
+		}
+		else
+		{	
+			//TODO this is ugly, but it will work so....
+			if(someComponent.getClass().equals((new JTextField()).getClass()))
+			{
+				someComponent.setBorder((new JTextField()).getBorder());
+			}
+			else if(someComponent.getClass().equals((new JScrollPane()).getClass()))
+			{
+				someComponent.setBorder((new JScrollPane()).getBorder());
+			}
+			else
+			{
+				someComponent.setBorder(null);
+			}
+		}
+	}
+	
+	/**
+	 * Check to see if the field is valid, (set flags for save button)
+	 * update boarder, whether it is valid or not,.
+	 * @param someComponent The JComponent the field is held in.
+	 * @param data The data we are check if valid.
+	 * @param field The required field we are checking.
+	 */
+	protected void checkValidField(JComponent someComponent, String data, String field)
+	{
+		updateBorder(someComponent, data);
+		int index = -1;
+		for (int i = 0; i < requiredFieldNames.length; i++)
+		{
+			if (requiredFieldNames[i] == field)
+			{
+				index = i;
+				break;
+			}
+		}
+		if (index == -1)
+		{
+			System.out.println("What the fuck did you do!?");
+		}
+		else 
+		{
+			requiredFieldFlags[index] = !data.isEmpty();
+		}
+		
+		attemptToEnableSaveButton();
+	}
+	
+	/**
+	 * Check the flags of all required field to see if they're all true.
+	 * If yes, then enable save button.
+	 * If no, disable save button.
+	 */
+	protected void attemptToEnableSaveButton()
+	{
+		boolean enable = true;
+		for (int i = 0; i < requiredFieldFlags.length; i++)
+		{
+			enable = enable && requiredFieldFlags[i];
+		}
+		saveButton.setEnabled(enable);
+	}
 }

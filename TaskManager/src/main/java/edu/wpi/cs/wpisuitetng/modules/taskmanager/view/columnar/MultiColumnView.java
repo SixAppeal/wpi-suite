@@ -16,6 +16,8 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
 /**
  * View for displaying multiple horizontal columns
  * @author wavanrensselaer
+ * @author akshoop
+ * @author rnorlando
  */
 public class MultiColumnView extends JPanel implements IView {
 	private static final long serialVersionUID = 7965275386426411767L;
@@ -41,10 +43,10 @@ public class MultiColumnView extends JPanel implements IView {
 		this.container.setLayout(new BoxLayout(this.container, BoxLayout.X_AXIS));
 		this.container.add(this.multiColumnPanel);
 		
-		this.columns.add(new ColumnView("Backlog"));
-		this.columns.add(new ColumnView("Development"));
-		this.columns.add(new ColumnView("Quality Control"));
-		this.columns.add(new ColumnView("Live"));
+		this.columns.add(new ColumnView("New"));
+		this.columns.add(new ColumnView("Scheduled"));
+		this.columns.add(new ColumnView("In Progress"));
+		this.columns.add(new ColumnView("Complete"));
 		
 		this.scrollPane.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
 		
