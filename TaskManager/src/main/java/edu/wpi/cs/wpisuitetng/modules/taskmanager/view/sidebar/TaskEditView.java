@@ -113,10 +113,10 @@ public class TaskEditView extends JPanel implements IView {
 		actEffortSpinner.setEnabled(false);
 		
 		statusBox = new JComboBox<TaskStatus>();
-		statusBox.addItem(new TaskStatus("Backlog"));
-		statusBox.addItem(new TaskStatus("Development"));
-		statusBox.addItem(new TaskStatus("Testing"));
-		statusBox.addItem(new TaskStatus("Live"));
+		statusBox.addItem(new TaskStatus("New"));
+		statusBox.addItem(new TaskStatus("Scheduled"));
+		statusBox.addItem(new TaskStatus("In Progress"));
+		statusBox.addItem(new TaskStatus("Complete"));
 		
 		membersTextArea = new JTextArea(5,0);
 		membersTextArea.setLineWrap(true);
@@ -151,6 +151,9 @@ public class TaskEditView extends JPanel implements IView {
 		this.add( statusBox, "wrap, width 50:120:150" );
 		
 		this.add( saveButton, "span 2, wrap, right" );
+		
+		updateBorder(titleEntry, titleEntry.getText());
+		updateBorder(descEntryScoller, descEntry.getText());
 		
 	}
 	

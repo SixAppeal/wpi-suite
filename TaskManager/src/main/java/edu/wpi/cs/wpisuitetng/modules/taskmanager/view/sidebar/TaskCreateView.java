@@ -45,6 +45,9 @@ public class TaskCreateView extends TaskEditView implements IView {
 			this.requiredFieldFlags[i] = false;
 		}
 		saveButton.setEnabled(false);
+		
+		updateBorder(titleEntry, titleEntry.getText());
+		updateBorder(descEntryScoller, descEntry.getText());
 	}
 	
 	/**

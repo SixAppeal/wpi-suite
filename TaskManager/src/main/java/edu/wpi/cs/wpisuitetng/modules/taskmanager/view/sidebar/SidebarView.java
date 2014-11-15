@@ -13,6 +13,8 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
 /**
  * The sidebar that will be the container for task creation, editing, and reading
  * @author wavanrensselaer
+ * @author akshoop
+ * @author rnorlando
  */
 public class SidebarView extends JPanel implements IView {
 	private static final long serialVersionUID = -9157611802121055998L;
@@ -24,6 +26,7 @@ public class SidebarView extends JPanel implements IView {
 	private TaskDetailView detailView;
 	private TaskEditView editView;
 	private TaskCreateView createView;
+	private TaskDefaultView defaultView;
 	
 	/**
 	 * Constructs a sidebar view
@@ -33,6 +36,7 @@ public class SidebarView extends JPanel implements IView {
 		this.detailView = new TaskDetailView();
 		this.createView = new TaskCreateView();
 		this.editView = new TaskEditView();
+		this.defaultView = new TaskDefaultView();
 		
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
@@ -42,14 +46,25 @@ public class SidebarView extends JPanel implements IView {
 		this.container.setPreferredSize(new Dimension(360, 500));
 		this.container.setMaximumSize(new Dimension(360, Integer.MAX_VALUE));
 		
-		this.curView = this.createView;
+		this.curView = this.defaultView;
+		this.createView.setVisible(false);
 		this.editView.setVisible(false);
 		this.detailView.setVisible(false);
 		
+		this.container.add(this.defaultView);
 		this.container.add(this.createView);
 		this.container.add(this.editView);
 		this.container.add(this.detailView);
 		this.add(container);
+	}
+	
+	/**
+	 * Shows the default panel
+	 */
+	public void showDefaultPanel() {
+		this.curView.setVisible(false);
+		this.curView = this.defaultView;
+		this.curView.setVisible(true);
 	}
 	
 	/**
