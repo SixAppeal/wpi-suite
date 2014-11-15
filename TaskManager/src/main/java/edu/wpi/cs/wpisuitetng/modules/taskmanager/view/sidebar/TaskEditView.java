@@ -60,6 +60,7 @@ public class TaskEditView extends JPanel implements IView {
 	JTextField newMemberField;
 	JButton addNewMemberButton;
 	JButton saveButton;
+	JButton cancelButton;
 	// TODO: There is a better datastucture out there to do this
 	boolean[] requiredFieldFlags = {false , false};
 	String[] requiredFieldNames = {"titleEntry", "descEntry"};
@@ -130,6 +131,14 @@ public class TaskEditView extends JPanel implements IView {
 			}
 		});
 		
+		cancelButton = new JButton("Cancel");
+		cancelButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				clearForm();
+				gateway.toPresenter("TaskPresenter", "toolbarDefault");
+			}
+		});
+		
 		this.descEntryScoller = new JScrollPane(descEntry);
 		
 		this.add( new JLabel("Title :"), "top" );
@@ -152,6 +161,8 @@ public class TaskEditView extends JPanel implements IView {
 		
 		this.add( saveButton, "span 2, wrap, right" );
 		
+		this.add( cancelButton, "span 2, wrap, right");
+		
 		updateBorder(titleEntry, titleEntry.getText());
 		updateBorder(descEntryScoller, descEntry.getText());
 		
@@ -173,6 +184,9 @@ public class TaskEditView extends JPanel implements IView {
 	
 		this.t = t;
 		populate();
+		updateBorder(titleEntry, titleEntry.getText());
+		updateBorder(descEntryScoller, descEntry.getText());
+		saveButton.setEnabled(true);
 		
 	}
 	
@@ -204,9 +218,6 @@ public class TaskEditView extends JPanel implements IView {
 		TaskStatus st = (TaskStatus)statusBox.getSelectedItem();
 		int est = (Integer)estEffortSpinnerModel.getValue();
 		int act = (Integer)actEffortSpinnerModel.getValue();
-		
-		updateBorder(titleEntry, titleEntry.getText());
-		updateBorder(descEntryScoller, descEntry.getText());
 		
 		if(title.isEmpty() || desc.isEmpty())
 		{
@@ -285,7 +296,7 @@ public class TaskEditView extends JPanel implements IView {
 	
 	/**
 	 * Check to see if the field is valid, (set flags for save button)
-	 * update boarder, whether it is valid or not,.
+	 * update border, whether it is valid or not,.
 	 * @param someComponent The JComponent the field is held in.
 	 * @param data The data we are check if valid.
 	 * @param field The required field we are checking.
@@ -327,5 +338,27 @@ public class TaskEditView extends JPanel implements IView {
 			enable = enable && requiredFieldFlags[i];
 		}
 		saveButton.setEnabled(enable);
+	}
+	
+	/**
+	 * Clears the creation form
+	 */
+	public void clearForm() {
+		this.titleEntry.setText("");
+		this.descEntry.setText("");
+		this.estEffortSpinner.setValue(1);
+		this.actEffortSpinner.setValue(0);
+		this.titleEntry.setBorder((new JTextField()).getBorder());
+		this.descEntry.setBorder(null);
+		this.descEntryScoller.setBorder((new JScrollPane()).getBorder());
+		
+		for(int i = 0; i < this.requiredFieldFlags.length; i++)
+		{
+			this.requiredFieldFlags[i] = false;
+		}
+		saveButton.setEnabled(false);
+		
+		updateBorder(titleEntry, titleEntry.getText());
+		updateBorder(descEntryScoller, descEntry.getText());
 	}
 }

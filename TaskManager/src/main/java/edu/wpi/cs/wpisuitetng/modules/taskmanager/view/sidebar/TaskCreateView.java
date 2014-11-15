@@ -29,28 +29,6 @@ public class TaskCreateView extends TaskEditView implements IView {
 	}
 	
 	/**
-	 * Clears the creation form
-	 */
-	public void clearForm() {
-		this.titleEntry.setText("");
-		this.descEntry.setText("");
-		this.estEffortSpinner.setValue(1);
-		this.actEffortSpinner.setValue(0);
-		this.titleEntry.setBorder((new JTextField()).getBorder());
-		this.descEntry.setBorder(null);
-		this.descEntryScoller.setBorder((new JScrollPane()).getBorder());
-		
-		for(int i = 0; i < this.requiredFieldFlags.length; i++)
-		{
-			this.requiredFieldFlags[i] = false;
-		}
-		saveButton.setEnabled(false);
-		
-		updateBorder(titleEntry, titleEntry.getText());
-		updateBorder(descEntryScoller, descEntry.getText());
-	}
-	
-	/**
 	 * Passes the task to the presenter to be stored
 	 */
 	@Override
