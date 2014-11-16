@@ -60,9 +60,6 @@ public class MultiColumnView extends JPanel implements IView {
 		this.add(this.scrollPane);
 	}
 	
-	public void updateFromOldTasks() {
-	}
-	
 	/**
 	 * Adds an array of tasks to their respective columns
 	 * @param tasks An array of tasks to add
@@ -75,6 +72,10 @@ public class MultiColumnView extends JPanel implements IView {
 		}
 	}
 	
+	/**
+	 * removes a task from this columnar view
+	 * @param task the task to be removed
+	 */
 	public void removeTask(Task task) {
 		/*if (task.getColumn() < this.columns.size() && task.getColumn() >= 0) {
 			this.columns.get(task.getColumn()).removeTask(task);
@@ -87,6 +88,18 @@ public class MultiColumnView extends JPanel implements IView {
 		}
 		
 		this.scrollPane.revalidate();
+	}
+	
+	/**
+	 * removes all tasks from this columnar view
+	 */
+	public void removeAllTasks() {
+		for (ColumnView c : columns) {
+			System.out.println("Removing all tasks from column " + c.getTitle());
+			c.removeAllTasks();
+			c.revalidate();
+			System.out.println("Finished removing!");
+		}
 	}
 	
 	/**

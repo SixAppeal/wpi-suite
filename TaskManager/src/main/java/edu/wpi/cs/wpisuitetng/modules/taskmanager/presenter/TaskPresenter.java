@@ -6,7 +6,9 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.TaskModel;
 import edu.wpi.cs.wpisuitetng.network.Request;
 import edu.wpi.cs.wpisuitetng.network.Network;
+import edu.wpi.cs.wpisuitetng.network.RequestObserver;
 import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
+import edu.wpi.cs.wpisuitetng.network.models.IRequest;
 
 
 /**
@@ -45,12 +47,35 @@ public class TaskPresenter implements IPresenter{
 		
 		if( tm == null ) tm = new TaskModel();
 		
-		task.setId(tm.getNextID());
-		
 		final Request request = Network.getInstance().makeRequest("taskmanager/task", HttpMethod.PUT);
 		request.setBody(task.toJson());
+		request.addObserver(new RequestObserver() {
+			
+			@Override
+			public void responseSuccess(IRequest iReq) {
+				gateway.toView("ColumnView", "addTask", Task.fromJson(iReq.getResponse().getBody()));
+			}
+
+			/**
+			 * @see RequestObserver.responseError
+			 */
+			@Override
+			public void responseError(IRequest iReq) {
+				System.err.println("createTask: Error retrieving all tasks");
+				// TODO: send message to view saying there was an error so the view can display it to the user
+			}
+
+			/**
+			 * @see RequestObserver.fail
+			 */
+			@Override
+			public void fail(IRequest iReq, Exception exception) {
+				System.err.println("createTask: Error retrieving all tasks");
+				// TODO: send message to view saying there was an error so the view can display it to the user
+			}
+		});
 		request.send();
-		this.gateway.toView("ColumnView", "addTask", task);
+		
 	}
 	
 	/**
@@ -79,6 +104,13 @@ public class TaskPresenter implements IPresenter{
 	 */
 	public void editTask(Task task) {
 		this.gateway.toView("SidebarView", "showEditPanel", task);
+	}
+	/**
+	 * Removes all tasks from the view. This can never be called to archive all tasks, so it need not
+	 * communicate with the database.
+	 */
+	public void removeAllTasks() {
+		this.gateway.toView("ColumnView", "removeAllTasks");
 	}
 	
 	/**
@@ -113,14 +145,26 @@ public class TaskPresenter implements IPresenter{
 		}
 	}
 	
+	/**
+	 * Adds every task in the array to the view.
+	 * @param tasks An array of tasks to be added
+	 */
 	public void addAllToView( Task[] tasks ) {
 		for( Task t : tasks) addToView(t);
 	}
 	
+	/**
+	 * Adds a task to the view.
+	 * @param t the task to add
+	 */
 	public void addToView( Task t ) {
 		if( !t.isArchived() ) this.gateway.toView("ColumnView", "addTask", t);
 	}
 	
+	/**
+	 * Archives a task, updating its status in the database
+	 * @param t the task to archive
+	 */
 	public void archiveTask( Task t ) {
 		
 		t.archive();

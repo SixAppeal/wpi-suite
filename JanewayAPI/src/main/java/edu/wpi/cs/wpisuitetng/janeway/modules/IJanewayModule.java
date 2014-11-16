@@ -31,6 +31,9 @@ public interface IJanewayModule {
 	 */
 	public List<JanewayTabModel> getTabs();
 
+	/**
+	 * This method is invoked on each module after login.
+	 */
 	public void finishInit();
 	
 }

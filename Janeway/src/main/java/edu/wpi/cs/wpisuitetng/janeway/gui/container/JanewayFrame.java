@@ -44,7 +44,7 @@ public class JanewayFrame extends JFrame {
 	/** The singelton instance */
 	private static JanewayFrame instance = null;
 	
-	private boolean bInit = false;
+	private boolean bInit = true;
 	private List<IJanewayModule> modules;
 
 	/**
@@ -114,10 +114,16 @@ public class JanewayFrame extends JFrame {
 		return tabPanel;
 	}
 	
+	/**
+	 * Overrode this method to provide a hacky solution to late-stage init on Janeway Modules
+	 */
 	@Override
 	public void setVisible(boolean visible) {
 		
-		if( !bInit ) for(IJanewayModule m : modules) m.finishInit();
+		if( bInit && visible ) {
+			for(IJanewayModule m : modules) m.finishInit();
+			bInit = false;
+		}
 		super.setVisible(visible);
 		
 	}

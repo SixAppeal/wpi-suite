@@ -70,7 +70,8 @@ public class Gateway {
 				}
 				System.err.print(classes[i].getName());
 			}
-			System.err.println("): " + e.getClass().getName());
+			System.err.print("): " + e.getClass().getName() + ":");
+			System.err.println(e.getMessage());
 		}
 	}
 	

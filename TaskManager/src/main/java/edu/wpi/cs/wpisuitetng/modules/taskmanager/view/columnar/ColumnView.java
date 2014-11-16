@@ -3,6 +3,7 @@ package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.util.ArrayList;
+import java.util.function.Predicate;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -83,13 +84,37 @@ public class ColumnView extends JPanel implements IView {
 		}
 	}
 	
+	/**
+	 * removes all tasks from this column
+	 */
+	public void removeAllTasks() {
+		for(TaskView t : this.tasks) {
+			System.out.println("Removing task " + t.getTaskID());
+			this.columnPanel.remove(t);
+			System.out.println("Task removed from ColumnPanel!");
+		}
+		this.tasks.clear(); //removing a task from the array we are currently iterating over is /illegal/
+	}
+	
+	/**
+	 * removes a task from this column
+	 * @param task the task to be removed
+	 */
 	public void removeTask(Task task) {
 		for (TaskView t: this.tasks){
 			if (t.getTaskID() == task.getId()) {
 				this.columnPanel.remove(t);
-				this.tasks.remove(t);
+				
 			}
 		}
+		
+		//This predicate is used to remove the tasks outside of the iterator
+		this.tasks.removeIf( new Predicate<TaskView>() {
+			@Override
+			public boolean test(TaskView t) {
+				return t.getTaskID() == task.getId();
+			}		
+		});
 		
 		this.columnPanel.revalidate();
 		this.columnPanel.repaint();
@@ -98,6 +123,16 @@ public class ColumnView extends JPanel implements IView {
 		
 	}
 
+	/**
+	 * @return title of this Column
+	 */
+	public String getTitle() {
+		return title;
+	}
+	
+	/**
+	 * @return the number of tasks in this column
+	 */
 	public int getTaskCount() {
 		return this.tasks.size();
 	}
