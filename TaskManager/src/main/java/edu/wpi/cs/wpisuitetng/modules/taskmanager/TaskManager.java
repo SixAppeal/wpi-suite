@@ -83,6 +83,9 @@ public class TaskManager implements IJanewayModule {
 		return tabs;
 	}
 
+	/**
+	 * @see edu.wpi.cs.wpisuitetng.janeway.modules.IJanewayModule#finishInit()
+	 */
 	@Override
 	public void finishInit() {
 		gateway.toPresenter("TaskPresenter", "getAllTasks");
