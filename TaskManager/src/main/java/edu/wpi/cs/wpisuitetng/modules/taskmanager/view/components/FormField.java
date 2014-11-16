@@ -13,8 +13,6 @@ import javax.swing.JPanel;
 /**
  * A form field to place in a form
  * @author wavanrensselaer
- *
- * @param <T> The component to use for input (i.e. JTextField)
  */
 public class FormField extends JPanel {
 	private static final long serialVersionUID = -2031130076773334170L;
