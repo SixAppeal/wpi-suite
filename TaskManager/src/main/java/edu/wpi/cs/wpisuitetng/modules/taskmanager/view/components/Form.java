@@ -2,6 +2,7 @@ package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,6 +37,7 @@ public class Form extends JPanel {
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.anchor = GridBagConstraints.PAGE_START;
 		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.insets = new Insets(0, 0, 10, 0);
 		gbc.weightx = 1.0;
 		gbc.gridx = 0;
 		
@@ -45,6 +47,7 @@ public class Form extends JPanel {
 			if (i == fields.length - 1) {
 				gbc.anchor = GridBagConstraints.FIRST_LINE_END;
 				gbc.fill = GridBagConstraints.NONE;
+				gbc.insets.bottom = 0;
 				gbc.weightx = 0.0;
 				gbc.weighty = 1.0;
 			}

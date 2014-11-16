@@ -6,23 +6,25 @@ import java.awt.Insets;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 
 /**
- * A panel that can contain multiple <code>FormField</code>s inline
+ * A panel that can contain multiple <code>FormField</code>s or other
+ * components (like <code>JButton</code>s) inline
  * @author wavanrensselaer
  */
 public class FormGroup extends JPanel {
 	private static final long serialVersionUID = 7117806918063764495L;
 	
-	private List<FormField> fields;
+	private List<JComponent> fields;
 	
 	/**
 	 * Constructs a <code>FormGroup</code>
 	 * @param fields
 	 */
-	public FormGroup(FormField... fields) {
-		this.fields = new ArrayList<FormField>();
+	public FormGroup(JComponent... fields) {
+		this.fields = new ArrayList<JComponent>();
 		
 		this.setOpaque(false);
 		this.setLayout(new GridBagLayout());
@@ -48,7 +50,7 @@ public class FormGroup extends JPanel {
 	 * Gets the fields associated with this group
 	 * @return A <code>List</code> of fields in this group
 	 */
-	public List<FormField> getFields() {
+	public List<JComponent> getFields() {
 		return this.fields;
 	}
 }

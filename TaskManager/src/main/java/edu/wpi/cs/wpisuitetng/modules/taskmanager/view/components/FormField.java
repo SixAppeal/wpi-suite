@@ -49,7 +49,7 @@ public class FormField extends JPanel {
 		gbc.gridy = 0;
 		this.add(this.label, gbc);
 		
-		gbc.insets = new Insets(5, 0, 10, 0);
+		gbc.insets = new Insets(5, 0, 0, 0);
 		gbc.gridy = 1;
 		this.add(this.field, gbc);
 	}
