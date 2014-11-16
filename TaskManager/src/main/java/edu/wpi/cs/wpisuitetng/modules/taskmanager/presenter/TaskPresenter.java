@@ -94,9 +94,7 @@ public class TaskPresenter implements IPresenter{
 	 * @return 
 	 */
 	public void getAllTasks() {
-		System.out.println("Got Here!");
 		final Request request = Network.getInstance().makeRequest("taskmanager/task", HttpMethod.GET);
-		System.out.println("Got Here Too!");
 		request.addObserver(new GetTasksObserver(this));
 		request.send();
 	}

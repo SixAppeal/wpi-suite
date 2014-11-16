@@ -42,9 +42,9 @@ public class SidebarView extends JPanel implements IView {
 		
 		this.container.setLayout(new BoxLayout(this.container, BoxLayout.X_AXIS));
 		this.container.setBackground(new Color(250, 250, 250));
-		this.container.setMinimumSize(new Dimension(360, 0));
-		this.container.setPreferredSize(new Dimension(360, 500));
-		this.container.setMaximumSize(new Dimension(360, Integer.MAX_VALUE));
+		this.container.setMinimumSize(new Dimension(300, 0));
+		this.container.setPreferredSize(new Dimension(300, 500));
+		this.container.setMaximumSize(new Dimension(300, Integer.MAX_VALUE));
 		
 		this.curView = this.defaultView;
 		this.createView.setVisible(false);
