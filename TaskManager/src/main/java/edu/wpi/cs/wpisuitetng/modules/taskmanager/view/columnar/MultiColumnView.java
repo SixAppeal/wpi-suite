@@ -100,6 +100,8 @@ public class MultiColumnView extends JPanel implements IView {
 			c.revalidate();
 			System.out.println("Finished removing!");
 		}
+		
+		this.scrollPane.revalidate();
 	}
 	
 	/**

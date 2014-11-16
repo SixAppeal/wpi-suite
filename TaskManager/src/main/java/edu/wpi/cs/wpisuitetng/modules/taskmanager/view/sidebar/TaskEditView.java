@@ -59,6 +59,8 @@ public class TaskEditView extends JPanel implements IView {
 	 */
 	public TaskEditView () {
 		
+		t = new Task();
+		
 		//If this is a task creation panel, use a different title text
 		String paneTitle = getTitle();
 		
@@ -166,7 +168,6 @@ public class TaskEditView extends JPanel implements IView {
 	}
 	
 	private void processTask() {
-		t = new Task();
 		
 		String title = titleEntry.getText();
 		String desc = descEntry.getText();
@@ -184,7 +185,7 @@ public class TaskEditView extends JPanel implements IView {
 			t.setDueDate( dueDatePicker.getDate() );
 			t.setColumn(statusBox.getSelectedIndex());
 		} catch (IllegalArgumentException ex) {
-			System.out.println(ex.getMessage());
+			System.err.println(ex.toString());
 			return;
 		}
 		

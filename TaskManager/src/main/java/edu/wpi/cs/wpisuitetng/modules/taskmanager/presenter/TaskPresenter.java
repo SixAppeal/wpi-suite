@@ -93,9 +93,71 @@ public class TaskPresenter implements IPresenter{
 	public void updateTask(Task task) {
 		final Request request = Network.getInstance().makeRequest("taskmanager/task", HttpMethod.POST);
 		request.setBody(task.toJson());
+		request.addObserver(new RequestObserver() {
+			
+			@Override
+			public void responseSuccess(IRequest iReq) {
+				gateway.toView("ColumnView", "addTask", Task.fromJson(iReq.getResponse().getBody()));
+			}
+
+			/**
+			 * @see RequestObserver.responseError
+			 */
+			@Override
+			public void responseError(IRequest iReq) {
+				System.err.println("updateTask: Error updating task");
+				// TODO: send message to view saying there was an error so the view can display it to the user
+			}
+
+			/**
+			 * @see RequestObserver.fail
+			 */
+			@Override
+			public void fail(IRequest iReq, Exception exception) {
+				System.err.println("updateTask: Error updating task");
+				// TODO: send message to view saying there was an error so the view can display it to the user
+			}
+		});
 		request.send();
 		this.gateway.toView("ColumnView", "removeTask", task);
-		this.gateway.toView("ColumnView", "addTask", task);
+		
+	}
+	
+	/**
+	 * Updates a task in the database without readding it to the view
+	 * @param task Task to update
+	 */
+	public void updateTaskForArchival(Task task) {
+		final Request request = Network.getInstance().makeRequest("taskmanager/task", HttpMethod.POST);
+		request.setBody(task.toJson());
+		request.addObserver(new RequestObserver() {
+			
+			@Override
+			public void responseSuccess(IRequest iReq) {
+				gateway.toView("ColumnView", "removeTask", Task.fromJson(iReq.getResponse().getBody()));
+			}
+
+			/**
+			 * @see RequestObserver.responseError
+			 */
+			@Override
+			public void responseError(IRequest iReq) {
+				System.err.println("updateTask: Error updating task");
+				// TODO: send message to view saying there was an error so the view can display it to the user
+			}
+
+			/**
+			 * @see RequestObserver.fail
+			 */
+			@Override
+			public void fail(IRequest iReq, Exception exception) {
+				System.err.println("updateTask: Error updating task");
+				// TODO: send message to view saying there was an error so the view can display it to the user
+			}
+		});
+		request.send();
+		this.gateway.toView("ColumnView", "removeTask", task);
+		
 	}
 	
 	/**
@@ -168,8 +230,7 @@ public class TaskPresenter implements IPresenter{
 	public void archiveTask( Task t ) {
 		
 		t.archive();
-		updateTask(t);
-		this.gateway.toView("ColumnView", "removeTask", t);
+		updateTaskForArchival(t);
 		
 	}
 	

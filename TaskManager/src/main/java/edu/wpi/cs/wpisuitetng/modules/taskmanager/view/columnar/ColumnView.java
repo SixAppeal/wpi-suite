@@ -94,6 +94,11 @@ public class ColumnView extends JPanel implements IView {
 			System.out.println("Task removed from ColumnPanel!");
 		}
 		this.tasks.clear(); //removing a task from the array we are currently iterating over is /illegal/
+		this.columnPanel.revalidate();
+		this.columnPanel.repaint();
+		
+		this.revalidate();
+		
 	}
 	
 	/**
