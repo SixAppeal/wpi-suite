@@ -31,6 +31,13 @@ public class TaskPresenter implements IPresenter{
 	}
 	
 	/**
+	 * Tells the SidebarView to show default form, which is empty
+	 */
+	public void toolbarDefault() {
+		this.gateway.toView("SidebarView", "showDefaultPanel");
+	}
+	
+	/**
 	 * Tells the SidebarView to show the form for creating a task
 	 */
 	public void toolbarCreate() {
@@ -51,6 +58,7 @@ public class TaskPresenter implements IPresenter{
 		request.setBody(task.toJson());
 		request.send();
 		this.gateway.toView("ColumnView", "addTask", task);
+		this.gateway.toView("SidebarView", "showDefaultPanel");
 	}
 	
 	/**
