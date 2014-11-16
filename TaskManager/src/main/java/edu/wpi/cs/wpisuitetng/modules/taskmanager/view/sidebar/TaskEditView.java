@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -29,6 +31,11 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
 /**
  * 
  * @author wmtemple
+ * @author jrhennessy
+ * @author nhhughes
+ * @author rwang3
+ * @author akshoop
+ * @author rnorlando
  *
  * A view to be displayed when creating or modifying a task object in the GUI.
  *
@@ -73,7 +80,7 @@ public class TaskEditView extends JPanel implements IView {
 		
 		// MigLayout gives us the easiest layout with best flexibility
 		MigLayout layout = new MigLayout(
-				"wrap 2",						//Layout constraints
+				"wrap 3",						//Layout constraints
 				"[right][left, 100::, grow]", 	//Column constraints
 				"");							//Row Constraints
 		
@@ -110,24 +117,24 @@ public class TaskEditView extends JPanel implements IView {
 		});
 		
 		this.add( new JLabel("Title :"), "top" );
-		this.add( titleEntry, "wrap, width 100:150, growx" );
+		this.add( titleEntry, "wrap, width 100:150, growx, span 2" );
 		
 		this.add( new JLabel("Description :"), "top" );
-		this.add( new JScrollPane(descEntry), "wrap, grow");
+		this.add( new JScrollPane(descEntry), "wrap, grow, span 2");
 		
 		this.add( new JLabel("Due Date :") );
-		this.add( dueDatePicker, "wrap, width 120:120:200, growx" );
+		this.add( dueDatePicker, "wrap, width 120:120:200, growx, span 2" );
 		
 		this.add( new JLabel("Est. Effort :") );
-		this.add( estEffortSpinner, "wrap, width 50:120:150" );
+		this.add( estEffortSpinner, "wrap, width 50:120:150, span 2" );
 		
 		this.add( new JLabel("Act. Effort :") );
-		this.add( actEffortSpinner, "wrap, width 50:120:150" );
+		this.add( actEffortSpinner, "wrap, width 50:120:150, span 2" );
 		
 		this.add( new JLabel("Task Status :") );
-		this.add( statusBox, "wrap, width 50:120:150" );
+		this.add( statusBox, "wrap, width 50:120:150, span 2" );
 		
-		this.add( saveButton, "span 2, wrap, right" );
+		this.add( saveButton, "span 3, wrap, right" );
 		
 		//Member Stuff
 		allMembersList = new ArrayList<String>();
@@ -142,10 +149,15 @@ public class TaskEditView extends JPanel implements IView {
 		JScrollPane allMembersListScroller = new JScrollPane(allMembers);
 		JScrollPane assignedMembersListScroller = new JScrollPane(assignedMembers);
 		
-		this.add(allMembersListScroller);
-		this.add(assignedMembersListScroller);
-		this.add(addMemberButton);
-		this.add(removeMemberButton);
+		Box buttonBox = new Box(BoxLayout.PAGE_AXIS);
+		buttonBox.add(addMemberButton);
+		buttonBox.add(removeMemberButton);
+		this.add( new JLabel("Members Available"), "width 125:125:200" );
+		this.add( new JLabel("Members Assigned"), "width 125:125:200, span 2, right" );
+		this.add(allMembersListScroller, "width 50:50:100, growx" );
+		this.add( buttonBox, "width 50:50:100, center"  );
+		this.add(assignedMembersListScroller, "width 50:50:100, growx" );
+		
 		
 		
 		
