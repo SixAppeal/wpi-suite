@@ -44,9 +44,7 @@ public class GetTasksObserver implements RequestObserver {
 	public void responseSuccess(IRequest iReq) {
 		Task[] tasks = new Gson().fromJson(iReq.getResponse().getBody(), Task[].class);
 		presenter.tasks = tasks;
-		if (id >= 0) {
-			presenter.getTask(id);
-		}
+		presenter.addAllToView(tasks);
 	}
 
 	/**

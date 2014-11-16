@@ -2,11 +2,14 @@ package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -25,6 +28,7 @@ public class TaskView extends JPanel implements IView {
 	private Task task;
 	private JPanel taskPanel;
 	private JLabel nameLabel;
+	private JButton archiveButton;
 	
 	/**
 	 * Constructs a <code>TaskView</code>
@@ -38,7 +42,7 @@ public class TaskView extends JPanel implements IView {
 		this.setBorder(BorderFactory.createEmptyBorder(0, 20, 20, 20));
 		this.setOpaque(false);
 		this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-		this.taskPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 100));
+		this.taskPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 80));
 		
 		this.taskPanel.setBackground(new Color(255, 255, 255));
 		
@@ -69,8 +73,26 @@ public class TaskView extends JPanel implements IView {
 			}
 		});
 		
+		archiveButton = new JButton("Archive Me!");
+		archiveButton.addActionListener( new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				archiveTask();
+				
+			}
+			
+		});
+		
 		this.taskPanel.add(nameLabel);
 		this.add(this.taskPanel);
+		this.add(archiveButton);
+	}
+	
+	public void archiveTask() {
+		
+		gateway.toPresenter("TaskPresenter", "archiveTask", task);
+		
 	}
 
 	/**

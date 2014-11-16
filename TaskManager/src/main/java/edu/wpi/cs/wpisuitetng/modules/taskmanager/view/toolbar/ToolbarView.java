@@ -9,6 +9,8 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.border.EtchedBorder;
 
+import com.sun.prism.Graphics;
+
 import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.DefaultToolbarView;
 import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.ToolbarGroupView;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
@@ -31,6 +33,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
  */
 public class ToolbarView extends DefaultToolbarView implements IView {
 
+	private boolean bInit = false;
 	public CreateTaskButtonPanel addButtons = new CreateTaskButtonPanel();
 	private Gateway gateway;
 	
@@ -61,9 +64,5 @@ public class ToolbarView extends DefaultToolbarView implements IView {
 		this.gateway = gateway;
 		this.addButtons.setGateway(this.gateway);
 	}
-	
-
-	
-	
 	
 }

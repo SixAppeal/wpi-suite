@@ -94,6 +94,7 @@ public class MultiColumnView extends JPanel implements IView {
 	 * @param task The task to add
 	 */
 	public void addTask(Task task) {
+		if ( task.isArchived() ) System.err.println("View trying to add Archived Task!");
 		if (task.getColumn() < this.columns.size() && task.getColumn() >= 0) {
 			this.columns.get(task.getColumn()).addTask(task);
 		}

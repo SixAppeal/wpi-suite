@@ -43,11 +43,15 @@ public class JanewayFrame extends JFrame {
 	
 	/** The singelton instance */
 	private static JanewayFrame instance = null;
+	
+	private boolean bInit = false;
+	private List<IJanewayModule> modules;
 
 	/**
 	 * Construct a new JanewayFrame
 	 */
 	private JanewayFrame(List<IJanewayModule> modules) {
+		this.modules = modules;
 		// Set window properties
 		setTitle("Janeway - WPI Suite Desktop Client");
 		setMinimumSize(new Dimension(800, 600)); // minimum window size is 800 x 600
@@ -108,6 +112,14 @@ public class JanewayFrame extends JFrame {
 	 */
 	public TabPanel getTabPanel() {
 		return tabPanel;
+	}
+	
+	@Override
+	public void setVisible(boolean visible) {
+		
+		if( !bInit ) for(IJanewayModule m : modules) m.finishInit();
+		super.setVisible(visible);
+		
 	}
 
 	/**

@@ -30,5 +30,7 @@ public interface IJanewayModule {
 	 * @return The list of tab models associated with this module.
 	 */
 	public List<JanewayTabModel> getTabs();
+
+	public void finishInit();
 	
 }

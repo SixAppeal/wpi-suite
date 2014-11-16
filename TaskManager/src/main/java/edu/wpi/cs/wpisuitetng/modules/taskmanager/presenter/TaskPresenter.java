@@ -112,5 +112,22 @@ public class TaskPresenter implements IPresenter{
 			System.err.println("TaskPresenter: Error getting task " + id);
 		}
 	}
+	
+	public void addAllToView( Task[] tasks ) {
+		for( Task t : tasks) addToView(t);
+	}
+	
+	public void addToView( Task t ) {
+		if( !t.isArchived() ) this.gateway.toView("ColumnView", "addTask", t);
+	}
+	
+	public void archiveTask( Task t ) {
+		
+		t.archive();
+		updateTask(t);
+		this.gateway.toView("ColumnView", "removeTask", t);
+		
+	}
+	
 }
 
