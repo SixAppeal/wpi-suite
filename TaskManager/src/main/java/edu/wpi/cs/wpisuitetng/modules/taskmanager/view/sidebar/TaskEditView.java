@@ -2,10 +2,13 @@ package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
@@ -48,10 +51,16 @@ public class TaskEditView extends JPanel implements IView {
 	SpinnerNumberModel estEffortSpinnerModel;
 	SpinnerNumberModel actEffortSpinnerModel;
 	JXDatePicker dueDatePicker;
-	JTextArea membersTextArea;
-	JTextField newMemberField;
-	JButton addNewMemberButton;
 	JButton saveButton;
+	//Member stuff
+	JList<String> allMembers;
+	JList<String> assignedMembers;
+	JButton addMemberButton;
+	JButton removeMemberButton;
+	String[] membersTest1 = {"user1", "user2", "user3","user1", "user2", "user3","user1", "user2", "user3","user1", "user2", "user3"};
+	String[] membersTest2 = {"user4", "user5", "user6"};
+	List<String> allMembersList;
+	List<String> assignedMembersList;
 	
 	
 	/**
@@ -93,10 +102,6 @@ public class TaskEditView extends JPanel implements IView {
 		statusBox.addItem(new TaskStatus("Testing"));
 		statusBox.addItem(new TaskStatus("Live"));
 		
-		membersTextArea = new JTextArea(5,0);
-		membersTextArea.setLineWrap(true);
-		membersTextArea.setWrapStyleWord(true);
-		
 		saveButton = new JButton("Save");
 		saveButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -123,6 +128,26 @@ public class TaskEditView extends JPanel implements IView {
 		this.add( statusBox, "wrap, width 50:120:150" );
 		
 		this.add( saveButton, "span 2, wrap, right" );
+		
+		//Member Stuff
+		allMembersList = new ArrayList<String>();
+		assignedMembersList = new ArrayList<String>();
+		allMembers = new JList<String>(membersTest1);
+		assignedMembers = new JList<String>(membersTest2);
+		addMemberButton = new JButton("=>");
+		removeMemberButton = new JButton("<=");
+		
+		allMembers.setLayoutOrientation(JList.VERTICAL);
+		assignedMembers.setLayoutOrientation(JList.VERTICAL);
+		JScrollPane allMembersListScroller = new JScrollPane(allMembers);
+		JScrollPane assignedMembersListScroller = new JScrollPane(assignedMembers);
+		
+		this.add(allMembersListScroller);
+		this.add(assignedMembersListScroller);
+		this.add(addMemberButton);
+		this.add(removeMemberButton);
+		
+		
 		
 	}
 	
