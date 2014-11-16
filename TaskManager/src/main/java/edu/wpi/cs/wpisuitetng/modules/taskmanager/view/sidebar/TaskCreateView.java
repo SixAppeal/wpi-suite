@@ -5,6 +5,8 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
 /**
  * 
  * @author wmtemple
+ * @author akshoop
+ * @author rnorlando
  *
  * A view to be displayed when creating or modifying a task object in the GUI.
  *
@@ -18,16 +20,6 @@ public class TaskCreateView extends TaskEditView implements IView {
 	@Override
 	protected String getTitle() {
 		return "New Task";
-	}
-	
-	/**
-	 * Clears the creation form
-	 */
-	public void clearForm() {
-		this.titleEntry.setText("");
-		this.descEntry.setText("");
-		this.estEffortSpinner.setValue(1);
-		this.actEffortSpinner.setValue(0);
 	}
 	
 	/**

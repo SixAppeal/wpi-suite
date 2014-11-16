@@ -16,6 +16,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
 /**
  * View for an individual column in the columnal layout
  * @author wavanrensselaer
+ * @author rnorlando
  */
 public class ColumnView extends JPanel implements IView {
 	private static final long serialVersionUID = 2174190454852340046L;

@@ -1,10 +1,15 @@
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.Date;
+import java.util.HashMap;
 
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -26,6 +31,8 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
 /**
  * 
  * @author wmtemple
+ * @author akshoop
+ * @author rnorlando
  *
  * A view to be displayed when creating or modifying a task object in the GUI.
  *
@@ -42,6 +49,7 @@ public class TaskEditView extends JPanel implements IView {
 	
 	JTextField titleEntry;
 	JTextArea descEntry;
+	JScrollPane descEntryScoller;
 	JComboBox<TaskStatus> statusBox;
 	JSpinner estEffortSpinner;
 	JSpinner actEffortSpinner;
@@ -52,13 +60,16 @@ public class TaskEditView extends JPanel implements IView {
 	JTextField newMemberField;
 	JButton addNewMemberButton;
 	JButton saveButton;
+	JButton cancelButton;	
+	HashMap<String, Boolean> requirderFieldFlags = new HashMap<String,Boolean>();
+	
 	
 	
 	/**
 	 * Create a new TaskEditView
 	 */
-	public TaskEditView () {
-		
+	public TaskEditView () 
+	{
 		//If this is a task creation panel, use a different title text
 		String paneTitle = getTitle();
 		
@@ -73,10 +84,24 @@ public class TaskEditView extends JPanel implements IView {
 		this.setLayout(layout);
 		
 		titleEntry = new JTextField();
+		titleEntry.addKeyListener(new KeyAdapter() {
+			public void keyReleased(KeyEvent e)
+			{
+				checkValidField(titleEntry, titleEntry.getText(), "titleEntry");
+			}
+		}
+		);
 		
 		descEntry = new JTextArea(5,0);
 		descEntry.setLineWrap(true);
 		descEntry.setWrapStyleWord(true);
+		descEntry.addKeyListener(new KeyAdapter() {
+			public void keyReleased(KeyEvent e)
+			{
+				checkValidField(descEntryScoller, descEntry.getText(), "descEntry");
+			}
+		}
+		);
 		
 		dueDatePicker = new JXDatePicker( new Date(System.currentTimeMillis()));
 
@@ -88,27 +113,38 @@ public class TaskEditView extends JPanel implements IView {
 		actEffortSpinner.setEnabled(false);
 		
 		statusBox = new JComboBox<TaskStatus>();
-		statusBox.addItem(new TaskStatus("Backlog"));
-		statusBox.addItem(new TaskStatus("Development"));
-		statusBox.addItem(new TaskStatus("Testing"));
-		statusBox.addItem(new TaskStatus("Live"));
+		statusBox.addItem(new TaskStatus("New"));
+		statusBox.addItem(new TaskStatus("Scheduled"));
+		statusBox.addItem(new TaskStatus("In Progress"));
+		statusBox.addItem(new TaskStatus("Complete"));
 		
 		membersTextArea = new JTextArea(5,0);
 		membersTextArea.setLineWrap(true);
 		membersTextArea.setWrapStyleWord(true);
 		
 		saveButton = new JButton("Save");
+		saveButton.setEnabled(false);
 		saveButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				processTask();
 			}
 		});
 		
+		cancelButton = new JButton("Cancel");
+		cancelButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				clearForm();
+				gateway.toPresenter("TaskPresenter", "toolbarDefault");
+			}
+		});
+		
+		this.descEntryScoller = new JScrollPane(descEntry);
+		
 		this.add( new JLabel("Title :"), "top" );
 		this.add( titleEntry, "wrap, width 100:150, growx" );
 		
 		this.add( new JLabel("Description :"), "top" );
-		this.add( new JScrollPane(descEntry), "wrap, grow");
+		this.add( descEntryScoller, "wrap, grow");
 		
 		this.add( new JLabel("Due Date :") );
 		this.add( dueDatePicker, "wrap, width 120:120:200, growx" );
@@ -123,6 +159,11 @@ public class TaskEditView extends JPanel implements IView {
 		this.add( statusBox, "wrap, width 50:120:150" );
 		
 		this.add( saveButton, "span 2, wrap, right" );
+		
+		this.add( cancelButton, "span 2, wrap, right");
+		
+		this.checkValidField(titleEntry, titleEntry.getText(), "titleEntry");
+		this.checkValidField(descEntryScoller, descEntry.getText(), "descEntry");
 		
 	}
 	
@@ -142,6 +183,9 @@ public class TaskEditView extends JPanel implements IView {
 	
 		this.t = t;
 		populate();
+		updateBorder(titleEntry, titleEntry.getText());
+		updateBorder(descEntryScoller, descEntry.getText());
+		saveButton.setEnabled(true);
 		
 	}
 	
@@ -161,7 +205,8 @@ public class TaskEditView extends JPanel implements IView {
 		
 		String stat = t.getStatus().toString();
 		
-		actEffortSpinner.setEnabled( (stat == "Testing") || (stat == "Live") );
+		//This is hard coded and should be fixed at some point in the future
+		actEffortSpinner.setEnabled( (stat.equals("In Progress")) || (stat.equals("Complete")) );
 		
 	}
 	
@@ -173,6 +218,11 @@ public class TaskEditView extends JPanel implements IView {
 		TaskStatus st = (TaskStatus)statusBox.getSelectedItem();
 		int est = (Integer)estEffortSpinnerModel.getValue();
 		int act = (Integer)actEffortSpinnerModel.getValue();
+		
+		if(title.isEmpty() || desc.isEmpty())
+		{
+			return;
+		}
 		
 		try {
 			
@@ -204,5 +254,95 @@ public class TaskEditView extends JPanel implements IView {
 		gateway.toPresenter("TaskPresenter", "updateTask", t);
 	}
 	
+	/**
+	 * Highlights the text field if attribute is required
+	 * to show the user that they did not fill out the text field.
+	 * @param someComponent Text area they did not fill out.
+	 */
+	protected void indicateRequiredField(JComponent someComponent)
+	{
+		someComponent.setBorder(BorderFactory.createLineBorder(Color.RED));
+	}
 	
+	/**
+	 * Updates the board of the JTextComponents, 
+	 * if it is empty it will indicate that it is a required field.
+	 * updates the borders based of whether the text is empty or has something
+	 * @param someComponent Text area that gets updated.
+	 * @param text The text relating to the field.
+	 */
+	protected void updateBorder(JComponent someComponent, String text)
+	{
+		if(text.isEmpty())
+		{
+			indicateRequiredField(someComponent);
+		}
+		else
+		{	
+			if(someComponent instanceof JTextField)
+			{
+				someComponent.setBorder((new JTextField()).getBorder());
+			}
+			else if(someComponent instanceof JScrollPane)
+			{
+				someComponent.setBorder((new JScrollPane()).getBorder());
+			}
+			else
+			{
+				someComponent.setBorder(null);
+			}
+		}
+	}
+	
+	/**
+	 * Check to see if the field is valid, (set flags for save button)
+	 * update border, whether it is valid or not,.
+	 * @param someComponent The JComponent the field is held in.
+	 * @param data The data we are check if valid.
+	 * @param field The required field we are checking.
+	 */
+	protected void checkValidField(JComponent someComponent, String data, String field)
+	{
+		updateBorder(someComponent, data);
+		this.requirderFieldFlags.put(field, !data.isEmpty());
+		
+		attemptToEnableSaveButton();
+	}
+	
+	/**
+	 * Check the flags of all required field to see if they're all true.
+	 * If yes, then enable save button.
+	 * If no, disable save button.
+	 */
+	protected void attemptToEnableSaveButton()
+	{
+		boolean enable = true;
+		for(String key: this.requirderFieldFlags.keySet())
+		{
+			enable = enable && this.requirderFieldFlags.get(key);
+		}
+		saveButton.setEnabled(enable);
+	}
+	
+	/**
+	 * Clears the creation form
+	 */
+	public void clearForm() {
+		this.titleEntry.setText("");
+		this.descEntry.setText("");
+		this.estEffortSpinner.setValue(1);
+		this.actEffortSpinner.setValue(0);
+		this.titleEntry.setBorder((new JTextField()).getBorder());
+		this.descEntry.setBorder(null);
+		this.descEntryScoller.setBorder((new JScrollPane()).getBorder());
+		
+		for(String key: this.requirderFieldFlags.keySet())
+		{
+			this.requirderFieldFlags.put(key, false);
+		}
+		saveButton.setEnabled(false);
+		
+		updateBorder(titleEntry, titleEntry.getText());
+		updateBorder(descEntryScoller, descEntry.getText());
+	}
 }

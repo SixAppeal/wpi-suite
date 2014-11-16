@@ -17,6 +17,8 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
 /**
  * View for a task that display in the ColumnView
  * @author wavanrensselaer
+ * @author akshoop
+ * @author rnorlando
  */
 public class TaskView extends JPanel implements IView {
 	private static final long serialVersionUID = 6255679649898290535L;
@@ -38,7 +40,7 @@ public class TaskView extends JPanel implements IView {
 		this.setBorder(BorderFactory.createEmptyBorder(0, 20, 20, 20));
 		this.setOpaque(false);
 		this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-		this.taskPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 100));
+		this.taskPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
 		
 		this.taskPanel.setBackground(new Color(255, 255, 255));
 		
@@ -69,6 +71,7 @@ public class TaskView extends JPanel implements IView {
 			}
 		});
 		
+		this.nameLabel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 20));
 		this.taskPanel.add(nameLabel);
 		this.add(this.taskPanel);
 	}

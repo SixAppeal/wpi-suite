@@ -54,7 +54,7 @@ public class CreateTaskButtonPanel extends ToolbarGroupView implements IView {
 		springLayout.putConstraint(SpringLayout.SOUTH, createTaskButton, -10, SpringLayout.SOUTH, this.contentPanel);
 		// Set the width of createTaskButton
 		Dimension d_task = createTaskButton.getPreferredSize();
-		d_task.width = 250;
+		d_task.width = 150;
 		createTaskButton.setPreferredSize(d_task);
 
 		// Layout of the create Panel Button
