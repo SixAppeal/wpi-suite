@@ -85,7 +85,9 @@ public class TaskEditView extends JPanel implements IView {
 		// MigLayout gives us the easiest layout with best flexibility
 		MigLayout layout = new MigLayout(
 				"wrap 3",						//Layout constraints
+				//changed wrap to 3 cells
 				"[right][][left, 100::, grow]", 	//Column constraints
+				//add the empty brackets to create a third cell
 				"");							//Row Constraints
 		
 		this.setOpaque(false);
@@ -177,7 +179,11 @@ public class TaskEditView extends JPanel implements IView {
 		this.add( buttonBox, "width 50:50:100, center"  );
 		this.add(assignedMembersListScroller, "width 50:50:100, growx, right" );
 	}
-	
+
+	/**
+	 * Allows a request from the server to add to the list of all members available to assign to a task
+	 * @param to_add Members from the server that are going to be added to the All Members list
+	 */
 	public void setAllMembers(String [] to_add) {
 		for (int i = 0; i < to_add.length; i++) {
 			if (!this.allMembersList.contains(to_add[i])) {
@@ -186,6 +192,9 @@ public class TaskEditView extends JPanel implements IView {
 		}
 	}
 	
+	/**
+	 * Takes the members that the user has selected and moves them to the list of members assigned to a task
+	 */
 	public void moveMembersToAssigned() {
 		List<String> selected = allMembers.getSelectedValuesList();
 		List<String> updatedAll = new ArrayList<String>();
@@ -202,6 +211,9 @@ public class TaskEditView extends JPanel implements IView {
 		assignedMembers.setListData(assignedMembersList.toArray(new String[assignedMembersList.size()]));
 	}
 	
+	/**
+	 * Take the members that are selected in the Assigned Members list and moves them back to the All Members list
+	 */
 	public void moveMembersToAll() {
 		List<String> selected = assignedMembers.getSelectedValuesList();
 		List<String> updatedAssigned = new ArrayList<String>();
@@ -257,6 +269,7 @@ public class TaskEditView extends JPanel implements IView {
 		actEffortSpinner.setEnabled( (stat == "Testing") || (stat == "Live") );
 		
 	}
+	
 	
 	private void processTask() {
 		t = new Task();

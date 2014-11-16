@@ -52,13 +52,14 @@ public class SidebarView extends JPanel implements IView {
 		this.add(container);
 	}
 	
+	/**
+	 * Updates the sidebar with all members from the server
+	 * @param members All members available to assign to a task
+	 */
 	public void updateMembers(String[] members) {
-		if (this.curView instanceof TaskEditView) {
-			((TaskEditView) this.curView).setAllMembers(members);
-		}
-		if (this.curView instanceof TaskCreateView) {
-			((TaskCreateView) this.curView).setAllMembers(members);
-		}
+			this.editView.setAllMembers(members);
+		
+			this.createView.setAllMembers(members);
 	}
 	
 	/**

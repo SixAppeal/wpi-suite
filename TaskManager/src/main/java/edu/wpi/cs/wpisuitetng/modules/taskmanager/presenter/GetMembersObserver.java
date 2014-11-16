@@ -17,6 +17,10 @@ public class GetMembersObserver implements RequestObserver {
 
 	private TaskPresenter presenter;
 	
+	/**
+	 * Create a member observer given a presenter
+	 * @param presenter The presenter that is given
+	 */
 	public GetMembersObserver(TaskPresenter presenter) {
 		this.presenter = presenter;
 	}

@@ -281,7 +281,7 @@ public class Task extends AbstractModel {
 	}
 
 	/**
-	 * @return Title of taskk
+	 * @return Title of task
 	 */
 	public String getTitle() {
 		return title;

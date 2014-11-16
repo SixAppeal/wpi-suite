@@ -15,6 +15,7 @@ import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
  *
  * @author wavanrensselaer
  * @author dpseaman
+ * @author nhhughes
  */
 
 public class TaskPresenter implements IPresenter{
@@ -115,12 +116,19 @@ public class TaskPresenter implements IPresenter{
 		}
 	}
 
+	/**
+	 * Makes a request to the servers to get all members
+	 */
 	public void getMembers() {
 		final Request request = Network.getInstance().makeRequest("core/user", HttpMethod.GET);
 		request.addObserver(new GetMembersObserver(this));
 		request.send();
 	}
 
+	/**
+	 * Caches members retrieved from the server locally and tells the sidebar view that there are new members to incorporate
+	 * @param to_submit
+	 */
 	public void updateMembers(String[] to_submit) {
 		this.members = to_submit;
 		this.gateway.toView("SidebarView", "UpdateMembers", (Object []) to_submit); 
