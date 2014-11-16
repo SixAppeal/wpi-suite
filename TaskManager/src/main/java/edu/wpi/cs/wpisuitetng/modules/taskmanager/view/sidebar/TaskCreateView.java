@@ -1,11 +1,5 @@
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
 
-import java.awt.Color;
-
-import javax.swing.BorderFactory;
-import javax.swing.JScrollPane;
-import javax.swing.JTextField;
-
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
 
 /**

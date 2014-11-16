@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.Date;
+import java.util.HashMap;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -18,7 +19,6 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
 import javax.swing.BorderFactory;
-import javax.swing.text.JTextComponent;
 
 import org.jdesktop.swingx.JXDatePicker;
 
@@ -60,17 +60,16 @@ public class TaskEditView extends JPanel implements IView {
 	JTextField newMemberField;
 	JButton addNewMemberButton;
 	JButton saveButton;
-	JButton cancelButton;
-	// TODO: There is a better datastucture out there to do this
-	boolean[] requiredFieldFlags = {false , false};
-	String[] requiredFieldNames = {"titleEntry", "descEntry"};
+	JButton cancelButton;	
+	HashMap<String, Boolean> requirderFieldFlags = new HashMap<String,Boolean>();
+	
 	
 	
 	/**
 	 * Create a new TaskEditView
 	 */
-	public TaskEditView () {
-		
+	public TaskEditView () 
+	{
 		//If this is a task creation panel, use a different title text
 		String paneTitle = getTitle();
 		
@@ -163,8 +162,8 @@ public class TaskEditView extends JPanel implements IView {
 		
 		this.add( cancelButton, "span 2, wrap, right");
 		
-		updateBorder(titleEntry, titleEntry.getText());
-		updateBorder(descEntryScoller, descEntry.getText());
+		this.checkValidField(titleEntry, titleEntry.getText(), "titleEntry");
+		this.checkValidField(descEntryScoller, descEntry.getText(), "descEntry");
 		
 	}
 	
@@ -206,7 +205,8 @@ public class TaskEditView extends JPanel implements IView {
 		
 		String stat = t.getStatus().toString();
 		
-		actEffortSpinner.setEnabled( (stat == "Testing") || (stat == "Live") );
+		//This is hard coded and should be fixed at some point in the future
+		actEffortSpinner.setEnabled( (stat.equals("In Progress")) || (stat.equals("Complete")) );
 		
 	}
 	
@@ -304,23 +304,7 @@ public class TaskEditView extends JPanel implements IView {
 	protected void checkValidField(JComponent someComponent, String data, String field)
 	{
 		updateBorder(someComponent, data);
-		int index = -1;
-		for (int i = 0; i < requiredFieldNames.length; i++)
-		{
-			if (requiredFieldNames[i] == field)
-			{
-				index = i;
-				break;
-			}
-		}
-		if (index == -1)
-		{
-			System.out.println("What the fuck did you do!?");
-		}
-		else 
-		{
-			requiredFieldFlags[index] = !data.isEmpty();
-		}
+		this.requirderFieldFlags.put(field, !data.isEmpty());
 		
 		attemptToEnableSaveButton();
 	}
@@ -333,9 +317,10 @@ public class TaskEditView extends JPanel implements IView {
 	protected void attemptToEnableSaveButton()
 	{
 		boolean enable = true;
-		for (int i = 0; i < requiredFieldFlags.length; i++)
+		for(String key: this.requirderFieldFlags.keySet())
 		{
-			enable = enable && requiredFieldFlags[i];
+			System.out.println(key);
+			enable = enable && this.requirderFieldFlags.get(key);
 		}
 		saveButton.setEnabled(enable);
 	}
@@ -352,9 +337,9 @@ public class TaskEditView extends JPanel implements IView {
 		this.descEntry.setBorder(null);
 		this.descEntryScoller.setBorder((new JScrollPane()).getBorder());
 		
-		for(int i = 0; i < this.requiredFieldFlags.length; i++)
+		for(String key: this.requirderFieldFlags.keySet())
 		{
-			this.requiredFieldFlags[i] = false;
+			this.requirderFieldFlags.put(key, false);
 		}
 		saveButton.setEnabled(false);
 		

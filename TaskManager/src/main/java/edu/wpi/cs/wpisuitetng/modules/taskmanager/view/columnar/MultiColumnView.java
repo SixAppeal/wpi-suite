@@ -1,7 +1,6 @@
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
