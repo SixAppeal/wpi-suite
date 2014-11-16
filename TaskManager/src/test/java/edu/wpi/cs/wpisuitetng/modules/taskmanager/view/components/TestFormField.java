@@ -12,18 +12,16 @@ public class TestFormField {
 	JTextField textField;
 	JTextArea textArea;
 	
-	FormField<JTextField> textFormField;
-	FormField<JTextArea> textAreaFormField;
+	FormField textFormField;
+	FormField textAreaFormField;
 	
 	@Before
 	public void setup() {
 		textField = new JTextField();
 		textArea = new JTextArea();
 		
-		textFormField = new FormField<JTextField>("Task",
-				textField);
-		textAreaFormField = new FormField<JTextArea>("Description",
-				textArea);
+		textFormField = new FormField("Task", textField);
+		textAreaFormField = new FormField("Description", textArea);
 	}
 	
 	@Test

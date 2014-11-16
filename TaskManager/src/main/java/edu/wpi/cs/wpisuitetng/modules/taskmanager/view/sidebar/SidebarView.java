@@ -21,7 +21,6 @@ public class SidebarView extends JPanel implements IView {
 	
 	private JPanel container;
 	private JPanel curView;
-	private CreateView testCreateView;
 	private TaskDetailView detailView;
 	private TaskEditView editView;
 	private TaskCreateView createView;
@@ -31,7 +30,6 @@ public class SidebarView extends JPanel implements IView {
 	 */
 	public SidebarView() {
 		this.container = new JPanel();
-		this.testCreateView = new CreateView();
 		this.detailView = new TaskDetailView();
 		this.createView = new TaskCreateView();
 		this.editView = new TaskEditView();
@@ -44,14 +42,13 @@ public class SidebarView extends JPanel implements IView {
 		this.container.setPreferredSize(new Dimension(300, 500));
 		this.container.setMaximumSize(new Dimension(300, Integer.MAX_VALUE));
 		
-		this.curView = this.testCreateView; //this.createView;
-		//this.editView.setVisible(false);
-		//this.detailView.setVisible(false);
+		this.curView = this.createView;
+		this.editView.setVisible(false);
+		this.detailView.setVisible(false);
 		
-		//this.container.add(this.createView);
-		//this.container.add(this.editView);
-		//this.container.add(this.detailView);
-		this.container.add(this.testCreateView);
+		this.container.add(this.createView);
+		this.container.add(this.editView);
+		this.container.add(this.detailView);
 		this.add(container);
 	}
 	

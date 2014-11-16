@@ -47,9 +47,9 @@ public class TaskPresenter implements IPresenter{
 		
 		task.setId(tm.getNextID());
 		
-		/*final Request request = Network.getInstance().makeRequest("taskmanager/task", HttpMethod.PUT);
+		final Request request = Network.getInstance().makeRequest("taskmanager/task", HttpMethod.PUT);
 		request.setBody(task.toJson());
-		request.send();*/
+		request.send();
 		this.gateway.toView("ColumnView", "addTask", task);
 	}
 	
@@ -66,9 +66,9 @@ public class TaskPresenter implements IPresenter{
 	 * @param task Task to update
 	 */
 	public void updateTask(Task task) {
-		/*final Request request = Network.getInstance().makeRequest("taskmanager/task", HttpMethod.POST);
+		final Request request = Network.getInstance().makeRequest("taskmanager/task", HttpMethod.POST);
 		request.setBody(task.toJson());
-		request.send();*/
+		request.send();
 		this.gateway.toView("ColumnView", "removeTask", task);
 		this.gateway.toView("ColumnView", "addTask", task);
 	}
@@ -86,9 +86,9 @@ public class TaskPresenter implements IPresenter{
 	 * @return 
 	 */
 	public void getAllTasks() {
-		/*final Request request = Network.getInstance().makeRequest("taskmanager/task", HttpMethod.GET);
+		final Request request = Network.getInstance().makeRequest("taskmanager/task", HttpMethod.GET);
 		request.addObserver(new GetTasksObserver(this));
-		request.send();*/
+		request.send();
 	}
 	
 	/**
@@ -97,9 +97,9 @@ public class TaskPresenter implements IPresenter{
 	 */
 	public void getTask(int id){
 		if (tasks == null){
-			/*final Request request = Network.getInstance().makeRequest("taskmanager/task", HttpMethod.GET);
+			final Request request = Network.getInstance().makeRequest("taskmanager/task", HttpMethod.GET);
 			request.addObserver(new GetTasksObserver(this, id));
-			request.send();*/
+			request.send();
 		} else {
 			for (int i = 0; i < tasks.length; i++) {
 				if (tasks[i].getId() == id){
