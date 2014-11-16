@@ -21,7 +21,6 @@ public class MultiColumnView extends JPanel implements IView {
 	private static final long serialVersionUID = 7965275386426411767L;
 
 	private Gateway gateway;
-	private TaskPresenter presenter;
 	JScrollPane scrollPane;
 	JPanel container;
 	JPanel multiColumnPanel;

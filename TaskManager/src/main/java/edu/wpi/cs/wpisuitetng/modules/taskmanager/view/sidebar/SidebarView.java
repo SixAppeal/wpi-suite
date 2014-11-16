@@ -52,6 +52,15 @@ public class SidebarView extends JPanel implements IView {
 		this.add(container);
 	}
 	
+	public void updateMembers(String[] members) {
+		if (this.curView instanceof TaskEditView) {
+			((TaskEditView) this.curView).setAllMembers(members);
+		}
+		if (this.curView instanceof TaskCreateView) {
+			((TaskCreateView) this.curView).setAllMembers(members);
+		}
+	}
+	
 	/**
 	 * Shows the creation panel 
 	 */

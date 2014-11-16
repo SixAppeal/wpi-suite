@@ -3,6 +3,7 @@ package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -26,7 +27,9 @@ import net.miginfocom.swing.MigLayout;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.TaskStatus;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.TaskPresenter;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar.ColumnView;
 
 /**
  * 
@@ -48,6 +51,7 @@ public class TaskEditView extends JPanel implements IView {
 	private static final long serialVersionUID = -8331650108561001757L;
 	
 	protected Gateway gateway;
+	private TaskPresenter presenter;
 	protected Task t;
 	
 	JTextField titleEntry;
@@ -81,7 +85,7 @@ public class TaskEditView extends JPanel implements IView {
 		// MigLayout gives us the easiest layout with best flexibility
 		MigLayout layout = new MigLayout(
 				"wrap 3",						//Layout constraints
-				"[right][left, 100::, grow]", 	//Column constraints
+				"[right][][left, 100::, grow]", 	//Column constraints
 				"");							//Row Constraints
 		
 		this.setOpaque(false);
@@ -137,12 +141,26 @@ public class TaskEditView extends JPanel implements IView {
 		this.add( saveButton, "span 3, wrap, right" );
 		
 		//Member Stuff
-		allMembersList = new ArrayList<String>();
-		assignedMembersList = new ArrayList<String>();
+		allMembersList = new ArrayList<String>(Arrays.asList(membersTest1));
+		assignedMembersList = new ArrayList<String>(Arrays.asList(membersTest2));
 		allMembers = new JList<String>(membersTest1);
 		assignedMembers = new JList<String>(membersTest2);
-		addMemberButton = new JButton("=>");
-		removeMemberButton = new JButton("<=");
+		addMemberButton = new JButton(">");
+		addMemberButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				moveMembersToAssigned();
+			}
+		});
+		
+		removeMemberButton = new JButton("<");
+		removeMemberButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				moveMembersToAll();
+			}
+		});
+		
+		
+		
 		
 		allMembers.setLayoutOrientation(JList.VERTICAL);
 		assignedMembers.setLayoutOrientation(JList.VERTICAL);
@@ -151,16 +169,53 @@ public class TaskEditView extends JPanel implements IView {
 		
 		Box buttonBox = new Box(BoxLayout.PAGE_AXIS);
 		buttonBox.add(addMemberButton);
+		buttonBox.add(new JLabel(""));
 		buttonBox.add(removeMemberButton);
-		this.add( new JLabel("Members Available"), "width 125:125:200" );
-		this.add( new JLabel("Members Assigned"), "width 125:125:200, span 2, right" );
-		this.add(allMembersListScroller, "width 50:50:100, growx" );
+		this.add( new JLabel("Members Available"), "width 150:150:200, growx" );
+		this.add( new JLabel("Members Assigned    "), "width 150:150:200, growx, right, cell 2 7" );
+		this.add(allMembersListScroller, "width 50:50:100, growx, left" );
 		this.add( buttonBox, "width 50:50:100, center"  );
-		this.add(assignedMembersListScroller, "width 50:50:100, growx" );
-		
-		
-		
-		
+		this.add(assignedMembersListScroller, "width 50:50:100, growx, right" );
+	}
+	
+	public void setAllMembers(String [] to_add) {
+		for (int i = 0; i < to_add.length; i++) {
+			if (!this.allMembersList.contains(to_add[i])) {
+				allMembersList.add(to_add[i]);
+			}
+		}
+	}
+	
+	public void moveMembersToAssigned() {
+		List<String> selected = allMembers.getSelectedValuesList();
+		List<String> updatedAll = new ArrayList<String>();
+		for (String s : allMembersList) {
+			if (!selected.contains(s)) {
+				updatedAll.add(s);
+			}
+		}
+		for (String s: selected) {
+			assignedMembersList.add(s);
+		}
+		allMembersList = updatedAll;
+		allMembers.setListData(updatedAll.toArray(new String[updatedAll.size()]));
+		assignedMembers.setListData(assignedMembersList.toArray(new String[assignedMembersList.size()]));
+	}
+	
+	public void moveMembersToAll() {
+		List<String> selected = assignedMembers.getSelectedValuesList();
+		List<String> updatedAssigned = new ArrayList<String>();
+		for (String s : assignedMembersList) {
+			if (!selected.contains(s)) {
+				updatedAssigned.add(s);
+			}
+		}
+		for (String s: selected) {
+			allMembersList.add(s);
+		}
+		assignedMembersList = updatedAssigned;
+		allMembers.setListData(allMembersList.toArray(new String[allMembersList.size()]));
+		assignedMembers.setListData(updatedAssigned.toArray(new String[updatedAssigned.size()]));
 	}
 	
 	/**
@@ -170,6 +225,7 @@ public class TaskEditView extends JPanel implements IView {
 	public void setGateway(Gateway gateway) {
 		this.gateway = gateway;
 	}
+	
 	
 	/**
 	 * Updates the view with a new task.

@@ -2,6 +2,7 @@ package edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter;
 
 import java.util.List;
 
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Member;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.TaskModel;
 import edu.wpi.cs.wpisuitetng.network.Request;
@@ -20,6 +21,7 @@ public class TaskPresenter implements IPresenter{
 
 	Gateway gateway;
 	Task[] tasks;
+	String[] members;
 	TaskModel tm;
 	
 	/**
@@ -112,5 +114,17 @@ public class TaskPresenter implements IPresenter{
 			System.err.println("TaskPresenter: Error getting task " + id);
 		}
 	}
-}
 
+	public void getMembers() {
+		final Request request = Network.getInstance().makeRequest("core/user", HttpMethod.GET);
+		request.addObserver(new GetMembersObserver(this));
+		request.send();
+	}
+
+	public void updateMembers(String[] to_submit) {
+		this.members = to_submit;
+		this.gateway.toView("SidebarView", "UpdateMembers", (Object []) to_submit); 
+		
+	}
+
+}
