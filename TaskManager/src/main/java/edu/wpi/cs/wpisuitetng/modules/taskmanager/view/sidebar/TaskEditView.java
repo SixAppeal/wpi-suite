@@ -319,7 +319,6 @@ public class TaskEditView extends JPanel implements IView {
 		boolean enable = true;
 		for(String key: this.requirderFieldFlags.keySet())
 		{
-			System.out.println(key);
 			enable = enable && this.requirderFieldFlags.get(key);
 		}
 		saveButton.setEnabled(enable);

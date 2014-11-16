@@ -62,7 +62,6 @@ public class SidebarView extends JPanel implements IView {
 	 * Shows the default panel
 	 */
 	public void showDefaultPanel() {
-		System.out.println("showDefaultPanel");
 		this.curView.setVisible(false);
 		this.curView = this.defaultView;
 		this.curView.setVisible(true);
@@ -72,7 +71,6 @@ public class SidebarView extends JPanel implements IView {
 	 * Shows the creation panel 
 	 */
 	public void showCreatePanel() {
-		System.out.println("showCreatePanel");
 		this.curView.setVisible(false);
 		this.curView = this.createView;
 		this.curView.setVisible(true);
@@ -83,7 +81,6 @@ public class SidebarView extends JPanel implements IView {
 	 * @param task The task to edit
 	 */
 	public void showEditPanel(Task task) {
-		System.out.println("showEditPanel");
 		this.editView.updateView(task);
 		this.curView.setVisible(false);
 		this.curView = this.editView;
