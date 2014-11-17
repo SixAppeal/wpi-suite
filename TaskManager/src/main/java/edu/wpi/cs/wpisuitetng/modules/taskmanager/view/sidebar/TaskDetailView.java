@@ -1,19 +1,16 @@
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
 
 import java.awt.Color;
-import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.SwingConstants;
 
-import net.miginfocom.swing.MigLayout;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
@@ -23,12 +20,11 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
  * @author tmeehan
  * @author wmtemple
  * @author krpeffer
+ * @author wavanrensselaer
  * 
  * A view for Task Details
  *
  */
-
-@SuppressWarnings("unused")
 public class TaskDetailView extends JPanel implements IView {
 
 
@@ -44,82 +40,42 @@ public class TaskDetailView extends JPanel implements IView {
 	/**
 	 * Declare all the JLabels the detail view will need
 	 */
-	JLabel idLabel;
-	JLabel taskIdLabel;			//Displays the Task's ID
-	
-	JLabel nameLabel;
 	JLabel taskNameLabel;		//Displays the Task's Title
+
+	JLabel descLabel;
+	JLabel taskDescLabel;		//Displays the Task's Description
 	
 	JLabel dateLabel;
 	JLabel taskDateLabel;		//Displays the Task's Due Date
-	
-	JLabel desLabel;
-	JLabel taskDesLabel;		//Displays the Task's Description
-	
-	JLabel statLabel;
-	JLabel taskStatLabel;		//Displays the Task's Status
-	
+
 	JLabel estLabel;
 	JLabel taskEstLabel;		//Displays the Task's Estimated Effort value
 	
 	JLabel actLabel;
 	JLabel taskActLabel;		//Displays the Task's Actual Effor Value
 	
-	JLabel assignedToLabel;
-	JLabel taskAssignedToLabel;	//Displays the Task's Assigned Members in a single string
-	
 	JButton editButton; //Opens the task for editing.
 	
 	public TaskDetailView() {
+		Color labelColor = new Color(160, 160, 160);
 		
-		String paneTitle = "Task Detail";
+		taskNameLabel = new JLabel("", JLabel.CENTER);
+
+		descLabel = new JLabel("Description");
+		descLabel.setForeground(labelColor);
+		taskDescLabel = new JLabel();
+
+		dateLabel = new JLabel("Due Date");
+		dateLabel.setForeground(labelColor);
+		taskDateLabel = new JLabel();
 		
-		/**
-		 * Declares the MiGLayout
-		 * "wrap 2" Says the layout can only have 2 columns
-		 * [right] The right column's size grows as needed
-		 * [left, 100::, grow] The left column has a base size of 100, but can grow if needed
-		 * "" Row settings are left empty for our purpose
-		 */
-		MigLayout detailView = new MigLayout(
-				"wrap 2",
-				"[right] [left, 100::, grow]",
-				"");
-		
-		/**
-		 * Creates the pane border and title
-		 * Sets the current layout to the previously declared MiGLayout
-		 */
-		this.setBorder(BorderFactory.createTitledBorder(paneTitle));
-		this.setLayout(detailView);
-		this.setOpaque(false);
-		
-		/**
-		 * creates all the JLabels for the given task
-		 */
-		idLabel = new JLabel("Task ID: ");
-		taskIdLabel = new JLabel();				
-		
-		nameLabel = new JLabel("Task name:");
-		taskNameLabel = new JLabel();						
-		
-		dateLabel = new JLabel ("Task due date:");
-		taskDateLabel = new JLabel ();			
-		
-		desLabel = new JLabel ("Task Description:");
-		taskDesLabel = new JLabel ();					
-		
-		statLabel = new JLabel ("Task Status:");
-		taskStatLabel = new JLabel();			
-		
-		estLabel = new JLabel ("Estimated Effort:");
+		estLabel = new JLabel ("Est. Effort");
+		estLabel.setForeground(labelColor);
 		taskEstLabel = new JLabel();
 		
-		actLabel = new JLabel ("Actual Effort:");
-		taskActLabel = new JLabel ();
-		
-		assignedToLabel = new JLabel("Members Assigned:");
-		taskAssignedToLabel = new JLabel();
+		actLabel = new JLabel ("Act. Effort");
+		actLabel.setForeground(labelColor);
+		taskActLabel = new JLabel();
 		
 		editButton = new JButton("Edit");
 		editButton.addActionListener(new ActionListener() {
@@ -129,34 +85,58 @@ public class TaskDetailView extends JPanel implements IView {
 		});
 		editButton.setEnabled(false);
 		
-		/**
-		 * Adds all the JLabels to the MiGLayout
-		 */
-		this.add(idLabel);
-		this.add(taskIdLabel);
+		this.setLayout(new GridBagLayout());
+		this.setOpaque(false);
 		
-		this.add(nameLabel);
-		this.add(taskNameLabel);
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.anchor = GridBagConstraints.PAGE_START;
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.weightx = 1.0;
+		gbc.insets = new Insets(20, 20, 0, 20);
+		gbc.gridwidth = 2;
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		this.add(taskNameLabel, gbc);
 		
-		this.add(dateLabel);
-		this.add(taskDateLabel);
+		gbc.gridy = 1;
+		this.add(descLabel, gbc);
 		
-		this.add(desLabel);
-		this.add(taskDesLabel);
+		gbc.insets.top = 5;
+		gbc.gridy = 2;
+		this.add(taskDescLabel, gbc);
 		
-		this.add(statLabel);
-		this.add(taskStatLabel);
+		gbc.insets.top = 20;
+		gbc.gridy = 3;
+		this.add(dateLabel, gbc);
 		
-		this.add(estLabel);
-		this.add(taskEstLabel);
+		gbc.insets.top = 5;
+		gbc.gridy = 4;
+		this.add(taskDateLabel, gbc);
 		
-		this.add(actLabel);
-		this.add(taskActLabel);
+		gbc.insets.top = 20;
+		gbc.gridwidth = 1;
+		gbc.gridy = 5;
+		this.add(estLabel, gbc);
 		
-		this.add(assignedToLabel);
-		this.add(taskAssignedToLabel);
+		gbc.gridx = 1;
+		this.add(actLabel, gbc);
 		
-		this.add( editButton, "span 2, wrap, right" );
+		gbc.insets.top = 5;
+		gbc.gridx = 0;
+		gbc.gridy = 6;
+		this.add(taskEstLabel, gbc);
+		
+		gbc.gridx = 1;
+		this.add(taskActLabel, gbc);
+		
+		gbc.anchor = GridBagConstraints.FIRST_LINE_END;
+		gbc.fill = GridBagConstraints.NONE;
+		gbc.insets.top = 20;
+		gbc.weighty = 1.0;
+		gbc.gridwidth = 2;
+		gbc.gridx = 0;
+		gbc.gridy = 7;
+		this.add(editButton, gbc);
 	}
 	
 	/**
@@ -167,14 +147,11 @@ public class TaskDetailView extends JPanel implements IView {
 		
 		this.t = t;
 		
-		taskIdLabel.setText(String.valueOf(this.t.getId()));
-		taskNameLabel.setText(this.t.getTitle());
-		taskDateLabel.setText(this.t.getDueDate().toString());
-		taskDesLabel.setText(this.t.getDescription());
-		taskStatLabel.setText(this.t.getStatus().toString());
+		taskNameLabel.setText("<html>" + this.t.getTitle() + "</html>");
+		taskDescLabel.setText("<html>" + this.t.getDescription() + "</html>");
+		taskDateLabel.setText("<html>" + this.t.getDueDate().toString() + "</html>");
 		taskEstLabel.setText(this.t.getEstimatedEffort().toString());
 		taskActLabel.setText(this.t.getActualEffort().toString());
-		taskAssignedToLabel.setText(this.t.getMemberList());
 		editButton.setEnabled(true);
 		this.revalidate();
 	}
