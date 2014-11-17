@@ -9,6 +9,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.border.Border;
 
 /**
  * A form field to place in a form
@@ -16,6 +17,20 @@ import javax.swing.JPanel;
  */
 public class FormField extends JPanel {
 	private static final long serialVersionUID = -2031130076773334170L;
+	
+	/**
+	 * The normal border assigned to fields
+	 */
+	public static final Border BORDER_NORMAL = BorderFactory.createCompoundBorder(
+			BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1),
+			BorderFactory.createEmptyBorder(5, 5, 5, 5));
+	
+	/**
+	 * The border assigned to fields in the error state
+	 */
+	public static final Border BORDER_ERROR = BorderFactory.createCompoundBorder(
+			BorderFactory.createLineBorder(Color.RED, 1),
+			BorderFactory.createEmptyBorder(5, 5, 5, 5));
 	
 	private String name;
 	private JLabel label;
@@ -32,9 +47,7 @@ public class FormField extends JPanel {
 		this.label = new JLabel(this.name);
 		this.field = field;
 		
-		this.field.setBorder(BorderFactory.createCompoundBorder(
-				BorderFactory.createLineBorder(new Color(200, 200, 200), 1),
-				BorderFactory.createEmptyBorder(5, 5, 5, 5)));
+		this.field.setBorder(BORDER_NORMAL);
 		this.field.setBackground(Color.WHITE);
 		
 		this.setOpaque(false);

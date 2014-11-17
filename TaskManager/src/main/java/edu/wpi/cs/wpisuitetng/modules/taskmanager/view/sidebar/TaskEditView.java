@@ -1,6 +1,8 @@
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
 
-import java.awt.Color;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -18,21 +20,23 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
-import javax.swing.BorderFactory;
 
 import org.jdesktop.swingx.JXDatePicker;
 
-import net.miginfocom.swing.MigLayout;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.TaskStatus;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.Form;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.FormField;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.FormGroup;
 
 /**
  * 
  * @author wmtemple
  * @author akshoop
  * @author rnorlando
+ * @author wavanrensselaer
  *
  * A view to be displayed when creating or modifying a task object in the GUI.
  *
@@ -47,9 +51,10 @@ public class TaskEditView extends JPanel implements IView {
 	protected Gateway gateway;
 	protected Task t;
 	
+	Form form;
 	JTextField titleEntry;
 	JTextArea descEntry;
-	JScrollPane descEntryScoller;
+	JScrollPane descEntryScroller;
 	JComboBox<TaskStatus> statusBox;
 	JSpinner estEffortSpinner;
 	JSpinner actEffortSpinner;
@@ -69,19 +74,9 @@ public class TaskEditView extends JPanel implements IView {
 	 * Create a new TaskEditView
 	 */
 	public TaskEditView () 
-	{
-		//If this is a task creation panel, use a different title text
-		String paneTitle = getTitle();
-		
-		// MigLayout gives us the easiest layout with best flexibility
-		MigLayout layout = new MigLayout(
-				"wrap 2",						//Layout constraints
-				"[right][left, 100::, grow]", 	//Column constraints
-				"");							//Row Constraints
-		
+	{	
 		this.setOpaque(false);
-		this.setBorder(BorderFactory.createTitledBorder(paneTitle));
-		this.setLayout(layout);
+		this.setLayout(new GridBagLayout());
 		
 		titleEntry = new JTextField();
 		titleEntry.addKeyListener(new KeyAdapter() {
@@ -98,7 +93,7 @@ public class TaskEditView extends JPanel implements IView {
 		descEntry.addKeyListener(new KeyAdapter() {
 			public void keyReleased(KeyEvent e)
 			{
-				checkValidField(descEntryScoller, descEntry.getText(), "descEntry");
+				checkValidField(descEntryScroller, descEntry.getText(), "descEntry");
 			}
 		}
 		);
@@ -138,33 +133,33 @@ public class TaskEditView extends JPanel implements IView {
 			}
 		});
 		
-		this.descEntryScoller = new JScrollPane(descEntry);
+		this.descEntryScroller = new JScrollPane(descEntry);
+
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.anchor = GridBagConstraints.PAGE_START;
+		gbc.weightx = 1.0;
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		gbc.insets = new Insets(20, 0, 0, 0);
+		this.add(new JLabel(this.getTitle(), JLabel.CENTER), gbc);
 		
-		this.add( new JLabel("Title :"), "top" );
-		this.add( titleEntry, "wrap, width 100:150, growx" );
+		gbc.insets.top = 0;
+		gbc.weighty = 1.0;
+		gbc.gridy = 1;
+		this.form = new Form(
+			new FormField("Title", titleEntry),
+			new FormField("Description", descEntryScroller),
+			new FormField("Due Date", dueDatePicker),
+			new FormGroup(
+				new FormField("Est. Effort", estEffortSpinner),
+				new FormField("Act. Effort", actEffortSpinner)
+			),
+			new FormField("Status", statusBox),
+			new FormGroup(saveButton, cancelButton)
+		);
 		
-		this.add( new JLabel("Description :"), "top" );
-		this.add( descEntryScoller, "wrap, grow");
-		
-		this.add( new JLabel("Due Date :") );
-		this.add( dueDatePicker, "wrap, width 120:120:200, growx" );
-		
-		this.add( new JLabel("Est. Effort :") );
-		this.add( estEffortSpinner, "wrap, width 50:120:150" );
-		
-		this.add( new JLabel("Act. Effort :") );
-		this.add( actEffortSpinner, "wrap, width 50:120:150" );
-		
-		this.add( new JLabel("Task Status :") );
-		this.add( statusBox, "wrap, width 50:120:150" );
-		
-		this.add( saveButton, "span 2, wrap, right" );
-		
-		this.add( cancelButton, "span 2, wrap, right");
-		
-		this.checkValidField(titleEntry, titleEntry.getText(), "titleEntry");
-		this.checkValidField(descEntryScoller, descEntry.getText(), "descEntry");
-		
+		this.add(this.form, gbc);
 	}
 	
 	/**
@@ -184,7 +179,7 @@ public class TaskEditView extends JPanel implements IView {
 		this.t = t;
 		populate();
 		updateBorder(titleEntry, titleEntry.getText());
-		updateBorder(descEntryScoller, descEntry.getText());
+		updateBorder(descEntryScroller, descEntry.getText());
 		saveButton.setEnabled(true);
 		
 	}
@@ -255,16 +250,6 @@ public class TaskEditView extends JPanel implements IView {
 	}
 	
 	/**
-	 * Highlights the text field if attribute is required
-	 * to show the user that they did not fill out the text field.
-	 * @param someComponent Text area they did not fill out.
-	 */
-	protected void indicateRequiredField(JComponent someComponent)
-	{
-		someComponent.setBorder(BorderFactory.createLineBorder(Color.RED));
-	}
-	
-	/**
 	 * Updates the board of the JTextComponents, 
 	 * if it is empty it will indicate that it is a required field.
 	 * updates the borders based of whether the text is empty or has something
@@ -275,22 +260,11 @@ public class TaskEditView extends JPanel implements IView {
 	{
 		if(text.isEmpty())
 		{
-			indicateRequiredField(someComponent);
+			someComponent.setBorder(FormField.BORDER_ERROR);
 		}
 		else
-		{	
-			if(someComponent instanceof JTextField)
-			{
-				someComponent.setBorder((new JTextField()).getBorder());
-			}
-			else if(someComponent instanceof JScrollPane)
-			{
-				someComponent.setBorder((new JScrollPane()).getBorder());
-			}
-			else
-			{
-				someComponent.setBorder(null);
-			}
+		{
+			someComponent.setBorder(FormField.BORDER_NORMAL);
 		}
 	}
 	
@@ -334,7 +308,7 @@ public class TaskEditView extends JPanel implements IView {
 		this.actEffortSpinner.setValue(0);
 		this.titleEntry.setBorder((new JTextField()).getBorder());
 		this.descEntry.setBorder(null);
-		this.descEntryScoller.setBorder((new JScrollPane()).getBorder());
+		this.descEntryScroller.setBorder((new JScrollPane()).getBorder());
 		
 		for(String key: this.requirderFieldFlags.keySet())
 		{
@@ -343,6 +317,6 @@ public class TaskEditView extends JPanel implements IView {
 		saveButton.setEnabled(false);
 		
 		updateBorder(titleEntry, titleEntry.getText());
-		updateBorder(descEntryScoller, descEntry.getText());
+		updateBorder(descEntryScroller, descEntry.getText());
 	}
 }

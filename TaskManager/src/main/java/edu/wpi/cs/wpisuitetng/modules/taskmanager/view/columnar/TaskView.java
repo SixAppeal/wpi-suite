@@ -23,6 +23,11 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
 public class TaskView extends JPanel implements IView {
 	private static final long serialVersionUID = 6255679649898290535L;
 	
+	/**
+	 * The cutoff point for the title string in the task
+	 */
+	public static final int MAX_TITLE_LENGTH = 20;
+	
 	private Gateway gateway;
 	private Task task;
 	private JPanel taskPanel;
@@ -35,7 +40,13 @@ public class TaskView extends JPanel implements IView {
 	public TaskView(Task task) {
 		this.task = task;
 		this.taskPanel = new JPanel();
-		this.nameLabel = new JLabel(this.task.getTitle());
+		
+		String title = this.task.getTitle();
+		if (title.length() > MAX_TITLE_LENGTH) {
+			title = title.substring(0,  MAX_TITLE_LENGTH) + "\u2026";
+		}
+		
+		this.nameLabel = new JLabel(title);
 		
 		this.setBorder(BorderFactory.createEmptyBorder(0, 20, 20, 20));
 		this.setOpaque(false);

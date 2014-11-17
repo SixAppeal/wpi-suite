@@ -23,7 +23,6 @@ public class TaskDefaultView extends JPanel implements IView {
 	 */
 	public TaskDefaultView() {
 		this.setBackground(new Color(250, 250, 250));
-		this.setBorder(BorderFactory.createTitledBorder(""));
 		this.setOpaque(false);
 	}
 	
