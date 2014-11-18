@@ -153,32 +153,6 @@ public class TaskEditView extends JPanel implements IView {
 		});
 		
 		this.descEntryScroller = new JScrollPane(descEntry);
-
-		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.fill = GridBagConstraints.HORIZONTAL;
-		gbc.anchor = GridBagConstraints.PAGE_START;
-		gbc.weightx = 1.0;
-		gbc.gridx = 0;
-		gbc.gridy = 0;
-		gbc.insets = new Insets(20, 0, 0, 0);
-		this.add(new JLabel(this.getTitle(), JLabel.CENTER), gbc);
-		
-		gbc.insets.top = 0;
-		gbc.weighty = 1.0;
-		gbc.gridy = 1;
-		this.form = new Form(
-			new FormField("Title", titleEntry),
-			new FormField("Description", descEntryScroller),
-			new FormField("Due Date", dueDatePicker),
-			new FormGroup(
-				new FormField("Est. Effort", estEffortSpinner),
-				new FormField("Act. Effort", actEffortSpinner)
-			),
-			new FormField("Status", statusBox),
-			new FormGroup(saveButton, cancelButton)
-		);
-		
-		this.add(this.form, gbc);
 		
 		//Member Stuff
 		allMembersList = new ArrayList<String>(Arrays.asList(membersTest1));
@@ -204,15 +178,43 @@ public class TaskEditView extends JPanel implements IView {
 		JScrollPane allMembersListScroller = new JScrollPane(allMembers);
 		JScrollPane assignedMembersListScroller = new JScrollPane(assignedMembers);
 		
-		Box buttonBox = new Box(BoxLayout.PAGE_AXIS);
+		Box buttonBox = new Box(BoxLayout.Y_AXIS);
 		buttonBox.add(addMemberButton);
 		buttonBox.add(new JLabel(""));
 		buttonBox.add(removeMemberButton);
-		this.add(new JLabel("Members Available"));
-		this.add(new JLabel("Members Assigned    "));
-		this.add(allMembersListScroller);
-		this.add(buttonBox);
-		this.add(assignedMembersListScroller);
+
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.anchor = GridBagConstraints.PAGE_START;
+		gbc.weightx = 1.0;
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		gbc.insets = new Insets(20, 0, 0, 0);
+		this.add(new JLabel(this.getTitle(), JLabel.CENTER), gbc);
+		
+		gbc.insets.top = 0;
+		gbc.weighty = 1.0;
+		gbc.gridy = 1;
+		this.form = new Form(
+			new FormField("Title", titleEntry),
+			new FormField("Description", descEntryScroller),
+			new FormField("Due Date", dueDatePicker),
+			new FormGroup(
+				new FormField("Est. Effort", estEffortSpinner),
+				new FormField("Act. Effort", actEffortSpinner)
+			),
+			new FormField("Members",
+				new FormGroup(
+					new FormField("Available", allMembersListScroller),
+					buttonBox,
+					new FormField("Assigned", assignedMembersListScroller)
+				)
+			),
+			new FormField("Status", statusBox),
+			new FormGroup(saveButton, cancelButton)
+		);
+		
+		this.add(this.form, gbc);
 	}
 
 	/**
