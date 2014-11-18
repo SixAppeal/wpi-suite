@@ -158,7 +158,9 @@ public class TaskEditView extends JPanel implements IView {
 		allMembersList = new ArrayList<String>(Arrays.asList(membersTest1));
 		assignedMembersList = new ArrayList<String>(Arrays.asList(membersTest2));
 		allMembers = new JList<String>(membersTest1);
+		allMembers.setVisibleRowCount(4);
 		assignedMembers = new JList<String>(membersTest2);
+		assignedMembers.setVisibleRowCount(4);
 		addMemberButton = new JButton(">");
 		addMemberButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -203,12 +205,10 @@ public class TaskEditView extends JPanel implements IView {
 				new FormField("Est. Effort", estEffortSpinner),
 				new FormField("Act. Effort", actEffortSpinner)
 			),
-			new FormField("Members",
-				new FormGroup(
-					new FormField("Available", allMembersListScroller),
-					buttonBox,
-					new FormField("Assigned", assignedMembersListScroller)
-				)
+			new FormGroup(
+				new FormField("Members", allMembersListScroller),
+				buttonBox,
+				new FormField("Assigned", assignedMembersListScroller)
 			),
 			new FormField("Status", statusBox),
 			new FormGroup(saveButton, cancelButton)
