@@ -86,6 +86,12 @@ public class TaskView extends JPanel implements IView {
 		this.taskPanel.add(nameLabel);
 		this.add(this.taskPanel);
 	}
+	
+	public void archiveTask() {
+		
+		gateway.toPresenter("TaskPresenter", "archiveTask", task);
+		
+	}
 
 	/**
 	 * @see IView.setGateway
