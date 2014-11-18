@@ -3,6 +3,7 @@ package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.toolbar;
 
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -31,8 +32,9 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
 *
 */
 public class CreateTaskButtonPanel extends ToolbarGroupView implements IView {
-	private JButton createTaskButton = new JButton("<html>Create<br />Task<html>");
-	private JButton createPanelButton = new JButton("<html>Create<br />Panel<html>");
+	private JButton createTaskButton = new JButton("<html>Create<br />Task</html>");
+	private JButton createPanelButton = new JButton("<html>Create<br />Panel</html>");
+	private JButton refreshPanelButton = new JButton("<html>Refresh<br />Panel</html>");
 	private final Action createTask = new CreateTaskAction();
 	private final Action createPanel = new CreatePanelAction();
 	private final JPanel contentPanel = new JPanel();
@@ -56,22 +58,39 @@ public class CreateTaskButtonPanel extends ToolbarGroupView implements IView {
 		Dimension d_task = createTaskButton.getPreferredSize();
 		d_task.width = 150;
 		createTaskButton.setPreferredSize(d_task);
+		
+		//Layout of refresh Panel Button
+		springLayout.putConstraint(SpringLayout.NORTH, refreshPanelButton, 10, SpringLayout.NORTH, this.contentPanel);
+		springLayout.putConstraint(SpringLayout.WEST, refreshPanelButton, 10, SpringLayout.EAST, createTaskButton);
+		springLayout.putConstraint(SpringLayout.SOUTH, refreshPanelButton, -10, SpringLayout.SOUTH, this.contentPanel);
 
 		// Layout of the create Panel Button
 		springLayout.putConstraint(SpringLayout.NORTH, createPanelButton, 10, SpringLayout.NORTH, this.contentPanel);
-		springLayout.putConstraint(SpringLayout.WEST, createPanelButton, 10, SpringLayout.EAST, createTaskButton);
+		springLayout.putConstraint(SpringLayout.WEST, createPanelButton, 10, SpringLayout.EAST, refreshPanelButton);
 		springLayout.putConstraint(SpringLayout.SOUTH, createPanelButton, -10, SpringLayout.SOUTH, this.contentPanel);
 		
 		createPanelButton.setPreferredSize(d_task); 
 
 		// Action listener for createTaskButton
 		createTaskButton.setAction(createTask);
+		
+		//Action Listener for refreshPanelButton
+		refreshPanelButton.addActionListener( new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				gateway.toPresenter("TaskPresenter", "getAllTasks");
+			}
+			
+		});
+		
 		// Action listener for createPanelButton
 		createPanelButton.setAction(createPanel);
 
 		contentPanel.add(createTaskButton);
 		//uncomment the line below once the controller can handle creating multiple columns
 		//contentPanel.add(createPanelButton);
+		contentPanel.add(refreshPanelButton);
 		contentPanel.setOpaque(false);
 		this.add(contentPanel);
 	}

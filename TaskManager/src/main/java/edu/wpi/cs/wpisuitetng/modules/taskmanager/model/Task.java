@@ -8,9 +8,6 @@ import com.google.gson.Gson;
 
 import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
 
-//TODO Fix import error
-//import edu.wpi.cs.wpisuitetng.modules.requirementmanager.models.Requirement;
-
 /**
  * 
  * The model we will be using to store in the database.  Contains all necessary information about a task
@@ -21,11 +18,12 @@ import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
  */
 public class Task extends AbstractModel {
 
+	int id;
+	private boolean archived;
 	String title;
 	String description;
 	TaskStatus status;
 	List<String> assignedTo;
-	int id;
 	Integer estimatedEffort; 
 	Integer actualEffort;
 	Date dueDate;
@@ -47,6 +45,7 @@ public class Task extends AbstractModel {
 		this.dueDate = null;
 		this.activities = new LinkedList<Activity>();
 		this.column = 0;
+		this.archived = false;
 	}
 
 	/**
@@ -89,6 +88,7 @@ public class Task extends AbstractModel {
 		this.dueDate = dueDate;
 		this.activities = activities;
 		this.column = 0;
+		this.archived = false;
 	}
 
 	/**
@@ -129,6 +129,7 @@ public class Task extends AbstractModel {
 		this.dueDate = dueDate;
 		this.activities = new LinkedList<Activity>();
 		this.column = 0;
+		this.archived = false;
 	}
 
 	/**
@@ -147,6 +148,7 @@ public class Task extends AbstractModel {
 		this.dueDate = null;
 		this.activities = new LinkedList<Activity>();
 		this.column = 0;
+		this.archived = false;
 	}
 
 
@@ -198,6 +200,7 @@ public class Task extends AbstractModel {
 		this.dueDate = toCopyFrom.dueDate;
 		this.activities = toCopyFrom.activities;
 		this.column = toCopyFrom.column;
+		this.archived = toCopyFrom.archived;
 	}
 
 	/**
@@ -437,4 +440,26 @@ public class Task extends AbstractModel {
 	public void setColumn(Integer column) {
 		this.column = column;
 	}
+	
+	/**
+	 * @return whether or not this task is archived
+	 */
+	public boolean isArchived() {
+		return archived;
+	}
+	
+	/**
+	 * Set archival status to false
+	 */
+	public void archive() {
+		this.archived = true;
+	}
+	
+	/**
+	 * Set archival status to true
+	 */
+	public void unarchive() {
+		this.archived = false;
+	}
+	
 }

@@ -54,6 +54,7 @@ public class TaskDetailView extends JPanel implements IView {
 	JLabel actLabel;
 	JLabel taskActLabel;		//Displays the Task's Actual Effor Value
 	
+	JButton archiveButton; //Archives the task.
 	JButton editButton; //Opens the task for editing.
 	
 	public TaskDetailView() {
@@ -76,6 +77,13 @@ public class TaskDetailView extends JPanel implements IView {
 		actLabel = new JLabel ("Act. Effort");
 		actLabel.setForeground(labelColor);
 		taskActLabel = new JLabel();
+		
+		archiveButton = new JButton("Archive");
+		archiveButton.addActionListener( new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				archiveTask();
+			}
+		});
 		
 		editButton = new JButton("Edit");
 		editButton.addActionListener(new ActionListener() {
@@ -129,13 +137,17 @@ public class TaskDetailView extends JPanel implements IView {
 		gbc.gridx = 1;
 		this.add(taskActLabel, gbc);
 		
-		gbc.anchor = GridBagConstraints.FIRST_LINE_END;
+		gbc.anchor = GridBagConstraints.FIRST_LINE_START;
 		gbc.fill = GridBagConstraints.NONE;
 		gbc.insets.top = 20;
 		gbc.weighty = 1.0;
-		gbc.gridwidth = 2;
 		gbc.gridx = 0;
 		gbc.gridy = 7;
+		this.add(archiveButton, gbc);
+		
+		gbc.anchor = GridBagConstraints.FIRST_LINE_END;
+		//gbc.gridwidth = 2;
+		gbc.gridx = 1;
 		this.add(editButton, gbc);
 	}
 	
@@ -161,6 +173,13 @@ public class TaskDetailView extends JPanel implements IView {
 	 */
 	public void editTask() {
 		this.gateway.toPresenter("TaskPresenter", "editTask", t);
+	}
+	
+	/**
+	 * Archives the task in the presenter.
+	 */
+	public void archiveTask() {
+		this.gateway.toPresenter("TaskPresenter", "archiveTask", t);
 	}
 
 	/**

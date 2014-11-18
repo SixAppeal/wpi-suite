@@ -72,5 +72,11 @@ public class RequirementManager implements IJanewayModule {
 		return tabs;
 	}
 
+	@Override
+	public void finishInit() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
 

@@ -33,7 +33,6 @@ import org.jdesktop.swingx.JXDatePicker;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.TaskStatus;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.TaskPresenter;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
 
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.Form;
@@ -43,17 +42,14 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.FormGroup;
 /**
  * 
  * @author wmtemple
-<<<<<<< HEAD
  * @author akshoop
  * @author rnorlando
  * @author wavanrensselaer
-=======
  * @author jrhennessy
  * @author nhhughes
  * @author rwang3
  * @author akshoop
  * @author rnorlando
->>>>>>> origin/devel_member
  *
  * A view to be displayed when creating or modifying a task object in the GUI.
  *
@@ -66,7 +62,6 @@ public class TaskEditView extends JPanel implements IView {
 	private static final long serialVersionUID = -8331650108561001757L;
 	
 	protected Gateway gateway;
-	private TaskPresenter presenter;
 	protected Task t;
 	
 	Form form;
@@ -98,6 +93,9 @@ public class TaskEditView extends JPanel implements IView {
 	 * Create a new TaskEditView
 	 */
 	public TaskEditView () {
+		
+		t = new Task();
+
 		this.setOpaque(false);
 		this.setLayout(new GridBagLayout());
 		
@@ -312,7 +310,6 @@ public class TaskEditView extends JPanel implements IView {
 	
 	
 	private void processTask() {
-		t = new Task();
 		
 		String title = titleEntry.getText();
 		String desc = descEntry.getText();
@@ -335,7 +332,7 @@ public class TaskEditView extends JPanel implements IView {
 			t.setDueDate( dueDatePicker.getDate() );
 			t.setColumn(statusBox.getSelectedIndex());
 		} catch (IllegalArgumentException ex) {
-			System.out.println(ex.getMessage());
+			System.err.println(ex.toString());
 			return;
 		}
 		

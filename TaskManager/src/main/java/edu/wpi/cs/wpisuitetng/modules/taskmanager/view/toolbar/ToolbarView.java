@@ -31,6 +31,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
  */
 public class ToolbarView extends DefaultToolbarView implements IView {
 
+	private boolean bInit = false;
 	public CreateTaskButtonPanel addButtons = new CreateTaskButtonPanel();
 	private Gateway gateway;
 	
@@ -61,9 +62,5 @@ public class ToolbarView extends DefaultToolbarView implements IView {
 		this.gateway = gateway;
 		this.addButtons.setGateway(this.gateway);
 	}
-	
-
-	
-	
 	
 }
