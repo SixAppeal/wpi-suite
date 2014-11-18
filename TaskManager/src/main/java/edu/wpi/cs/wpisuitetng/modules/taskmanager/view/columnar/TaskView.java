@@ -2,14 +2,11 @@ package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -20,9 +17,16 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
 /**
  * View for a task that display in the ColumnView
  * @author wavanrensselaer
+ * @author akshoop
+ * @author rnorlando
  */
 public class TaskView extends JPanel implements IView {
 	private static final long serialVersionUID = 6255679649898290535L;
+	
+	/**
+	 * The cutoff point for the title string in the task
+	 */
+	public static final int MAX_TITLE_LENGTH = 20;
 	
 	private Gateway gateway;
 	private Task task;
@@ -36,12 +40,18 @@ public class TaskView extends JPanel implements IView {
 	public TaskView(Task task) {
 		this.task = task;
 		this.taskPanel = new JPanel();
-		this.nameLabel = new JLabel(this.task.getTitle());
+		
+		String title = this.task.getTitle();
+		if (title.length() > MAX_TITLE_LENGTH) {
+			title = title.substring(0,  MAX_TITLE_LENGTH) + "\u2026";
+		}
+		
+		this.nameLabel = new JLabel(title);
 		
 		this.setBorder(BorderFactory.createEmptyBorder(0, 20, 20, 20));
 		this.setOpaque(false);
 		this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-		this.taskPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 80));
+		this.taskPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
 		
 		this.taskPanel.setBackground(new Color(255, 255, 255));
 		
@@ -72,6 +82,7 @@ public class TaskView extends JPanel implements IView {
 			}
 		});
 		
+		this.nameLabel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 20));
 		this.taskPanel.add(nameLabel);
 		this.add(this.taskPanel);
 	}

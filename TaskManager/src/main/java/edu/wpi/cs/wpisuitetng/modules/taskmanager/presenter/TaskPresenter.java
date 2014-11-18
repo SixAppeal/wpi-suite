@@ -16,12 +16,14 @@ import edu.wpi.cs.wpisuitetng.network.models.IRequest;
  *
  * @author wavanrensselaer
  * @author dpseaman
+ * @author nhhughes
  */
 
 public class TaskPresenter implements IPresenter{
 
 	Gateway gateway;
 	Task[] tasks;
+	String[] members;
 	TaskModel tm;
 	
 	/**
@@ -30,6 +32,13 @@ public class TaskPresenter implements IPresenter{
 	@Override
 	public void setGateway(Gateway gateway) {
 		this.gateway = gateway;
+	}
+	
+	/**
+	 * Tells the SidebarView to show default form, which is empty
+	 */
+	public void toolbarDefault() {
+		this.gateway.toView("SidebarView", "showDefaultPanel");
 	}
 	
 	/**
@@ -75,7 +84,8 @@ public class TaskPresenter implements IPresenter{
 			}
 		});
 		request.send();
-		
+		this.gateway.toView("SidebarView", "showDefaultPanel");
+
 	}
 	
 	/**
@@ -180,9 +190,7 @@ public class TaskPresenter implements IPresenter{
 	 * @return 
 	 */
 	public void getAllTasks() {
-		System.out.println("Got Here!");
 		final Request request = Network.getInstance().makeRequest("taskmanager/task", HttpMethod.GET);
-		System.out.println("Got Here Too!");
 		request.addObserver(new GetTasksObserver(this));
 		request.send();
 	}
@@ -233,6 +241,24 @@ public class TaskPresenter implements IPresenter{
 		updateTaskForArchival(t);
 		
 	}
-	
-}
 
+	/**
+	 * Makes a request to the servers to get all members
+	 */
+	public void getMembers() {
+		final Request request = Network.getInstance().makeRequest("core/user", HttpMethod.GET);
+		request.addObserver(new GetMembersObserver(this));
+		request.send();
+	}
+
+	/**
+	 * Caches members retrieved from the server locally and tells the sidebar view that there are new members to incorporate
+	 * @param to_submit
+	 */
+	public void updateMembers(String[] to_submit) {
+		this.members = to_submit;
+		this.gateway.toView("SidebarView", "UpdateMembers", (Object []) to_submit); 
+		
+	}
+
+}

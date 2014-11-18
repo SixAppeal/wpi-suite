@@ -92,6 +92,8 @@ public class TaskManager implements IJanewayModule {
 	public List<JanewayTabModel> getTabs() {
 		return tabs;
 	}
+	
+	
 
 	/**
 	 * @see edu.wpi.cs.wpisuitetng.janeway.modules.IJanewayModule#finishInit()

@@ -8,34 +8,15 @@ package edu.wpi.cs.wpisuitetng.modules.taskmanager.model;
  * @author jrhennessy
  */
 public class Activity {
-
-		Member member;
-		String comment;
-		
-		/**
-		 *  Constructor for an activity
-		 * @param member member that made the comment
-		 * @param comment comment that the member made
-		 */
-		public Activity(Member member, String comment){
-			this.member = member;
-			this.comment = comment;
-		}
-
-
-	//Getters and Setters
+	String comment;
+	
 	/**
-	 * @return the member
+	 *  Constructor for an activity
+	 * @param member member that made the comment
+	 * @param comment comment that the member made
 	 */
-	public Member getMember() {
-		return member;
-	}
-
-	/**
-	 * @param member the member to set
-	 */
-	public void setMember(Member member) {
-		this.member = member;
+	public Activity(String comment){
+		this.comment = comment;
 	}
 
 	/**
