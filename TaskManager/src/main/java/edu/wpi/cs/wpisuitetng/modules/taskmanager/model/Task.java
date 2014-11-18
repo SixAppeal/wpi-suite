@@ -108,12 +108,7 @@ public class Task extends AbstractModel {
 			Integer actualEffort, Date dueDate) throws IllegalArgumentException {
 		super();
 
-		if (title.length() > 100 ){
-			throw new IllegalArgumentException("Title Too Long!");
-		}
-		else {
-			this.title = title;
-		}
+		this.title = title;
 		this.description = description;
 		this.status = status;
 		this.assignedTo = new LinkedList<String>();
@@ -143,12 +138,7 @@ public class Task extends AbstractModel {
 	 */
 	public Task(String title) throws IllegalArgumentException {
 		super();
-		if (title.length() > 100 ){
-			throw new IllegalArgumentException("Title Too Long!");
-		} 
-		else {
-			this.title = title;
-		}
+		this.title = title;
 		this.description = "";
 		this.status = null;
 		this.assignedTo = new LinkedList<String>();
