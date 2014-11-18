@@ -159,7 +159,7 @@ public class TaskEditView extends JPanel implements IView {
 		descEntry.setText(t.getDescription());
 		estEffortSpinnerModel.setValue(t.getEstimatedEffort());
 		actEffortSpinnerModel.setValue(t.getActualEffort());
-		dueDatePicker.getJDateInstantPanel().getModel().setDate(d.getYear(),
+		dueDatePicker.getJDateInstantPanel().getModel().setDate(d.getYear() + 1900,
 				d.getMonth(), d.getDay());
 		statusBox.setSelectedItem(t.getStatus());
 		
@@ -188,7 +188,7 @@ public class TaskEditView extends JPanel implements IView {
 			t.setStatus(st);
 			t.setEstimatedEffort(est);
 			t.setActualEffort(act);
-			t.setDueDate(new Date(year, month, day));
+			t.setDueDate(new Date(year - 1900, month, day));
 			t.setColumn(statusBox.getSelectedIndex());
 		} catch (IllegalArgumentException ex) {
 			System.out.println(ex.getMessage());

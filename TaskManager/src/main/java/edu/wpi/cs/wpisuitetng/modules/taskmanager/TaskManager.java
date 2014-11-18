@@ -64,6 +64,8 @@ public class TaskManager implements IJanewayModule {
 		gateway.addView("SidebarView", sidebarView);
 		gateway.addView("ColumnView", columnView);
 		gateway.addView("ToolbarView", toolbarview);
+		
+		columnView.updateFromOldTasks();
 	}
 	
 	/**

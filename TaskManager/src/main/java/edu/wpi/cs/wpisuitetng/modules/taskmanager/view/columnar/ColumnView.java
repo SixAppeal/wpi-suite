@@ -82,5 +82,24 @@ public class ColumnView extends JPanel implements IView {
 			taskView.setGateway(this.gateway);
 		}
 	}
+	
+	public void removeTask(Task task) {
+		for (TaskView t: this.tasks){
+			if (t.getTaskID() == task.getId()) {
+				this.columnPanel.remove(t);
+				this.tasks.remove(t);
+			}
+		}
+		
+		this.columnPanel.revalidate();
+		this.columnPanel.repaint();
+		
+		this.revalidate();
+		
+	}
 
+	public int getTaskCount() {
+		return this.tasks.size();
+	}
+	
 }

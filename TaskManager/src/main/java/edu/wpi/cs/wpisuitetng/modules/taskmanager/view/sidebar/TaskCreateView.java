@@ -37,6 +37,7 @@ public class TaskCreateView extends TaskEditView implements IView {
 	protected void taskOut() {
 		this.clearForm();
 		gateway.toPresenter("TaskPresenter", "createTask", t);
+		//gateway.toPresenter("TaskPresenter", "getAllTasks");
 	}
 	
 }
