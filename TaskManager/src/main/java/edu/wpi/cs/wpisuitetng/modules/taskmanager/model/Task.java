@@ -24,7 +24,7 @@ public class Task extends AbstractModel {
 	String title;
 	String description;
 	TaskStatus status;
-	List<Member> assignedTo;
+	List<String> assignedTo;
 	int id;
 	Integer estimatedEffort; 
 	Integer actualEffort;
@@ -41,7 +41,7 @@ public class Task extends AbstractModel {
 		this.title = "";
 		this.description = "";
 		this.status = null;
-		this.assignedTo = new LinkedList<Member>();
+		this.assignedTo = new LinkedList<String>();
 		this.estimatedEffort = -1;
 		this.actualEffort = -1;
 		this.dueDate = null;
@@ -63,7 +63,7 @@ public class Task extends AbstractModel {
 	 * @throws IllegalArgumentException
 	 */
 	public Task(String title, String description, TaskStatus status,
-			List<Member> assignedTo, Integer estimatedEffort,
+			List<String> assignedTo, Integer estimatedEffort,
 			Integer actualEffort, Date dueDate, List<Activity> activities) throws IllegalArgumentException {
 		super();
 		if (title.length() > 100 ){
@@ -121,7 +121,7 @@ public class Task extends AbstractModel {
 		}
 		this.description = description;
 		this.status = status;
-		this.assignedTo = new LinkedList<Member>();
+		this.assignedTo = new LinkedList<String>();
 		//checks that estimatedEffort is positive
 		if (estimatedEffort > 0){
 			this.estimatedEffort = estimatedEffort;
@@ -156,7 +156,7 @@ public class Task extends AbstractModel {
 		}
 		this.description = "";
 		this.status = null;
-		this.assignedTo = new LinkedList<Member>();
+		this.assignedTo = new LinkedList<String>();
 		this.estimatedEffort = -1;
 		this.actualEffort = -1;
 		this.dueDate = null;
@@ -274,14 +274,14 @@ public class Task extends AbstractModel {
 	 */
 	public String getMemberList() {
 		StringBuilder memberList = new StringBuilder();
-		for (Member m: this.assignedTo){
-			memberList.append(m.getName()).append(", ");
+		for (String m: this.assignedTo){
+			memberList.append(m).append(", ");
 		}
 		return memberList.toString();
 	}
 
 	/**
-	 * @return Title of taskk
+	 * @return Title of task
 	 */
 	public String getTitle() {
 		return title;
@@ -336,7 +336,7 @@ public class Task extends AbstractModel {
 	 * 
 	 * @return members associated with task
 	 */
-	public List<Member> getAssignedTo() {
+	public List<String> getAssignedTo() {
 		return assignedTo;
 	}
 
@@ -344,7 +344,7 @@ public class Task extends AbstractModel {
 	 * 
 	 * @param assignedTo members associated with task
 	 */
-	public void setAssignedTo(List<Member> assignedTo) {
+	public void setAssignedTo(List<String> assignedTo) {
 		this.assignedTo = assignedTo;
 	}
 

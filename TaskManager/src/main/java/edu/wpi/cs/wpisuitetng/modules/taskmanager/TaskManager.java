@@ -83,5 +83,7 @@ public class TaskManager implements IJanewayModule {
 	public List<JanewayTabModel> getTabs() {
 		return tabs;
 	}
+	
+	
 
 }

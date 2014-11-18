@@ -59,6 +59,15 @@ public class SidebarView extends JPanel implements IView {
 	}
 	
 	/**
+	 * Updates the sidebar with all members from the server
+	 * @param members All members available to assign to a task
+	 */
+	public void updateMembers(String[] members) {
+			this.editView.setAllMembers(members);
+			this.createView.setAllMembers(members);
+	}
+	
+	/**
 	 * Shows the default panel
 	 */
 	public void showDefaultPanel() {
@@ -66,7 +75,7 @@ public class SidebarView extends JPanel implements IView {
 		this.curView = this.defaultView;
 		this.curView.setVisible(true);
 	}
-	
+
 	/**
 	 * Shows the creation panel 
 	 */
