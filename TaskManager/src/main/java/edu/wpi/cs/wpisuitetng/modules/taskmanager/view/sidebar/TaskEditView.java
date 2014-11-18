@@ -87,8 +87,6 @@ public class TaskEditView extends JPanel implements IView {
 	JList<String> assignedMembers;
 	JButton addMemberButton;
 	JButton removeMemberButton;
-	String[] membersTest1 = {"user1", "user2", "user3","user1", "user2", "user3","user1", "user2", "user3","user1", "user2", "user3"};
-	String[] membersTest2 = {"user4", "user5", "user6"};
 	List<String> allMembersList;
 	List<String> assignedMembersList;
 	JListMouseHandler allMembersMouseHandler;
@@ -159,10 +157,10 @@ public class TaskEditView extends JPanel implements IView {
 		this.descEntryScroller = new JScrollPane(descEntry);
 
 		//Member Stuff
-		allMembersList = new ArrayList<String>(Arrays.asList(membersTest1));
-		assignedMembersList = new ArrayList<String>(Arrays.asList(membersTest2));
+		allMembersList = new ArrayList<String>();
+		assignedMembersList = new ArrayList<String>();
 		
-		allMembers = new JList<String>(membersTest1);
+		allMembers = new JList<String>();
 		allMembers.setVisibleRowCount(4);
 		allMembers.setLayoutOrientation(JList.VERTICAL);
 		this.allMembersMouseHandler = new JListMouseHandler(allMembers);
@@ -175,7 +173,7 @@ public class TaskEditView extends JPanel implements IView {
 		});
 		JScrollPane allMembersListScroller = new JScrollPane(allMembers);
 		
-		assignedMembers = new JList<String>(membersTest2);
+		assignedMembers = new JList<String>();
 		assignedMembers.setVisibleRowCount(4);
 		assignedMembers.setLayoutOrientation(JList.VERTICAL);
 		this.assignedMembersMouseHandler = new JListMouseHandler(assignedMembers);
@@ -257,8 +255,14 @@ public class TaskEditView extends JPanel implements IView {
 				allMembersList.add(to_add[i]);
 			}
 		}
+		allMembers.setListData(allMembersList.toArray(new String[allMembersList.size()]));
 	}
 
+	public void addMember(String member_to_add) {
+		this.allMembersList.add(member_to_add);
+		allMembers.setListData(allMembersList.toArray(new String[allMembersList.size()]));
+	}
+	
 	/**
 	 * Takes the members that the user has selected and moves them to the list of members assigned to a task
 	 */
@@ -369,6 +373,7 @@ public class TaskEditView extends JPanel implements IView {
 			t.setActualEffort(act);
 			t.setDueDate( dueDatePicker.getDate() );
 			t.setColumn(statusBox.getSelectedIndex());
+			t.setAssignedTo(this.assignedMembersList);
 		} catch (IllegalArgumentException ex) {
 			System.err.println(ex.toString());
 			return;

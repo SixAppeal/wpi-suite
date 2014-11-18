@@ -258,8 +258,10 @@ public class TaskPresenter implements IPresenter{
 	 */
 	public void updateMembers(String[] to_submit) {
 		this.members = to_submit;
-		this.gateway.toView("SidebarView", "UpdateMembers", (Object []) to_submit); 
-		
+		this.gateway.toView("SidebarView", "clearMembers");
+		for (String member : to_submit) {
+			this.gateway.toView("SidebarView", "updateMembers", member); 
+		}
 	}
 
 }

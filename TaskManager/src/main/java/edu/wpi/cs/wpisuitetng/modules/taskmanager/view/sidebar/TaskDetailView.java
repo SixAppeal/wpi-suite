@@ -54,6 +54,9 @@ public class TaskDetailView extends JPanel implements IView {
 	JLabel actLabel;
 	JLabel taskActLabel;		//Displays the Task's Actual Effor Value
 	
+	JLabel memberLabel;
+	JLabel taskMemberLabel;
+	
 	JButton archiveButton; //Archives the task.
 	JButton editButton; //Opens the task for editing.
 	
@@ -77,6 +80,10 @@ public class TaskDetailView extends JPanel implements IView {
 		actLabel = new JLabel ("Act. Effort");
 		actLabel.setForeground(labelColor);
 		taskActLabel = new JLabel();
+		
+		memberLabel = new JLabel ("Members");
+		memberLabel.setForeground(labelColor);
+		taskMemberLabel = new JLabel();
 		
 		archiveButton = new JButton("Archive");
 		archiveButton.addActionListener( new ActionListener() {
@@ -137,12 +144,20 @@ public class TaskDetailView extends JPanel implements IView {
 		gbc.gridx = 1;
 		this.add(taskActLabel, gbc);
 		
+		gbc.gridy = 7;
+		gbc.gridx = 0;
+		this.add(memberLabel);
+		gbc.gridy = 8;
+		gbc.gridx = 0;
+		this.add(taskMemberLabel);
+		
+		
 		gbc.anchor = GridBagConstraints.FIRST_LINE_START;
 		gbc.fill = GridBagConstraints.NONE;
 		gbc.insets.top = 20;
 		gbc.weighty = 1.0;
 		gbc.gridx = 0;
-		gbc.gridy = 7;
+		gbc.gridy = 9;
 		this.add(archiveButton, gbc);
 		
 		gbc.anchor = GridBagConstraints.FIRST_LINE_END;
@@ -164,6 +179,7 @@ public class TaskDetailView extends JPanel implements IView {
 		taskDateLabel.setText("<html>" + this.t.getDueDate().toString() + "</html>");
 		taskEstLabel.setText(this.t.getEstimatedEffort().toString());
 		taskActLabel.setText(this.t.getActualEffort().toString());
+		taskMemberLabel.setText(this.t.getActivities().toString());
 		editButton.setEnabled(true);
 		this.revalidate();
 	}
