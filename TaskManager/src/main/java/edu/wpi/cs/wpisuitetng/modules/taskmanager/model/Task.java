@@ -66,12 +66,7 @@ public class Task extends AbstractModel {
 			List<String> assignedTo, Integer estimatedEffort,
 			Integer actualEffort, Date dueDate, List<Activity> activities) throws IllegalArgumentException {
 		super();
-		if (title.length() > 100 ){
-			throw new IllegalArgumentException("Title Too Long!");
-		}
-		else {
-			this.title = title;
-		}
+		this.title = title;
 		this.description = description;
 		this.status = status;
 		this.assignedTo = assignedTo;
