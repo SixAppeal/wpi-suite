@@ -7,15 +7,17 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.Date;
 import java.util.HashMap;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.DefaultListSelectionModel;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -23,10 +25,13 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
+import javax.swing.ListSelectionModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import org.jdesktop.swingx.JXDatePicker;
 
@@ -35,7 +40,6 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.TaskStatus;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.TaskPresenter;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
-
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.Form;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.FormField;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.FormGroup;
@@ -167,6 +171,18 @@ public class TaskEditView extends JPanel implements IView {
 				moveMembersToAssigned();
 			}
 		});
+		MouseListener mouse = new MouseEventDemo();
+		this.addMouseListener(mouse);
+		
+		allMembers.addListSelectionListener(new ListSelectionListener() {
+			int count = 0;
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				System.out.println("Value Changed" + count);
+				this.count++;
+			}
+		});
+		
 		
 		removeMemberButton = new JButton("<");
 		removeMemberButton.addActionListener(new ActionListener() {
@@ -174,6 +190,9 @@ public class TaskEditView extends JPanel implements IView {
 				moveMembersToAll();
 			}
 		});
+		
+//		ListSelectionModel allMembersSelectionManger = new MartyListSelectionModel();
+//		allMembers.setSelectionModel(allMembersSelectionManger);
 		
 		allMembers.setLayoutOrientation(JList.VERTICAL);
 		assignedMembers.setLayoutOrientation(JList.VERTICAL);
@@ -217,6 +236,10 @@ public class TaskEditView extends JPanel implements IView {
 		this.add(this.form, gbc);
 	}
 
+	public void selectionChanged() {
+		System.out.println("Got Here");
+	}
+	
 	/**
 	 * Allows a request from the server to add to the list of all members available to assign to a task
 	 * @param to_add Members from the server that are going to be added to the All Members list
@@ -425,4 +448,31 @@ public class TaskEditView extends JPanel implements IView {
 		updateBorder(titleEntry, titleEntry.getText());
 		updateBorder(descEntryScroller, descEntry.getText());
 	}
+	
+	private class MouseEventDemo implements MouseListener {
+        //where initialization occurs:
+        //Register for mouse events on blankArea and the panel.
+       
+	    public void mousePressed(MouseEvent e) {
+	       System.out.println("Number of Clicks: " + e.getClickCount());
+	    }
+	
+	    public void mouseReleased(MouseEvent e) {
+	    	System.out.println("Number of Clicks: " + e.getClickCount());
+	    }
+	    
+	    public void mouseEntered(MouseEvent e) {
+	    	System.out.println("Number of Clicks: " + e.getClickCount());
+	    }
+	
+	    public void mouseExited(MouseEvent e) {
+	    	System.out.println("Number of Clicks: " + e.getClickCount());
+	    }
+	
+	    public void mouseClicked(MouseEvent e) {
+	       System.out.println("Mouse clicked. # of clicks:" + e.getClickCount());
+	    }
+	    
+	}
+	
 }
