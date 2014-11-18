@@ -105,7 +105,7 @@ public class ColumnView extends JPanel implements IView {
 	 * removes a task from this column
 	 * @param task the task to be removed
 	 */
-	public void removeTask(Task task) {
+	public void removeTask(final Task task) {
 		for (TaskView t: this.tasks){
 			if (t.getTaskID() == task.getId()) {
 				this.columnPanel.remove(t);

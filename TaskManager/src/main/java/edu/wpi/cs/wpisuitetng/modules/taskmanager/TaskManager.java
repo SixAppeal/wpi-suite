@@ -16,12 +16,22 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar.SidebarView;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.toolbar.ToolbarView;
 
 /**
+ * @author SixAppeal
  * 
- * @author SixAppeal, tmeehan
- * 
+ * @author wmtemple
+ * @author thhughes
+ * @author nhhughes
+ * @author srojas
+ * @author tmeehan
+ * @author krpeffer
+ * @author akshoop
+ * @author dpseaman
+ * @author jrhennessy
+ * @author rwang3
+ * @author wavanrensselaer
+ * @author rnorlando
  *
  * A module for managing tasks within Teams
- *
  */
 public class TaskManager implements IJanewayModule {
 

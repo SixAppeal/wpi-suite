@@ -28,7 +28,6 @@ public class TaskView extends JPanel implements IView {
 	private Task task;
 	private JPanel taskPanel;
 	private JLabel nameLabel;
-	private JButton archiveButton;
 	
 	/**
 	 * Constructs a <code>TaskView</code>
@@ -73,20 +72,8 @@ public class TaskView extends JPanel implements IView {
 			}
 		});
 		
-		archiveButton = new JButton("Archive Me!");
-		archiveButton.addActionListener( new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				archiveTask();
-				
-			}
-			
-		});
-		
 		this.taskPanel.add(nameLabel);
 		this.add(this.taskPanel);
-		this.add(archiveButton);
 	}
 	
 	public void archiveTask() {
