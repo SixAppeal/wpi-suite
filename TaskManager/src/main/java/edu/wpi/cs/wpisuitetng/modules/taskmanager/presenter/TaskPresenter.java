@@ -237,6 +237,7 @@ public class TaskPresenter implements IPresenter{
 	 */
 	public void archiveTask( Task t ) {
 		
+		gateway.toView("SidebarView", "showDefaultPanel");
 		t.archive();
 		updateTaskForArchival(t);
 		

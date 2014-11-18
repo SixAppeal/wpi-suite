@@ -8,9 +8,6 @@ import com.google.gson.Gson;
 
 import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
 
-//TODO Fix import error
-//import edu.wpi.cs.wpisuitetng.modules.requirementmanager.models.Requirement;
-
 /**
  * 
  * The model we will be using to store in the database.  Contains all necessary information about a task
