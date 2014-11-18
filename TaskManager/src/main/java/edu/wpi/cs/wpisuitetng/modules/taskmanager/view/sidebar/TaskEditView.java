@@ -70,7 +70,6 @@ public class TaskEditView extends JPanel implements IView {
 	private static final long serialVersionUID = -8331650108561001757L;
 
 	protected Gateway gateway;
-	private TaskPresenter presenter;
 	protected Task t;
 
 	Form form;
@@ -96,7 +95,8 @@ public class TaskEditView extends JPanel implements IView {
 	String[] membersTest2 = {"user4", "user5", "user6"};
 	List<String> allMembersList;
 	List<String> assignedMembersList;
-	JListMouseHandler mouse;
+	JListMouseHandler allMembersMouseHandler;
+	JListMouseHandler assignedMembersMouseHandler;
 
 
 	/**
@@ -162,40 +162,46 @@ public class TaskEditView extends JPanel implements IView {
 		//Member Stuff
 		allMembersList = new ArrayList<String>(Arrays.asList(membersTest1));
 		assignedMembersList = new ArrayList<String>(Arrays.asList(membersTest2));
+		
 		allMembers = new JList<String>(membersTest1);
 		allMembers.setVisibleRowCount(4);
+		allMembers.setLayoutOrientation(JList.VERTICAL);
+		this.allMembersMouseHandler = new JListMouseHandler(allMembers);
+		allMembers.addMouseListener(allMembersMouseHandler);
+		allMembers.addListSelectionListener(new ListSelectionListener() {
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				notifyAllMembersMouseHandler();
+			}
+		});
+		JScrollPane allMembersListScroller = new JScrollPane(allMembers);
+		
 		assignedMembers = new JList<String>(membersTest2);
 		assignedMembers.setVisibleRowCount(4);
+		assignedMembers.setLayoutOrientation(JList.VERTICAL);
+		this.assignedMembersMouseHandler = new JListMouseHandler(assignedMembers);
+		assignedMembers.addMouseListener(assignedMembersMouseHandler);
+		assignedMembers.addListSelectionListener(new ListSelectionListener() {
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				notifyAssignedMembersMouseHandler();
+			}
+		});
+		JScrollPane assignedMembersListScroller = new JScrollPane(assignedMembers);
+		
 		addMemberButton = new JButton(">");
 		addMemberButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				moveMembersToAssigned();
 			}
 		});
-		this.mouse = new JListMouseHandler(allMembers);
-		allMembers.addMouseListener(mouse);
-		allMembers.addListSelectionListener(new ListSelectionListener() {
-			@Override
-			public void valueChanged(ListSelectionEvent e) {
-				notifyMouseHandler();
-			}
-		});
-
-
+		
 		removeMemberButton = new JButton("<");
 		removeMemberButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				moveMembersToAll();
 			}
 		});
-
-		//		ListSelectionModel allMembersSelectionManger = new MartyListSelectionModel();
-		//		allMembers.setSelectionModel(allMembersSelectionManger);
-
-		allMembers.setLayoutOrientation(JList.VERTICAL);
-		assignedMembers.setLayoutOrientation(JList.VERTICAL);
-		JScrollPane allMembersListScroller = new JScrollPane(allMembers);
-		JScrollPane assignedMembersListScroller = new JScrollPane(assignedMembers);
 
 		Box buttonBox = new Box(BoxLayout.Y_AXIS);
 		buttonBox.add(addMemberButton);
@@ -234,10 +240,14 @@ public class TaskEditView extends JPanel implements IView {
 		this.add(this.form, gbc);
 	}
 
-	public void notifyMouseHandler() {
-		this.mouse.just_changed = true;
+	public void notifyAllMembersMouseHandler() {
+		this.allMembersMouseHandler.just_changed = true;
 	}
 
+	public void notifyAssignedMembersMouseHandler() {
+		this.assignedMembersMouseHandler.just_changed = true;
+	}
+	
 	/**
 	 * Allows a request from the server to add to the list of all members available to assign to a task
 	 * @param to_add Members from the server that are going to be added to the All Members list
@@ -267,6 +277,8 @@ public class TaskEditView extends JPanel implements IView {
 		allMembersList = updatedAll;
 		allMembers.setListData(updatedAll.toArray(new String[updatedAll.size()]));
 		assignedMembers.setListData(assignedMembersList.toArray(new String[assignedMembersList.size()]));
+		this.allMembersMouseHandler.clear();
+		this.assignedMembersMouseHandler.clear();
 	}
 
 	/**
@@ -286,6 +298,8 @@ public class TaskEditView extends JPanel implements IView {
 		assignedMembersList = updatedAssigned;
 		allMembers.setListData(allMembersList.toArray(new String[allMembersList.size()]));
 		assignedMembers.setListData(updatedAssigned.toArray(new String[updatedAssigned.size()]));
+		this.assignedMembersMouseHandler.clear();
+		this.allMembersMouseHandler.clear();
 	}
 
 	/**
@@ -447,136 +461,13 @@ public class TaskEditView extends JPanel implements IView {
 		updateBorder(descEntryScroller, descEntry.getText());
 	}
 
-	private class JListEmptySelectionModel implements ListSelectionModel {
-
-		@Override
-		public void setSelectionInterval(int index0, int index1) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public void addSelectionInterval(int index0, int index1) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public void removeSelectionInterval(int index0, int index1) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public int getMinSelectionIndex() {
-			// TODO Auto-generated method stub
-			return 0;
-		}
-
-		@Override
-		public int getMaxSelectionIndex() {
-			// TODO Auto-generated method stub
-			return 0;
-		}
-
-		@Override
-		public boolean isSelectedIndex(int index) {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-		@Override
-		public int getAnchorSelectionIndex() {
-			// TODO Auto-generated method stub
-			return 0;
-		}
-
-		@Override
-		public void setAnchorSelectionIndex(int index) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public int getLeadSelectionIndex() {
-			// TODO Auto-generated method stub
-			return 0;
-		}
-
-		@Override
-		public void setLeadSelectionIndex(int index) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public void clearSelection() {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public boolean isSelectionEmpty() {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-		@Override
-		public void insertIndexInterval(int index, int length, boolean before) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public void removeIndexInterval(int index0, int index1) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public void setValueIsAdjusting(boolean valueIsAdjusting) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public boolean getValueIsAdjusting() {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-		@Override
-		public void setSelectionMode(int selectionMode) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public int getSelectionMode() {
-			// TODO Auto-generated method stub
-			return 0;
-		}
-
-		@Override
-		public void addListSelectionListener(ListSelectionListener x) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public void removeListSelectionListener(ListSelectionListener x) {
-			// TODO Auto-generated method stub
-
-		}
-
-	}
-
 	private class JListMouseHandler implements MouseListener {
 
 		JList<String> list;
 		Boolean just_changed;
 		int[] previous_indexes;
-
+		int keyboard_event_count;
+		
 		public JListMouseHandler (JList<String> list) {
 			this.list = list;
 			just_changed = false;
@@ -610,26 +501,18 @@ public class TaskEditView extends JPanel implements IView {
 
 		public void mouseExited(MouseEvent e) {}
 
-		public void mouseClicked(MouseEvent e) {
-
-//			int clicked_index = this.list.locationToIndex(e.getPoint());
-//			if (this.just_changed) {
-//				this.just_changed = false;
-//				
-//				for (int i : previous_indexes) {
-//					if (!this.inArray(i, this.list.getSelectedIndices())) {
-//						this.list.addSelectionInterval(i, i);
-//					}
-//				}
-//				if (this.inArray(clicked_index, this.list.getSelectedIndices()) && this.inArray(clicked_index, previous_indexes)) {
-//					this.list.removeSelectionInterval(clicked_index, clicked_index);
-//				}
-//			}
-//			else {
-//				list.removeSelectionInterval(clicked_index, clicked_index);
-//			}
-//			this.previous_indexes = this.list.getSelectedIndices();
-
+		public void mouseClicked(MouseEvent e) {}
+		
+		public void update_selected() {
+			if (this.keyboard_event_count == 0) {
+				this.previous_indexes = this.list.getSelectedIndices();
+				this.keyboard_event_count++;
+			}
+		}
+		
+		public void clear() {
+			this.list.clearSelection();
+			this.previous_indexes = this.list.getSelectedIndices();
 		}
 		
 		private Boolean inArray(int to_check, int[] array) {
