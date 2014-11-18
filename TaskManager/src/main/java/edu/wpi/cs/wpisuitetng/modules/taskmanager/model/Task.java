@@ -278,12 +278,7 @@ public class Task extends AbstractModel {
 	 * @throws IllegalArgumentException
 	 */
 	public void setTitle(String title) throws IllegalArgumentException {
-		if (title.length() > 100 ){
-			throw new IllegalArgumentException("Title Too Long!");
-		}
-		else {
-			this.title = title;
-		}
+		this.title = title;
 	}
 
 	/**
