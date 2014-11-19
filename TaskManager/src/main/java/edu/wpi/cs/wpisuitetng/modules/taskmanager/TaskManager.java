@@ -3,6 +3,8 @@
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -35,6 +37,8 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.toolbar.ToolbarView;
  */
 public class TaskManager implements IJanewayModule {
 
+	private Timer t;
+	
 	//Access Level: Package
 	String name;
 	List<JanewayTabModel> tabs;
@@ -74,6 +78,8 @@ public class TaskManager implements IJanewayModule {
 		gateway.addView("SidebarView", sidebarView);
 		gateway.addView("ColumnView", columnView);
 		gateway.addView("ToolbarView", toolbarview);
+		
+		t = new Timer();
 
 	}
 	
@@ -92,16 +98,32 @@ public class TaskManager implements IJanewayModule {
 	public List<JanewayTabModel> getTabs() {
 		return tabs;
 	}
-	
-	
 
 	/**
 	 * @see edu.wpi.cs.wpisuitetng.janeway.modules.IJanewayModule#finishInit()
 	 */
 	@Override
 	public void finishInit() {
-		gateway.toPresenter("TaskPresenter", "getAllTasks");
+		t.scheduleAtFixedRate(new TimerTask() {
+
+			@Override
+			public void run() {
+				gateway.toPresenter("TaskPresenter", "getAllTasks");
+				
+			}
+			
+		}, 0, 3000);
 		gateway.toPresenter("TaskPresenter", "getMembers");
+	}
+
+	/**
+	 * @see edu.wpi.cs.wpisuitetng.janeway.modules.IJanewayModule#cleanup()
+	 */
+	@Override
+	public void cleanup() {
+		
+		t.cancel();
+		
 	}
 
 }
