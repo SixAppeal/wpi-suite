@@ -2,6 +2,9 @@ package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.toolbar;
 
 
 import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -45,8 +48,8 @@ public class CreateTaskButtonPanel extends ToolbarGroupView implements IView {
 	 */
 	public CreateTaskButtonPanel(){
 		super("");
-		SpringLayout springLayout = new SpringLayout();
 		
+<<<<<<< HEAD
 		this.contentPanel.setLayout(springLayout);
 		this.setPreferredWidth(570);
 
@@ -68,8 +71,15 @@ public class CreateTaskButtonPanel extends ToolbarGroupView implements IView {
 		springLayout.putConstraint(SpringLayout.NORTH, createPanelButton, 10, SpringLayout.NORTH, this.contentPanel);
 		springLayout.putConstraint(SpringLayout.WEST, createPanelButton, 10, SpringLayout.EAST, refreshPanelButton);
 		springLayout.putConstraint(SpringLayout.SOUTH, createPanelButton, -10, SpringLayout.SOUTH, this.contentPanel);
+=======
+		this.contentPanel.setLayout(new GridBagLayout());
+>>>>>>> origin/devel_feedback2
 		
-		createPanelButton.setPreferredSize(d_task); 
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		gbc.weighty = 1.0;
+		gbc.anchor = GridBagConstraints.LINE_START;
 
 		// Action listener for createTaskButton
 		createTaskButton.setAction(createTask);
@@ -87,7 +97,7 @@ public class CreateTaskButtonPanel extends ToolbarGroupView implements IView {
 		// Action listener for createPanelButton
 		createPanelButton.setAction(createPanel);
 
-		contentPanel.add(createTaskButton);
+		contentPanel.add(createTaskButton, gbc);
 		//uncomment the line below once the controller can handle creating multiple columns
 		//contentPanel.add(createPanelButton);
 		contentPanel.add(refreshPanelButton);
@@ -97,7 +107,7 @@ public class CreateTaskButtonPanel extends ToolbarGroupView implements IView {
 
 
 	/**
-	 * Method getCreateButton.
+	 * returns the panel create button
 	 * 
 	 * @return JButton
 	 */
@@ -106,7 +116,7 @@ public class CreateTaskButtonPanel extends ToolbarGroupView implements IView {
 	}
 
 	/**
-	 * Method getCreateIterationButton.
+	 * returns the task create button
 	 * 
 	 * @return JButton
 	 */
