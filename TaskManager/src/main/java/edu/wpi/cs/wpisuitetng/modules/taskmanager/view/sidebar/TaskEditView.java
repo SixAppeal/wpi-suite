@@ -337,7 +337,9 @@ public class TaskEditView extends JPanel implements IView {
 		actEffortSpinner.setEnabled( (stat.equals("In Progress")) || (stat.equals("Complete")) );
 	}
 	
-	
+	/**
+	 * grabs all the data from the form
+	 */
 	private void processTask() {
 		t = new Task();
 		
@@ -378,6 +380,9 @@ public class TaskEditView extends JPanel implements IView {
 		return "Edit Task";
 	}
 	
+	/**
+	 * sends the task to the presenter
+	 */
 	protected void taskOut() {
 		gateway.toPresenter("TaskPresenter", "updateTask", t);
 	}
@@ -475,6 +480,12 @@ public class TaskEditView extends JPanel implements IView {
 		updateBorder(descEntryScroller, descEntry.getText());
 	}
 	
+	/**
+	 * Checks if the spinner has a valid value
+	 * creates an error if the value is <=0
+	 * @param spinner
+	 * @param names
+	 */
 	public void checkValidityOfSpinner(JSpinner spinner, String names)
 	{
 		if((int)spinner.getValue() <= 0)

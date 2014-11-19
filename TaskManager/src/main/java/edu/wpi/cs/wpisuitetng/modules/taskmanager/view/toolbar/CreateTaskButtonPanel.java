@@ -69,7 +69,7 @@ public class CreateTaskButtonPanel extends ToolbarGroupView implements IView {
 
 
 	/**
-	 * Method getCreateButton.
+	 * returns the panel create button
 	 * 
 	 * @return JButton
 	 */
@@ -78,7 +78,7 @@ public class CreateTaskButtonPanel extends ToolbarGroupView implements IView {
 	}
 
 	/**
-	 * Method getCreateIterationButton.
+	 * returns the task create button
 	 * 
 	 * @return JButton
 	 */
