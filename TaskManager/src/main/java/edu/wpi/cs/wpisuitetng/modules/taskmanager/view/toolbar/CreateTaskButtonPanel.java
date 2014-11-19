@@ -1,10 +1,8 @@
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.toolbar;
 
 
-import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -12,7 +10,6 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JPanel;
-import javax.swing.SpringLayout;
 
 import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.ToolbarGroupView;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
@@ -49,31 +46,7 @@ public class CreateTaskButtonPanel extends ToolbarGroupView implements IView {
 	public CreateTaskButtonPanel(){
 		super("");
 		
-<<<<<<< HEAD
-		this.contentPanel.setLayout(springLayout);
-		this.setPreferredWidth(570);
-
-		// Set the alignment of the First button (task button)
-		springLayout.putConstraint(SpringLayout.NORTH, createTaskButton, 10, SpringLayout.NORTH, this.contentPanel);
-		springLayout.putConstraint(SpringLayout.WEST, createTaskButton, 10, SpringLayout.WEST, this.contentPanel);
-		springLayout.putConstraint(SpringLayout.SOUTH, createTaskButton, -10, SpringLayout.SOUTH, this.contentPanel);
-		// Set the width of createTaskButton
-		Dimension d_task = createTaskButton.getPreferredSize();
-		d_task.width = 150;
-		createTaskButton.setPreferredSize(d_task);
-		
-		//Layout of refresh Panel Button
-		springLayout.putConstraint(SpringLayout.NORTH, refreshPanelButton, 10, SpringLayout.NORTH, this.contentPanel);
-		springLayout.putConstraint(SpringLayout.WEST, refreshPanelButton, 10, SpringLayout.EAST, createTaskButton);
-		springLayout.putConstraint(SpringLayout.SOUTH, refreshPanelButton, -10, SpringLayout.SOUTH, this.contentPanel);
-
-		// Layout of the create Panel Button
-		springLayout.putConstraint(SpringLayout.NORTH, createPanelButton, 10, SpringLayout.NORTH, this.contentPanel);
-		springLayout.putConstraint(SpringLayout.WEST, createPanelButton, 10, SpringLayout.EAST, refreshPanelButton);
-		springLayout.putConstraint(SpringLayout.SOUTH, createPanelButton, -10, SpringLayout.SOUTH, this.contentPanel);
-=======
 		this.contentPanel.setLayout(new GridBagLayout());
->>>>>>> origin/devel_feedback2
 		
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.gridx = 0;
