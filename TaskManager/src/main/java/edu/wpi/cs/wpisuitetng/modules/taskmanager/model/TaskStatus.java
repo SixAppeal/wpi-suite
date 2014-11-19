@@ -19,7 +19,16 @@ public class TaskStatus {
 		this.status = status;
 	}
 	
+	/**
+	 * We require equality checks in other classes
+	 */
+	public boolean equals(Object o) {
+		return (o instanceof TaskStatus) && ((TaskStatus)o).getStatus().equals(this.status);
+	}
 	
+	public int hashCode() {
+		return status.hashCode();
+	}
 	
 	//Getters and Setters
 	/**
