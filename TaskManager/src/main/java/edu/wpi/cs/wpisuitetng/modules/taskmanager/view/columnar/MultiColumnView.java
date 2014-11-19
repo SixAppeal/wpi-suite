@@ -94,13 +94,11 @@ public class MultiColumnView extends JPanel implements IView {
 	 */
 	public void removeAllTasks() {
 		for (ColumnView c : columns) {
-			System.out.println("Removing all tasks from column " + c.getTitle());
+			//System.out.println("Removing all tasks from column " + c.getTitle());
 			c.removeAllTasks();
-			c.revalidate();
-			System.out.println("Finished removing!");
+			//System.out.println("Finished removing!");
 		}
 		
-		this.scrollPane.revalidate();
 	}
 	
 	/**
