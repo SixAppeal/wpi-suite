@@ -101,7 +101,7 @@ public class TaskManager implements IJanewayModule {
 	@Override
 	public void finishInit() {
 		gateway.toPresenter("TaskPresenter", "getAllTasks");
-		
+		gateway.toPresenter("TaskPresenter", "getMembers");
 	}
 
 }

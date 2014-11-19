@@ -6,9 +6,11 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.LinkedList;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
 
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
@@ -54,6 +56,9 @@ public class TaskDetailView extends JPanel implements IView {
 	JLabel actLabel;
 	JLabel taskActLabel;		//Displays the Task's Actual Effor Value
 	
+	JLabel memberLabel;
+	JList<String> taskMemberList;
+	
 	JButton archiveButton; //Archives the task.
 	JButton editButton; //Opens the task for editing.
 	
@@ -77,6 +82,10 @@ public class TaskDetailView extends JPanel implements IView {
 		actLabel = new JLabel ("Act. Effort");
 		actLabel.setForeground(labelColor);
 		taskActLabel = new JLabel();
+		
+		memberLabel = new JLabel ("Members");
+		memberLabel.setForeground(labelColor);
+		taskMemberList = new JList<String>();
 		
 		archiveButton = new JButton("Archive");
 		archiveButton.addActionListener( new ActionListener() {
@@ -137,12 +146,24 @@ public class TaskDetailView extends JPanel implements IView {
 		gbc.gridx = 1;
 		this.add(taskActLabel, gbc);
 		
+		
+		gbc.gridwidth = 2;
+		gbc.insets.top = 20;
+		gbc.gridy = 7;
+		gbc.gridx = 0;
+		this.add(memberLabel, gbc);
+		
+		gbc.insets.top = 5;
+		gbc.gridy = 8;
+		this.add(taskMemberList, gbc);
+		
+		
 		gbc.anchor = GridBagConstraints.FIRST_LINE_START;
 		gbc.fill = GridBagConstraints.NONE;
 		gbc.insets.top = 20;
 		gbc.weighty = 1.0;
 		gbc.gridx = 0;
-		gbc.gridy = 7;
+		gbc.gridy = 9;
 		this.add(archiveButton, gbc);
 		
 		gbc.anchor = GridBagConstraints.FIRST_LINE_END;
@@ -164,6 +185,7 @@ public class TaskDetailView extends JPanel implements IView {
 		taskDateLabel.setText("<html>" + this.t.getDueDate().toString() + "</html>");
 		taskEstLabel.setText(this.t.getEstimatedEffort().toString());
 		taskActLabel.setText(this.t.getActualEffort().toString());
+		taskMemberList.setListData(t.getAssignedTo().toArray(new String[0]));
 		editButton.setEnabled(true);
 		this.revalidate();
 	}
