@@ -1,5 +1,6 @@
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
 
+import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -9,7 +10,6 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.Date;
 import java.util.HashMap;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -27,6 +27,8 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import org.jdesktop.swingx.JXDatePicker;
 
@@ -35,7 +37,6 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.TaskStatus;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.TaskPresenter;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
-
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.Form;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.FormField;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.FormGroup;
@@ -80,8 +81,10 @@ public class TaskEditView extends JPanel implements IView {
 	SpinnerNumberModel actEffortSpinnerModel;
 	JXDatePicker dueDatePicker;
 	JButton saveButton;
-	JButton cancelButton;	
+	JButton cancelButton;
+	JLabel errorText;	
 	HashMap<String, Boolean> requirderFieldFlags = new HashMap<String,Boolean>();
+	
 
 	//Member stuff
 	JList<String> allMembers;
@@ -123,12 +126,28 @@ public class TaskEditView extends JPanel implements IView {
 		
 		dueDatePicker = new JXDatePicker( new Date(System.currentTimeMillis()));
 
-		estEffortSpinnerModel = new SpinnerNumberModel(1, 1, null, 1);
+		estEffortSpinnerModel = new SpinnerNumberModel(0, null, null, 1);
 		estEffortSpinner = new JSpinner( estEffortSpinnerModel );
+		estEffortSpinner.addChangeListener(new ChangeListener() {
+			
+			@Override
+			public void stateChanged(ChangeEvent e)
+			{
+				checkValidityOfSpinner(estEffortSpinner, "Est. Effort");
+			}
+		});
 		
-		actEffortSpinnerModel = new SpinnerNumberModel(0, 0, null, 1);
+		actEffortSpinnerModel = new SpinnerNumberModel(1, null, null, 1);
 		actEffortSpinner = new JSpinner( actEffortSpinnerModel );
 		actEffortSpinner.setEnabled(false);
+		actEffortSpinner.addChangeListener(new ChangeListener() {
+			
+			@Override
+			public void stateChanged(ChangeEvent e)
+			{
+				checkValidityOfSpinner(actEffortSpinner, "Act. Effort");
+			}
+		});
 		
 		statusBox = new JComboBox<TaskStatus>();
 		statusBox.addItem(new TaskStatus("New"));
@@ -184,7 +203,14 @@ public class TaskEditView extends JPanel implements IView {
 		buttonBox.add(addMemberButton);
 		buttonBox.add(new JLabel(""));
 		buttonBox.add(removeMemberButton);
+		
+		errorText = new JLabel("Invalid Input", JLabel.CENTER);
+		errorText.setForeground(Color.RED);
+		errorText.setBorder(FormField.BORDER_ERROR);
+		
 
+		checkValidityOfSpinner(estEffortSpinner , "Est. Effort");
+		
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.anchor = GridBagConstraints.PAGE_START;
@@ -211,7 +237,8 @@ public class TaskEditView extends JPanel implements IView {
 				new FormField("Assigned", assignedMembersListScroller)
 			),
 			new FormField("Status", statusBox),
-			new FormGroup(saveButton, cancelButton)
+			new FormGroup(saveButton, cancelButton),
+			new FormField(null, errorText)
 		);
 		
 		this.add(this.form, gbc);
@@ -386,7 +413,29 @@ public class TaskEditView extends JPanel implements IView {
 		updateBorder(someComponent, data);
 		this.requirderFieldFlags.put(field, !data.isEmpty());
 		
+		update();
+	}
+	
+	/**
+	 *  update any field for changeable information
+	 */
+	public void update()
+	{
+		updateErrorMessage();
 		attemptToEnableSaveButton();
+	}
+	
+	/**
+	 * reveals the error message if a single field is not valid
+	 */
+	private void updateErrorMessage()
+	{
+		boolean vis = true;
+		for(String key: this.requirderFieldFlags.keySet())
+		{
+			vis = vis && this.requirderFieldFlags.get(key);
+		}
+		errorText.setVisible(!vis);
 	}
 	
 	/**
@@ -424,5 +473,22 @@ public class TaskEditView extends JPanel implements IView {
 		
 		updateBorder(titleEntry, titleEntry.getText());
 		updateBorder(descEntryScroller, descEntry.getText());
+	}
+	
+	public void checkValidityOfSpinner(JSpinner spinner, String names)
+	{
+		if((int)spinner.getValue() <= 0)
+		{
+			requirderFieldFlags.put(names, false);
+			spinner.setBorder(FormField.BORDER_ERROR);
+		}
+		else
+		{
+			requirderFieldFlags.put(names, true);
+			spinner.setBorder(FormField.BORDER_NORMAL);
+		}
+		update();
+	
+		
 	}
 }
