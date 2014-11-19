@@ -88,6 +88,7 @@ public class SidebarView extends JPanel implements IView {
 		this.curView.setVisible(false);
 		this.curView = this.createView;
 		this.curView.setVisible(true);
+		this.createView.updateView(new Task());
 	}
 	
 	/**

@@ -89,6 +89,8 @@ public class TaskEditView extends JPanel implements IView {
 	HashMap<String, Boolean> requirderFieldFlags = new HashMap<String,Boolean>();
 	
 
+	JScrollPane allMembersListScroller;
+	JScrollPane assignedMembersListScroller;
 	//Member stuff
 	JList<String> allMembers;
 	JList<String> assignedMembers;
@@ -96,6 +98,7 @@ public class TaskEditView extends JPanel implements IView {
 	JButton removeMemberButton;
 	List<String> allMembersList;
 	List<String> assignedMembersList;
+	List<String> globalMembersList;
 	JListMouseHandler allMembersMouseHandler;
 	JListMouseHandler assignedMembersMouseHandler;
 
@@ -181,7 +184,7 @@ public class TaskEditView extends JPanel implements IView {
 		//Member Stuff
 		allMembersList = new ArrayList<String>();
 		assignedMembersList = new ArrayList<String>();
-		
+		globalMembersList = new ArrayList<String>();
 		allMembers = new JList<String>();
 		allMembers.setVisibleRowCount(4);
 		allMembers.setLayoutOrientation(JList.VERTICAL);
@@ -193,7 +196,7 @@ public class TaskEditView extends JPanel implements IView {
 				notifyAllMembersMouseHandler();
 			}
 		});
-		JScrollPane allMembersListScroller = new JScrollPane(allMembers);
+		allMembersListScroller = new JScrollPane(allMembers);
 		
 		assignedMembers = new JList<String>();
 		assignedMembers.setVisibleRowCount(4);
@@ -206,7 +209,7 @@ public class TaskEditView extends JPanel implements IView {
 				notifyAssignedMembersMouseHandler();
 			}
 		});
-		JScrollPane assignedMembersListScroller = new JScrollPane(assignedMembers);
+		assignedMembersListScroller = new JScrollPane(assignedMembers);
 		
 		addMemberButton = new JButton(">");
 		addMemberButton.addActionListener(new ActionListener() {
@@ -288,9 +291,46 @@ public class TaskEditView extends JPanel implements IView {
 		allMembers.setListData(allMembersList.toArray(new String[allMembersList.size()]));
 	}
 
+	public void updatePanels(List<String> assigned, List<String> all) {
+		allMembers.setListData(all.toArray(new String[all.size()]));
+		assignedMembers.setListData(assigned.toArray(new String[assigned.size()]));
+		fixPanel();
+	}
+	
+	public void fixPanel() {
+		if (assignedMembersList.size() == 0) {
+			String [] empty_string_list = new String[1];
+			empty_string_list[0] = "";
+			this.assignedMembers.setListData(empty_string_list);	
+		}
+		if (allMembersList.size() == 0) {
+			String [] empty_string_list = new String[1];
+			empty_string_list[0] = "";
+			this.allMembers.setListData(empty_string_list);
+		}
+		this.allMembers.revalidate();
+		this.allMembersListScroller.revalidate();
+		this.allMembers.repaint();
+		this.allMembersListScroller.repaint();
+		this.assignedMembers.revalidate();
+		this.assignedMembersListScroller.revalidate();
+		this.assignedMembers.repaint();
+		this.assignedMembersListScroller.repaint();
+		this.revalidate();
+		this.repaint();
+	}
+	
 	public void addMember(String member_to_add) {
-		this.allMembersList.add(member_to_add);
+		
+		this.globalMembersList.add(member_to_add);
+		this.allMembersList = new ArrayList<String>(globalMembersList);
+		String to_print = "";
+		for (String s: allMembersList) {
+			to_print = to_print + ", " + s;
+		}
+		System.out.println(to_print);
 		allMembers.setListData(allMembersList.toArray(new String[allMembersList.size()]));
+		fixPanel();
 	}
 	
 	/**
@@ -312,6 +352,7 @@ public class TaskEditView extends JPanel implements IView {
 		assignedMembers.setListData(assignedMembersList.toArray(new String[assignedMembersList.size()]));
 		this.allMembersMouseHandler.clear();
 		this.assignedMembersMouseHandler.clear();
+		fixPanel();
 	}
 
 	/**
@@ -333,6 +374,7 @@ public class TaskEditView extends JPanel implements IView {
 		assignedMembers.setListData(updatedAssigned.toArray(new String[updatedAssigned.size()]));
 		this.assignedMembersMouseHandler.clear();
 		this.allMembersMouseHandler.clear();
+		fixPanel();
 	}
 
 	/**
@@ -368,14 +410,31 @@ public class TaskEditView extends JPanel implements IView {
 		titleEntry.setText(t.getTitle());
 		descEntry.setText(t.getDescription());
 		estEffortSpinnerModel.setValue(t.getEstimatedEffort());
-		actEffortSpinnerModel.setValue(t.getActualEffort());
+		if (t.getActualEffort() <= 0) {
+			actEffortSpinnerModel.setValue(1);
+		}
+		else {
+			actEffortSpinnerModel.setValue(t.getActualEffort());
+		}
 		dueDatePicker.setDate( d );
+		
 		statusBox.setSelectedItem(t.getStatus());
 
 		String stat = t.getStatus().toString();
-
+	
 		//This is hard coded and should be fixed at some point in the future
 		actEffortSpinner.setEnabled( (stat.equals("In Progress")) || (stat.equals("Complete")) );
+		
+		List<String> taskAssignedMembers = t.getAssignedTo();
+		assignedMembersList = taskAssignedMembers;
+		List<String> to_use = new ArrayList<String>(globalMembersList);
+		for (String s : taskAssignedMembers) {
+			if (to_use.contains(s)) {
+				to_use.remove(s);
+			}
+		}
+		allMembersList = to_use;
+		updatePanels(assignedMembersList, allMembersList);
 	}
 	
 	/**
@@ -409,9 +468,10 @@ public class TaskEditView extends JPanel implements IView {
 			System.err.println(ex.toString());
 			return;
 		}
-
+		this.assignedMembersList = new ArrayList<String> ();
+		this.allMembersList = new ArrayList<String> ();
 		taskOut();
-
+		
 	}
 
 	/**

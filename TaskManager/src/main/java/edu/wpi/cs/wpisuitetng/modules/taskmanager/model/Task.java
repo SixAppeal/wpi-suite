@@ -38,11 +38,11 @@ public class Task extends AbstractModel {
 		super();
 		this.title = "";
 		this.description = "";
-		this.status = null;
+		this.status = new TaskStatus("New");
 		this.assignedTo = new LinkedList<String>();
 		this.estimatedEffort = -1;
-		this.actualEffort = -1;
-		this.dueDate = null;
+		this.actualEffort = 1;
+		this.dueDate = new Date();
 		this.activities = new LinkedList<Activity>();
 		this.column = 0;
 		this.archived = false;
