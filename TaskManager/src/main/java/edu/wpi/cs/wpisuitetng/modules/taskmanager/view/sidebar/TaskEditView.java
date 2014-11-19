@@ -9,6 +9,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.ArrayList;
@@ -373,7 +374,8 @@ public class TaskEditView extends JPanel implements IView {
 			t.setActualEffort(act);
 			t.setDueDate( dueDatePicker.getDate() );
 			t.setColumn(statusBox.getSelectedIndex());
-			t.setAssignedTo(this.assignedMembersList);
+			t.setAssignedTo(new ArrayList<String>(this.assignedMembersList));
+			System.out.println(t.toJson());
 		} catch (IllegalArgumentException ex) {
 			System.err.println(ex.toString());
 			return;
