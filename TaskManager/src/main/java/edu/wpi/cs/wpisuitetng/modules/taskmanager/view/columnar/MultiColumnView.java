@@ -69,6 +69,7 @@ public class MultiColumnView extends JPanel implements IView {
 				this.columns.get(tasks[i].getColumn()).addTask(tasks[i]);
 			}
 		}
+		this.scrollPane.revalidate();
 	}
 	
 	/**
