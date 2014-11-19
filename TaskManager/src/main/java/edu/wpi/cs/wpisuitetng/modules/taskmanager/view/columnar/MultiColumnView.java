@@ -60,6 +60,17 @@ public class MultiColumnView extends JPanel implements IView {
 	}
 	
 	/**
+	 * Revalidates the contents of the View
+	 */
+	public void refreshView() {
+		for (ColumnView c : columns) {
+			c.refreshView();
+			c.repaint();
+		}
+		this.scrollPane.revalidate();
+	}
+	
+	/**
 	 * Adds an array of tasks to their respective columns
 	 * @param tasks An array of tasks to add
 	 */
@@ -69,7 +80,7 @@ public class MultiColumnView extends JPanel implements IView {
 				this.columns.get(tasks[i].getColumn()).addTask(tasks[i]);
 			}
 		}
-		this.scrollPane.revalidate();
+		
 	}
 	
 	/**
@@ -111,7 +122,7 @@ public class MultiColumnView extends JPanel implements IView {
 		if (task.getColumn() < this.columns.size() && task.getColumn() >= 0) {
 			this.columns.get(task.getColumn()).addTask(task);
 		}
-		this.scrollPane.revalidate();
+		//this.scrollPane.revalidate();
 	}
 	
 	/**

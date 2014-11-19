@@ -64,6 +64,16 @@ public class ColumnView extends JPanel implements IView {
 	}
 	
 	/**
+	 * Refresh the contents of this view
+	 */
+	public void refreshView() {
+		
+		columnPanel.revalidate();
+		this.revalidate();
+		
+	}
+	
+	/**
 	 * Adds a task to the column
 	 * @param task A task model
 	 */
