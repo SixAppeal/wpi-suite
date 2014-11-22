@@ -8,7 +8,7 @@ import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
  * @author wavanrensselaer
  */
 public class Stage extends AbstractModel {
-	String name;
+	private String name;
 	
 	/**
 	 * Constructs a stage with no name
@@ -23,6 +23,22 @@ public class Stage extends AbstractModel {
 	 */
 	public Stage(String name) {
 		this.name = name;
+	}
+	
+	/**
+	 * Sets the name of the stage
+	 * @param name A name
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	/**
+	 * Gets the name of the stage
+	 * @return The name of the stage
+	 */
+	public String getName() {
+		return this.name;
 	}
 
 	@Override
