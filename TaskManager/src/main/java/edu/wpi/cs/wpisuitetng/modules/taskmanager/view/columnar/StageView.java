@@ -3,6 +3,7 @@ package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Predicate;
 
 import javax.swing.BorderFactory;
@@ -27,7 +28,7 @@ public class StageView extends JPanel implements IView {
 	private JPanel columnPanel;
 	private JLabel titleLabel;
 	private JPanel titlePanel;
-	private ArrayList<TaskView> tasks;
+	private List<TaskView> tasks;
 	
 	/**
 	 * Constructs a <code>ColumnView</code> which has a title and an

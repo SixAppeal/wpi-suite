@@ -1,6 +1,7 @@
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -12,7 +13,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
 
 /**
- * View for displaying multiple horizontal columns
+ * View for displaying multiple horizontal columns with associated tasks
  * @author wavanrensselaer
  * @author akshoop
  * @author rnorlando
@@ -21,24 +22,24 @@ public class ColumnView extends JPanel implements IView {
 	private static final long serialVersionUID = 7965275386426411767L;
 
 	private Gateway gateway;
+	
+	private Task[] tasks;
+	
 	JScrollPane scrollPane;
 	JPanel container;
-	JPanel multiColumnPanel;
 	
-	ArrayList<StageView> columns;
+	List<StageView> columns;
 	
 	/**
-	 * Constructs a <code>MultiViewColumn</code> which holds an <code>ArrayList</code>
-	 * of <code>ColumnView</code>s.
+	 * Constructs a <code>ColumnView</code> which holds an <code>ArrayList</code>
+	 * of <code>StageView</code>s.
 	 */
 	public ColumnView() {
 		this.columns = new ArrayList<StageView>();
-		this.multiColumnPanel = new JPanel();
 		this.container = new JPanel();
 		this.scrollPane = new JScrollPane(this.container);
 		
 		this.container.setLayout(new BoxLayout(this.container, BoxLayout.X_AXIS));
-		this.container.add(this.multiColumnPanel);
 		
 		this.columns.add(new StageView("New"));
 		this.columns.add(new StageView("Scheduled"));
@@ -50,13 +51,19 @@ public class ColumnView extends JPanel implements IView {
 		this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		this.setOpaque(false);
 		
-		this.multiColumnPanel.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 0));
-		this.multiColumnPanel.setLayout(new BoxLayout(this.multiColumnPanel, BoxLayout.X_AXIS));
+		this.container.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 0));
 		
 		for (StageView column : this.columns) {
-			this.multiColumnPanel.add(column);
+			this.container.add(column);
 		}
 		this.add(this.scrollPane);
+	}
+	
+	/**
+	 * Reflows the view when it's state changes.
+	 */
+	public void reflow() {
+		
 	}
 	
 	/**
