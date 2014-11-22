@@ -2,14 +2,15 @@ package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Predicate;
 
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
@@ -24,65 +25,100 @@ public class StageView extends JPanel implements IView {
 	private static final long serialVersionUID = 2174190454852340046L;
 	
 	private Gateway gateway;
-	private String title;
-	private JPanel columnPanel;
-	private JLabel titleLabel;
-	private JPanel titlePanel;
-	private List<TaskView> tasks;
+	
+	// State-related fields
+	private Task[] tasks;
+	
+	// Components
+	private String name;
+	private JLabel nameLabel;
+	private JPanel container;
+	private JScrollPane scrollPane;
+	private List<TaskView> taskViews;
 	
 	/**
-	 * Constructs a <code>ColumnView</code> which has a title and an
+	 * Constructs a <code>ColumnView</code> which has a name and an
 	 * <code>ArrayList</code> of the tasks to display.
 	 * @param title The title of the column
 	 */
-	public StageView(String title) {
-		this.title = title;
-		this.columnPanel = new JPanel();
-		this.titleLabel = new JLabel(this.title, JLabel.LEFT);
-		this.titlePanel = new JPanel();
-		this.tasks = new ArrayList<TaskView>();
-		
-		this.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 20));
+	public StageView(String name) {
+		this.nameLabel = new JLabel("", JLabel.CENTER);
+		this.container = new JPanel();
+		this.scrollPane = new JScrollPane(this.container);
+		this.taskViews = new ArrayList<TaskView>();
+
+		this.setBackground(new Color(220, 220, 220));
+		this.setMinimumSize(new Dimension(260, 0));
+		this.setMaximumSize(new Dimension(260, Integer.MAX_VALUE));
+		this.setPreferredSize(new Dimension(260, 0));
+		this.setLayout(new GridBagLayout());
 		this.setOpaque(false);
-		this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		
-		this.titlePanel.setOpaque(false);
-		this.titlePanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-		this.titlePanel.setLayout(new BoxLayout(this.titlePanel, BoxLayout.X_AXIS));
-		this.titlePanel.add(this.titleLabel);
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.anchor = GridBagConstraints.PAGE_START;
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.insets = new Insets(10, 20, 10, 20);
+		gbc.weightx = 1.0;
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		this.add(this.nameLabel);
 		
-		this.columnPanel.setBackground(new Color(220, 220, 220));
-		this.columnPanel.setLayout(new BoxLayout(this.columnPanel, BoxLayout.Y_AXIS));
-		this.columnPanel.setMinimumSize(new Dimension(260, 0));
-		this.columnPanel.setPreferredSize(new Dimension(260, 0));
-		this.columnPanel.setMaximumSize(new Dimension(260, Integer.MAX_VALUE));
+		gbc.fill = GridBagConstraints.BOTH;
+		gbc.insets = new Insets(0, 0, 0, 0);
+		gbc.weighty = 1.0;
+		gbc.gridy = 1;
+		this.add(this.scrollPane);
 		
-		this.columnPanel.add(this.titlePanel);
-		for (TaskView task : this.tasks) {
-			this.columnPanel.add(task);
-		}
-		this.add(this.columnPanel);
+		this.setState(this.name, null);
 	}
 	
 	/**
-	 * Refresh the contents of this view
+	 * Sets the name of the stage.
+	 * @param name The new name of the stage
 	 */
-	public void refreshView() {
-		
-		columnPanel.revalidate();
-		this.revalidate();
-		
+	public void setName(String name) {
+		this.setState(name, this.tasks);
 	}
 	
 	/**
-	 * Adds a task to the column
-	 * @param task A task model
+	 * Gets the name of the stage
+	 * @return The name of the stage
 	 */
-	public void addTask(Task task) {
-		TaskView taskView = new TaskView(task);
-		taskView.setGateway(this.gateway);
-		tasks.add(taskView);
-		this.columnPanel.add(taskView);
+	public String getName() {
+		return this.name;
+	}
+	
+	/**
+	 * Sets the state of tasks within this stage.
+	 * @param tasks The new task array
+	 */
+	public void setTasks(Task[] tasks) {
+		this.setState(this.name, tasks);
+	}
+	
+	/**
+	 * Gets the state of the tasks within this view
+	 * @return An array of tasks within this view
+	 */
+	public Task[] getTasks() {
+		return this.tasks;
+	}
+	
+	/**
+	 * Sets the state of this view, the name and the tasks within this stage.
+	 * @param tasks The new task array
+	 */
+	public void setState(String name, Task[] tasks) {
+		this.name = name == null ? "" : name;
+		this.tasks = tasks == null ? new Task[0] : tasks;
+		this.reflow();
+	}
+	
+	/**
+	 * Reflows this views when it's state changes.
+	 */
+	public void reflow() {
+		// TODO
 	}
 	
 	/**
@@ -91,63 +127,9 @@ public class StageView extends JPanel implements IView {
 	@Override
 	public void setGateway(Gateway gateway) {
 		this.gateway = gateway;
-		for (TaskView taskView : this.tasks) {
+		for (TaskView taskView : this.taskViews) {
 			taskView.setGateway(this.gateway);
 		}
-	}
-	
-	/**
-	 * removes all tasks from this column
-	 */
-	public void removeAllTasks() {
-		for(TaskView t : this.tasks) {
-			//System.out.println("Removing task " + t.getTaskID());
-			this.columnPanel.remove(t);
-			//System.out.println("Task removed from ColumnPanel!");
-		}
-		this.tasks.clear(); //removing a task from the array we are currently iterating over is /illegal/
-		
-	}
-	
-	/**
-	 * removes a task from this column
-	 * @param task the task to be removed
-	 */
-	public void removeTask(final Task task) {
-		for (TaskView t: this.tasks){
-			if (t.getTaskID() == task.getId()) {
-				this.columnPanel.remove(t);
-				
-			}
-		}
-		
-		//This predicate is used to remove the tasks outside of the iterator
-		this.tasks.removeIf( new Predicate<TaskView>() {
-			@Override
-			public boolean test(TaskView t) {
-				return t.getTaskID() == task.getId();
-			}		
-		});
-		
-		this.columnPanel.revalidate();
-		this.columnPanel.repaint();
-		
-		this.revalidate();
-		
-	}
-
-	/**
-	 * @return title of this Column
-	 */
-	public String getTitle() {
-		return title;
-	}
-	
-	/**
-	 * @return the number of tasks in this column
-	 */
-	public int getTaskCount() {
-		return this.tasks.size();
 	}
 	
 }
