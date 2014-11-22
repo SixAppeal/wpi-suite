@@ -47,7 +47,7 @@ public class TestTask {
 	}
 	
 	/**
-	 * tests the copy from function. makes sure constructor with no title initializes to ""
+	 * tests the copy from function. makes sure constructor with no title initializes to "" 
 	 * copies the title from another one and makes sure it changed
 	 */
 	@Test

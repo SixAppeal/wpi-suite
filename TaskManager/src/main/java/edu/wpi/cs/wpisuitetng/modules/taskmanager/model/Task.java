@@ -7,6 +7,7 @@ import java.util.List;
 import com.google.gson.Gson;
 
 import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.util.TaskUtil;
 
 /**
  * 
@@ -18,34 +19,24 @@ import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
  */
 public class Task extends AbstractModel {
 
-	int id;
+	private int id;
 	private boolean archived;
-	String title;
-	String description;
-	TaskStatus status;
-	List<String> assignedTo;
-	Integer estimatedEffort; 
-	Integer actualEffort;
-	Date dueDate;
-	List<Activity> activities;
-	Integer column;
-	//List<Requirement> associatedRequirement;
+	private String title;
+	private String description;
+	private TaskStatus status;
+	private List<String> assignedTo;
+	private Integer estimatedEffort; 
+	private Integer actualEffort;
+	private Date dueDate;
+	private List<Activity> activities;
+	//Requirement associatedRequirement;
 
 	/**
-	 * Empty constructor for the Task class
+	 * Default constructor (dummy task for initialization)
 	 */
 	public Task() {
-		super();
-		this.title = "";
-		this.description = "";
-		this.status = new TaskStatus("New");
-		this.assignedTo = new LinkedList<String>();
-		this.estimatedEffort = -1;
-		this.actualEffort = 1;
-		this.dueDate = new Date();
-		this.activities = new LinkedList<Activity>();
-		this.column = 0;
-		this.archived = false;
+		this("Dummy", "Dummy", new TaskStatus("New"), new LinkedList<String>(), 1, 1,
+				new Date(), new LinkedList<Activity>());
 	}
 
 	/**
@@ -65,196 +56,77 @@ public class Task extends AbstractModel {
 			List<String> assignedTo, Integer estimatedEffort,
 			Integer actualEffort, Date dueDate, List<Activity> activities) throws IllegalArgumentException {
 		super();
-		this.title = title;
-		this.description = description;
-		this.status = status;
+		this.title = TaskUtil.validateTitle(title);
+		this.description = TaskUtil.validateDescription(description);
+		this.status = TaskUtil.validateStage(status);
 		this.assignedTo = assignedTo;
-
-		//check that estimatedEffort is positive
-		if (estimatedEffort > 0){
-			this.estimatedEffort = estimatedEffort;
-		}
-		else {
-			throw new IllegalArgumentException("Estimated Effort Must Be Greater Than Zero!");
-		}
-		
-		if (actualEffort >= 0){
-			this.actualEffort = actualEffort;
-		}
-		else {
-			throw new IllegalArgumentException("Actual Effort Must Be Greater Than Or Equal To Zero!");
-		}
-
-		this.dueDate = dueDate;
+		this.estimatedEffort = TaskUtil.validateEffort(estimatedEffort);
+		this.actualEffort = TaskUtil.validateEffort(actualEffort);
+		this.dueDate = TaskUtil.validateDueDate(dueDate);
 		this.activities = activities;
-		this.column = 0;
 		this.archived = false;
 	}
-
+	
 	/**
-	 * Constructor for a task that does not have list of members assigned to it or a list of activities
-	 * 
-	 * 
-	 * @param title name for the task
-	 * @param description explanation of the task
-	 * @param status what point the task is at (in progress, not started, etc.)
-	 * @param estimatedEffort number that represents how much effort (units of work)
-	 * @param actualEffort number that represents the actual effort
-	 * @param dueDate when the task is due
-	 * @throws IllegalArgumentException
+	 * Copy-Constructor
+	 * @param t Task to copy from.
 	 */
-
-	public Task(String title, String description, TaskStatus status, Integer estimatedEffort,
-			Integer actualEffort, Date dueDate) throws IllegalArgumentException {
-		super();
-
-		this.title = title;
-		this.description = description;
-		this.status = status;
-		this.assignedTo = new LinkedList<String>();
-		//checks that estimatedEffort is positive
-		if (estimatedEffort > 0){
-			this.estimatedEffort = estimatedEffort;
-		}
-		else {
-			throw new IllegalArgumentException("Estimated Effort Must Be Greater Than Zero!");
-		}
-		//checks that actualEffort is positive
-		if (actualEffort > 0){
-			this.actualEffort = actualEffort;
-		}
-		else {
-			throw new IllegalArgumentException("Actual Effort Must Be Greater Than Zero!");
-		}
-		this.dueDate = dueDate;
-		this.activities = new LinkedList<Activity>();
-		this.column = 0;
-		this.archived = false;
+	public Task(Task t) {
+		this.id = t.getId();
+		this.title = new String(t.getTitle());
+		this.description = new String(t.getDescription());
+		this.status = new TaskStatus(t.getStatus());
+		this.assignedTo = new LinkedList<String>(t.getAssignedTo());
+		this.estimatedEffort = new Integer(t.getEstimatedEffort());
+		this.actualEffort = new Integer(t.getActualEffort());
+		this.dueDate = new Date(t.getDueDate().getTime());
+		this.activities = new LinkedList<Activity>(t.getActivities());
 	}
-
+	
 	/**
-	 * Constructor for a task with only a title
-	 * @param title name for the task
-	 * @throws IllegalArgumentException
+	 * Checks to see if the objects are equal according to reference then id number
+	 * @param obj:  Object to compare against
 	 */
-	public Task(String title) throws IllegalArgumentException {
-		super();
-		this.title = title;
-		this.description = "";
-		this.status = null;
-		this.assignedTo = new LinkedList<String>();
-		this.estimatedEffort = -1;
-		this.actualEffort = -1;
-		this.dueDate = null;
-		this.activities = new LinkedList<Activity>();
-		this.column = 0;
-		this.archived = false;
+	public boolean equals(Object obj) {
+		//If obj is an instance of Task then return true if there's a reference math OR an ID match
+		return ((obj instanceof Task) && ((this == obj) || (((Task)obj).getId() == this.id)));
 	}
-
-
+	
 	/**
-	 * Returns an instance of Requirement constructed using the given
-	 * Requirement encoded as a JSON string.
-	 * 
-	 * @param json
-	 *            JSON-encoded Requirement to deserialize @return the
-	 *            Requirement contained in the given JSON
+	 * Determines the hashCode of the task to be its ID
 	 */
-	public static Task fromJson(String json) {
-		return new Gson().fromJson(json, Task.class);
-
-	}
-
+	public int hashCode() { return this.id; }
+	
 	/**
-	 * Method toJSON. @return String * @see
-	 * edu.wpi.cs.wpisuitetng.modules.Model#toJSON() * @see
-	 * edu.wpi.cs.wpisuitetng.modules.Model#toJSON()
-	 */
-	@Override
-	/**This returns a Json encoded String representation of this requirement object.
-	 * 
-	 * @return a Json encoded String representation of this requirement
-	 * 
+	 * @return a JSON text representation of this task
 	 */
 	public String toJson() {
 		return new Gson().toJson(this, Task.class);
 	}
 
 	/**
-	 * Copies all of the values from the given requirement to this requirement.
-	 * 
-	 * @param toCopyFrom
-	 *            the requirement to copy from.
-	 */
-	public void copyFrom(Task toCopyFrom) {
-		//
-		//If not it can be with Requirement.fromJson(requirement.toJson)
-		this.description = toCopyFrom.description;
-		this.title = toCopyFrom.title;
-		this.status = toCopyFrom.status;
-		this.assignedTo = toCopyFrom.assignedTo;
-		this.id = toCopyFrom.id;
-		this.estimatedEffort = toCopyFrom.estimatedEffort;
-		this.actualEffort = toCopyFrom.actualEffort;
-		this.status = toCopyFrom.status;
-		this.dueDate = toCopyFrom.dueDate;
-		this.activities = toCopyFrom.activities;
-		this.column = toCopyFrom.column;
-		this.archived = toCopyFrom.archived;
-	}
-
-	/**
-	 * Checks to see if the objects are equal by first checking the Task id then the title.
-	 * 
-	 * @param obj:  Object to compare against
-	 */
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-
-		Task other = (Task) obj;
-
-		if (this.id != other.id) {
-			return false;
-		}
-		if (this.title.compareTo(other.title) != 0) {
-			return false;
-		}
-
-		return true;
-	}
-
-	/**
-	 * Necessary Method Implementation
+	 * Necessary Method Implementation: our task model does not use this.
 	 */
 	@Override
 	public void save() {
-		// TODO Auto-generated method stub
-
+		throw new RuntimeException("Someone called save() on a task. This violates our methodology.");
 	}
 
 	/**
-	 * Necessary Method Implementation
+	 * Necessary Method Implementation: our task model does not use this.
 	 */
 	@Override
 	public void delete() {
-		// TODO Auto-generated method stub
+		throw new RuntimeException("Someone called delete() on a task. This violates our methodology.");
 	}
 
 	/**
-	 * Necessary Method Implementation
-	 * 
+	 * Necessary Method Implementation: our task model does not use this.
 	 */
 	@Override
 	public Boolean identify(Object o) {
-		// TODO Auto-generated method stub
-		return null;
+		throw new RuntimeException("Someone called identify() on a task. Please use equals() instead.");
 	}
-
 
 	/**
 	 * @return Title of task
@@ -411,22 +283,6 @@ public class Task extends AbstractModel {
 	 */
 	public void setActivities(List<Activity> activities) {
 		this.activities = activities;
-	}
-
-	/**
-	 * 
-	 * @return column task is associated with
-	 */
-	public Integer getColumn() {
-		return column;
-	}
-
-	/**
-	 * 
-	 * @param column column task is associated with
-	 */
-	public void setColumn(Integer column) {
-		this.column = column;
 	}
 	
 	/**

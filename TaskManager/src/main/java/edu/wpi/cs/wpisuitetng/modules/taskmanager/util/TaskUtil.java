@@ -2,9 +2,28 @@ package edu.wpi.cs.wpisuitetng.modules.taskmanager.util;
 
 import java.util.Date;
 
+import com.google.gson.Gson;
+
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.TaskStatus;
 
+/**
+ * A utility class for managing Tasks.
+ * @author wmtemple
+ *
+ */
 public class TaskUtil {
+	
+	/**
+	 * Deserializes a task from JSON
+	 * 
+	 * @param json JSON representation of task
+	 * @return the Task represented by the given JSON
+	 */
+	public static Task fromJson(String json) {
+		return new Gson().fromJson(json, Task.class);
+
+	}
 	
 	/**
 	 * Checks a String against the ruleset for valid task titles.

@@ -19,13 +19,19 @@ public class TaskStatus {
 		this.status = status;
 	}
 	
+	public TaskStatus(TaskStatus ts) {
+		this.status = new String(ts.getStatus());
+	}
+
 	/**
-	 * We require equality checks in other classes
+	 * TaskStatus equality is based on the string which identifies them.
 	 */
 	public boolean equals(Object o) {
 		return (o instanceof TaskStatus) && ((TaskStatus)o).getStatus().equals(this.status);
 	}
-	
+	/**
+	 * 
+	 */
 	public int hashCode() {
 		return status.hashCode();
 	}
