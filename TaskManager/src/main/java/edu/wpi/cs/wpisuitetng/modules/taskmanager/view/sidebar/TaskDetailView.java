@@ -13,6 +13,8 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 
+import org.jdesktop.swingx.JXSearchPanel;
+
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
@@ -62,6 +64,8 @@ public class TaskDetailView extends JPanel implements IView {
 	JButton archiveButton; //Archives the task.
 	JButton editButton; //Opens the task for editing.
 	
+	JXSearchPanel searchBox;
+	
 	public TaskDetailView() {
 		Color labelColor = new Color(160, 160, 160);
 		
@@ -101,6 +105,8 @@ public class TaskDetailView extends JPanel implements IView {
 			}
 		});
 		editButton.setEnabled(false);
+		
+		searchBox = new JXSearchPanel();
 		
 		this.setLayout(new GridBagLayout());
 		this.setOpaque(false);
@@ -170,6 +176,14 @@ public class TaskDetailView extends JPanel implements IView {
 		//gbc.gridwidth = 2;
 		gbc.gridx = 1;
 		this.add(editButton, gbc);
+		
+		gbc.insets.top = 20;
+		gbc.gridy = 10;
+		gbc.gridx = 0;
+		gbc.gridwidth = 2;
+		gbc.gridheight = 2;
+		this.add(searchBox, gbc);
+		
 	}
 	
 	/**

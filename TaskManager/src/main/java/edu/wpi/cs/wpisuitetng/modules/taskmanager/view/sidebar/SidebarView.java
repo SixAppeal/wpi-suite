@@ -27,6 +27,7 @@ public class SidebarView extends JPanel implements IView {
 	private TaskEditView editView;
 	private TaskCreateView createView;
 	private TaskDefaultView defaultView;
+	private SearchBox searchBox;
 	
 	/**
 	 * Constructs a sidebar view
@@ -37,6 +38,7 @@ public class SidebarView extends JPanel implements IView {
 		this.createView = new TaskCreateView();
 		this.editView = new TaskEditView();
 		this.defaultView = new TaskDefaultView();
+		this.searchBox = new SearchBox();
 		
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
@@ -55,6 +57,7 @@ public class SidebarView extends JPanel implements IView {
 		this.container.add(this.createView);
 		this.container.add(this.editView);
 		this.container.add(this.detailView);
+		this.container.add(this.searchBox);
 		this.add(container);
 	}
 	
@@ -112,6 +115,15 @@ public class SidebarView extends JPanel implements IView {
 		this.detailView.updateView(task);
 		this.curView.setVisible(true);
 		this.detailView.revalidate();
+	}
+	
+	/**
+	 * Shows the search box
+	 */
+	public void showSearchBox() {
+		this.curView.setVisible(false);
+		this.curView = this.searchBox;
+		this.curView.setVisible(true);
 	}
 	
 	/**

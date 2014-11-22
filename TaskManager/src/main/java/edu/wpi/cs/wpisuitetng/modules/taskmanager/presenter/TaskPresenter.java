@@ -17,6 +17,7 @@ import edu.wpi.cs.wpisuitetng.network.models.IRequest;
  * @author wavanrensselaer
  * @author dpseaman
  * @author nhhughes
+ * @author akshoop
  */
 
 public class TaskPresenter implements IPresenter{
@@ -266,4 +267,10 @@ public class TaskPresenter implements IPresenter{
 		}
 	}
 
+	/**
+	 * Tells the SidebarView to show the search box
+	 */
+	public void showSearch() {
+		this.gateway.toView("SidebarView", "showSearchBox");
+	}
 }

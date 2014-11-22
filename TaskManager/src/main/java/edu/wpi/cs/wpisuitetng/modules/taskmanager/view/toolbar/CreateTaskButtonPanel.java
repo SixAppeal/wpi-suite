@@ -35,6 +35,7 @@ public class CreateTaskButtonPanel extends ToolbarGroupView implements IView {
 	private JButton createTaskButton = new JButton("<html>Create<br />Task</html>");
 	private JButton createPanelButton = new JButton("<html>Create<br />Panel</html>");
 	//private JButton refreshPanelButton = new JButton("<html>Refresh<br />Panel</html>");
+	private JButton searchPanelButton = new JButton("<html>Search <br />Panel</html>");
 	private final Action createTask = new CreateTaskAction();
 	private final Action createPanel = new CreatePanelAction();
 	private final JPanel contentPanel = new JPanel();
@@ -67,6 +68,15 @@ public class CreateTaskButtonPanel extends ToolbarGroupView implements IView {
 			
 		});*/
 		
+		// Action listener for searchPanelButton
+		searchPanelButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				gateway.toPresenter("TaskPresenter", "showSearch");
+			}
+		});
+		
 		// Action listener for createPanelButton
 		createPanelButton.setAction(createPanel);
 
@@ -74,6 +84,7 @@ public class CreateTaskButtonPanel extends ToolbarGroupView implements IView {
 		//uncomment the line below once the controller can handle creating multiple columns
 		//contentPanel.add(createPanelButton);
 		//contentPanel.add(refreshPanelButton);
+		contentPanel.add(searchPanelButton);
 		contentPanel.setOpaque(false);
 		this.add(contentPanel);
 	}
