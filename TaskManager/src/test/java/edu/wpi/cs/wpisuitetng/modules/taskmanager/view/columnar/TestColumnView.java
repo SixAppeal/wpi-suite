@@ -6,21 +6,21 @@ import org.junit.Before;
 import org.junit.Test;
 
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar.MultiColumnView;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar.ColumnView;
 
 /**
  * Tests for the multi-column view
  * @author wavanrensselaer
  */
 public class TestColumnView {
-	MultiColumnView multiColumnView;
+	ColumnView multiColumnView;
 	
 	/**
 	 * Initialize a <code>MultiColumnView</code> for testing
 	 */
 	@Before
 	public void setup() {
-		multiColumnView = new MultiColumnView();
+		multiColumnView = new ColumnView();
 	}
 	
 	/**

@@ -13,7 +13,7 @@ import javax.swing.JPanel;
 import edu.wpi.cs.wpisuitetng.janeway.modules.IJanewayModule;
 import edu.wpi.cs.wpisuitetng.janeway.modules.JanewayTabModel;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.*;
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar.MultiColumnView;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar.ColumnView;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar.SidebarView;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.toolbar.ToolbarView;
 
@@ -44,7 +44,7 @@ public class TaskManager implements IJanewayModule {
 	List<JanewayTabModel> tabs;
 	Gateway gateway;
 	JPanel mainPanel;
-	MultiColumnView columnView;
+	ColumnView columnView;
 	SidebarView sidebarView;
 	TaskPresenter taskPresenter;
 	
@@ -61,7 +61,7 @@ public class TaskManager implements IJanewayModule {
 
 		gateway = new Gateway();
 		mainPanel = new JPanel();
-		columnView = new MultiColumnView();
+		columnView = new ColumnView();
 		sidebarView = new SidebarView();
 		
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.X_AXIS));

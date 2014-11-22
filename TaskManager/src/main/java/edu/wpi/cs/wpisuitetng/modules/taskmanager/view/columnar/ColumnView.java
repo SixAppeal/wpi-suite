@@ -1,87 +1,128 @@
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar;
 
-import java.awt.Color;
-import java.awt.Dimension;
 import java.util.ArrayList;
-import java.util.function.Predicate;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
 
 /**
- * View for an individual column in the columnal layout
+ * View for displaying multiple horizontal columns
  * @author wavanrensselaer
+ * @author akshoop
  * @author rnorlando
  */
 public class ColumnView extends JPanel implements IView {
-	private static final long serialVersionUID = 2174190454852340046L;
-	
+	private static final long serialVersionUID = 7965275386426411767L;
+
 	private Gateway gateway;
-	private String title;
-	private JPanel columnPanel;
-	private JLabel titleLabel;
-	private JPanel titlePanel;
-	private ArrayList<TaskView> tasks;
+	JScrollPane scrollPane;
+	JPanel container;
+	JPanel multiColumnPanel;
+	
+	ArrayList<StageView> columns;
 	
 	/**
-	 * Constructs a <code>ColumnView</code> which has a title and an
-	 * <code>ArrayList</code> of the tasks to display.
-	 * @param title The title of the column
+	 * Constructs a <code>MultiViewColumn</code> which holds an <code>ArrayList</code>
+	 * of <code>ColumnView</code>s.
 	 */
-	public ColumnView(String title) {
-		this.title = title;
-		this.columnPanel = new JPanel();
-		this.titleLabel = new JLabel(this.title, JLabel.LEFT);
-		this.titlePanel = new JPanel();
-		this.tasks = new ArrayList<TaskView>();
+	public ColumnView() {
+		this.columns = new ArrayList<StageView>();
+		this.multiColumnPanel = new JPanel();
+		this.container = new JPanel();
+		this.scrollPane = new JScrollPane(this.container);
 		
-		this.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 20));
-		this.setOpaque(false);
+		this.container.setLayout(new BoxLayout(this.container, BoxLayout.X_AXIS));
+		this.container.add(this.multiColumnPanel);
+		
+		this.columns.add(new StageView("New"));
+		this.columns.add(new StageView("Scheduled"));
+		this.columns.add(new StageView("In Progress"));
+		this.columns.add(new StageView("Complete"));
+		
+		this.scrollPane.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+		
 		this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+		this.setOpaque(false);
 		
-		this.titlePanel.setOpaque(false);
-		this.titlePanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-		this.titlePanel.setLayout(new BoxLayout(this.titlePanel, BoxLayout.X_AXIS));
-		this.titlePanel.add(this.titleLabel);
+		this.multiColumnPanel.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 0));
+		this.multiColumnPanel.setLayout(new BoxLayout(this.multiColumnPanel, BoxLayout.X_AXIS));
 		
-		this.columnPanel.setBackground(new Color(220, 220, 220));
-		this.columnPanel.setLayout(new BoxLayout(this.columnPanel, BoxLayout.Y_AXIS));
-		this.columnPanel.setMinimumSize(new Dimension(260, 0));
-		this.columnPanel.setPreferredSize(new Dimension(260, 0));
-		this.columnPanel.setMaximumSize(new Dimension(260, Integer.MAX_VALUE));
-		
-		this.columnPanel.add(this.titlePanel);
-		for (TaskView task : this.tasks) {
-			this.columnPanel.add(task);
+		for (StageView column : this.columns) {
+			this.multiColumnPanel.add(column);
 		}
-		this.add(this.columnPanel);
+		this.add(this.scrollPane);
 	}
 	
 	/**
-	 * Refresh the contents of this view
+	 * Revalidates the contents of the View
 	 */
 	public void refreshView() {
-		
-		columnPanel.revalidate();
-		this.revalidate();
+		for (StageView c : columns) {
+			c.refreshView();
+			c.repaint();
+		}
+		this.scrollPane.revalidate();
+	}
+	
+	/**
+	 * Adds an array of tasks to their respective columns
+	 * @param tasks An array of tasks to add
+	 */
+	public void addAllTasks(Task[] tasks) {
+		for (int i = 0; i < tasks.length; i++) {
+			if (tasks[i].getColumn() < this.columns.size() && tasks[i].getColumn() >= 0) {
+				this.columns.get(tasks[i].getColumn()).addTask(tasks[i]);
+			}
+		}
 		
 	}
 	
 	/**
-	 * Adds a task to the column
-	 * @param task A task model
+	 * removes a task from this columnar view
+	 * @param task the task to be removed
+	 */
+	public void removeTask(Task task) {
+		/*if (task.getColumn() < this.columns.size() && task.getColumn() >= 0) {
+			this.columns.get(task.getColumn()).removeTask(task);
+			this.scrollPane.revalidate();
+		}*/
+		
+		for( StageView c : columns ) {
+			c.removeTask(task);
+			c.revalidate();
+		}
+		
+		this.scrollPane.revalidate();
+	}
+	
+	/**
+	 * removes all tasks from this columnar view
+	 */
+	public void removeAllTasks() {
+		for (StageView c : columns) {
+			//System.out.println("Removing all tasks from column " + c.getTitle());
+			c.removeAllTasks();
+			//System.out.println("Finished removing!");
+		}
+		
+	}
+	
+	/**
+	 * Adds a single task to it's column
+	 * @param task The task to add
 	 */
 	public void addTask(Task task) {
-		TaskView taskView = new TaskView(task);
-		taskView.setGateway(this.gateway);
-		tasks.add(taskView);
-		this.columnPanel.add(taskView);
+		if ( task.isArchived() ) System.err.println("View trying to add Archived Task!");
+		if (task.getColumn() < this.columns.size() && task.getColumn() >= 0) {
+			this.columns.get(task.getColumn()).addTask(task);
+		}
+		//this.scrollPane.revalidate();
 	}
 	
 	/**
@@ -90,63 +131,8 @@ public class ColumnView extends JPanel implements IView {
 	@Override
 	public void setGateway(Gateway gateway) {
 		this.gateway = gateway;
-		for (TaskView taskView : this.tasks) {
-			taskView.setGateway(this.gateway);
+		for (StageView column : this.columns) {
+			column.setGateway(gateway);;
 		}
 	}
-	
-	/**
-	 * removes all tasks from this column
-	 */
-	public void removeAllTasks() {
-		for(TaskView t : this.tasks) {
-			//System.out.println("Removing task " + t.getTaskID());
-			this.columnPanel.remove(t);
-			//System.out.println("Task removed from ColumnPanel!");
-		}
-		this.tasks.clear(); //removing a task from the array we are currently iterating over is /illegal/
-		
-	}
-	
-	/**
-	 * removes a task from this column
-	 * @param task the task to be removed
-	 */
-	public void removeTask(final Task task) {
-		for (TaskView t: this.tasks){
-			if (t.getTaskID() == task.getId()) {
-				this.columnPanel.remove(t);
-				
-			}
-		}
-		
-		//This predicate is used to remove the tasks outside of the iterator
-		this.tasks.removeIf( new Predicate<TaskView>() {
-			@Override
-			public boolean test(TaskView t) {
-				return t.getTaskID() == task.getId();
-			}		
-		});
-		
-		this.columnPanel.revalidate();
-		this.columnPanel.repaint();
-		
-		this.revalidate();
-		
-	}
-
-	/**
-	 * @return title of this Column
-	 */
-	public String getTitle() {
-		return title;
-	}
-	
-	/**
-	 * @return the number of tasks in this column
-	 */
-	public int getTaskCount() {
-		return this.tasks.size();
-	}
-	
 }
