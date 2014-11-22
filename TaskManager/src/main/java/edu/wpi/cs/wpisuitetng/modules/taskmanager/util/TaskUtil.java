@@ -42,24 +42,13 @@ public class TaskUtil {
 	}
 	
 	/**
-	 * 
-	 * @param input
-	 * @return
+	 * Checks an Integer against the ruleset for valid task efforts
+	 * @param input The integer entered by the user
+	 * @return The same Integer, provided that it is valid.
 	 * @throws IllegalArgumentException
 	 */
-	public static Integer validateEstEffort(Integer input) throws IllegalArgumentException {
-		//TODO: Define implementation of validation
-		return input;
-	}
-	
-	/**
-	 * 
-	 * @param input
-	 * @return
-	 * @throws IllegalArgumentException
-	 */
-	public static Integer validateActEffort(Integer input) throws IllegalArgumentException {
-		//TODO: Define implementation of validation
+	public static Integer validateEffort(Integer input) throws IllegalArgumentException {
+		if ( input <= 0 ) throw new IllegalArgumentException("Estimated Effort must be greater than zero.");
 		return input;
 	}
 	
