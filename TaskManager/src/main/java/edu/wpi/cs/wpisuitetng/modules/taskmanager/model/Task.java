@@ -38,11 +38,11 @@ public class Task extends AbstractModel {
 		super();
 		this.title = "";
 		this.description = "";
-		this.status = null;
+		this.status = new TaskStatus("New");
 		this.assignedTo = new LinkedList<String>();
 		this.estimatedEffort = -1;
-		this.actualEffort = -1;
-		this.dueDate = null;
+		this.actualEffort = 1;
+		this.dueDate = new Date();
 		this.activities = new LinkedList<Activity>();
 		this.column = 0;
 		this.archived = false;
@@ -255,18 +255,6 @@ public class Task extends AbstractModel {
 		return null;
 	}
 
-	/**
-	 * Returns a Concantenated String of all the members in the assignedTo List
-	 * String memberList
-	 * @return memberList
-	 */
-	public String getMemberList() {
-		StringBuilder memberList = new StringBuilder();
-		for (String m: this.assignedTo){
-			memberList.append(m).append(", ");
-		}
-		return memberList.toString();
-	}
 
 	/**
 	 * @return Title of task

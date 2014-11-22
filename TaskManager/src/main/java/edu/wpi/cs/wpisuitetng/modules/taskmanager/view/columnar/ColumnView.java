@@ -64,6 +64,16 @@ public class ColumnView extends JPanel implements IView {
 	}
 	
 	/**
+	 * Refresh the contents of this view
+	 */
+	public void refreshView() {
+		
+		columnPanel.revalidate();
+		this.revalidate();
+		
+	}
+	
+	/**
 	 * Adds a task to the column
 	 * @param task A task model
 	 */
@@ -90,15 +100,11 @@ public class ColumnView extends JPanel implements IView {
 	 */
 	public void removeAllTasks() {
 		for(TaskView t : this.tasks) {
-			System.out.println("Removing task " + t.getTaskID());
+			//System.out.println("Removing task " + t.getTaskID());
 			this.columnPanel.remove(t);
-			System.out.println("Task removed from ColumnPanel!");
+			//System.out.println("Task removed from ColumnPanel!");
 		}
 		this.tasks.clear(); //removing a task from the array we are currently iterating over is /illegal/
-		this.columnPanel.revalidate();
-		this.columnPanel.repaint();
-		
-		this.revalidate();
 		
 	}
 	

@@ -31,7 +31,7 @@ public class FormGroup extends JPanel {
 		
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.weightx = 1.0;
-		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.fill = GridBagConstraints.BOTH;
 		gbc.gridy = 0;
 
 		for (int i = 0; i < fields.length; i++) {

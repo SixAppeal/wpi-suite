@@ -78,4 +78,10 @@ public class DummyModule implements IJanewayModule {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void cleanup() {
+		// TODO Auto-generated method stub
+		
+	}
 }

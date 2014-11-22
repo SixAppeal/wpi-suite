@@ -90,6 +90,16 @@ public class JanewayFrame extends JFrame {
 		KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(keyEventDispatcher);
 		addGlobalKeyboardShortcuts(keyEventDispatcher);
 		
+		//This will give us a way to clean up our modules
+		addWindowListener(new WindowAdapter()
+        {
+            @Override
+            public void windowClosing(WindowEvent e)
+            {
+                for(IJanewayModule m : modules) m.cleanup();
+            }
+        });
+		
 	}
 	
 	public static JanewayFrame getInstance() {
@@ -115,7 +125,7 @@ public class JanewayFrame extends JFrame {
 	}
 	
 	/**
-	 * Overrode this method to provide a hacky solution to late-stage init on Janeway Modules
+	 * Overrode this method to provide late-stage init on Janeway Modules
 	 */
 	@Override
 	public void setVisible(boolean visible) {

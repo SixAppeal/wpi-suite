@@ -78,5 +78,11 @@ public class RequirementManager implements IJanewayModule {
 		
 	}
 
+	@Override
+	public void cleanup() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
 

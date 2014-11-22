@@ -183,6 +183,7 @@ public class TaskPresenter implements IPresenter{
 	 */
 	public void removeAllTasks() {
 		this.gateway.toView("ColumnView", "removeAllTasks");
+		//this.gateway.toView("ColumnView", "refreshView");
 	}
 	
 	/**
@@ -221,6 +222,7 @@ public class TaskPresenter implements IPresenter{
 	 */
 	public void addAllToView( Task[] tasks ) {
 		for( Task t : tasks) addToView(t);
+		this.gateway.toView("ColumnView", "refreshView");
 	}
 	
 	/**
@@ -258,8 +260,10 @@ public class TaskPresenter implements IPresenter{
 	 */
 	public void updateMembers(String[] to_submit) {
 		this.members = to_submit;
-		this.gateway.toView("SidebarView", "UpdateMembers", (Object []) to_submit); 
-		
+		this.gateway.toView("SidebarView", "clearMembers");
+		for (String member : to_submit) {
+			this.gateway.toView("SidebarView", "updateMembers", member); 
+		}
 	}
 
 }

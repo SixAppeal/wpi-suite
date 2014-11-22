@@ -67,17 +67,6 @@ public class TestTask {
 		assertEquals(1, 1); 
 	}
 	
-	/**
-	 * tests that the title truncates if you use one longer than 99 chars
-	 */
-	@Test(expected = IllegalArgumentException.class)
-	public void testSetTitle(){
-		Task newTask = new Task();
-		assertEquals(newTask.title,"");
-		newTask.setTitle("0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789000000000000000000000000000000000");
-		assertEquals(newTask.title,"012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678");
-
-	}
 	
 	/**
 	 * Function to test that the actual effort changes with the set method and is NOT negative 

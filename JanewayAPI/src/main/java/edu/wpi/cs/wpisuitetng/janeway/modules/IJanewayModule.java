@@ -36,4 +36,9 @@ public interface IJanewayModule {
 	 */
 	public void finishInit();
 	
+	/**
+	 * This method is invoked on each module once the root JanewayFrame is closed.
+	 */
+	public void cleanup();
+	
 }
