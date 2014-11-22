@@ -166,4 +166,13 @@ public class LocalCache implements Cache {
 		return false;
 	}
 
+	/**
+	 * @see edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.ICache#subscribe()
+	 */
+	@Override
+	public void subscribe(String topic, String action, String callback) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

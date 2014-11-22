@@ -60,4 +60,12 @@ public interface Cache {
 	 * @return whether a cache was successfully selected or not
 	 */
 	public boolean clearCache(String request);
+	
+	/**
+	 * Used to have a view / presenter updated when the network has finished everything
+	 * @param topic task, archive, etc..
+	 * @param action update, create, delete, etc...
+	 * @param callback class:method to have the gateway call
+	 */
+	public void subscribe(String topic, String action, String callback);
 }
