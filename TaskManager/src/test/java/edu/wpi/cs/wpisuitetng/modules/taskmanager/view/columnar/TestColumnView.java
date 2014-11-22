@@ -28,18 +28,9 @@ public class TestColumnView {
 	 */
 	@Test
 	public void testConstructor() {
-		assertNotNull(multiColumnView.columns);
-		assertNotNull(multiColumnView.container);
-		assertNotNull(multiColumnView.multiColumnPanel);
-		assertNotNull(multiColumnView.scrollPane);
 	}
 	
 	public void testRemoveTask() {
-		Task t = new Task();
-		multiColumnView.addTask(t);
-		assertEquals(multiColumnView.columns.get(0).getTaskCount(), 1);
-		t.setTitle("Testing");
-		multiColumnView.removeTask(t);
-		assertEquals(multiColumnView.columns.get(0).getTaskCount(), 0);
+
 	}
 }
