@@ -16,6 +16,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.util.TaskUtil;
  * @author nhhughes
  * @author srojas
  * @author jrhennessy
+ * @author Thhughes
  */
 public class Task extends AbstractModel {
 

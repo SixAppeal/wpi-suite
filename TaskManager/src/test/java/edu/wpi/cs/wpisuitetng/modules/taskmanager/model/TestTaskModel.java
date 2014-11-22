@@ -13,12 +13,15 @@ import org.junit.Test;
  * Unit Tests for TaskModel
  * 
  * @author nhhughes
+ * @author Thhughes
+ * @author wmtemple
+ * @author jrhennessy
  *
  */
 public class TestTaskModel {
 
-	Task task1 = new Task("Task 1");
-	Task task2 = new Task("Task 2");
+	Task task1 = new Task();
+	Task task2 = new Task();
 	
 	List<Task> tasks1 = new ArrayList<Task>();
 	List<Task> tasks2 = new ArrayList<Task>();
@@ -30,8 +33,8 @@ public class TestTaskModel {
 	 */
 	@Before
 	public void setup() {
-		task1.id = 0;
-		task2.id = 1;
+		task1.setId(0);
+		task2.setId(1);
 		tasks1.add(task1);
 		tasks2.add(task1);
 		tasks2.add(task2);
@@ -54,7 +57,7 @@ public class TestTaskModel {
 	 * Test that task columns can be changed
 	 */
 	@Test
-	public void testChangeColumn() {
+	public void testChangeSatus() {
 		model.addTask(task1);
 		model.addTask(task2);
 		model.changeColumn(0, 5);

@@ -10,6 +10,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.TaskStatus;
 /**
  * A utility class for managing Tasks.
  * @author wmtemple
+ * @author Thhughes
  *
  */
 public class TaskUtil {

@@ -2,6 +2,9 @@ package edu.wpi.cs.wpisuitetng.modules.taskmanager.model;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+
+import java.util.Date;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -11,6 +14,8 @@ import org.junit.Test;
  * @author nhhughes
  * @author srojas
  * @author jrhennessy
+ * @author Thhughes
+ * 
  *
  */
 public class TestTask {
@@ -22,7 +27,16 @@ public class TestTask {
 	 */
 	@Before
 	public void setup() {
-		this.task = new Task("testing da tasks");
+		this.task = new Task();
+		/*
+		 * Default: 
+		 * Title 		= Dummy
+		 * Description	= Dummy
+		 * Efforts 		= 1
+		 * Date 		= new Date()
+		 * Status		= New
+		 * 
+		 */
 	}
 	
 	/**
@@ -32,17 +46,15 @@ public class TestTask {
 	public void testConstructor() {
 		Task newTask = new Task();
 		assertNotNull(newTask);
-		assertEquals(newTask.title, "");
-		assertEquals(this.task.title, "testing da tasks");
-		assertEquals(newTask.activities.size(),0);
-		assertEquals(newTask.actualEffort, new Integer(-1));
-		assertEquals(newTask.assignedTo.size(), 0);
-		assertEquals(newTask.column, new Integer(0));
-		assertEquals(newTask.description, "");
-		assertEquals(newTask.dueDate, null);
-		assertEquals(newTask.estimatedEffort, new Integer(-1));
-		assertEquals(newTask.id, 0);
-		assertEquals(newTask.status, null);
+		assertEquals(newTask.getTitle(), "Dummy");
+		assertEquals(newTask.getActivities().size(),0);
+		assertEquals(newTask.getActualEffort(), new Integer(1));
+		assertEquals(newTask.getAssignedTo().size(), 0);
+		assertEquals(newTask.getDescription(), "Dummy");
+		assertEquals(newTask.getDueDate(), new Date());
+		assertEquals(newTask.getEstimatedEffort(), new Integer(1));
+		assertEquals(newTask.getId(), 0);
+		assertEquals(newTask.getStatus(), new TaskStatus("New"));
 
 	}
 	
@@ -51,11 +63,9 @@ public class TestTask {
 	 * copies the title from another one and makes sure it changed
 	 */
 	@Test
-	public void testCopyFrom() {
-		Task newTask = new Task();
-		assertEquals(newTask.title, "");
-		newTask.copyFrom(this.task);
-		assertEquals(newTask.title, "testing da tasks");
+	public void testCopyConstructor() {
+		Task newTask = new Task(this.task);
+		assertEquals(newTask.getTitle(), "Dummy");
 	}
 
 	/**
@@ -75,11 +85,11 @@ public class TestTask {
 	public void testSetActualEffort() {
 
 		Task newTask = new Task();
-		assertEquals(newTask.actualEffort, new Integer(-1));
+		assertEquals(newTask.getActualEffort(), new Integer(1));
 		newTask.setActualEffort(10);
-		assertEquals(newTask.actualEffort, new Integer(10));
+		assertEquals(newTask.getActualEffort(), new Integer(10));
 		newTask.setActualEffort(-50);
-		assertEquals(newTask.actualEffort, new Integer(-1));
+		assertEquals(newTask.getActualEffort(), new Integer(1));
 
 	}
 	
@@ -91,10 +101,10 @@ public class TestTask {
 		//TODO Write Comprehensive Tests once we start using actual effort
 
 		Task newTask = new Task();
-		assertEquals(newTask.estimatedEffort, new Integer(-1));
+		assertEquals(newTask.getEstimatedEffort(), new Integer(1));
 		newTask.setEstimatedEffort(10);
-		assertEquals(newTask.estimatedEffort, new Integer(10));
+		assertEquals(newTask.getEstimatedEffort(), new Integer(10));
 		newTask.setEstimatedEffort(-50);
-		assertEquals(newTask.estimatedEffort, new Integer(-1));
+		assertEquals(newTask.getEstimatedEffort(), new Integer(1));
 	}
 }

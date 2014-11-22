@@ -5,7 +5,7 @@ import org.junit.Test;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.util.TaskUtil;;
 
 /**
- * 
+ * Tests all the methods in TaskUtil
  * @author Thhughes
  * @author jrhennessy
  *
@@ -14,7 +14,7 @@ public class TestTaskUtil {
 	
 	
 	/**
-	 * tests that the sanatizeinput function will sanatize the leading 
+	 * tests that the sanitizeInput function will sanitize the leading 
 	 * zeros in an input
 	 */
 	@Test 

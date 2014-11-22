@@ -29,6 +29,7 @@ import edu.wpi.cs.wpisuitetng.modules.core.models.Project;
  * Unit Tests for Task Entity Manager
  * 
  * @author nhhughes
+ * @author Thhughes
  *
  */
 public class TestTaskEntityManager {
@@ -36,8 +37,8 @@ public class TestTaskEntityManager {
 	private Session mockSession = mock(Session.class);
 	private Project mockProject = mock(Project.class);
 
-	private Task task1 = new Task("Task 1");
-	private Task task2 = new Task("Task 2");
+	private Task task1 = new Task();
+	private Task task2 = new Task();
 
 	List<Task> tasks = new ArrayList<Task>();
 
@@ -65,8 +66,8 @@ public class TestTaskEntityManager {
 	 */
 	@Before
 	public void setup() {
-		task1.id = 0;
-		task2.id = 1;
+		task1.setId(0);
+		task2.setId(1);
 		tasks.add(task1);
 		tasks.add(task2);
 
