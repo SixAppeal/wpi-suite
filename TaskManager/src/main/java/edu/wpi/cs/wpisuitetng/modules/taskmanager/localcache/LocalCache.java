@@ -4,7 +4,12 @@
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import com.google.gson.Gson;
 
 import edu.wpi.cs.wpisuitetng.exceptions.NotImplementedException;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
@@ -27,6 +32,7 @@ public class LocalCache implements Cache {
 	private List<User> members;
 	private List<TaskStatus> statuses;
 	private Gateway gateway;
+	private Map<String, List<String>> callbacks;
 	
 	/**
 	 * Initializes the local cache with a lookup table and some cache data structures
@@ -38,35 +44,32 @@ public class LocalCache implements Cache {
 		members = new ArrayList<User>();
 		statuses = new ArrayList<TaskStatus>();
 		this.gateway = gateway;
+		callbacks = new HashMap<String, List<String>>();
+		callbacks.put("tasks", new ArrayList<String>());
+		callbacks.put("archive", new ArrayList<String>());
+		callbacks.put("members", new ArrayList<String>());
+		callbacks.put("stage", new ArrayList<String>());
 	}
 	
-
 	/**
 	 * @throws NotImplementedException 
 	 * @see edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.ICache#store(java.lang.String, java.lang.Object)
 	 */
 	@Override
 	public void store(String request, Object toStore) throws NotImplementedException {
-		if (request.compareTo("task") == 0) {
-			tasks.add((Task) toStore);
+		if (request.equals("task")) {
 			final Request networkRequest = Network.getInstance().makeRequest("taskmanager/task", HttpMethod.GET);
-			networkRequest.addObserver(new CallbackManager(gateway, ""));
+			networkRequest.addObserver(new CallbackManager(gateway, callbacks.get("tasks")));
 			networkRequest.send();
 		}
-		if (request.compareTo("archive") == 0) {
-			archive.add((Task) toStore);
+		if (request.equals("archive")) {
 			final Request networkRequest = Network.getInstance().makeRequest("taskmanager/task", HttpMethod.GET);
-			networkRequest.addObserver(new CallbackManager(gateway, ""));
+			networkRequest.addObserver(new CallbackManager(gateway, callbacks.get("archive")));
 			networkRequest.send();
 		}
-		if (request.compareTo("member") == 0) {
-			throw new NotImplementedException();
-		}
-		if (request.compareTo("stage") == 0) {
-			//TODO make entity manager that will respond to this request
-			statuses.add((TaskStatus) toStore);
+		if (request.equals("stage")) {
 			final Request networkRequest = Network.getInstance().makeRequest("taskmanager/stage", HttpMethod.GET);
-			networkRequest.addObserver(new CallbackManager(gateway, ""));
+			networkRequest.addObserver(new CallbackManager(gateway, callbacks.get("stage")));
 			networkRequest.send();
 		}
 	}
@@ -77,32 +80,23 @@ public class LocalCache implements Cache {
 	 */
 	@Override
 	public void update(String request, Object oldObject, Object newObject) throws NotImplementedException {
-		if (request.compareTo("task") == 0) {
-			tasks.remove((Task) oldObject);
-			tasks.add((Task) newObject);
+		if (request.equals("task")) {
 			final Request networkRequest = Network.getInstance().makeRequest("taskmanager/task", HttpMethod.POST);
 			networkRequest.setBody(((Task)newObject).toJson());
-			networkRequest.addObserver(new CallbackManager(gateway, ""));
+			networkRequest.addObserver(new CallbackManager(gateway, callbacks.get("tasks")));
 			networkRequest.send();
 		}
-		if (request.compareTo("archive") == 0) {
-			archive.remove((Task) oldObject);
-			archive.add((Task) newObject);
+		if (request.equals("archive")) {
 			final Request networkRequest = Network.getInstance().makeRequest("taskmanager/task", HttpMethod.POST);
 			networkRequest.setBody(((Task)newObject).toJson());
-			networkRequest.addObserver(new CallbackManager(gateway, ""));
+			networkRequest.addObserver(new CallbackManager(gateway, callbacks.get("archive")));
 			networkRequest.send();
 		}
-		if (request.compareTo("member") == 0) {
-			throw new NotImplementedException();
-		}
-		if (request.compareTo("stage") == 0) {
-			statuses.remove((TaskStatus) newObject);
-			statuses.add((TaskStatus) oldObject);
+		if (request.equals("stage")) {
 			final Request networkRequest = Network.getInstance().makeRequest("taskmanager/stage", HttpMethod.POST);
 			//TODO Need to figure out how stages are stored
 			//networkRequest.setBody(this.statuses.toJson());
-			networkRequest.addObserver(new CallbackManager(gateway, ""));
+			networkRequest.addObserver(new CallbackManager(gateway, callbacks.get("stage")));
 			networkRequest.send();
 		}
 	}
@@ -114,18 +108,6 @@ public class LocalCache implements Cache {
 	@Override
 	public void delete(String request, Object toDelete) throws NotImplementedException {
 		throw new NotImplementedException();
-//		if (request.compareTo("task") == 0) {
-//			tasks.remove((Task) toDelete);
-//		}
-//		if (request.compareTo("archive") == 0) {
-//			archive.remove((Task) toDelete);
-//		}
-//		if (request.compareTo("member") == 0) {
-//			members.remove((User) toDelete);
-//		}
-//		if (request.compareTo("stage") == 0) {
-//			statuses.remove((TaskStatus) toDelete);
-//		}
 	}
 
 	/**
@@ -133,16 +115,16 @@ public class LocalCache implements Cache {
 	 */
 	@Override
 	public Object[] retreive(String request) {
-		if (request.compareTo("task") == 0) {
+		if (request.equals("task")) {
 			return tasks.toArray(new Task[0]);
 		}
-		if (request.compareTo("archive") == 0) {
+		if (request.equals("archive")) {
 			return archive.toArray(new Task[0]);
 		}
-		if (request.compareTo("member") == 0) {
+		if (request.equals("member")) {
 			return members.toArray(new User[0]);
 		}
-		if (request.compareTo("stage") == 0) {
+		if (request.equals("stage")) {
 			return members.toArray(new TaskStatus[0]);
 		}
 		return null;
@@ -157,21 +139,42 @@ public class LocalCache implements Cache {
 		throw new NotImplementedException();
 	}
 
+	public void sync(String request) {
+		if (request.equals("task")) {
+			final Request networkRequest = Network.getInstance().makeRequest("taskmanager/task", HttpMethod.GET);
+			networkRequest.addObserver(new SyncManager((Cache)this, "task"));
+			networkRequest.send();
+		}
+		if (request.equals("archive")) {
+			final Request networkRequest = Network.getInstance().makeRequest("taskmanager/task", HttpMethod.GET);
+			networkRequest.addObserver(new SyncManager((Cache)this, "archive"));
+			networkRequest.send();
+		}
+		if (request.equals("member")) {
+			final Request networkRequest = Network.getInstance().makeRequest("core/user", HttpMethod.GET);
+			networkRequest.addObserver(new SyncManager((Cache)this, "member"));
+			networkRequest.send();
+		}
+		if (request.equals("stage")) {
+			//TODO actually write this
+		}
+	}
+	
 	/**
 	 * @see edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.ICache#clearCache(java.lang.String)
 	 */
 	@Override
 	public void clearCache(String request) {
-		if (request.compareTo("task") == 0) {
+		if (request.equals("task")) {
 			tasks = new ArrayList<Task>();
 		}
-		if (request.compareTo("archive") == 0) {
+		if (request.equals("archive")) {
 			archive = new ArrayList<Task>();
 		}
-		if (request.compareTo("member") == 0) {
+		if (request.equals("member")) {
 			members = new ArrayList<User>();
 		}
-		if (request.compareTo("stage") == 0) {
+		if (request.equals("stage")) {
 			statuses = new ArrayList<TaskStatus>();
 		}
 	}
@@ -183,6 +186,34 @@ public class LocalCache implements Cache {
 	public void subscribe(String topic, String action, String callback) {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	public void set(String request, String updateValue) {
+		if (request.equals("task")) {
+			Task[] returned  = new Gson().fromJson(updateValue, Task[].class);
+			tasks = new ArrayList<Task>();
+			for (Task t: returned) {
+				if (!t.isArchived()) {
+					tasks.add(t);
+				}
+			}
+		}
+		if (request.equals("archive")) {
+			Task[] returned  = new Gson().fromJson(updateValue, Task[].class);
+			archive = new ArrayList<Task>();
+			for (Task t: returned) {
+				if (t.isArchived()) {
+					archive.add(t);
+				}
+			}
+		}
+		if (request.equals("member")) {
+			User[] returned = new Gson().fromJson(updateValue, User[].class);
+			members = new ArrayList<User>(Arrays.asList(returned));
+		}
+		if (request.equals("stage")) {
+			//TODO implement this
+		}
 	}
 
 }

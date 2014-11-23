@@ -71,4 +71,11 @@ public interface Cache {
 	 * @param callback class:method to have the gateway call
 	 */
 	public void subscribe(String topic, String action, String callback);
+
+	public void set(String request, String data);
+	
+	public void sync(String request);
+
 }
+
+
