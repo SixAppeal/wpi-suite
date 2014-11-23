@@ -4,6 +4,7 @@ import java.util.List;
 
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.TaskModel;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.util.TaskUtil;
 import edu.wpi.cs.wpisuitetng.network.Request;
 import edu.wpi.cs.wpisuitetng.network.Network;
 import edu.wpi.cs.wpisuitetng.network.RequestObserver;
@@ -17,6 +18,7 @@ import edu.wpi.cs.wpisuitetng.network.models.IRequest;
  * @author wavanrensselaer
  * @author dpseaman
  * @author nhhughes
+ * @author Thhughes
  */
 
 public class TaskPresenter implements IPresenter{
@@ -62,7 +64,7 @@ public class TaskPresenter implements IPresenter{
 			
 			@Override
 			public void responseSuccess(IRequest iReq) {
-				gateway.toView("ColumnView", "addTask", Task.fromJson(iReq.getResponse().getBody()));
+				gateway.toView("ColumnView", "addTask", TaskUtil.fromJson(iReq.getResponse().getBody()));
 			}
 
 			/**
@@ -107,7 +109,7 @@ public class TaskPresenter implements IPresenter{
 			
 			@Override
 			public void responseSuccess(IRequest iReq) {
-				gateway.toView("ColumnView", "addTask", Task.fromJson(iReq.getResponse().getBody()));
+				gateway.toView("ColumnView", "addTask", TaskUtil.fromJson(iReq.getResponse().getBody()));
 			}
 
 			/**
@@ -144,7 +146,7 @@ public class TaskPresenter implements IPresenter{
 			
 			@Override
 			public void responseSuccess(IRequest iReq) {
-				gateway.toView("ColumnView", "removeTask", Task.fromJson(iReq.getResponse().getBody()));
+				gateway.toView("ColumnView", "removeTask", TaskUtil.fromJson(iReq.getResponse().getBody()));
 			}
 
 			/**
