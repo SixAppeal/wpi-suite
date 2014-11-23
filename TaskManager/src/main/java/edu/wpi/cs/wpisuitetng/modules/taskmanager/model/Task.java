@@ -85,12 +85,21 @@ public class Task extends AbstractModel {
 	}
 	
 	/**
-	 * Checks to see if the objects are equal according to reference then id number
-	 * @param obj:  Object to compare against
+	 * Checks to see if the objects are equal
+	 * @param o Object to compare against
 	 */
-	public boolean equals(Object obj) {
-		//If obj is an instance of Task then return true if there's a reference math OR an ID match
-		return ((obj instanceof Task) && ((this == obj) || (((Task)obj).getId() == this.id)));
+	@Override
+	public boolean equals(Object o) {
+		if (o instanceof Task) {
+			Task task = (Task) o;
+			return this.id == task.getId()
+				&& this.title.equals(task.getTitle())
+				&& this.description.equals(task.getDescription())
+				&& this.estimatedEffort.equals(task.getEstimatedEffort())
+				&& this.actualEffort.equals(task.getActualEffort())
+				&& this.dueDate.equals(task.getDueDate());
+		}
+		return false;
 	}
 	
 	/**
