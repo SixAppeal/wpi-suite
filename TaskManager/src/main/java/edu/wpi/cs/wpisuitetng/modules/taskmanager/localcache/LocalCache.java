@@ -10,6 +10,10 @@ import edu.wpi.cs.wpisuitetng.exceptions.NotImplementedException;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.TaskStatus;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
+import edu.wpi.cs.wpisuitetng.network.Network;
+import edu.wpi.cs.wpisuitetng.network.Request;
+import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
 
 /**
  * This class is responsible for managing local copies of the database information
@@ -22,17 +26,18 @@ public class LocalCache implements Cache {
 	private List<Task> archive;
 	private List<User> members;
 	private List<TaskStatus> statuses;
-	
+	private Gateway gateway;
 	
 	/**
 	 * Initializes the local cache with a lookup table and some cache data structures
 	 * @author nhhughes
 	 */
-	public LocalCache() {
+	public LocalCache(Gateway gateway) {
 		tasks = new ArrayList<Task>();
 		archive = new ArrayList<Task>();
 		members = new ArrayList<User>();
 		statuses = new ArrayList<TaskStatus>();
+		this.gateway = gateway;
 	}
 	
 
@@ -69,21 +74,37 @@ public class LocalCache implements Cache {
 		if (request.compareTo("task") == 0) {
 			tasks.remove((Task) toUpdate);
 			tasks.add((Task) toUpdate);
+			final Request networkRequest = Network.getInstance().makeRequest("taskmanager/task", HttpMethod.POST);
+			networkRequest.setBody(((Task)toUpdate).toJson());
+			networkRequest.addObserver(new CallbackManager(gateway, ""));
+			networkRequest.send();
 			return true;
 		}
 		if (request.compareTo("archive") == 0) {
 			archive.remove((Task) toUpdate);
 			archive.add((Task) toUpdate);
+			final Request networkRequest = Network.getInstance().makeRequest("taskmanager/task", HttpMethod.POST);
+			networkRequest.setBody(((Task)toUpdate).toJson());
+			networkRequest.addObserver(new CallbackManager(gateway, ""));
+			networkRequest.send();
 			return true;
 		}
 		if (request.compareTo("member") == 0) {
 			members.remove((User) toUpdate);
 			members.add((User) toUpdate);
+			final Request networkRequest = Network.getInstance().makeRequest("taskmanager/task", HttpMethod.POST);
+			networkRequest.setBody(((Task)toUpdate).toJson());
+			networkRequest.addObserver(new CallbackManager(gateway, ""));
+			networkRequest.send();
 			return true;
 		}
 		if (request.compareTo("stage") == 0) {
 			statuses.remove((TaskStatus) toUpdate);
 			statuses.add((TaskStatus) toUpdate);
+			final Request networkRequest = Network.getInstance().makeRequest("taskmanager/task", HttpMethod.POST);
+			networkRequest.setBody(((Task)toUpdate).toJson());
+			networkRequest.addObserver(new CallbackManager(gateway, ""));
+			networkRequest.send();
 			return true;
 		}
 		return false;
