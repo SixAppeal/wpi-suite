@@ -1,10 +1,11 @@
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar;
 
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
@@ -31,25 +32,30 @@ public class ColumnView extends JPanel implements IView {
 	// Components
 	private JPanel container;
 	private JScrollPane scrollPane;
-	private List<StageView> stageViews;
 	
 	/**
 	 * Constructs a <code>ColumnView</code> which holds an <code>ArrayList</code>
 	 * of <code>StageView</code>s.
 	 */
 	public ColumnView() {
-		this.stageViews = new ArrayList<StageView>();
 		this.container = new JPanel();
 		this.scrollPane = new JScrollPane(this.container);
 		
-		this.container.setLayout(new BoxLayout(this.container, BoxLayout.X_AXIS));
-		this.container.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 0));
-		
+		this.container.setLayout(new GridBagLayout());
+
 		this.scrollPane.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
 		
-		this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+		this.setLayout(new GridBagLayout());
 		this.setOpaque(false);
-		this.add(this.scrollPane);
+		
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.anchor = GridBagConstraints.PAGE_START;
+		gbc.fill = GridBagConstraints.BOTH;
+		gbc.weightx = 1.0;
+		gbc.weighty = 1.0;
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		this.add(this.scrollPane, gbc);
 		
 		this.setState(null, new Stage[] {
 			new Stage("New"),
@@ -106,7 +112,35 @@ public class ColumnView extends JPanel implements IView {
 	 * Reflows the view when it's state changes.
 	 */
 	public void reflow() {
-		// TODO
+		StageView stageView;
+		int i;
+		for (i = 0; i < this.container.getComponentCount(); i++) {
+			stageView = (StageView) this.container.getComponent(i);
+			if (i >= this.stages.length) {
+				this.container.remove(i--);
+			} else if (!stageView.getStage().equals(this.stages[i])) {
+				stageView.setState(this.stages[i],
+						this.getTasksForStage(this.stages[i]));
+			}
+		}
+		for (; i < this.stages.length; i++) {
+			this.container.add(new StageView(this.stages[i],
+					this.getTasksForStage(this.stages[i])));
+		}
+		
+		this.scrollPane.revalidate();
+	}
+	
+	private Task[] getTasksForStage(Stage stage) {
+		List<Task> tasks = new ArrayList<Task>();
+		
+		for (int i = 0; i < this.tasks.length; i++) {
+			if (this.tasks[i].getStage().equals(stage.getName())) {
+				tasks.add(this.tasks[i]);
+			}
+		}
+		
+		return tasks.toArray(new Task[0]);
 	}
 	
 	/**
@@ -115,8 +149,5 @@ public class ColumnView extends JPanel implements IView {
 	@Override
 	public void setGateway(Gateway gateway) {
 		this.gateway = gateway;
-		for (StageView column : this.stageViews) {
-			column.setGateway(gateway);;
-		}
 	}
 }

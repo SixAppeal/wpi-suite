@@ -65,4 +65,9 @@ public class Stage extends AbstractModel {
 		return null;
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		return o instanceof Stage
+			&& this.name.equals(((Stage) o).getName());
+	}
 }

@@ -24,6 +24,7 @@ public class Task extends AbstractModel {
 	private boolean archived;
 	private String title;
 	private String description;
+	private String stage;
 	private TaskStatus status;
 	private List<String> assignedTo;
 	private Integer estimatedEffort; 
@@ -36,7 +37,7 @@ public class Task extends AbstractModel {
 	 * Default constructor (dummy task for initialization)
 	 */
 	public Task() {
-		this("Dummy", "Dummy", new TaskStatus("New"), new LinkedList<String>(), 1, 1,
+		this("Dummy", "Dummy", "", new TaskStatus("New"), new LinkedList<String>(), 1, 1,
 				new Date(), new LinkedList<Activity>());
 	}
 
@@ -53,12 +54,13 @@ public class Task extends AbstractModel {
 	 * @param activities list of activities (comments that members can put) for the task
 	 * @throws IllegalArgumentException
 	 */
-	public Task(String title, String description, TaskStatus status,
+	public Task(String title, String description, String stage, TaskStatus status,
 			List<String> assignedTo, Integer estimatedEffort,
 			Integer actualEffort, Date dueDate, List<Activity> activities) throws IllegalArgumentException {
 		super();
 		this.title = TaskUtil.validateTitle(title);
 		this.description = TaskUtil.validateDescription(description);
+		this.stage = stage;
 		this.status = TaskUtil.validateStage(status);
 		this.assignedTo = assignedTo;
 		this.estimatedEffort = TaskUtil.validateEffort(estimatedEffort);
@@ -76,6 +78,7 @@ public class Task extends AbstractModel {
 		this.id = t.getId();
 		this.title = new String(t.getTitle());
 		this.description = new String(t.getDescription());
+		this.stage = new String(t.getStage());
 		this.status = new TaskStatus(t.getStatus());
 		this.assignedTo = new LinkedList<String>(t.getAssignedTo());
 		this.estimatedEffort = new Integer(t.getEstimatedEffort());
@@ -167,6 +170,22 @@ public class Task extends AbstractModel {
 	 */
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	
+	/**
+	 * Gets the stage of this task
+	 * @return The stage that this task belongs to
+	 */
+	public String getStage() {
+		return this.stage;
+	}
+	
+	/**
+	 * Sets the stage of this task
+	 * @param stage A stage
+	 */
+	public void setStage(String stage) {
+		this.stage = stage;
 	}
 
 	/**
