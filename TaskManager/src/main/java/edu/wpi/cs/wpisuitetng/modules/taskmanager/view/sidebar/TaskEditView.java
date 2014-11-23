@@ -96,9 +96,13 @@ public class TaskEditView extends JPanel implements IView {
 	JList<String> assignedMembers;
 	JButton addMemberButton;
 	JButton removeMemberButton;
+	
+	MemberListHandler EditViewMemberHandler;
+	
 	List<String> allMembersList;
 	List<String> assignedMembersList;
 	List<String> globalMembersList;
+	
 	JListMouseHandler allMembersMouseHandler;
 	JListMouseHandler assignedMembersMouseHandler;
 
@@ -182,9 +186,13 @@ public class TaskEditView extends JPanel implements IView {
 		this.descEntryScroller = new JScrollPane(descEntry);
 
 		//Member Stuff
+		EditViewMemberHandler = new MemberListHandler();
+		
+		
 		allMembersList = new ArrayList<String>();
 		assignedMembersList = new ArrayList<String>();
 		globalMembersList = new ArrayList<String>();
+		
 		allMembers = new JList<String>();
 		allMembers.setVisibleRowCount(4);
 		allMembers.setLayoutOrientation(JList.VERTICAL);
