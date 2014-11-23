@@ -193,6 +193,7 @@ public class TaskEditView extends JPanel implements IView {
 		assignedMembersList = new ArrayList<String>();
 		globalMembersList = new ArrayList<String>();
 		
+		// Set UI for members
 		allMembers = new JList<String>();
 		allMembers.setVisibleRowCount(4);
 		allMembers.setLayoutOrientation(JList.VERTICAL);
@@ -286,19 +287,26 @@ public class TaskEditView extends JPanel implements IView {
 		this.assignedMembersMouseHandler.just_changed = true;
 	}
 	
-	/**
-	 * Allows a request from the server to add to the list of all members available to assign to a task
-	 * @param to_add Members from the server that are going to be added to the All Members list
-	 */
-	public void setAllMembers(String [] to_add) {
-		for (int i = 0; i < to_add.length; i++) {
-			if (!this.allMembersList.contains(to_add[i])) {
-				allMembersList.add(to_add[i]);
-			}
-		}
-		allMembers.setListData(allMembersList.toArray(new String[allMembersList.size()]));
-	}
+//	/**
+//	 * Allows a request from the server to add to the list of all members available to assign to a task
+//	 * @param to_add Members from the server that are going to be added to the All Members list
+//	 */
+//	public void setAllMembers(String [] to_add) {
+//		for (int i = 0; i < to_add.length; i++) {
+//			if (!this.allMembersList.contains(to_add[i])) {
+//				allMembersList.add(to_add[i]);
+//			}
+//		}
+//		allMembers.setListData(allMembersList.toArray(new String[allMembersList.size()]));
+//	}
 
+	/**
+	 * 
+	 * @param assigned
+	 * @param all
+	 * 
+	 *  Update Panels is used to redraw the lists once something is changed
+	 */
 	public void updatePanels(List<String> assigned, List<String> all) {
 		allMembers.setListData(all.toArray(new String[all.size()]));
 		assignedMembers.setListData(assigned.toArray(new String[assigned.size()]));
@@ -306,12 +314,12 @@ public class TaskEditView extends JPanel implements IView {
 	}
 	
 	public void fixPanel() {
-		if (assignedMembersList.size() == 0) {
+		if(EditViewMemberHandler.getAssigned().size() == 0){
 			String [] empty_string_list = new String[1];
 			empty_string_list[0] = "";
 			this.assignedMembers.setListData(empty_string_list);	
 		}
-		if (allMembersList.size() == 0) {
+		if (EditViewMemberHandler.getUnassigned().size() == 0) {
 			String [] empty_string_list = new String[1];
 			empty_string_list[0] = "";
 			this.allMembers.setListData(empty_string_list);

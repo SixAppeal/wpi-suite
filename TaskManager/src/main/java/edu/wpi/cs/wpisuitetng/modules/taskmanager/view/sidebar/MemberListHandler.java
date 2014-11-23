@@ -21,9 +21,9 @@ public class MemberListHandler {
 	
 	protected Gateway gateway;
 	
-	List<String> allMembersList;
-	List<String> assignedMembersList;
-	List<String> globalMembersList;
+	private List<String> allMembersList;
+	private List<String> assignedMembersList;
+	private List<String> globalMembersList;
 	
 	
 	public MemberListHandler(){
@@ -31,7 +31,7 @@ public class MemberListHandler {
 		assignedMembersList = new ArrayList<String>();	// List of members who are assigned to a task
 		globalMembersList = new ArrayList<String>();	// List of ALL members
 		
-		this.gateway.toView("localcache", "subscribe", "member:MemberListHandler:updateAll");
+		//this.gateway.toView("localcache", "subscribe", "member:MemberListHandler:updateAll");
 		
 		
 	}
