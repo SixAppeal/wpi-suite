@@ -54,33 +54,6 @@ public class TaskView extends JPanel implements IView {
 		gbc.gridx = 0;
 		gbc.gridy = 0;
 		this.add(this.titleLabel, gbc);
-		
-		this.addMouseListener(new MouseListener() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				gateway.toPresenter("TaskPresenter", "viewTask", task);
-			}
-
-			@Override
-			public void mousePressed(MouseEvent e) {
-				
-			}
-
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				setBackground(new Color(245, 245, 245));
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e) {
-				setBackground(new Color(255, 255, 255));
-			}
-		});
 	}
 	
 	/**
