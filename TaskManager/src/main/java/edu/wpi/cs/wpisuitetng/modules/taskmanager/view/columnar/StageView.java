@@ -119,6 +119,13 @@ public class StageView extends JPanel implements IView {
 	public void reflow() {
 		this.nameLabel.setText(this.stage == null ? "" : this.stage.getName());
 		
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.anchor = GridBagConstraints.PAGE_START;
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.weightx = 1.0;
+		gbc.insets = new Insets(0, 10, 10, 10);
+		gbc.gridx = 0;
+		
 		TaskView taskView;
 		int i;
 		for (i = 0; i < this.container.getComponentCount(); i++) {
@@ -130,7 +137,8 @@ public class StageView extends JPanel implements IView {
 			}
 		}
 		for (; i < this.tasks.length; i++) {
-			this.container.add(new TaskView(this.tasks[i]));
+			gbc.gridy = i;
+			this.container.add(new TaskView(this.tasks[i]), gbc);
 		}
 		
 		this.scrollPane.revalidate();

@@ -2,6 +2,7 @@ package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -112,6 +113,13 @@ public class ColumnView extends JPanel implements IView {
 	 * Reflows the view when it's state changes.
 	 */
 	public void reflow() {
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.anchor = GridBagConstraints.FIRST_LINE_START;
+		gbc.fill = GridBagConstraints.VERTICAL;
+		gbc.weighty = 1.0;
+		gbc.insets = new Insets(20, 20, 20, 0);
+		gbc.gridy = 0;
+		
 		StageView stageView;
 		int i;
 		for (i = 0; i < this.container.getComponentCount(); i++) {
@@ -124,13 +132,19 @@ public class ColumnView extends JPanel implements IView {
 			}
 		}
 		for (; i < this.stages.length; i++) {
+			gbc.gridx = i;
 			this.container.add(new StageView(this.stages[i],
-					this.getTasksForStage(this.stages[i])));
+					this.getTasksForStage(this.stages[i])), gbc);
 		}
 		
 		this.scrollPane.revalidate();
 	}
 	
+	/**
+	 * Gets the array of tasks that are associated with a stage
+	 * @param stage The stage to which the tasks should belong
+	 * @return An array of <code>Task</code>s
+	 */
 	private Task[] getTasksForStage(Stage stage) {
 		List<Task> tasks = new ArrayList<Task>();
 		

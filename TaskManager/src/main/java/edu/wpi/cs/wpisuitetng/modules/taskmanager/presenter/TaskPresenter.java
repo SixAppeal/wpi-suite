@@ -1,9 +1,9 @@
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter;
 
-import java.util.List;
+
+import com.google.gson.Gson;
 
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.TaskModel;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.util.TaskUtil;
 import edu.wpi.cs.wpisuitetng.network.Request;
 import edu.wpi.cs.wpisuitetng.network.Network;
@@ -26,7 +26,6 @@ public class TaskPresenter implements IPresenter{
 	Gateway gateway;
 	Task[] tasks;
 	String[] members;
-	TaskModel tm;
 	
 	/**
 	 * @see IPresenter.setGateway
@@ -56,7 +55,6 @@ public class TaskPresenter implements IPresenter{
 	 */
 	public void createTask(Task task) {
 		
-		if( tm == null ) tm = new TaskModel();
 		
 		final Request request = Network.getInstance().makeRequest("taskmanager/task", HttpMethod.PUT);
 		request.setBody(task.toJson());

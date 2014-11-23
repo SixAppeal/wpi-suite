@@ -469,7 +469,7 @@ public class TaskEditView extends JPanel implements IView {
 			t.setEstimatedEffort(est);
 			t.setActualEffort(act);
 			t.setDueDate( dueDatePicker.getDate() );
-			t.setColumn(statusBox.getSelectedIndex());
+			//t.setColumn(statusBox.getSelectedIndex());  //TODO change this to new status implementtation
 			t.setAssignedTo(new ArrayList<String>(this.assignedMembersList));
 			System.out.println(t.toJson());
 		} catch (IllegalArgumentException ex) {
