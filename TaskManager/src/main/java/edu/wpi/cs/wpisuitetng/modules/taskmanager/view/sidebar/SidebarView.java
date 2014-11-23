@@ -67,6 +67,8 @@ public class SidebarView extends JPanel implements IView {
 			this.createView.addMember(member);
 	}
 	
+	
+	// Need to edit //
 	public void clearMembers() {
 		this.editView.setAllMembers(new String[0]);
 		this.createView.setAllMembers(new String[0]);

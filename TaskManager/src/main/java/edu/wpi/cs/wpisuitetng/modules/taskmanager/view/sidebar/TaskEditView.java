@@ -368,44 +368,38 @@ public class TaskEditView extends JPanel implements IView {
 	/**
 	 * Takes the members that the user has selected and moves them to the list of members assigned to a task
 	 */
-	public void moveMembersToAssigned() {
-		List<String> selected = allMembers.getSelectedValuesList();
-		List<String> updatedAll = new ArrayList<String>();
-		for (String s : allMembersList) {
-			if (!selected.contains(s)) {
-				updatedAll.add(s);
-			}
-		}
-		for (String s: selected) {
-			assignedMembersList.add(s);
-		}
-		allMembersList = updatedAll;
-		allMembers.setListData(updatedAll.toArray(new String[updatedAll.size()]));
-		assignedMembers.setListData(assignedMembersList.toArray(new String[assignedMembersList.size()]));
+	public void moveMembersToAssigned() {	
+		// Add selected members
+		EditViewMemberHandler.assignMembers(allMembers.getSelectedValuesList());
+		
+		
+		// Set the unsassigned JList
+		allMembers.setListData(EditViewMemberHandler.getUnassigned().toArray(new String[EditViewMemberHandler.getNumUnAssigned()]));
+		// Set the assigned JList
+		allMembers.setListData(EditViewMemberHandler.getAssigned().toArray(new String[EditViewMemberHandler.getNumAssigned()]));
+		
+		
 		this.allMembersMouseHandler.clear();
 		this.assignedMembersMouseHandler.clear();
 		fixPanel();
 	}
-
+	
 	/**
 	 * Take the members that are selected in the Assigned Members list and moves them back to the All Members list
 	 */
 	public void moveMembersToAll() {
-		List<String> selected = assignedMembers.getSelectedValuesList();
-		List<String> updatedAssigned = new ArrayList<String>();
-		for (String s : assignedMembersList) {
-			if (!selected.contains(s)) {
-				updatedAssigned.add(s);
-			}
-		}
-		for (String s: selected) {
-			allMembersList.add(s);
-		}
-		assignedMembersList = updatedAssigned;
-		allMembers.setListData(allMembersList.toArray(new String[allMembersList.size()]));
-		assignedMembers.setListData(updatedAssigned.toArray(new String[updatedAssigned.size()]));
-		this.assignedMembersMouseHandler.clear();
+		// Add selected members
+		EditViewMemberHandler.unAssignMembers(allMembers.getSelectedValuesList());
+		
+		
+		// Set the unsassigned JList
+		allMembers.setListData(EditViewMemberHandler.getUnassigned().toArray(new String[EditViewMemberHandler.getNumUnAssigned()]));
+		// Set the assigned JList
+		allMembers.setListData(EditViewMemberHandler.getAssigned().toArray(new String[EditViewMemberHandler.getNumAssigned()]));
+		
+		
 		this.allMembersMouseHandler.clear();
+		this.assignedMembersMouseHandler.clear();
 		fixPanel();
 	}
 

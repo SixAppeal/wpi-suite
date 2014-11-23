@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.Cache;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
 
@@ -57,7 +58,7 @@ public class MemberListHandler {
 	 * 	This will move a valid member from the allMembersList to the assignedMemberList
 	 */
 	public void assignMember(String toAdd){
-		if (globalMembersList.contains(toAdd)){
+		if (!globalMembersList.contains(toAdd)){
 			throw new IllegalArgumentException("Can only add valid members");
 		}
 		allMembersList.remove(toAdd);
@@ -65,8 +66,35 @@ public class MemberListHandler {
 		
 	}
 	
-	public void setAssignMembers(List<String> members){
-		assignedMembersList = members;
+	public void assignMembers(List<String> members){
+		for (String s: members){
+			if (!globalMembersList.contains(s)){
+				throw new IllegalArgumentException("Can only add valid members");
+			}
+		}
+		assignedMembersList.addAll(members);
+		allMembersList.removeAll(members);
+		
+	}
+	
+	public void unAssignMember(String toRem){
+		if (!assignedMembersList.contains(toRem)){
+			throw new IllegalArgumentException("Can only add valid members");
+		}
+		assignedMembersList.remove(toRem);
+		allMembersList.add(toRem);
+		
+	}
+	
+	public void unAssignMembers(List<String> members){
+		for (String s: members){
+			if (!assignedMembersList.contains(s)){
+				throw new IllegalArgumentException("Can only add valid members");
+			}
+		}
+		allMembersList.addAll(members);
+		assignedMembersList.removeAll(members);
+		
 	}
 	
 	
@@ -78,10 +106,10 @@ public class MemberListHandler {
 	 */
 	private void setGlobal(Cache localCache){
 		Object[] output = localCache.retreive("member");
-		String[] memberArray = Arrays.copyOf(output, output.length, String[].class);
+		User[] memberArray = Arrays.copyOf(output, output.length, User[].class);
 		
 		for (int i = 0; i < memberArray.length; i++){
-			globalMembersList.add(memberArray[i]);
+			globalMembersList.add(memberArray[i].getUsername());
 		}
 		
 	}
@@ -97,6 +125,14 @@ public class MemberListHandler {
 	
 	public List<String> getUnassigned(){
 		return allMembersList;
+	}
+	
+	public Integer getNumAssigned(){
+		return assignedMembersList.size();
+	}
+	
+	public Integer getNumUnAssigned(){
+		return allMembersList.size();
 	}
 	
 }
