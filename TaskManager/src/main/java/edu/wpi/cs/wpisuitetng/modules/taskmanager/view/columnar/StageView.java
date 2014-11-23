@@ -5,8 +5,6 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -34,7 +32,6 @@ public class StageView extends JPanel implements IView {
 	private JLabel nameLabel;
 	private JPanel container;
 	private JScrollPane scrollPane;
-	private List<TaskView> taskViews;
 	
 	/**
 	 * Constructs a <code>ColumnView</code> which has a name and an
@@ -45,7 +42,8 @@ public class StageView extends JPanel implements IView {
 		this.nameLabel = new JLabel("", JLabel.CENTER);
 		this.container = new JPanel();
 		this.scrollPane = new JScrollPane(this.container);
-		this.taskViews = new ArrayList<TaskView>();
+		
+		this.container.setLayout(new GridBagLayout());
 
 		this.setBackground(new Color(220, 220, 220));
 		this.setMinimumSize(new Dimension(260, 0));
@@ -118,7 +116,10 @@ public class StageView extends JPanel implements IView {
 	 * Reflows this views when it's state changes.
 	 */
 	public void reflow() {
-		// TODO
+		TaskView[] taskViews = (TaskView[]) this.container.getComponents();
+		for (int i = 0; i < taskViews.length; i++) {
+			
+		}
 	}
 	
 	/**
@@ -127,9 +128,5 @@ public class StageView extends JPanel implements IView {
 	@Override
 	public void setGateway(Gateway gateway) {
 		this.gateway = gateway;
-		for (TaskView taskView : this.taskViews) {
-			taskView.setGateway(this.gateway);
-		}
 	}
-	
 }
