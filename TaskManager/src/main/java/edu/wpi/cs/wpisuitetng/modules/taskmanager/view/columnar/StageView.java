@@ -10,6 +10,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Stage;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
@@ -25,10 +26,10 @@ public class StageView extends JPanel implements IView {
 	private Gateway gateway;
 	
 	// State-related fields
+	private Stage stage;
 	private Task[] tasks;
 	
 	// Components
-	private String name;
 	private JLabel nameLabel;
 	private JPanel container;
 	private JScrollPane scrollPane;
@@ -38,7 +39,7 @@ public class StageView extends JPanel implements IView {
 	 * <code>ArrayList</code> of the tasks to display.
 	 * @param title The title of the column
 	 */
-	public StageView(String name) {
+	public StageView(Stage stage, Task[] tasks) {
 		this.nameLabel = new JLabel("", JLabel.CENTER);
 		this.container = new JPanel();
 		this.scrollPane = new JScrollPane(this.container);
@@ -67,23 +68,23 @@ public class StageView extends JPanel implements IView {
 		gbc.gridy = 1;
 		this.add(this.scrollPane);
 		
-		this.setState(this.name, null);
+		this.setState(stage, tasks);
 	}
 	
 	/**
-	 * Sets the name of the stage.
-	 * @param name The new name of the stage
+	 * Sets the stage of the view
+	 * @param stage The new stage
 	 */
-	public void setName(String name) {
-		this.setState(name, this.tasks);
+	public void setStage(Stage stage) {
+		this.setState(stage, this.tasks);
 	}
 	
 	/**
-	 * Gets the name of the stage
-	 * @return The name of the stage
+	 * Gets the view's stage
+	 * @return The stage of the stage
 	 */
-	public String getName() {
-		return this.name;
+	public Stage getStage() {
+		return this.stage;
 	}
 	
 	/**
@@ -91,7 +92,7 @@ public class StageView extends JPanel implements IView {
 	 * @param tasks The new task array
 	 */
 	public void setTasks(Task[] tasks) {
-		this.setState(this.name, tasks);
+		this.setState(this.stage, tasks);
 	}
 	
 	/**
@@ -106,8 +107,8 @@ public class StageView extends JPanel implements IView {
 	 * Sets the state of this view, the name and the tasks within this stage.
 	 * @param tasks The new task array
 	 */
-	public void setState(String name, Task[] tasks) {
-		this.name = name == null ? "" : name;
+	public void setState(Stage stage, Task[] tasks) {
+		this.stage = stage;
 		this.tasks = tasks == null ? new Task[0] : tasks;
 		this.reflow();
 	}
@@ -116,10 +117,23 @@ public class StageView extends JPanel implements IView {
 	 * Reflows this views when it's state changes.
 	 */
 	public void reflow() {
-		TaskView[] taskViews = (TaskView[]) this.container.getComponents();
-		for (int i = 0; i < taskViews.length; i++) {
-			
+		this.nameLabel.setText(this.stage == null ? "" : this.stage.getName());
+		
+		TaskView taskView;
+		int i;
+		for (i = 0; i < this.container.getComponentCount(); i++) {
+			taskView = (TaskView) this.container.getComponent(i);
+			if (i >= this.tasks.length) {
+				this.container.remove(i--);
+			} else if (!taskView.getTask().equals(this.tasks[i])) {
+				taskView.setState(this.tasks[i]);
+			}
 		}
+		for (; i < this.tasks.length; i++) {
+			this.container.add(new TaskView(this.tasks[i]));
+		}
+		
+		this.scrollPane.revalidate();
 	}
 	
 	/**
