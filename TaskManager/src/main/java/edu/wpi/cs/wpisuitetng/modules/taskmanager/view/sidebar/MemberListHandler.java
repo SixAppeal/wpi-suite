@@ -22,7 +22,7 @@ public class MemberListHandler {
 	
 	protected Gateway gateway;
 	
-	private List<String> allMembersList;
+	private List<String> allMembersList;			
 	private List<String> assignedMembersList;
 	private List<String> globalMembersList;
 	

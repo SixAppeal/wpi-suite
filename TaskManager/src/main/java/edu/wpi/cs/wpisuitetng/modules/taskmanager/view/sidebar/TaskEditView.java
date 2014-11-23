@@ -99,9 +99,9 @@ public class TaskEditView extends JPanel implements IView {
 	
 	MemberListHandler EditViewMemberHandler;
 	
-	List<String> allMembersList;
-	List<String> assignedMembersList;
-	List<String> globalMembersList;
+//	List<String> allMembersList;
+//	List<String> assignedMembersList;
+//	List<String> globalMembersList;
 	
 	JListMouseHandler allMembersMouseHandler;
 	JListMouseHandler assignedMembersMouseHandler;
@@ -189,9 +189,9 @@ public class TaskEditView extends JPanel implements IView {
 		EditViewMemberHandler = new MemberListHandler();
 		
 		
-		allMembersList = new ArrayList<String>();
-		assignedMembersList = new ArrayList<String>();
-		globalMembersList = new ArrayList<String>();
+//		allMembersList = new ArrayList<String>();
+//		assignedMembersList = new ArrayList<String>();
+//		globalMembersList = new ArrayList<String>();
 		
 		// Set UI for members
 		allMembers = new JList<String>();
@@ -449,6 +449,7 @@ public class TaskEditView extends JPanel implements IView {
 		String stat = t.getStatus().toString();
 	
 		//This is hard coded and should be fixed at some point in the future
+		//I agree
 		actEffortSpinner.setEnabled( (stat.equals("In Progress")) || (stat.equals("Complete")) );
 		
 		List<String> taskAssignedMembers = t.getAssignedTo();
@@ -488,14 +489,17 @@ public class TaskEditView extends JPanel implements IView {
 			t.setActualEffort(act);
 			t.setDueDate( dueDatePicker.getDate() );
 			//t.setColumn(statusBox.getSelectedIndex());  //TODO change this to new status implementtation
-			t.setAssignedTo(new ArrayList<String>(this.assignedMembersList));
+//			t.setAssignedTo(new ArrayList<String>(this.assignedMembersList));
+			t.setAssignedTo(new ArrayList<String>(this.EditViewMemberHandler.getAssigned()));
 			System.out.println(t.toJson());
 		} catch (IllegalArgumentException ex) {
 			System.err.println(ex.toString());
 			return;
 		}
-		this.assignedMembersList = new ArrayList<String> ();
-		this.allMembersList = new ArrayList<String> ();
+		
+		// Why do we do this?? 
+//		this.assignedMembersList = new ArrayList<String> ();
+//		this.allMembersList = new ArrayList<String> ();
 		taskOut();
 		
 	}
@@ -631,6 +635,7 @@ public class TaskEditView extends JPanel implements IView {
 		
 	}
 
+	
 	private class JListMouseHandler implements MouseListener {
 
 		JList<String> list;
