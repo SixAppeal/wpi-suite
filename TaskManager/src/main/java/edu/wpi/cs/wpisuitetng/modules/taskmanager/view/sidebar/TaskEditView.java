@@ -287,18 +287,34 @@ public class TaskEditView extends JPanel implements IView {
 		this.assignedMembersMouseHandler.just_changed = true;
 	}
 	
-//	/**
-//	 * Allows a request from the server to add to the list of all members available to assign to a task
-//	 * @param to_add Members from the server that are going to be added to the All Members list
-//	 */
-//	public void setAllMembers(String [] to_add) {
-//		for (int i = 0; i < to_add.length; i++) {
-//			if (!this.allMembersList.contains(to_add[i])) {
-//				allMembersList.add(to_add[i]);
-//			}
-//		}
-//		allMembers.setListData(allMembersList.toArray(new String[allMembersList.size()]));
-//	}
+	
+	// Below isnt called?? Compilation errors when commenting it out... 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	// Below isnt called?? Compilation errors when commenting it out... 
+	
+	/**
+	 * Allows a request from the server to add to the list of all members available to assign to a task
+	 * @param to_add Members from the server that are going to be added to the All Members list
+	 */
+	public void setAllMembers(String [] to_add) {
+		for (int i = 0; i < to_add.length; i++) {
+			if (!this.allMembersList.contains(to_add[i])) {
+				allMembersList.add(to_add[i]);
+			}
+		}
+		allMembers.setListData(allMembersList.toArray(new String[allMembersList.size()]));
+	}
 
 	/**
 	 * 
