@@ -452,7 +452,7 @@ public class TaskEditView extends JPanel implements IView {
 		{
 			return;
 		}
-
+		
 		try {
 
 			t.setTitle(title);
@@ -473,6 +473,7 @@ public class TaskEditView extends JPanel implements IView {
 		taskOut();
 		
 	}
+
 
 	/**
 	 * Gets the title for this view

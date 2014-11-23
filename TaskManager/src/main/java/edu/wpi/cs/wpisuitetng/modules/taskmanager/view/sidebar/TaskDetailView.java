@@ -54,10 +54,13 @@ public class TaskDetailView extends JPanel implements IView {
 	JLabel taskEstLabel;		//Displays the Task's Estimated Effort value
 	
 	JLabel actLabel;
-	JLabel taskActLabel;		//Displays the Task's Actual Effor Value
+	JLabel taskActLabel;		//Displays the Task's Actual Effort Value
 	
 	JLabel memberLabel;
 	JList<String> taskMemberList;
+	
+	JLabel activitiesLabel;
+	JList<String> taskActivitiesList;
 	
 	JButton archiveButton; //Archives the task.
 	JButton editButton; //Opens the task for editing.
@@ -85,7 +88,11 @@ public class TaskDetailView extends JPanel implements IView {
 		
 		memberLabel = new JLabel ("Members");
 		memberLabel.setForeground(labelColor);
-		taskMemberList = new JList<String>();
+		taskMemberList = new JList<String> ();
+		
+		activitiesLabel = new JLabel ("Activities History");
+		activitiesLabel.setForeground(labelColor);
+		taskActivitiesList = new JList<String> ();
 		
 		archiveButton = new JButton("Archive");
 		archiveButton.addActionListener( new ActionListener() {
@@ -157,13 +164,22 @@ public class TaskDetailView extends JPanel implements IView {
 		gbc.gridy = 8;
 		this.add(taskMemberList, gbc);
 		
+		gbc.insets.top = 20;
+		gbc.gridy = 9;
+		gbc.gridx = 0;
+		this.add(activitiesLabel,gbc);
+		
+		gbc.insets.top = 5;
+		gbc.gridy = 10;
+		this.add(taskActivitiesList, gbc);
+		
 		
 		gbc.anchor = GridBagConstraints.FIRST_LINE_START;
 		gbc.fill = GridBagConstraints.NONE;
 		gbc.insets.top = 20;
 		gbc.weighty = 1.0;
 		gbc.gridx = 0;
-		gbc.gridy = 9;
+		gbc.gridy = 11;
 		this.add(archiveButton, gbc);
 		
 		gbc.anchor = GridBagConstraints.FIRST_LINE_END;
@@ -186,6 +202,7 @@ public class TaskDetailView extends JPanel implements IView {
 		taskEstLabel.setText(this.t.getEstimatedEffort().toString());
 		taskActLabel.setText(this.t.getActualEffort().toString());
 		taskMemberList.setListData(t.getAssignedTo().toArray(new String[0]));
+		taskActivitiesList.setListData(t.getActivities().toArray(new String[0]));
 		editButton.setEnabled(true);
 		this.revalidate();
 	}

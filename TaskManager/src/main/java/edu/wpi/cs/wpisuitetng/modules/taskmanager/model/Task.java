@@ -44,6 +44,7 @@ public class Task extends AbstractModel {
 		this.actualEffort = 1;
 		this.dueDate = new Date();
 		this.activities = new LinkedList<Activity>();
+		this.activities.add(new Activity("Task created, bro"));
 		this.column = 0;
 		this.archived = false;
 	}
@@ -227,6 +228,12 @@ public class Task extends AbstractModel {
 
 		return true;
 	}
+	
+	public void addToActivitiesList(Object oldObj, Object newObj, String objType){
+		if (!oldObj.equals(newObj)){
+			activities.add(new Activity("Set " + objType + " to " + newObj.toString()));
+		}
+	}
 
 	/**
 	 * Necessary Method Implementation
@@ -270,6 +277,7 @@ public class Task extends AbstractModel {
 	 */
 	public void setTitle(String title) throws IllegalArgumentException {
 		this.title = title;
+		this.addToActivitiesList(this.getTitle(), title, "Title");
 	}
 
 	/**
@@ -285,6 +293,7 @@ public class Task extends AbstractModel {
 	 */
 	public void setDescription(String description) {
 		this.description = description;
+		this.addToActivitiesList(this.getDescription(), description, "Description");
 	}
 
 	/**
@@ -301,6 +310,8 @@ public class Task extends AbstractModel {
 	 */
 	public void setStatus(TaskStatus status) {
 		this.status = status;
+		this.addToActivitiesList(this.getStatus(), status, "Status");
+	
 	}
 
 	/**
@@ -317,6 +328,21 @@ public class Task extends AbstractModel {
 	 */
 	public void setAssignedTo(List<String> assignedTo) {
 		this.assignedTo = assignedTo;
+		this.addMembersToActivities(this.getAssignedTo(), assignedTo);
+		
+	}
+	
+	public void addMembersToActivities(List<String> oldMembers, List<String> newMembers){
+		for(String member : oldMembers){
+			if(!newMembers.contains(member)){
+				this.activities.add(new Activity (member + " was removed"));
+			}
+		}
+		for(String member : newMembers){
+			if(!oldMembers.contains(member)){
+				this.activities.add(new Activity (member + " was added"));
+			}
+		}
 	}
 
 	/**
@@ -352,6 +378,7 @@ public class Task extends AbstractModel {
 		//checks that estimatedEffort is positive
 		if (estimatedEffort > 0){
 			this.estimatedEffort = estimatedEffort;
+			this.addToActivitiesList(this.getEstimatedEffort(), estimatedEffort, "Estimated Effort");
 		}
 		else {
 			throw new IllegalArgumentException("Estimated Effort Must Be Greater Than Zero!");
@@ -375,6 +402,7 @@ public class Task extends AbstractModel {
 		// making sure that the inputted value is positive
 		if (actualEffort >= 0){
 			this.actualEffort = actualEffort;
+			this.addToActivitiesList(this.getActualEffort(), actualEffort, "Actual Effort");
 		}
 		else {
 			throw new IllegalArgumentException("Actual Effort Must Be Greater Than Or Equal To Zero!");
@@ -395,6 +423,7 @@ public class Task extends AbstractModel {
 	 */
 	public void setDueDate(Date dueDate) {
 		this.dueDate = dueDate;
+		this.addToActivitiesList(this.getDueDate(), dueDate, "Due Date");
 	}
 
 	/**
@@ -427,6 +456,7 @@ public class Task extends AbstractModel {
 	 */
 	public void setColumn(Integer column) {
 		this.column = column;
+		this.addToActivitiesList(this.getColumn(), column, "Column");
 	}
 	
 	/**
@@ -441,6 +471,7 @@ public class Task extends AbstractModel {
 	 */
 	public void archive() {
 		this.archived = true;
+		this.activities.add(new Activity("Task has been archived"));
 	}
 	
 	/**
@@ -448,6 +479,7 @@ public class Task extends AbstractModel {
 	 */
 	public void unarchive() {
 		this.archived = false;
+		this.activities.add(new Activity("Task has been unarchived"));
 	}
 	
 }
