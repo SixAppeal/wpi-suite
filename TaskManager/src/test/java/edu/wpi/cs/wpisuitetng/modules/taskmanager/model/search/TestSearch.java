@@ -5,6 +5,7 @@ import static org.junit.Assert.assertNotNull;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.lucene.queryparser.classic.ParseException;
@@ -65,15 +66,48 @@ public class TestSearch {
 	public void testSearchForTitle() throws SearchException, IOException, ParseException {
 		Search someSearch = new Search();
 		testList = new ArrayList<Task>();
+		List<String> testAssignedTo = new LinkedList<String>();
+		testAssignedTo.add("akshoop");
+		testAssignedTo.add("bunch");
 		
 		someSearch.initialize();
-		testList.add(new Task("sometitle"));
-		testList.add(new Task("Another title"));
-		testList.add(new Task("HERE'S ANOTHER TITLE"));
+		Task task1 = new Task("sometitle bunch");
+		task1.setDescription("sometitle bunch of words HERE ARE CAPITAL lettersWith, commas's yeah!?");
+		task1.setAssignedTo(testAssignedTo);
+		task1.setId(3);
+		
+		Task task2 = new Task("another title bunch");
+		task2.setDescription("sometitle bunch of's yeah!?");
+		task2.setAssignedTo(testAssignedTo);
+		task2.setId(4);
+		
+		Task task3 = new Task("testing bunch");
+		task3.setDescription(" other description bunch");
+		task3.setAssignedTo(testAssignedTo);
+		task3.setId(5);
+		
+		
+		testList.add(task1);
+		testList.add(task2);
+		testList.add(task3);
+		
+		
+		
 		someSearch.createIndex(testList);
-		String result = someSearch.searchFor("sometitle");
-		System.out.println("result should be " + result);
-		assertEquals(result.compareTo("sometitle"), 0);
+//		String result1 = someSearch.searchFor("sometitle");
+//		System.out.println("result1 should be " + result1);
+//		
+//		String result2 = someSearch.searchFor("capital");
+//		System.out.println("result2 should be " + result2);
+//		
+//		String result3 = someSearch.searchFor("nhhughes");
+//		System.out.println("result3 should be " + result3);
+//		
+		List<Integer> result = someSearch.searchFor("bunch");
+		for (Integer i : result) {
+			System.out.println("Task Id: " + i);
+		}
+		//assertEquals(result.compareTo("sometitle"), 0);
 	}
 	
 	
