@@ -42,96 +42,90 @@ public class LocalCache implements Cache {
 	
 
 	/**
+	 * @throws NotImplementedException 
 	 * @see edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.ICache#store(java.lang.String, java.lang.Object)
 	 */
 	@Override
-	public boolean store(String request, Object toStore) {
+	public void store(String request, Object toStore) throws NotImplementedException {
 		if (request.compareTo("task") == 0) {
 			tasks.add((Task) toStore);
-			return true;
+			final Request networkRequest = Network.getInstance().makeRequest("taskmanager/task", HttpMethod.GET);
+			networkRequest.addObserver(new CallbackManager(gateway, ""));
+			networkRequest.send();
 		}
 		if (request.compareTo("archive") == 0) {
 			archive.add((Task) toStore);
-			return true;
+			final Request networkRequest = Network.getInstance().makeRequest("taskmanager/task", HttpMethod.GET);
+			networkRequest.addObserver(new CallbackManager(gateway, ""));
+			networkRequest.send();
 		}
 		if (request.compareTo("member") == 0) {
-			members.add((User) toStore);
-			return true;
+			throw new NotImplementedException();
 		}
 		if (request.compareTo("stage") == 0) {
+			//TODO make entity manager that will respond to this request
 			statuses.add((TaskStatus) toStore);
-			return true;
+			final Request networkRequest = Network.getInstance().makeRequest("taskmanager/stage", HttpMethod.GET);
+			networkRequest.addObserver(new CallbackManager(gateway, ""));
+			networkRequest.send();
 		}
-		return false;
 	}
 
-
 	/**
-	 * @see edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.ICache#update(java.lang.String, java.lang.Object)
+	 * @throws NotImplementedException 
+	 * @see edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.ICache#update(java.lang.String, java.lang.Object, java.lang.Object)
 	 */
 	@Override
-	public boolean update(String request, Object toUpdate) {
+	public void update(String request, Object oldObject, Object newObject) throws NotImplementedException {
 		if (request.compareTo("task") == 0) {
-			tasks.remove((Task) toUpdate);
-			tasks.add((Task) toUpdate);
+			tasks.remove((Task) oldObject);
+			tasks.add((Task) newObject);
 			final Request networkRequest = Network.getInstance().makeRequest("taskmanager/task", HttpMethod.POST);
-			networkRequest.setBody(((Task)toUpdate).toJson());
+			networkRequest.setBody(((Task)newObject).toJson());
 			networkRequest.addObserver(new CallbackManager(gateway, ""));
 			networkRequest.send();
-			return true;
 		}
 		if (request.compareTo("archive") == 0) {
-			archive.remove((Task) toUpdate);
-			archive.add((Task) toUpdate);
+			archive.remove((Task) oldObject);
+			archive.add((Task) newObject);
 			final Request networkRequest = Network.getInstance().makeRequest("taskmanager/task", HttpMethod.POST);
-			networkRequest.setBody(((Task)toUpdate).toJson());
+			networkRequest.setBody(((Task)newObject).toJson());
 			networkRequest.addObserver(new CallbackManager(gateway, ""));
 			networkRequest.send();
-			return true;
 		}
 		if (request.compareTo("member") == 0) {
-			members.remove((User) toUpdate);
-			members.add((User) toUpdate);
-			final Request networkRequest = Network.getInstance().makeRequest("taskmanager/task", HttpMethod.POST);
-			networkRequest.setBody(((Task)toUpdate).toJson());
-			networkRequest.addObserver(new CallbackManager(gateway, ""));
-			networkRequest.send();
-			return true;
+			throw new NotImplementedException();
 		}
 		if (request.compareTo("stage") == 0) {
-			statuses.remove((TaskStatus) toUpdate);
-			statuses.add((TaskStatus) toUpdate);
-			final Request networkRequest = Network.getInstance().makeRequest("taskmanager/task", HttpMethod.POST);
-			networkRequest.setBody(((Task)toUpdate).toJson());
+			statuses.remove((TaskStatus) newObject);
+			statuses.add((TaskStatus) oldObject);
+			final Request networkRequest = Network.getInstance().makeRequest("taskmanager/stage", HttpMethod.POST);
+			//TODO Need to figure out how stages are stored
+			//networkRequest.setBody(this.statuses.toJson());
 			networkRequest.addObserver(new CallbackManager(gateway, ""));
 			networkRequest.send();
-			return true;
 		}
-		return false;
 	}
 
 	/**
+	 * @throws NotImplementedException 
 	 * @see edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.ICache#delete(java.lang.String, java.lang.Object)
 	 */
 	@Override
-	public boolean delete(String request, Object toDelete) {
-		if (request.compareTo("task") == 0) {
-			tasks.remove((Task) toDelete);
-			return true;
-		}
-		if (request.compareTo("archive") == 0) {
-			archive.remove((Task) toDelete);
-			return true;
-		}
-		if (request.compareTo("member") == 0) {
-			members.remove((User) toDelete);
-			return true;
-		}
-		if (request.compareTo("stage") == 0) {
-			statuses.remove((TaskStatus) toDelete);
-			return true;
-		}
-		return false;
+	public void delete(String request, Object toDelete) throws NotImplementedException {
+		throw new NotImplementedException();
+//		if (request.compareTo("task") == 0) {
+//			tasks.remove((Task) toDelete);
+//		}
+//		if (request.compareTo("archive") == 0) {
+//			archive.remove((Task) toDelete);
+//		}
+//		if (request.compareTo("member") == 0) {
+//			members.remove((User) toDelete);
+//		}
+//		if (request.compareTo("stage") == 0) {
+//			statuses.remove((TaskStatus) toDelete);
+//		}
 	}
 
 	/**
@@ -167,24 +161,19 @@ public class LocalCache implements Cache {
 	 * @see edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.ICache#clearCache(java.lang.String)
 	 */
 	@Override
-	public boolean clearCache(String request) {
+	public void clearCache(String request) {
 		if (request.compareTo("task") == 0) {
 			tasks = new ArrayList<Task>();
-			return true;
 		}
 		if (request.compareTo("archive") == 0) {
 			archive = new ArrayList<Task>();
-			return true;
 		}
 		if (request.compareTo("member") == 0) {
 			members = new ArrayList<User>();
-			return true;
 		}
 		if (request.compareTo("stage") == 0) {
 			statuses = new ArrayList<TaskStatus>();
-			return true;
 		}
-		return false;
 	}
 
 	/**

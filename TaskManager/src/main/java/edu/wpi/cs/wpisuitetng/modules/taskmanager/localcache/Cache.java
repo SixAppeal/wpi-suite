@@ -18,24 +18,27 @@ public interface Cache {
 	 * @param request Task, Member or anything else that needs to be cached
 	 * @param toStore Object to be added to a type specific cache
 	 * @return whether the request was successful
+	 * @throws NotImplementedException 
 	 */
-	public boolean store(String request, Object toStore);
+	public void store(String request, Object toStore) throws NotImplementedException;
 	
 	/**
 	 * Takes a request that specifies where in the cache the object should be updated
 	 * @param request Task, Member, or anything else that needs to be cached
 	 * @param toUpdate Object to be updates to a type specific cache
 	 * @return whether the request was successful
+	 * @throws NotImplementedException 
 	 */
-	public boolean update(String request, Object toUpdate);
+	public void update(String request, Object oldOjbect, Object newObject) throws NotImplementedException;
 	
 	/**
 	 * Takes a request that specifies an object to delete in the cache and deletes it.
 	 * @param request Task, Member, or anything else that needs to be cached
 	 * @param toDelete Object to be delete
 	 * @return whether the request was successful
+	 * @throws NotImplementedException 
 	 */
-	public boolean delete(String request, Object toDelete);
+	public void delete(String request, Object toDelete) throws NotImplementedException;
 	
 	/**
 	 * Takes a request for a certain cache and returns the cache
@@ -59,7 +62,7 @@ public interface Cache {
 	 * @param request Cache to delete from or 'all'
 	 * @return whether a cache was successfully selected or not
 	 */
-	public boolean clearCache(String request);
+	public void clearCache(String request);
 	
 	/**
 	 * Used to have a view / presenter updated when the network has finished everything

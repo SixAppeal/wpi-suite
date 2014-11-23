@@ -116,7 +116,7 @@ public class Task extends AbstractModel {
 	public String toJson() {
 		return new Gson().toJson(this, Task.class);
 	}
-
+	
 	/**
 	 * Necessary Method Implementation: our task model does not use this.
 	 */
