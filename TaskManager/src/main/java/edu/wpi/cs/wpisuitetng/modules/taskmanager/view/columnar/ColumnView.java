@@ -61,12 +61,7 @@ public class ColumnView extends JPanel implements IView {
 		gbc.gridy = 0;
 		this.add(this.scrollPane, gbc);
 		
-		Task t = new Task();
-		t.setTitle("A task");
-		t.setStage("New");
-		this.setState(new Task[] {
-			t
-		}, new Stage[] {
+		this.setState(new Task[0], new Stage[] {
 			new Stage("New"),
 			new Stage("Scheduled"),
 			new Stage("In Progress"),
