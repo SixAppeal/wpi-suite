@@ -13,6 +13,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
 /**
  * 
  * @author Thhughes
+ * @author jrhennessy
  *
  *
  *	A handler for the member lists. 
@@ -66,7 +67,11 @@ public class MemberListHandler {
 		
 	}
 	
-	public void assignMembers(List<String> members){
+	/**
+	 * Will move all valid members from allmemberslist to assignedmemberlist
+	 * @param members the members to assign
+	 */
+	public void assignMember(List<String> members){
 		for (String s: members){
 			if (!globalMembersList.contains(s)){
 				throw new IllegalArgumentException("Can only add valid members");
@@ -77,6 +82,10 @@ public class MemberListHandler {
 		
 	}
 	
+	/**
+	 * Moves a valid member from the assignedmemberlist to allmemberslist
+	 * @param toRem the member to remove from the list
+	 */
 	public void unAssignMember(String toRem){
 		if (!assignedMembersList.contains(toRem)){
 			throw new IllegalArgumentException("Can only add valid members");
@@ -86,7 +95,11 @@ public class MemberListHandler {
 		
 	}
 	
-	public void unAssignMembers(List<String> members){
+	/**
+	 * Takes all valid members and moves them from the assignedmemberlist to the allmemberslist
+	 * @param members the members to unassign from the task
+	 */
+	public void unAssignMember(List<String> members){
 		for (String s: members){
 			if (!assignedMembersList.contains(s)){
 				throw new IllegalArgumentException("Can only add valid members");
@@ -96,7 +109,6 @@ public class MemberListHandler {
 		assignedMembersList.removeAll(members);
 		
 	}
-	
 	
 	/**
 	 * 
@@ -114,25 +126,54 @@ public class MemberListHandler {
 		
 	}
 	
+	/**
+	 * Sets the unassigned members list to those members not already assigned to a task
+	 */
 	private void setUnassigned(){
 		allMembersList = globalMembersList;
 		allMembersList.removeAll(assignedMembersList);
 		
 	}
+	
+	/**
+	 * Gets the list of members assigned to a task
+	 * @return All members assigned to a task
+	 */
 	public List<String> getAssigned(){
 		return assignedMembersList;
 	}
 	
+	/**
+	 * Gets the list of members not assigned to a task
+	 * @return All members not assigned to a task
+	 */
 	public List<String> getUnassigned(){
 		return allMembersList;
 	}
 	
+	/**
+	 * Gets the number of members assigned to a task
+	 * @return the number of members assigned to the task
+	 */
 	public Integer getNumAssigned(){
 		return assignedMembersList.size();
 	}
 	
+	/**
+	 * Gets the number of members not assigned to a task
+	 * @return the number of members not assigned to a task
+	 */
 	public Integer getNumUnAssigned(){
 		return allMembersList.size();
 	}
 	
+	/**
+	 * Sets the assigned and unassigned lists based off of the input from the task
+	 * @param newAssigned List of members currently assigned to a task
+	 */
+	public void populateMembers(List<String> newAssigned){
+		this.assignedMembersList = newAssigned;
+		this.allMembersList = globalMembersList;
+		this.allMembersList.removeAll(this.assignedMembersList);
+	}
 }
