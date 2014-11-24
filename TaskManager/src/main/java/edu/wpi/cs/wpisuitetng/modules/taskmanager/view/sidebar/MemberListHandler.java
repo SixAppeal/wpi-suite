@@ -26,12 +26,14 @@ public class MemberListHandler {
 	private List<String> allMembersList;			
 	private List<String> assignedMembersList;
 	private List<String> globalMembersList;
+	private final List<String> blankList;
 	
-	
+	// TODO: Need to uncomment the subscribe gateway command to get cache information
 	public MemberListHandler(){
 		allMembersList = new ArrayList<String>();		// List of members NOT assigned to a task
 		assignedMembersList = new ArrayList<String>();	// List of members who are assigned to a task
 		globalMembersList = new ArrayList<String>();	// List of ALL members
+		blankList = new ArrayList<String>();
 		
 		//this.gateway.toView("localcache", "subscribe", "member:MemberListHandler:updateAll");
 		
@@ -47,9 +49,67 @@ public class MemberListHandler {
 	 */
 	public void updateAll(Cache localCache){
 		setGlobal(localCache);	
-		setUnassigned();
+		updateUnassigned();
 		
 	}
+	
+	/**
+	 * 
+	 * @param localCache local cache of all the data
+	 * 
+	 * 	Converts the array of Objects from the Loal Cache to an array of Users
+	 * 	Then converts the array of users to a list<String> of the usernames
+	 */
+	private void setGlobal(Cache localCache){
+		Object[] output = localCache.retrieve("member");
+		User[] memberArray = Arrays.copyOf(output, output.length, User[].class);
+		
+		for (int i = 0; i < memberArray.length; i++){
+			globalMembersList.add(memberArray[i].getUsername());
+		}
+		
+	}
+	
+	/**
+	 * Sets the unassigned members list to those members not already assigned to a task
+	 */
+	private void updateUnassigned(){
+		allMembersList = globalMembersList;
+		allMembersList.removeAll(assignedMembersList);
+		
+	}
+
+	
+	
+	
+	/**
+	 * 	Clears all the internal lists for a new task to be displayed.
+	 */
+	public void clearMembers(){
+		// Provided in case of JList Displaying problems
+		// As was previously used
+		this.globalMembersList = this.blankList;
+		this.assignedMembersList = this.blankList;
+		this.allMembersList = this.blankList;
+		
+	}
+	
+	/**
+	 * Sets the assigned and unassigned lists based off of the input from the task
+	 * @param newAssigned List of members currently assigned to a task
+	 */
+	public void populateMembers(List<String> newAssigned){
+		this.assignedMembersList = newAssigned;
+		this.allMembersList = globalMembersList;
+		this.allMembersList.removeAll(this.assignedMembersList);
+	}
+
+	
+	
+	
+	
+	
+	
 	
 	
 	/**
@@ -110,30 +170,7 @@ public class MemberListHandler {
 		
 	}
 	
-	/**
-	 * 
-	 * @param localCache local cache of all the data
-	 * 
-	 * 	re-populates the global members list from the cache to ensure continuously up to date data. 
-	 */
-	private void setGlobal(Cache localCache){
-		Object[] output = localCache.retrieve("member");
-		User[] memberArray = Arrays.copyOf(output, output.length, User[].class);
-		
-		for (int i = 0; i < memberArray.length; i++){
-			globalMembersList.add(memberArray[i].getUsername());
-		}
-		
-	}
-	
-	/**
-	 * Sets the unassigned members list to those members not already assigned to a task
-	 */
-	private void setUnassigned(){
-		allMembersList = globalMembersList;
-		allMembersList.removeAll(assignedMembersList);
-		
-	}
+
 	
 	/**
 	 * Gets the list of members assigned to a task
@@ -167,13 +204,9 @@ public class MemberListHandler {
 		return allMembersList.size();
 	}
 	
-	/**
-	 * Sets the assigned and unassigned lists based off of the input from the task
-	 * @param newAssigned List of members currently assigned to a task
-	 */
-	public void populateMembers(List<String> newAssigned){
-		this.assignedMembersList = newAssigned;
-		this.allMembersList = globalMembersList;
-		this.allMembersList.removeAll(this.assignedMembersList);
-	}
+	
+	
+
+
+
 }

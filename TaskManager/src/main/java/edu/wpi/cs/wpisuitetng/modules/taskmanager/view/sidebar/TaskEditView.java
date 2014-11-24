@@ -100,6 +100,7 @@ public class TaskEditView extends JPanel implements IView {
 	
 	MemberListHandler EditViewMemberHandler;
 	
+	// Being replaced by MemberListHandler, uncommented to not throw errors. 
 	List<String> allMembersList;
 	List<String> assignedMembersList;
 	List<String> globalMembersList;
@@ -113,11 +114,12 @@ public class TaskEditView extends JPanel implements IView {
 	 */
 	public TaskEditView () {
 		
-		t = new Task();
+		t = new Task();		// Internal Task
 
 		this.setOpaque(false);
 		this.setLayout(new GridBagLayout());
 
+		// Gui Setup
 		titleEntry = new JTextField();
 		titleEntry.addKeyListener(new KeyAdapter() {
 			public void keyReleased(KeyEvent e)
@@ -189,7 +191,7 @@ public class TaskEditView extends JPanel implements IView {
 		//Member Stuff
 		EditViewMemberHandler = new MemberListHandler();
 		
-		
+		// TODO: Delete below lists after cache information is working. 
 //		allMembersList = new ArrayList<String>();
 //		assignedMembersList = new ArrayList<String>();
 //		globalMembersList = new ArrayList<String>();
@@ -244,7 +246,7 @@ public class TaskEditView extends JPanel implements IView {
 		errorText.setForeground(Color.RED);
 		errorText.setBorder(FormField.BORDER_ERROR);
 		
-
+		// GUI Layout Stuff
 		checkValidityOfSpinner(estEffortSpinner , "Est. Effort");
 		
 		GridBagConstraints gbc = new GridBagConstraints();
@@ -288,21 +290,13 @@ public class TaskEditView extends JPanel implements IView {
 		this.assignedMembersMouseHandler.just_changed = true;
 	}
 	
-	
-	// Below isnt called?? Compilation errors when commenting it out... 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	// Below isnt called?? Compilation errors when commenting it out... 
+
+
+	/*
+	 * TODO: setAllMembers should be removed. 
+	 * Currently is not removed because the system throws 
+	 * errors because it expects it
+	 */
 	
 	/**
 	 * Allows a request from the server to add to the list of all members available to assign to a task
@@ -330,6 +324,10 @@ public class TaskEditView extends JPanel implements IView {
 		fixPanel();
 	}
 	
+	/**
+	 * Fixes the display of the panel containing the member information
+	 * 
+	 */
 	public void fixPanel() {
 		if(EditViewMemberHandler.getAssigned().size() == 0){
 			String [] empty_string_list = new String[1];
@@ -353,6 +351,11 @@ public class TaskEditView extends JPanel implements IView {
 		this.repaint();
 	}
 	
+	/*
+	 * TODO: Remove addMember(String ...)
+	 * 
+	 * Currently in the system to avoid errors due to refactoring
+	 */
 	public void addMember(String member_to_add) {
 		
 		this.globalMembersList.add(member_to_add);
@@ -374,11 +377,9 @@ public class TaskEditView extends JPanel implements IView {
 		EditViewMemberHandler.assignMember(allMembers.getSelectedValuesList());
 		
 		
-		// Set the unsassigned JList
+		// Set the unsassigned/assigned JList
 		allMembers.setListData(EditViewMemberHandler.getUnassigned().toArray(new String[EditViewMemberHandler.getNumUnAssigned()]));
-		// Set the assigned JList
 		allMembers.setListData(EditViewMemberHandler.getAssigned().toArray(new String[EditViewMemberHandler.getNumAssigned()]));
-		
 		
 		this.allMembersMouseHandler.clear();
 		this.assignedMembersMouseHandler.clear();
@@ -393,11 +394,9 @@ public class TaskEditView extends JPanel implements IView {
 		EditViewMemberHandler.unAssignMember(allMembers.getSelectedValuesList());
 		
 		
-		// Set the unsassigned JList
+		// Set the unsassigned/assigned JList
 		allMembers.setListData(EditViewMemberHandler.getUnassigned().toArray(new String[EditViewMemberHandler.getNumUnAssigned()]));
-		// Set the assigned JList
 		allMembers.setListData(EditViewMemberHandler.getAssigned().toArray(new String[EditViewMemberHandler.getNumAssigned()]));
-		
 		
 		this.allMembersMouseHandler.clear();
 		this.assignedMembersMouseHandler.clear();
@@ -483,7 +482,6 @@ public class TaskEditView extends JPanel implements IView {
 			t.setActualEffort(act);
 			t.setDueDate( dueDatePicker.getDate() );
 			//t.setColumn(statusBox.getSelectedIndex());  //TODO change this to new status implementtation
-//			t.setAssignedTo(new ArrayList<String>(this.assignedMembersList));
 			t.setAssignedTo(new ArrayList<String>(this.EditViewMemberHandler.getAssigned()));
 			System.out.println(t.toJson());
 		} catch (IllegalArgumentException ex) {
