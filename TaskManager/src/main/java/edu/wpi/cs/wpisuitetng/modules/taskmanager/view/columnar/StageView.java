@@ -30,6 +30,7 @@ public class StageView extends JPanel implements IView {
 	// State-related fields
 	private Stage stage;
 	private Task[] tasks;
+	private GridBagLayout layout;
 	
 	// Components
 	private JLabel nameLabel;
@@ -45,10 +46,13 @@ public class StageView extends JPanel implements IView {
 		this.nameLabel = new JLabel("", JLabel.CENTER);
 		this.container = new JPanel();
 		this.scrollPane = new JScrollPane(this.container);
+		this.layout = new GridBagLayout();
 		
-		this.container.setLayout(new GridBagLayout());
+		this.container.setLayout(this.layout);
 		this.container.setOpaque(false);
 		
+		this.scrollPane.setOpaque(false);
+		this.scrollPane.getViewport().setOpaque(false);
 		this.scrollPane.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
 		this.scrollPane.setHorizontalScrollBarPolicy(
 				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -141,13 +145,28 @@ public class StageView extends JPanel implements IView {
 			} else if (!taskView.getTask().equals(this.tasks[i])) {
 				taskView.setState(this.tasks[i]);
 			}
+			this.updateConstraints(taskView, i);
 		}
 		for (; i < this.tasks.length; i++) {
 			gbc.gridy = i;
-			this.container.add(new TaskView(this.tasks[i]), gbc);
+			taskView = new TaskView(this.tasks[i]);
+			this.container.add(taskView, gbc);
+			this.updateConstraints(taskView, i);
 		}
 		
 		this.scrollPane.revalidate();
+	}
+	
+	/**
+	 * Updates the constraints on a component in the container.
+	 * This is a helper method to reflow.
+	 * @param view The component to update
+	 * @param i The index of this component
+	 */
+	private void updateConstraints(TaskView view, int i) {
+		GridBagConstraints gbc = this.layout.getConstraints(view);
+		gbc.weighty = i == this.tasks.length - 1 ? 1.0 : 0.0;
+		this.layout.setConstraints(view, gbc);
 	}
 	
 	/**
