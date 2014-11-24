@@ -59,6 +59,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.FormGroup;
  * @author rwang3
  * @author akshoop
  * @author rnorlando
+ * @author Thhughes
  *
  * A view to be displayed when creating or modifying a task object in the GUI.
  *
@@ -370,7 +371,7 @@ public class TaskEditView extends JPanel implements IView {
 	 */
 	public void moveMembersToAssigned() {	
 		// Add selected members
-		EditViewMemberHandler.assignMembers(allMembers.getSelectedValuesList());
+		EditViewMemberHandler.assignMember(allMembers.getSelectedValuesList());
 		
 		
 		// Set the unsassigned JList
@@ -389,7 +390,7 @@ public class TaskEditView extends JPanel implements IView {
 	 */
 	public void moveMembersToAll() {
 		// Add selected members
-		EditViewMemberHandler.unAssignMembers(allMembers.getSelectedValuesList());
+		EditViewMemberHandler.unAssignMember(allMembers.getSelectedValuesList());
 		
 		
 		// Set the unsassigned JList
@@ -452,16 +453,9 @@ public class TaskEditView extends JPanel implements IView {
 		//I agree
 		actEffortSpinner.setEnabled( (stat.equals("In Progress")) || (stat.equals("Complete")) );
 		
-		List<String> taskAssignedMembers = t.getAssignedTo();
-		assignedMembersList = taskAssignedMembers;
-		List<String> to_use = new ArrayList<String>(globalMembersList);
-		for (String s : taskAssignedMembers) {
-			if (to_use.contains(s)) {
-				to_use.remove(s);
-			}
-		}
-		allMembersList = to_use;
-		updatePanels(assignedMembersList, allMembersList);
+		
+		EditViewMemberHandler.populateMembers(t.getAssignedTo());
+		updatePanels(EditViewMemberHandler.getAssigned(), EditViewMemberHandler.getUnassigned());
 	}
 	
 	/**
