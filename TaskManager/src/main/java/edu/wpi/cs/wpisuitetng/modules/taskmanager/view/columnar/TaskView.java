@@ -44,7 +44,6 @@ public class TaskView extends JPanel implements IView {
 		this.titleLabel = new JLabel("", JLabel.LEFT);
 
 		this.setBackground(new Color(255, 255, 255));
-		this.setOpaque(false);
 		this.setLayout(new GridBagLayout());
 		
 		GridBagConstraints gbc = new GridBagConstraints();
@@ -54,6 +53,8 @@ public class TaskView extends JPanel implements IView {
 		gbc.gridx = 0;
 		gbc.gridy = 0;
 		this.add(this.titleLabel, gbc);
+		
+		this.setState(task);
 	}
 	
 	/**
@@ -78,6 +79,8 @@ public class TaskView extends JPanel implements IView {
 	 */
 	public void reflow() {
 		this.titleLabel.setText(this.task.getTitle());
+		this.titleLabel.revalidate();
+		this.revalidate();
 	}
 
 	/**

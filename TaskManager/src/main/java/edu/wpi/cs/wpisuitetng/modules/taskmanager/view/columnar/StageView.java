@@ -6,9 +6,11 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 
+import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
 
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Stage;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
@@ -45,13 +47,17 @@ public class StageView extends JPanel implements IView {
 		this.scrollPane = new JScrollPane(this.container);
 		
 		this.container.setLayout(new GridBagLayout());
+		this.container.setOpaque(false);
+		
+		this.scrollPane.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+		this.scrollPane.setHorizontalScrollBarPolicy(
+				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
 		this.setBackground(new Color(220, 220, 220));
 		this.setMinimumSize(new Dimension(260, 0));
 		this.setMaximumSize(new Dimension(260, Integer.MAX_VALUE));
-		this.setPreferredSize(new Dimension(260, 0));
+		this.setPreferredSize(new Dimension(260, 400));
 		this.setLayout(new GridBagLayout());
-		this.setOpaque(false);
 		
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.anchor = GridBagConstraints.PAGE_START;
@@ -60,13 +66,13 @@ public class StageView extends JPanel implements IView {
 		gbc.weightx = 1.0;
 		gbc.gridx = 0;
 		gbc.gridy = 0;
-		this.add(this.nameLabel);
+		this.add(this.nameLabel, gbc);
 		
 		gbc.fill = GridBagConstraints.BOTH;
 		gbc.insets = new Insets(0, 0, 0, 0);
 		gbc.weighty = 1.0;
 		gbc.gridy = 1;
-		this.add(this.scrollPane);
+		this.add(this.scrollPane, gbc);
 		
 		this.setState(stage, tasks);
 	}

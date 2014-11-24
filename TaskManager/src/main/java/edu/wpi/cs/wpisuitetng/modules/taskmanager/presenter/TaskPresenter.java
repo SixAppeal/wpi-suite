@@ -62,7 +62,7 @@ public class TaskPresenter implements IPresenter{
 			
 			@Override
 			public void responseSuccess(IRequest iReq) {
-				gateway.toView("ColumnView", "addTask", TaskUtil.fromJson(iReq.getResponse().getBody()));
+				//gateway.toView("ColumnView", "addTask", TaskUtil.fromJson(iReq.getResponse().getBody()));
 			}
 
 			/**
@@ -107,7 +107,7 @@ public class TaskPresenter implements IPresenter{
 			
 			@Override
 			public void responseSuccess(IRequest iReq) {
-				gateway.toView("ColumnView", "addTask", TaskUtil.fromJson(iReq.getResponse().getBody()));
+				//gateway.toView("ColumnView", "addTask", TaskUtil.fromJson(iReq.getResponse().getBody()));
 			}
 
 			/**
@@ -129,7 +129,7 @@ public class TaskPresenter implements IPresenter{
 			}
 		});
 		request.send();
-		this.gateway.toView("ColumnView", "removeTask", task);
+		//this.gateway.toView("ColumnView", "removeTask", task);
 		
 	}
 	
@@ -144,7 +144,7 @@ public class TaskPresenter implements IPresenter{
 			
 			@Override
 			public void responseSuccess(IRequest iReq) {
-				gateway.toView("ColumnView", "removeTask", TaskUtil.fromJson(iReq.getResponse().getBody()));
+				//gateway.toView("ColumnView", "removeTask", TaskUtil.fromJson(iReq.getResponse().getBody()));
 			}
 
 			/**
@@ -166,7 +166,7 @@ public class TaskPresenter implements IPresenter{
 			}
 		});
 		request.send();
-		this.gateway.toView("ColumnView", "removeTask", task);
+		//this.gateway.toView("ColumnView", "removeTask", task);
 		
 	}
 	
@@ -182,7 +182,7 @@ public class TaskPresenter implements IPresenter{
 	 * communicate with the database.
 	 */
 	public void removeAllTasks() {
-		this.gateway.toView("ColumnView", "removeAllTasks");
+		//this.gateway.toView("ColumnView", "removeAllTasks");
 		//this.gateway.toView("ColumnView", "refreshView");
 	}
 	
@@ -222,7 +222,7 @@ public class TaskPresenter implements IPresenter{
 	 */
 	public void addAllToView( Task[] tasks ) {
 		for( Task t : tasks) addToView(t);
-		this.gateway.toView("ColumnView", "refreshView");
+		//this.gateway.toView("ColumnView", "refreshView");
 	}
 	
 	/**
@@ -230,7 +230,7 @@ public class TaskPresenter implements IPresenter{
 	 * @param t the task to add
 	 */
 	public void addToView( Task t ) {
-		if( !t.isArchived() ) this.gateway.toView("ColumnView", "addTask", t);
+		//if( !t.isArchived() ) this.gateway.toView("ColumnView", "addTask", t);
 	}
 	
 	/**

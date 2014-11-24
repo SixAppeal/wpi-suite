@@ -9,6 +9,7 @@ import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
 
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Stage;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
@@ -45,6 +46,8 @@ public class ColumnView extends JPanel implements IView {
 		this.container.setLayout(new GridBagLayout());
 
 		this.scrollPane.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+		this.scrollPane.setVerticalScrollBarPolicy(
+				ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 		
 		this.setLayout(new GridBagLayout());
 		this.setOpaque(false);
@@ -58,7 +61,12 @@ public class ColumnView extends JPanel implements IView {
 		gbc.gridy = 0;
 		this.add(this.scrollPane, gbc);
 		
-		this.setState(null, new Stage[] {
+		Task t = new Task();
+		t.setTitle("A task");
+		t.setStage("New");
+		this.setState(new Task[] {
+			t
+		}, new Stage[] {
 			new Stage("New"),
 			new Stage("Scheduled"),
 			new Stage("In Progress"),
@@ -117,7 +125,7 @@ public class ColumnView extends JPanel implements IView {
 		gbc.anchor = GridBagConstraints.FIRST_LINE_START;
 		gbc.fill = GridBagConstraints.VERTICAL;
 		gbc.weighty = 1.0;
-		gbc.insets = new Insets(20, 20, 20, 0);
+		gbc.insets = new Insets(20, 0, 20, 20);
 		gbc.gridy = 0;
 		
 		StageView stageView;
@@ -132,6 +140,7 @@ public class ColumnView extends JPanel implements IView {
 			}
 		}
 		for (; i < this.stages.length; i++) {
+			gbc.insets.left = i == 0 ? 20 : 0;
 			gbc.gridx = i;
 			this.container.add(new StageView(this.stages[i],
 					this.getTasksForStage(this.stages[i])), gbc);

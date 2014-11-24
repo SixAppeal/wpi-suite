@@ -100,9 +100,9 @@ public class TaskEditView extends JPanel implements IView {
 	
 	MemberListHandler EditViewMemberHandler;
 	
-//	List<String> allMembersList;
-//	List<String> assignedMembersList;
-//	List<String> globalMembersList;
+	List<String> allMembersList;
+	List<String> assignedMembersList;
+	List<String> globalMembersList;
 	
 	JListMouseHandler allMembersMouseHandler;
 	JListMouseHandler assignedMembersMouseHandler;
