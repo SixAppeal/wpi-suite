@@ -108,12 +108,23 @@ public class TestSearch {
 		System.out.println("******************************************************");
 		
 		List<Integer> result = someSearch.searchFor("sometitle");
+		int count = 1;
+		for (Integer i: result) {
+			System.out.println(count + ": " + i);
+			count++;
+		}
 		
 		System.out.println("******************************************************");
-		System.out.println("Searching for: nhhughes");
+		System.out.println("Searching for: akshoop");
 		System.out.println("******************************************************");
 		
 		result = someSearch.searchFor("akshoop");
+		
+		count = 1;
+		for (Integer i: result) {
+			System.out.println(count + ": " + i);
+			count++;
+		}
 		
 		System.out.println("******************************************************");
 		System.out.println("Searching for: bunch");
@@ -121,6 +132,13 @@ public class TestSearch {
 		
 		
 		result = someSearch.searchFor("bunch");
+		
+		
+		count = 1;
+		for (Integer i: result) {
+			System.out.println(count + ": " + i);
+			count++;
+		}
 		//assertEquals(result.compareTo("sometitle"), 0);
 	}
 	

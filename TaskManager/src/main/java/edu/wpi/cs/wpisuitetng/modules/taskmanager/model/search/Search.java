@@ -2,7 +2,11 @@ package edu.wpi.cs.wpisuitetng.modules.taskmanager.model.search;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.PriorityQueue;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
@@ -77,40 +81,65 @@ public class Search {
 		ScoreDoc[] hits = collectorTitle.topDocs().scoreDocs;
 		
 		
-		System.out.println("Found " + hits.length + " hit(s) for title.");
+		//System.out.println("Found " + hits.length + " hit(s) for title.");
 		
 		List<Integer> toReturn = new ArrayList<Integer>();
+		Map<Integer, Integer> rankings = new HashMap<Integer, Integer>();
+		
 		
 		for(int i=0;i<hits.length;++i) {
 		    int docId = hits[i].doc;
 		    Document d = searcher.doc(docId);
-		    System.out.println((i + 1) + ". " + d.get("id"));
+		    //System.out.println((i + 1) + ". " + d.get("id"));
+		    rankings.put(Integer.parseInt(d.get("id")), 3*(hits.length-i));
 		}
 		
 		TopScoreDocCollector collectorDescription = TopScoreDocCollector.create(10, true);
 		searcher.search(queryDescription, collectorDescription);
 		hits = collectorDescription.topDocs().scoreDocs;
 		
-		System.out.println("Found " + hits.length + " hit(s) for description.");
+		//System.out.println("Found " + hits.length + " hit(s) for description.");
 		
 		for(int i=0;i<hits.length;++i) {
 		    int docId = hits[i].doc;
 		    Document d = searcher.doc(docId);
-		    System.out.println((i + 1) + ". " + d.get("id"));
+		    //System.out.println((i + 1) + ". " + d.get("id"));
+		    Integer id = Integer.parseInt(d.get("id"));
+		    if (rankings.containsKey(id)) {
+		    	rankings.put(id, 2*(hits.length -i) + rankings.get(id));
+		    }
+		    else {
+		    	rankings.put(id, 2*i);
+		    }
 		}
 		
 		TopScoreDocCollector collectorMembers = TopScoreDocCollector.create(10, true);
 		searcher.search(queryMembers, collectorMembers);
 		hits = collectorMembers.topDocs().scoreDocs;
 		
-		System.out.println("Found " + hits.length + " hit(s) for members.");
+		//System.out.println("Found " + hits.length + " hit(s) for members.");
 		
 		for(int i=0;i<hits.length;++i) {
 		    int docId = hits[i].doc;
 		    Document d = searcher.doc(docId);
-		    System.out.println((i + 1) + ". " + d.get("id"));
+		    //System.out.println((i + 1) + ". " + d.get("id"));
+		    Integer id = Integer.parseInt(d.get("id"));
+		    if (rankings.containsKey(id)) {
+		    	rankings.put(id, (hits.length - i) + rankings.get(id));
+		    }
+		    else {
+		    	rankings.put(id, 2*i);
+		    }
+		}
+		PriorityQueue<IdRanking> idList = new PriorityQueue<IdRanking>();
+		
+		for (Map.Entry<Integer, Integer> i: rankings.entrySet()) {
+			idList.add(new IdRanking(i.getKey(), i.getValue()));
 		}
 		
+		while (!idList.isEmpty()) {
+			toReturn.add(idList.poll().getId());
+		}
 		
 		return toReturn;
 	
@@ -177,5 +206,25 @@ public class Search {
 		}
 		
 		
+	}
+}
+
+
+class IdRanking implements Comparable<IdRanking> {
+	private int id;
+	private Integer ranking;
+	
+	IdRanking(int id, Integer ranking) {
+		this.id = id;
+		this.ranking = ranking;
+	}
+
+	@Override
+	public int compareTo(IdRanking o) {
+		return this.ranking.compareTo(o.ranking);
+	}
+	
+	public int getId() {
+		return id;
 	}
 }
