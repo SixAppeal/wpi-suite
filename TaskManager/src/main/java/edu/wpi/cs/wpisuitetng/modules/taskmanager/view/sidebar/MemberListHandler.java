@@ -25,7 +25,7 @@ public class MemberListHandler {
 	
 	private List<String> allMembersList;			
 	private List<String> assignedMembersList;
-	private List<String> globalMembersList;
+	private List<String> globalMembersList;				// Only updated through localCache
 	private final List<String> blankList;
 	
 	// TODO: Need to uncomment the subscribe gateway command to get cache information
@@ -62,11 +62,35 @@ public class MemberListHandler {
 	 */
 	private void setGlobal(Cache localCache){
 		Object[] output = localCache.retrieve("member");
-		User[] memberArray = Arrays.copyOf(output, output.length, User[].class);
+		User[] memberArray = objectsToUsers(output);
+		globalMembersList = usersToUsernames(memberArray);
+
 		
-		for (int i = 0; i < memberArray.length; i++){
-			globalMembersList.add(memberArray[i].getUsername());
+	}
+	
+	/**
+	 * Converts an array of users to a list of usernames
+	 * 
+	 * @param userList list of users 
+	 * @return	List<String> that are the usernames of the users
+	 */
+	private List<String> usersToUsernames(User[] userList){
+		List<String> output = new ArrayList<String>(); 
+		for (int i = 0; i < userList.length; i++){
+			output.add(userList[i].getUsername());
 		}
+		return output;
+	}
+	
+	/**
+	 * Converts an array of objects to an array of users
+	 * 
+	 * @param inputObj Array of Objects
+	 * @return array of Users
+	 */
+	private User[] objectsToUsers(Object[] inputObj){
+		User[] memberArray = new User[inputObj.length];
+		return memberArray = Arrays.copyOf(inputObj, inputObj.length, User[].class);
 		
 	}
 	
@@ -88,9 +112,11 @@ public class MemberListHandler {
 	public void clearMembers(){
 		// Provided in case of JList Displaying problems
 		// As was previously used
-		this.globalMembersList = this.blankList;
-		this.assignedMembersList = this.blankList;
-		this.allMembersList = this.blankList;
+		MemberListHandler tempHandler = new MemberListHandler();
+		
+		this.globalMembersList = tempHandler.getGlobal();
+		this.assignedMembersList = tempHandler.getAssigned();
+		this.allMembersList = tempHandler.getUnassigned();
 		
 	}
 	
@@ -99,8 +125,9 @@ public class MemberListHandler {
 	 * @param newAssigned List of members currently assigned to a task
 	 */
 	public void populateMembers(List<String> newAssigned){
+		List<String> temp = new ArrayList<String>(globalMembersList);		// Need this to avoid compiler errors found while testing
 		this.assignedMembersList = newAssigned;
-		this.allMembersList = globalMembersList;
+		this.allMembersList = temp;
 		this.allMembersList.removeAll(this.assignedMembersList);
 	}
 
@@ -170,6 +197,25 @@ public class MemberListHandler {
 		
 	}
 	
+	/**
+	 * Global List Adder
+	 * -- Should only be used for testing -- 
+	 * 
+	 * @param toAdd String to add to the global List
+	 */
+	public void addGlobal(String toAdd){
+		globalMembersList.add(toAdd);
+		
+	}
+	/**
+	 * Global List Adder
+	 * -- Should only be used for testing -- 
+	 * 
+	 * @param toAdd List of Strings to add to the global List
+	 */
+	public void addGlobal(List<String> toAdd){
+		globalMembersList.addAll(toAdd);
+	}
 
 	
 	/**
@@ -189,6 +235,15 @@ public class MemberListHandler {
 	}
 	
 	/**
+	 * Gets the lsit of members 
+	 * @return	all the members possible
+	 */
+	public List<String> getGlobal(){
+		return this.globalMembersList;
+	}
+	
+	
+	/**
 	 * Gets the number of members assigned to a task
 	 * @return the number of members assigned to the task
 	 */
@@ -204,6 +259,14 @@ public class MemberListHandler {
 		return allMembersList.size();
 	}
 	
+	/**
+	 * Gets the number of members not assigned to a task
+	 * @return the number of members not assigned to a task
+	 */
+	public Integer getNumMembers(){
+		return globalMembersList.size();
+	}
+		
 	
 	
 
