@@ -103,10 +103,24 @@ public class TestSearch {
 //		String result3 = someSearch.searchFor("nhhughes");
 //		System.out.println("result3 should be " + result3);
 //		
-		List<Integer> result = someSearch.searchFor("bunch");
-		for (Integer i : result) {
-			System.out.println("Task Id: " + i);
-		}
+		System.out.println("******************************************************");
+		System.out.println("Searching for: sometitle");
+		System.out.println("******************************************************");
+		
+		List<Integer> result = someSearch.searchFor("sometitle");
+		
+		System.out.println("******************************************************");
+		System.out.println("Searching for: nhhughes");
+		System.out.println("******************************************************");
+		
+		result = someSearch.searchFor("akshoop");
+		
+		System.out.println("******************************************************");
+		System.out.println("Searching for: bunch");
+		System.out.println("******************************************************");
+		
+		
+		result = someSearch.searchFor("bunch");
 		//assertEquals(result.compareTo("sometitle"), 0);
 	}
 	
