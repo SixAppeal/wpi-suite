@@ -117,7 +117,7 @@ public class MemberListHandler {
 	 * 	re-populates the global members list from the cache to ensure continuously up to date data. 
 	 */
 	private void setGlobal(Cache localCache){
-		Object[] output = localCache.retreive("member");
+		Object[] output = localCache.retrieve("member");
 		User[] memberArray = Arrays.copyOf(output, output.length, User[].class);
 		
 		for (int i = 0; i < memberArray.length; i++){

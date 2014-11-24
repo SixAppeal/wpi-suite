@@ -27,13 +27,13 @@ import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
  */
 public class LocalCache implements Cache {
 	
-	private List<Task> tasks;
-	private List<Task> archive;
-	private List<User> members;
-	private List<TaskStatus> statuses;
-	private Gateway gateway;
-	private Map<String, List<String>> callbacks;
-	
+	List<Task> tasks;
+	List<Task> archive;
+	List<User> members;
+	List<TaskStatus> statuses;
+	Gateway gateway;
+	Map<String, List<String>> callbacks;
+
 	/**
 	 * Initializes the local cache with a lookup table and some cache data structures
 	 * @author nhhughes
@@ -45,119 +45,10 @@ public class LocalCache implements Cache {
 		statuses = new ArrayList<TaskStatus>();
 		this.gateway = gateway;
 		callbacks = new HashMap<String, List<String>>();
-		callbacks.put("tasks", new ArrayList<String>());
+		callbacks.put("task", new ArrayList<String>());
 		callbacks.put("archive", new ArrayList<String>());
-		callbacks.put("members", new ArrayList<String>());
+		callbacks.put("member", new ArrayList<String>());
 		callbacks.put("stage", new ArrayList<String>());
-	}
-	
-	/**
-	 * @throws NotImplementedException 
-	 * @see edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.ICache#store(java.lang.String, java.lang.Object)
-	 */
-	@Override
-	public void store(String request, Object toStore) throws NotImplementedException {
-		if (request.equals("task")) {
-			final Request networkRequest = Network.getInstance().makeRequest("taskmanager/task", HttpMethod.GET);
-			networkRequest.addObserver(new CallbackManager(gateway, callbacks.get("tasks")));
-			networkRequest.send();
-		}
-		if (request.equals("archive")) {
-			final Request networkRequest = Network.getInstance().makeRequest("taskmanager/task", HttpMethod.GET);
-			networkRequest.addObserver(new CallbackManager(gateway, callbacks.get("archive")));
-			networkRequest.send();
-		}
-		if (request.equals("stage")) {
-			final Request networkRequest = Network.getInstance().makeRequest("taskmanager/stage", HttpMethod.GET);
-			networkRequest.addObserver(new CallbackManager(gateway, callbacks.get("stage")));
-			networkRequest.send();
-		}
-	}
-
-	/**
-	 * @throws NotImplementedException 
-	 * @see edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.ICache#update(java.lang.String, java.lang.Object, java.lang.Object)
-	 */
-	@Override
-	public void update(String request, Object oldObject, Object newObject) throws NotImplementedException {
-		if (request.equals("task")) {
-			final Request networkRequest = Network.getInstance().makeRequest("taskmanager/task", HttpMethod.POST);
-			networkRequest.setBody(((Task)newObject).toJson());
-			networkRequest.addObserver(new CallbackManager(gateway, callbacks.get("tasks")));
-			networkRequest.send();
-		}
-		if (request.equals("archive")) {
-			final Request networkRequest = Network.getInstance().makeRequest("taskmanager/task", HttpMethod.POST);
-			networkRequest.setBody(((Task)newObject).toJson());
-			networkRequest.addObserver(new CallbackManager(gateway, callbacks.get("archive")));
-			networkRequest.send();
-		}
-		if (request.equals("stage")) {
-			final Request networkRequest = Network.getInstance().makeRequest("taskmanager/stage", HttpMethod.POST);
-			//TODO Need to figure out how stages are stored
-			//networkRequest.setBody(this.statuses.toJson());
-			networkRequest.addObserver(new CallbackManager(gateway, callbacks.get("stage")));
-			networkRequest.send();
-		}
-	}
-
-	/**
-	 * @throws NotImplementedException 
-	 * @see edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.ICache#delete(java.lang.String, java.lang.Object)
-	 */
-	@Override
-	public void delete(String request, Object toDelete) throws NotImplementedException {
-		throw new NotImplementedException();
-	}
-
-	/**
-	 * @see edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.ICache#retreive(java.lang.String)
-	 */
-	@Override
-	public Object[] retreive(String request) {
-		if (request.equals("task")) {
-			return tasks.toArray(new Task[0]);
-		}
-		if (request.equals("archive")) {
-			return archive.toArray(new Task[0]);
-		}
-		if (request.equals("member")) {
-			return members.toArray(new User[0]);
-		}
-		if (request.equals("stage")) {
-			return members.toArray(new TaskStatus[0]);
-		}
-		return null;
-	}
-
-	/**
-	 * @throws NotImplementedException 
-	 * @see edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.ICache#retreive(java.lang.String, java.lang.String)
-	 */
-	@Override
-	public Object[] retreive(String request, String filter) throws NotImplementedException {
-		throw new NotImplementedException();
-	}
-
-	public void sync(String request) {
-		if (request.equals("task")) {
-			final Request networkRequest = Network.getInstance().makeRequest("taskmanager/task", HttpMethod.GET);
-			networkRequest.addObserver(new SyncManager((Cache)this, "task"));
-			networkRequest.send();
-		}
-		if (request.equals("archive")) {
-			final Request networkRequest = Network.getInstance().makeRequest("taskmanager/task", HttpMethod.GET);
-			networkRequest.addObserver(new SyncManager((Cache)this, "archive"));
-			networkRequest.send();
-		}
-		if (request.equals("member")) {
-			final Request networkRequest = Network.getInstance().makeRequest("core/user", HttpMethod.GET);
-			networkRequest.addObserver(new SyncManager((Cache)this, "member"));
-			networkRequest.send();
-		}
-		if (request.equals("stage")) {
-			//TODO actually write this
-		}
 	}
 	
 	/**
@@ -178,16 +69,149 @@ public class LocalCache implements Cache {
 			statuses = new ArrayList<TaskStatus>();
 		}
 	}
-
+	
 	/**
 	 * @see edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.ICache#subscribe()
 	 */
 	@Override
-	public void subscribe(String topic, String action, String callback) {
-		// TODO Auto-generated method stub
-		
+	public void subscribe(String request) {
+		String topic = request.split(":")[0];
+		String callback = request.split(":")[1] + ":" + request.split(":")[2];
+		if (callbacks.containsKey(topic)) {
+			List<String> currentCallbacks = callbacks.get(topic);
+			currentCallbacks.add(callback);
+		}
 	}
 	
+	/**
+	 * @see edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.ICache#retreive(java.lang.String)
+	 */
+	@Override
+	public Object[] retrieve(String request) {
+		if (request.equals("task")) {
+			return tasks.toArray(new Task[0]);
+		}
+		if (request.equals("archive")) {
+			return archive.toArray(new Task[0]);
+		}
+		if (request.equals("member")) {
+			return members.toArray(new User[0]);
+		}
+		if (request.equals("stage")) {
+			return members.toArray(new TaskStatus[0]);
+		}
+		return null;
+	}
+
+	/**
+	 * @throws NotImplementedException 
+	 * @see edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.ICache#retreive(java.lang.String, java.lang.String)
+	 */
+	@Override
+	public Object[] retrieve(String request, String filter) throws NotImplementedException {
+		throw new NotImplementedException();
+	}
+	
+	/**
+	 * @see edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.ICache#store(java.lang.String, java.lang.Object)
+	 */
+	@Override
+	public void store(String request, Object toStore) {
+		if (request.equals("task")) {
+			final Request networkRequest = Network.getInstance().makeRequest("taskmanager/task", HttpMethod.GET);
+			networkRequest.addObserver(new CallbackManager(gateway, callbacks.get("tasks")));
+			networkRequest.send();
+		}
+		if (request.equals("archive")) {
+			final Request networkRequest = Network.getInstance().makeRequest("taskmanager/task", HttpMethod.GET);
+			networkRequest.addObserver(new CallbackManager(gateway, callbacks.get("archive")));
+			networkRequest.send();
+		}
+		if (request.equals("stage")) {
+			//TODO Implement this part of the cache
+		}
+	}
+
+	/**
+	 * @see edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.ICache#update(java.lang.String, java.lang.Object, java.lang.Object)
+	 */
+	@Override
+	public void update(String request, Object oldObject, Object newObject) {
+		if (request.equals("task")) {
+			final Request networkRequest = Network.getInstance().makeRequest("taskmanager/task", HttpMethod.POST);
+			networkRequest.setBody(((Task)newObject).toJson());
+			networkRequest.addObserver(new CallbackManager(gateway, callbacks.get("tasks")));
+			networkRequest.send();
+		}
+		if (request.equals("archive")) {
+			final Request networkRequest = Network.getInstance().makeRequest("taskmanager/task", HttpMethod.POST);
+			networkRequest.setBody(((Task)newObject).toJson());
+			networkRequest.addObserver(new CallbackManager(gateway, callbacks.get("archive")));
+			networkRequest.send();
+		}
+		if (request.equals("stage")) {
+			//TODO Implement this part of the cache
+		}
+	}
+
+	/**
+	 * @see edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.ICache#sync(java.lang.String)
+	 */
+	@Override
+	public void sync(String request) {
+		if (request.equals("task")) {
+			final Request networkRequest = Network.getInstance().makeRequest("taskmanager/task", HttpMethod.GET);
+			networkRequest.addObserver(new SyncManager((Cache)this, "task"));
+			networkRequest.send();
+		}
+		if (request.equals("archive")) {
+			final Request networkRequest = Network.getInstance().makeRequest("taskmanager/task", HttpMethod.GET);
+			networkRequest.addObserver(new SyncManager((Cache)this, "archive"));
+			networkRequest.send();
+		}
+		if (request.equals("member")) {
+			final Request networkRequest = Network.getInstance().makeRequest("core/user", HttpMethod.GET);
+			networkRequest.addObserver(new SyncManager((Cache)this, "member"));
+			networkRequest.send();
+		}
+		if (request.equals("stage")) {
+			//TODO Implement this part of the cache
+		}
+	}
+	
+	/**
+	 * @see edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.ICache#addVerified(java.lang.String, java.lang.String)
+	 */
+	@Override
+	public void addVerified(String request, String updateValue) {
+		System.out.println(updateValue);
+		if (request.equals("task")) {
+			Task t = new Gson().fromJson(updateValue, Task.class);
+			System.out.println(t.getId() + t.getTitle() + t.getActualEffort() + t.getEstimatedEffort() + t.getDueDate());
+			tasks.add(t);
+		}
+		if (request.equals("archive")) {
+			Task t = new Gson().fromJson(updateValue, Task.class);
+			System.out.println(t);
+			archive.add(t);
+		}
+		if (request.equals("stage")) {
+			//TODO figure this out
+		}
+	}
+	
+	/**
+	 * @see edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.ICache#updateVerified(java.lang.String, java.lang.String, java.lang.Object)
+	 */
+	@Override
+	public void updateVerified(String request, String updateValue, Object oldValue) {
+		//do shit
+	}
+	
+	/**
+	 * @see edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.ICache#set(java.lang.String, java.lang.String)
+	 */
+	@Override
 	public void set(String request, String updateValue) {
 		if (request.equals("task")) {
 			Task[] returned  = new Gson().fromJson(updateValue, Task[].class);

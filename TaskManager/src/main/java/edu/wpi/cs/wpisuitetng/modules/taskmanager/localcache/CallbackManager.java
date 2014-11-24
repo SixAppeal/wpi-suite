@@ -16,6 +16,9 @@ public class CallbackManager implements RequestObserver {
 		this.callbacks = callbacks;
 	}
 	
+	/**
+	 * @see RequestObserver.responseSuccess
+	 */
 	@Override
 	public void responseSuccess(IRequest iReq) {
 		for (String s: callbacks) {
@@ -29,7 +32,6 @@ public class CallbackManager implements RequestObserver {
 	@Override
 	public void responseError(IRequest iReq) {
 		System.err.println("updateTask: Error updating task");
-		//invalidate caching operation
 	}
 
 	/**
@@ -38,6 +40,5 @@ public class CallbackManager implements RequestObserver {
 	@Override
 	public void fail(IRequest iReq, Exception exception) {
 		System.err.println("updateTask: Error updating task");
-		//invalidate caching operation
 	}
 }
