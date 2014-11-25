@@ -122,7 +122,7 @@ public class Task extends AbstractModel {
 	 */
 	@Override
 	public void save() {
-		throw new RuntimeException("Someone called save() on a task. This violates our methodology.");
+		throw new RuntimeException("Called save() on a task. This violates our methodology.");
 	}
 
 	/**
@@ -130,7 +130,7 @@ public class Task extends AbstractModel {
 	 */
 	@Override
 	public void delete() {
-		throw new RuntimeException("Someone called delete() on a task. This violates our methodology.");
+		throw new RuntimeException("Called delete() on a task. This violates our methodology.");
 	}
 
 	/**
@@ -138,7 +138,7 @@ public class Task extends AbstractModel {
 	 */
 	@Override
 	public Boolean identify(Object o) {
-		throw new RuntimeException("Someone called identify() on a task. Please use equals() instead.");
+		throw new RuntimeException("Called identify() on a task. Please use equals() instead.");
 	}
 
 	/**
