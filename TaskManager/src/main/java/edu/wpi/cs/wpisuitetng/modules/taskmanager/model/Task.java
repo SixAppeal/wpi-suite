@@ -105,7 +105,15 @@ public class Task extends AbstractModel {
 	/**
 	 * Determines the hashCode of the task to be its ID
 	 */
+	@Override
 	public int hashCode() { return this.id; }
+	
+	/**
+	 * A simple toString
+	 */
+	public String toString() {
+		return "Task[" + this.id + "][" + this.title + "](" + this.stage + ")";
+	}
 	
 	/**
 	 * @return a JSON text representation of this task

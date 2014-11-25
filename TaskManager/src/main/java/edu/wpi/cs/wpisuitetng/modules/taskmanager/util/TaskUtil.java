@@ -6,7 +6,6 @@ import com.google.gson.Gson;
 
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Stage;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.TaskStatus;
 
 /**
  * A utility class for managing Tasks.
