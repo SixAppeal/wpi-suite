@@ -27,6 +27,7 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
+import javax.swing.JTabbedPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.JTextArea;
@@ -36,7 +37,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-
 
 import org.jdesktop.swingx.JXDatePicker;
 
@@ -174,7 +174,8 @@ public class TaskEditView extends JPanel implements IView {
 		cancelButton = new JButton("Cancel");
 		cancelButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				clearForm();
+				//modify to remove a tab
+				//SidebarView.getTabPane().remove(this);
 				gateway.toPresenter("TaskPresenter", "toolbarDefault");
 			}
 		});
@@ -268,6 +269,10 @@ public class TaskEditView extends JPanel implements IView {
 		);
 		
 		this.add(this.form, gbc);
+	}
+	
+	public Task getTask(){
+		return this.t;
 	}
 
 	public void notifyAllMembersMouseHandler() {
@@ -580,6 +585,7 @@ public class TaskEditView extends JPanel implements IView {
 
 		updateBorder(titleEntry, titleEntry.getText());
 		updateBorder(descEntryScroller, descEntry.getText());
+
 	}
 	
 	/**
@@ -667,6 +673,10 @@ public class TaskEditView extends JPanel implements IView {
 			}
 			return false;
 		}
+		
+		
+		
+		
 
 	}
 

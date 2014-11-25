@@ -37,7 +37,7 @@ public class GetMembersObserver implements RequestObserver {
 		for (int i = 0; i < members.length; i++) {
 			to_submit[i] = members[i].getUsername();
 		}
-		presenter.updateMembers(to_submit);
+		//presenter.updateMembers(to_submit);
 		
 	}
 

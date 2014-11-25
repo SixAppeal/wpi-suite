@@ -2,6 +2,9 @@ package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,14 +32,17 @@ public class SidebarView extends JPanel implements IView {
 
 	private TaskDefaultView defaultView;
 	private JTabbedPane tabPane;
+	/**
+	 * @return the tabPane
+	 */
+
+
 	private List<IView>  viewList; // list for views
 
 	/**
 	 * Constructs a sidebar view
 	 */
 	public SidebarView() {
-
-
 		this.defaultView = new TaskDefaultView();
 
 		this.tabPane = new JTabbedPane(JTabbedPane.LEFT);
@@ -48,6 +54,17 @@ public class SidebarView extends JPanel implements IView {
 		this.setPreferredSize(new Dimension(300, 500));
 		this.setMaximumSize(new Dimension(300, Integer.MAX_VALUE));
 		this.add(tabPane);
+
+		this.setLayout(new GridBagLayout());
+		GridBagConstraints gbc = new GridBagConstraints();
+
+		gbc.anchor = GridBagConstraints.PAGE_START;
+		gbc.fill = GridBagConstraints.BOTH;
+		gbc.weightx = 1.0;
+		gbc.weighty = 1.0;
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		this.add(tabPane, gbc);
 	}
 
 
@@ -56,19 +73,69 @@ public class SidebarView extends JPanel implements IView {
 	 * Shows the creation panel 
 	 */
 	public void addCreatePanel() {
+		//add logic to avoid creating multiple empty tabs
+		if (isThereAnEmptyTab()){
+			return;
+		}
 		TaskCreateView createView = new TaskCreateView();
+		createView.setGateway(this.gateway);
 		tabPane.addTab("Create Task", createView);
 		this.tabPane.setSelectedIndex(this.tabPane.indexOfComponent(createView));
 		this.viewList.add(createView);
 	}
+
+	
+	/**
+	 * this method checks all of the views in the tabs to see if there is an empty tab open
+	 * @return boolean , it returns true if there is an empty tab open, false if there is not
+	 */
+	public boolean isThereAnEmptyTab(){
+		for (IView view : viewList){
+			if (view instanceof TaskCreateView){
+				boolean titleEmpty = (((TaskCreateView)view).titleEntry.getText().equals("")) ;
+				boolean descEmpty = (((TaskCreateView)view).descEntry.getText().equals(""));
+				boolean estEffortDefault =(((TaskCreateView)view).estEffortSpinner.getValue().equals(0)) ;
+
+				//if fields empty switch to existing empty tab
+				if (titleEmpty && descEmpty && estEffortDefault){
+					this.tabPane.setSelectedIndex(this.tabPane.indexOfComponent((TaskCreateView)view));	
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	
+
+	
+	
+	/**
+	 * getter for Tab pane
+	 * @return tabPane
+	 */
+	public JTabbedPane getTabPane() {
+		return tabPane;
+	}
+	
 
 	/**
 	 * Shows the edit panel
 	 * @param task The task to edit
 	 */
 	public void addEditPanel(Task task) {
+
+		for (IView view : viewList){
+			if (view instanceof TaskEditView){
+				if (((TaskEditView)view).getTask().equals(task)){
+					this.tabPane.setSelectedIndex(this.tabPane.indexOfComponent((TaskEditView)view));
+					return;
+				}
+			}
+		}
 		TaskEditView editView = new TaskEditView();
-		tabPane.addTab("Create Task", editView);
+		editView.setGateway(this.gateway);
+		tabPane.addTab("Edit Task", editView);
 		this.tabPane.setSelectedIndex(this.tabPane.indexOfComponent(editView));
 
 	}
@@ -79,6 +146,7 @@ public class SidebarView extends JPanel implements IView {
 	 */
 	public void addDetailPanel(Task task) {
 		TaskDetailView detailView = new TaskDetailView();
+		detailView.setGateway(this.gateway);
 		tabPane.addTab("Create Task", detailView);
 		this.tabPane.setSelectedIndex(this.tabPane.indexOfComponent(detailView));
 

@@ -38,14 +38,14 @@ public class TaskPresenter implements IPresenter{
 	 * Tells the SidebarView to show default form, which is empty
 	 */
 	public void toolbarDefault() {
-		this.gateway.toView("SidebarView", "showDefaultPanel");
+		this.gateway.toView("SidebarView", "addDefaultPanel");
 	}
 	
 	/**
 	 * Tells the SidebarView to show the form for creating a task
 	 */
 	public void toolbarCreate() {
-		this.gateway.toView("SidebarView", "showCreatePanel");
+		this.gateway.toView("SidebarView", "addCreatePanel");
 	}
 	
 	/**
@@ -93,7 +93,7 @@ public class TaskPresenter implements IPresenter{
 	 * @param task Task to view
 	 */
 	public void viewTask(Task task) {
-		this.gateway.toView("SidebarView", "showDetailPanel", task);
+		this.gateway.toView("SidebarView", "addDetailPanel", task);
 	}
 	
 	/**
@@ -175,7 +175,7 @@ public class TaskPresenter implements IPresenter{
 	 * @param task Task to edit
 	 */
 	public void editTask(Task task) {
-		this.gateway.toView("SidebarView", "showEditPanel", task);
+		this.gateway.toView("SidebarView", "addEditPanel", task);
 	}
 	/**
 	 * Removes all tasks from the view. This can never be called to archive all tasks, so it need not
@@ -245,25 +245,28 @@ public class TaskPresenter implements IPresenter{
 		
 	}
 
-	/**
-	 * Makes a request to the servers to get all members
-	 */
-	public void getMembers() {
-		final Request request = Network.getInstance().makeRequest("core/user", HttpMethod.GET);
-		request.addObserver(new GetMembersObserver(this));
-		request.send();
-	}
-
-	/**
-	 * Caches members retrieved from the server locally and tells the sidebar view that there are new members to incorporate
-	 * @param to_submit
-	 */
-	public void updateMembers(String[] to_submit) {
-		this.members = to_submit;
-		this.gateway.toView("SidebarView", "clearMembers");
-		for (String member : to_submit) {
-			this.gateway.toView("SidebarView", "updateMembers", member); 
-		}
-	}
-
+	
 }
+
+//	/**
+//	 * Makes a request to the servers to get all members
+//	 */
+//	public void getMembers() {
+//		final Request request = Network.getInstance().makeRequest("core/user", HttpMethod.GET);
+//		request.addObserver(new GetMembersObserver(this));
+//		request.send();
+//	}
+//
+//	/**
+//	 * Caches members retrieved from the server locally and tells the sidebar view that there are new members to incorporate
+//	 * @param to_submit
+//	 */
+//	public void updateMembers(String[] to_submit) {
+//		this.members = to_submit;
+//		this.gateway.toView("SidebarView", "clearMembers");
+//		for (String member : to_submit) {
+//			this.gateway.toView("SidebarView", "updateMembers", member); 
+//		}
+//	}
+//
+//}
