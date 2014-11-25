@@ -24,8 +24,7 @@ public class Task extends AbstractModel {
 	private boolean archived;
 	private String title;
 	private String description;
-	private String stage;
-	private TaskStatus status;
+	private Stage stage;
 	private List<String> assignedTo;
 	private Integer estimatedEffort; 
 	private Integer actualEffort;
@@ -37,7 +36,7 @@ public class Task extends AbstractModel {
 	 * Default constructor (dummy task for initialization)
 	 */
 	public Task() {
-		this("Dummy", "Dummy", "", new TaskStatus("New"), new LinkedList<String>(), 1, 1,
+		this("A New Task", "A New Task", new Stage("New"), new LinkedList<String>(), 1, 1,
 				new Date(), new LinkedList<Activity>());
 	}
 
@@ -54,14 +53,13 @@ public class Task extends AbstractModel {
 	 * @param activities list of activities (comments that members can put) for the task
 	 * @throws IllegalArgumentException
 	 */
-	public Task(String title, String description, String stage, TaskStatus status,
+	public Task(String title, String description, Stage stage,
 			List<String> assignedTo, Integer estimatedEffort,
 			Integer actualEffort, Date dueDate, List<Activity> activities) throws IllegalArgumentException {
 		super();
 		this.title = TaskUtil.validateTitle(title);
 		this.description = TaskUtil.validateDescription(description);
-		this.stage = stage;
-		this.status = TaskUtil.validateStage(status);
+		this.stage = TaskUtil.validateStage(stage);
 		this.assignedTo = assignedTo;
 		this.estimatedEffort = TaskUtil.validateEffort(estimatedEffort);
 		this.actualEffort = TaskUtil.validateEffort(actualEffort);
@@ -78,8 +76,7 @@ public class Task extends AbstractModel {
 		this.id = t.getId();
 		this.title = new String(t.getTitle());
 		this.description = new String(t.getDescription());
-		this.stage = new String(t.getStage());
-		this.status = new TaskStatus(t.getStatus());
+		this.stage = t.getStage();
 		this.assignedTo = new LinkedList<String>(t.getAssignedTo());
 		this.estimatedEffort = new Integer(t.getEstimatedEffort());
 		this.actualEffort = new Integer(t.getActualEffort());
@@ -154,7 +151,7 @@ public class Task extends AbstractModel {
 	 * @throws IllegalArgumentException
 	 */
 	public void setTitle(String title) throws IllegalArgumentException {
-		this.title = title;
+		this.title = TaskUtil.validateTitle(title);
 	}
 
 	/**
@@ -168,15 +165,15 @@ public class Task extends AbstractModel {
 	 * 
 	 * @param description Description of task
 	 */
-	public void setDescription(String description) {
-		this.description = description;
+	public void setDescription(String description) throws IllegalArgumentException  {
+		this.description = TaskUtil.validateDescription(description);
 	}
 	
 	/**
 	 * Gets the stage of this task
 	 * @return The stage that this task belongs to
 	 */
-	public String getStage() {
+	public Stage getStage() {
 		return this.stage;
 	}
 	
@@ -184,24 +181,8 @@ public class Task extends AbstractModel {
 	 * Sets the stage of this task
 	 * @param stage A stage
 	 */
-	public void setStage(String stage) {
-		this.stage = stage;
-	}
-
-	/**
-	 * 
-	 * @return status of task
-	 */
-	public TaskStatus getStatus() {
-		return status;
-	}
-
-	/**
-	 * 
-	 * @param status status of task
-	 */
-	public void setStatus(TaskStatus status) {
-		this.status = status;
+	public void setStage(Stage stage) throws IllegalArgumentException {
+		this.stage = TaskUtil.validateStage(stage);
 	}
 
 	/**
@@ -251,12 +232,7 @@ public class Task extends AbstractModel {
 	 */
 	public void setEstimatedEffort(Integer estimatedEffort) throws IllegalArgumentException {
 		//checks that estimatedEffort is positive
-		if (estimatedEffort > 0){
-			this.estimatedEffort = estimatedEffort;
-		}
-		else {
-			throw new IllegalArgumentException("Estimated Effort Must Be Greater Than Zero!");
-		}
+		this.estimatedEffort = TaskUtil.validateEffort(estimatedEffort);
 	}
 
 	/**
@@ -273,13 +249,8 @@ public class Task extends AbstractModel {
 	 * @throws IllegalArgumentException
 	 */
 	public void setActualEffort(Integer actualEffort) throws IllegalArgumentException {
-		// making sure that the inputted value is positive
-		if (actualEffort >= 0){
-			this.actualEffort = actualEffort;
-		}
-		else {
-			throw new IllegalArgumentException("Actual Effort Must Be Greater Than Or Equal To Zero!");
-		}
+		// making sure that the input value is positive
+		this.actualEffort = TaskUtil.validateEffort(actualEffort);
 	}
 
 	/**
@@ -294,8 +265,8 @@ public class Task extends AbstractModel {
 	 * 
 	 * @param dueDate due date for the task
 	 */
-	public void setDueDate(Date dueDate) {
-		this.dueDate = dueDate;
+	public void setDueDate(Date dueDate) throws IllegalArgumentException  {
+		this.dueDate = TaskUtil.validateDueDate(dueDate);
 	}
 
 	/**
@@ -310,7 +281,7 @@ public class Task extends AbstractModel {
 	 * 
 	 * @param activities list of comments on the task
 	 */
-	public void setActivities(List<Activity> activities) {
+	public void setActivities(List<Activity> activities) throws IllegalArgumentException  {
 		this.activities = activities;
 	}
 	
@@ -333,6 +304,22 @@ public class Task extends AbstractModel {
 	 */
 	public void unarchive() {
 		this.archived = false;
+	}
+
+	/**
+	 * Master setter which updates this task according to a new task without changing its id.
+	 * @param updatedTask
+	 * @throws IllegalArgumentException
+	 */
+	public void updateFrom(Task updatedTask) throws IllegalArgumentException {
+		this.title = new String(TaskUtil.validateTitle(updatedTask.getTitle()));
+		this.description = new String(TaskUtil.validateDescription(updatedTask.getDescription()));
+		this.stage = TaskUtil.validateStage(updatedTask.getStage());
+		this.assignedTo = new LinkedList<String>(updatedTask.getAssignedTo());
+		this.estimatedEffort = TaskUtil.validateEffort(new Integer(updatedTask.getEstimatedEffort()));
+		this.actualEffort = TaskUtil.validateEffort(new Integer(updatedTask.getActualEffort()));
+		this.dueDate = TaskUtil.validateDueDate(new Date(updatedTask.getDueDate().getTime()));
+		this.activities = new LinkedList<Activity>(updatedTask.getActivities());
 	}
 	
 }

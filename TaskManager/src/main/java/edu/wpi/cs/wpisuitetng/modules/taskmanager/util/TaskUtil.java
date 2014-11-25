@@ -4,6 +4,7 @@ import java.util.Date;
 
 import com.google.gson.Gson;
 
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Stage;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.TaskStatus;
 
@@ -73,13 +74,13 @@ public class TaskUtil {
 	
 	/**
 	 * 
-	 * @param input
+	 * @param stage
 	 * @return
 	 * @throws IllegalArgumentException
 	 */
-	public static TaskStatus validateStage(TaskStatus input) throws IllegalArgumentException {
+	public static Stage validateStage(Stage stage) throws IllegalArgumentException {
 		//TODO: Define implementation of validation
-		return input;
+		return stage;
 	}
 	
 	/**

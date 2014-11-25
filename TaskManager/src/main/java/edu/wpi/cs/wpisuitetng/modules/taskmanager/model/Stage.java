@@ -7,7 +7,7 @@ import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
  * 
  * @author wavanrensselaer
  */
-public class Stage extends AbstractModel {
+public class Stage {
 	private String name;
 	
 	/**
@@ -40,34 +40,20 @@ public class Stage extends AbstractModel {
 	public String getName() {
 		return this.name;
 	}
-
+	
 	@Override
-	public void save() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void delete() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public String toJson() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Boolean identify(Object o) {
-		// TODO Auto-generated method stub
-		return null;
+	public String toString() {
+		return this.name;
 	}
 
 	@Override
 	public boolean equals(Object o) {
 		return o instanceof Stage
 			&& this.name.equals(((Stage) o).getName());
+	}
+	
+	@Override
+	public int hashCode() {
+		return this.name.hashCode();
 	}
 }

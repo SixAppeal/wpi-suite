@@ -112,7 +112,7 @@ public class TaskManager implements IJanewayModule {
 				
 			}
 			
-		}, 0, 500);
+		}, 0, 3000);
 		gateway.toPresenter("TaskPresenter", "getMembers");
 	}
 

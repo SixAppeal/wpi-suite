@@ -37,9 +37,9 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-
 import org.jdesktop.swingx.JXDatePicker;
 
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Stage;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.TaskStatus;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
@@ -78,7 +78,7 @@ public class TaskEditView extends JPanel implements IView {
 	JTextField titleEntry;
 	JTextArea descEntry;
 	JScrollPane descEntryScroller;
-	JComboBox<TaskStatus> statusBox;
+	JComboBox<Stage> statusBox;
 	JSpinner estEffortSpinner;
 	JSpinner actEffortSpinner;
 	SpinnerNumberModel estEffortSpinnerModel;
@@ -164,11 +164,11 @@ public class TaskEditView extends JPanel implements IView {
 			}
 		});
 		
-		statusBox = new JComboBox<TaskStatus>();
-		statusBox.addItem(new TaskStatus("New"));
-		statusBox.addItem(new TaskStatus("Scheduled"));
-		statusBox.addItem(new TaskStatus("In Progress"));
-		statusBox.addItem(new TaskStatus("Complete"));
+		statusBox = new JComboBox<Stage>();
+		statusBox.addItem(new Stage("New"));
+		statusBox.addItem(new Stage("Scheduled"));
+		statusBox.addItem(new Stage("In Progress"));
+		statusBox.addItem(new Stage("Complete"));
 
 		saveButton = new JButton("Save");
 		saveButton.setEnabled(false);
@@ -444,9 +444,9 @@ public class TaskEditView extends JPanel implements IView {
 		}
 		dueDatePicker.setDate( d );
 		
-		statusBox.setSelectedItem(t.getStatus());
+		statusBox.setSelectedItem(t.getStage());
 
-		String stat = t.getStatus().toString();
+		String stat = t.getStage().toString();
 	
 		//This is hard coded and should be fixed at some point in the future
 		//I agree
@@ -464,7 +464,7 @@ public class TaskEditView extends JPanel implements IView {
 
 		String title = titleEntry.getText();
 		String desc = descEntry.getText();
-		TaskStatus st = (TaskStatus)statusBox.getSelectedItem();
+		Stage st = (Stage)statusBox.getSelectedItem();
 		int est = (Integer)estEffortSpinnerModel.getValue();
 		int act = (Integer)actEffortSpinnerModel.getValue();
 
@@ -477,8 +477,7 @@ public class TaskEditView extends JPanel implements IView {
 
 			t.setTitle(title);
 			t.setDescription(desc);
-			t.setStatus(st);
-			t.setStage(st.getStatus());
+			t.setStage(st);
 			t.setEstimatedEffort(est);
 			t.setActualEffort(act);
 			t.setDueDate( dueDatePicker.getDate() );
