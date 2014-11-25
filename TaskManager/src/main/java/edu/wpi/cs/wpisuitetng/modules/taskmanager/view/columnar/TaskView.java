@@ -2,6 +2,8 @@ package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -10,6 +12,8 @@ import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.draganddrop.DragAndDropTransferHandler;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.draganddrop.DraggableMouseListener;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
@@ -20,7 +24,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
  * @author akshoop
  * @author rnorlando
  */
-public class TaskView extends JPanel implements IView {
+public class TaskView extends JPanel implements IView, Transferable {
 	private static final long serialVersionUID = 6255679649898290535L;
 	
 	/**
@@ -85,6 +89,9 @@ public class TaskView extends JPanel implements IView {
 		this.nameLabel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 20));
 		this.taskPanel.add(nameLabel);
 		this.add(this.taskPanel);
+		
+		this.addMouseListener(new DraggableMouseListener());
+		this.setTransferHandler(new DragAndDropTransferHandler());
 	}
 	
 	public void archiveTask() {
@@ -103,6 +110,71 @@ public class TaskView extends JPanel implements IView {
 	
 	public int getTaskID() {
 		return this.task.getId();
+	}
+	
+	////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * 
+	 * @param flavor
+	 * @return
+	 */
+	public Object getTransferData(DataFlavor flavor){
+		
+		DataFlavor thisFlavor = null;
+		
+		try {
+			thisFlavor = ColumnView.getTaskDataFlavor();
+		} catch (Exception ex) {
+			System.err.println("Problem Lazy Loading: " + ex.getMessage());
+			ex.printStackTrace(System.err);
+			return null;
+		}
+		
+		if (thisFlavor != null && flavor.equals(thisFlavor)) {
+			return TaskView.this;
+		}
+		
+		return null;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public DataFlavor[] getTransferDataFlavors() {
+		
+		DataFlavor[] flavors = {null};
+		
+		try{
+			flavors[0] = ColumnView.getTaskDataFlavor();
+		} catch (Exception ex) {
+			System.err.println("Problem Lazy Loading: " + ex.getMessage());
+			ex.printStackTrace(System.err);
+			return null;
+		}
+		
+		return flavors;
+	}
+	
+	public boolean isDataFlavorSupported(DataFlavor flavor) {
+		
+		DataFlavor[] flavors = {null};
+		try{
+			flavors[0] = ColumnView.getTaskDataFlavor();
+		} catch (Exception ex) {
+			System.err.println("Problem Lazy Loading: " + ex.getMessage());
+			ex.printStackTrace(System.err);
+			return false;
+		}
+		
+		for (DataFlavor f : flavors) {
+			if (f.equals(flavor)) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
 
 }
