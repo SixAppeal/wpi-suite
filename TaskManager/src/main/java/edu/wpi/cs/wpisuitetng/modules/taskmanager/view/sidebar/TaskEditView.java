@@ -478,6 +478,7 @@ public class TaskEditView extends JPanel implements IView {
 			t.setTitle(title);
 			t.setDescription(desc);
 			t.setStatus(st);
+			t.setStage(st.getStatus());
 			t.setEstimatedEffort(est);
 			t.setActualEffort(act);
 			t.setDueDate( dueDatePicker.getDate() );
