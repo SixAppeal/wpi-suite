@@ -315,4 +315,8 @@ public class Task extends AbstractModel {
 		this.archived = false;
 	}
 	
+	@Override
+	public String toString() {
+		return "Task[" + this.id + "][" + this.title + "](" + this.stage + ")";
+	}
 }

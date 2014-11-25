@@ -153,7 +153,7 @@ public class ColumnView extends JPanel implements IView {
 		List<Task> tasks = new ArrayList<Task>();
 		
 		for (int i = 0; i < this.tasks.length; i++) {
-			if (this.tasks[i].getStage().equals(stage.getName())) {
+			if (this.tasks[i].getStage().equals(stage)) {
 				tasks.add(this.tasks[i]);
 			}
 		}
