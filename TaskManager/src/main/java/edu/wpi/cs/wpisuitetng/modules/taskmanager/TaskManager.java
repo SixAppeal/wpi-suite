@@ -65,8 +65,8 @@ public class TaskManager implements IJanewayModule {
 		sidebarView = new SidebarView();
 		
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.X_AXIS));
-		mainPanel.add(sidebarView);
 		mainPanel.add(columnView);
+		mainPanel.add(sidebarView);
 		
 		tabs.add(new JanewayTabModel(
 				name,
