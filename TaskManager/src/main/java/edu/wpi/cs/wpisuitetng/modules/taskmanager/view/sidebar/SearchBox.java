@@ -46,6 +46,7 @@ public class SearchBox extends JPanel implements IView {
 	
 	Search toSearch;
 	JTextField searchBox;
+	JPanel resultsBox;
 	List<Task> taskList;
 	Form form;
 	GridBagConstraints gbc;
@@ -57,7 +58,7 @@ public class SearchBox extends JPanel implements IView {
 	public SearchBox() throws IOException {
 		toSearch = new Search();
 		toSearch.initialize();
-		
+		resultsBox = new JPanel();
 		taskList = new ArrayList<Task>();
 		
 		// testing purposes
@@ -84,7 +85,21 @@ public class SearchBox extends JPanel implements IView {
 		
 		searchBox = new JTextField();
 		searchBox.addKeyListener(new KeyAdapter() {
-			
+			public void keyReleased(KeyEvent e) {
+				try {
+					System.out.println("length of results is: " + toSearch.searchFor(searchBox.getText()).size());
+					displayResults(toSearch.searchFor(searchBox.getText() /*+"*"*/));
+				} catch (SearchException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (ParseException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
 			public void keyPressed(KeyEvent e)
 			{
 				if (e.getKeyChar() == '\n') {
@@ -106,6 +121,7 @@ public class SearchBox extends JPanel implements IView {
 			}
 		});
 		
+		
 		this.setLayout(new GridBagLayout());
 		this.setOpaque(false);
 		
@@ -121,12 +137,15 @@ public class SearchBox extends JPanel implements IView {
 		gbc.insets = new Insets(20, 20, 0, 20);
 		
 		this.add(new JLabel("Search", JLabel.CENTER), gbc);
-		
+		this.resultsBox.setLayout(new GridBagLayout());
+		this.resultsBox.setOpaque(false);;
 		gbc.gridy = 1;
-
-		gbc.weighty = 1.0;
-		
 		this.add(searchBox, gbc);
+		
+		
+		gbc.weighty = 1.0;
+		gbc.gridy = 2;
+		this.add(resultsBox, gbc);
 		gbc.weighty = 0.0;
 	}
 	
@@ -135,22 +154,14 @@ public class SearchBox extends JPanel implements IView {
 	 * @param results The list of task IDs to print 
 	 */
 	public void displayResults(List<Integer> results) {
-		this.removeAll();
+		this.resultsBox.removeAll();
 		
-		// Yumz suggested to simply have the "Search" bold word and search textbox separate to the remove all.
-		// So the "Search" bold word and textbox are separate, and with the auto results, it updates the 
-		// results below in some fashion, such as having a panel fill the entire bottom thing.
-		// Ask Shoop if you're confused
 		gbc.gridx = 0;
 		gbc.gridy = 0;
 		gbc.fill = GridBagConstraints.HORIZONTAL;
-		this.add(new JLabel("Search", JLabel.CENTER), gbc);
 		
-		gbc.gridy = 1;
-		gbc.weightx = 1.0;
-		this.add(searchBox, gbc);
 		
-		int count = 1;
+		int count = 0;
 		
 		for (Integer r: results) {
 			gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -167,12 +178,12 @@ public class SearchBox extends JPanel implements IView {
 					viewTask(t);
 				}
 			});
+			gbc.gridy = count;
+			this.resultsBox.add(content, gbc);
 			gbc.gridy = count + 1;
-			this.add(content, gbc);
-			gbc.gridy = count + 2;
 			gbc.fill = GridBagConstraints.NONE;
 			gbc.anchor = GridBagConstraints.FIRST_LINE_START;
-			this.add(viewButton, gbc);
+			this.resultsBox.add(viewButton, gbc);
 			count += 2;
 		}
 		gbc.weighty = 1.0;
@@ -180,7 +191,7 @@ public class SearchBox extends JPanel implements IView {
 		JPanel filler = new JPanel();
 		filler.setOpaque(false);
 		
-		this.add(filler, gbc);
+		this.resultsBox.add(filler, gbc);
 		gbc.weighty = 0.0;
 		this.revalidate();
 		this.repaint();
