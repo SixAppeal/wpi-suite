@@ -2,6 +2,7 @@ package edu.wpi.cs.wpisuitetng.modules.taskmanager.draganddrop;
 
 import java.awt.datatransfer.Transferable;
 import java.awt.dnd.DragSourceDragEvent;
+import java.awt.dnd.DragSourceMotionListener;
 import java.awt.event.InputEvent;
 
 import javax.swing.JComponent;
@@ -9,21 +10,20 @@ import javax.swing.TransferHandler;
 
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar.TaskView;
 
-public class DragAndDropTransferHandler extends TransferHandler{
+public class DragAndDropTransferHandler extends TransferHandler implements DragSourceMotionListener{
 	
+	private static final long serialVersionUID = 7376701064237929995L;
+
 	public DragAndDropTransferHandler() {
 		super();
 	}
 		
 	@Override
 	public Transferable createTransferable(JComponent c) {
-		System.out.println("Creating Transferable");	
-		
 		if (c instanceof TaskView) {
 			Transferable trans = (TaskView) c;
 			return trans;
 		}
-			
 		return null;
 	}
 	
@@ -31,11 +31,9 @@ public class DragAndDropTransferHandler extends TransferHandler{
 	
 	@Override
 	public int getSourceActions(JComponent c) {
-		
 		if (c instanceof TaskView) {
 			return TransferHandler.COPY;
 		}
-		
 		return TransferHandler.NONE;
 	}
 	

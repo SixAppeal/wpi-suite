@@ -14,17 +14,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar.ColumnDragDropPanel;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar.ColumnView;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar.TaskView;
 
 public class CustomDropTargetListener implements DropTargetListener {
 	
-	private final ColumnView column;
+	private final ColumnDragDropPanel column;
 	
 	private static final Cursor droppableCursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR),
 			notDroppableCursor = Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR);
 	
-	public CustomDropTargetListener(ColumnView sheet) {
+	public CustomDropTargetListener(ColumnDragDropPanel sheet) {
 		this.column = sheet;
 	}
 
@@ -48,7 +49,8 @@ public class CustomDropTargetListener implements DropTargetListener {
 	
 	@Override
 	public void drop(DropTargetDropEvent dtde) {
-		
+		System.out.println("Step 5 of 7: The user dropped the panel. The drop(...) method will compare the drops location with other panels and reorder the panels accordingly.");
+        
 		this.column.setCursor(Cursor.getDefaultCursor());
 		
 		DataFlavor dragAndDropTaskFlavor = null;
@@ -58,7 +60,7 @@ public class CustomDropTargetListener implements DropTargetListener {
 		
 		try {
 			dragAndDropTaskFlavor = ColumnView.getTaskDataFlavor();
-			
+						
 			transferable = dtde.getTransferable();
 			DropTargetContext c = dtde.getDropTargetContext();
 			
@@ -66,12 +68,11 @@ public class CustomDropTargetListener implements DropTargetListener {
 				transferableObj = dtde.getTransferable().getTransferData(dragAndDropTaskFlavor);
 			}
 			
+			
 		} catch (Exception ex) {}
-		
 		if (transferableObj == null) {
 			return;
 		}
-		
 		TaskView droppedTask = (TaskView) transferableObj;
 		
 		
@@ -80,15 +81,17 @@ public class CustomDropTargetListener implements DropTargetListener {
 		Map<Integer, TaskView> yLocMapForTasks = new HashMap<Integer, TaskView>();
 		yLocMapForTasks.put(dropYLoc, droppedTask);
 		
-		for (TaskView nextPanel : column.getTasks()) {
+		for (TaskView nextPanel : column.getColumnView().getTasks()) {
 			
 			int y = nextPanel.getY();
 			
-			if (!nextPanel.equals(droppedTask)) {
+			if (nextPanel.getTaskID() != (droppedTask.getTaskID())) {
 				yLocMapForTasks.put(y, nextPanel);
 			}
 		}
-		
+		for (Integer t: yLocMapForTasks.keySet()) {
+			System.out.println(t);
+		}
 		List<Integer> sortableYValues = new ArrayList<Integer>();
 		sortableYValues.addAll(yLocMapForTasks.keySet());
 		Collections.sort(sortableYValues);
@@ -98,11 +101,11 @@ public class CustomDropTargetListener implements DropTargetListener {
 			orderedTasks.add(yLocMapForTasks.get(i));
 		}
 		
-		List<TaskView> inMemoryTaskList = this.column.getTasks();
+		List<TaskView> inMemoryTaskList = this.column.getColumnView().getTasks();
 		inMemoryTaskList.clear();
 		inMemoryTaskList.addAll(orderedTasks);
 		
-		this.column.redrawTasks();
+		this.column.getColumnView().redrawTasks();
 	}
 	
 

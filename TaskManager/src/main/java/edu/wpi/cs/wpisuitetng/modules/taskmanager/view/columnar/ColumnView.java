@@ -1,9 +1,25 @@
+/**
+ * Issues:
+ * 	1) The only available space to drag is where tasks aren't (need to make task view drop targets as well
+ *  2) Dragging between columns adds the new task, but forgets to delete the old one
+ *  3) my code broke the gateway stuff.  You can't have a gateway or task inside the taskview, so we need a way of checking if we click on a task
+ *  4) highlight of mousing over persists after drag and drop
+ *  5) database clears drag and drop order
+ * Order of things I'm going to take a look at if you guys don't get to them:
+ *  1) the available space thing.  I have a workaround, I think.
+ *  2) the gateway stuff.  TaskView cannot contain anything with Task or Gateway in it. Probably need a global mouse listener or something. Other 
+ *  option is the gateway, task and everything else becomes a JPanel (which is a pretty bad option.
+ *  3) database stuff
+ *  I'm figuring that you guys can definitely handle graphics / animation / everything else.  
+ */
+
+
+
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar;
 
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.datatransfer.DataFlavor;
-import java.awt.dnd.DropTarget;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
@@ -13,8 +29,6 @@ import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.draganddrop.CustomDropTargetListener;
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.draganddrop.DragAndDropTransferHandler;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
@@ -43,7 +57,8 @@ public class ColumnView extends JPanel implements IView {
 	 */
 	public ColumnView(String title) {
 		this.title = title;
-		this.columnPanel = new JPanel();
+		this.columnPanel = new ColumnDragDropPanel(this);
+		
 		this.titleLabel = new JLabel(this.title, JLabel.LEFT);
 		this.titlePanel = new JPanel();
 		this.tasks = new ArrayList<TaskView>();
@@ -63,15 +78,9 @@ public class ColumnView extends JPanel implements IView {
 		this.columnPanel.setPreferredSize(new Dimension(260, 0));
 		this.columnPanel.setMaximumSize(new Dimension(260, Integer.MAX_VALUE));
 		
-		this.columnPanel.add(this.titlePanel);
-		for (TaskView task : this.tasks) {
-			this.columnPanel.add(task);
-		}
 		this.add(this.columnPanel);
 		
-		this.setTransferHandler(new DragAndDropTransferHandler());
-		this.setDropTarget(new DropTarget(ColumnView.this,
-				new CustomDropTargetListener(ColumnView.this)));
+		
 	}
 	
 	/**
@@ -90,13 +99,9 @@ public class ColumnView extends JPanel implements IView {
 	 */
 	public void addTask(Task task) {
 		TaskView taskView = new TaskView(task);
-		taskView.setGateway(this.gateway);
+		//taskView.setGateway(this.gateway);
 		tasks.add(taskView);
 		this.columnPanel.add(taskView);
-	}
-	
-	public List<TaskView> getTasks() {
-		return this.tasks;
 	}
 	
 	/**
@@ -106,7 +111,7 @@ public class ColumnView extends JPanel implements IView {
 	public void setGateway(Gateway gateway) {
 		this.gateway = gateway;
 		for (TaskView taskView : this.tasks) {
-			taskView.setGateway(this.gateway);
+			//taskView.setGateway(this.gateway);
 		}
 	}
 	
@@ -115,9 +120,7 @@ public class ColumnView extends JPanel implements IView {
 	 */
 	public void removeAllTasks() {
 		for(TaskView t : this.tasks) {
-			//System.out.println("Removing task " + t.getTaskID());
 			this.columnPanel.remove(t);
-			//System.out.println("Task removed from ColumnPanel!");
 		}
 		this.tasks.clear(); //removing a task from the array we are currently iterating over is /illegal/
 		
@@ -167,26 +170,22 @@ public class ColumnView extends JPanel implements IView {
 	///////////////////////////////////////////////////////////////////////////////////////
 	
 	public void redrawTasks() {
-		for(TaskView t : this.tasks) {
-			//System.out.println("Removing task " + t.getTaskID());
-			this.columnPanel.remove(t);
-			//System.out.println("Task removed from ColumnPanel!");
-		}
-		
+		this.columnPanel.removeAll();
 		for (TaskView t : this.tasks) {
-			this.add(t);
+			this.columnPanel.add(t);
 		}
-		
 		this.validate();
 		this.repaint();
 	}
 	
+	public List<TaskView> getTasks() {
+		return tasks;
+	}
+	
 	public static DataFlavor getTaskDataFlavor() throws Exception {
-        // Lazy load/create the flavor
         if (dragAndDropPanelDataFlavor == null) {
-            dragAndDropPanelDataFlavor = new DataFlavor(DataFlavor.javaJVMLocalObjectMimeType + ";class=TaskView");
+            dragAndDropPanelDataFlavor = new DataFlavor(TaskView.class, "TaskView");// new DataFlavor(DataFlavor.javaJVMLocalObjectMimeType + ";class=TaskView");
         }
-
         return dragAndDropPanelDataFlavor;
     }
 }

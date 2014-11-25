@@ -3,6 +3,8 @@ package edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter;
 import java.util.HashMap;
 import java.lang.reflect.Method;
 
+import javax.swing.JPanel;
+
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
 
 /**
@@ -14,6 +16,11 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
  * @author dpseaman
  */
 public class Gateway {
+	
+	
+	/**
+	 * 
+	 */
 	HashMap<String, IPresenter> presenters;
 	HashMap<String, IView> views;
 	

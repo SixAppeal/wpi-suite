@@ -24,7 +24,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
  * @author akshoop
  * @author rnorlando
  */
-public class TaskView extends JPanel implements IView, Transferable {
+public class TaskView extends JPanel implements Transferable {
 	private static final long serialVersionUID = 6255679649898290535L;
 	
 	/**
@@ -32,20 +32,20 @@ public class TaskView extends JPanel implements IView, Transferable {
 	 */
 	public static final int MAX_TITLE_LENGTH = 20;
 	
-	private Gateway gateway;
-	private Task task;
+//	private Gateway gateway;
+	//private Task task;
 	private JPanel taskPanel;
 	private JLabel nameLabel;
-	
+	private int id;
 	/**
 	 * Constructs a <code>TaskView</code>
 	 * @param name The name of the task
 	 */
 	public TaskView(Task task) {
-		this.task = task;
+		//this.task = task;
 		this.taskPanel = new JPanel();
-		
-		String title = this.task.getTitle();
+		this.id = task.getId();
+		String title = task.getTitle();
 		if (title.length() > MAX_TITLE_LENGTH) {
 			title = title.substring(0,  MAX_TITLE_LENGTH) + "\u2026";
 		}
@@ -62,7 +62,7 @@ public class TaskView extends JPanel implements IView, Transferable {
 		this.taskPanel.addMouseListener(new MouseListener() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				gateway.toPresenter("TaskPresenter", "viewTask", task);
+				//gateway.toPresenter("TaskPresenter", "viewTask", task);
 			}
 
 			@Override
@@ -90,26 +90,26 @@ public class TaskView extends JPanel implements IView, Transferable {
 		this.taskPanel.add(nameLabel);
 		this.add(this.taskPanel);
 		
-		this.addMouseListener(new DraggableMouseListener());
+		this.taskPanel.addMouseListener(new DraggableMouseListener(this));
 		this.setTransferHandler(new DragAndDropTransferHandler());
 	}
-	
-	public void archiveTask() {
-		
-		gateway.toPresenter("TaskPresenter", "archiveTask", task);
-		
-	}
+//	
+//	public void archiveTask() {
+//		
+//		gateway.toPresenter("TaskPresenter", "archiveTask", task);
+//		
+//	}
 
 	/**
 	 * @see IView.setGateway
 	 */
-	@Override
-	public void setGateway(Gateway gateway) {
-		this.gateway = gateway;
-	}
+//	@Override
+//	public void setGateway(Gateway gateway) {
+//		this.gateway = gateway;
+//	}
 	
 	public int getTaskID() {
-		return this.task.getId();
+		return this.id;
 	}
 	
 	////////////////////////////////////////////////////////////////////////
@@ -120,9 +120,9 @@ public class TaskView extends JPanel implements IView, Transferable {
 	 * @return
 	 */
 	public Object getTransferData(DataFlavor flavor){
-		
+		 System.out.println("Step 7 of 7: Returning the data from the Transferable object. In this case, the actual panel is now transfered!");
+	       
 		DataFlavor thisFlavor = null;
-		
 		try {
 			thisFlavor = ColumnView.getTaskDataFlavor();
 		} catch (Exception ex) {
@@ -130,11 +130,9 @@ public class TaskView extends JPanel implements IView, Transferable {
 			ex.printStackTrace(System.err);
 			return null;
 		}
-		
 		if (thisFlavor != null && flavor.equals(thisFlavor)) {
-			return TaskView.this;
+			return (Object)TaskView.this;  //This is the problem
 		}
-		
 		return null;
 	}
 	
@@ -145,7 +143,8 @@ public class TaskView extends JPanel implements IView, Transferable {
 	public DataFlavor[] getTransferDataFlavors() {
 		
 		DataFlavor[] flavors = {null};
-		
+		System.out.println("Step 4 of 7: Querying for acceptable DataFlavors to determine what is available. Our example only supports our custom RandomDragAndDropPanel DataFlavor.");
+        
 		try{
 			flavors[0] = ColumnView.getTaskDataFlavor();
 		} catch (Exception ex) {
@@ -153,13 +152,16 @@ public class TaskView extends JPanel implements IView, Transferable {
 			ex.printStackTrace(System.err);
 			return null;
 		}
-		
 		return flavors;
 	}
 	
 	public boolean isDataFlavorSupported(DataFlavor flavor) {
 		
+
 		DataFlavor[] flavors = {null};
+		
+		 System.out.println("Step 6 of 7: Verifying that DataFlavor is supported.  Our example only supports our custom RandomDragAndDropPanel DataFlavor.");
+	        
 		try{
 			flavors[0] = ColumnView.getTaskDataFlavor();
 		} catch (Exception ex) {
@@ -173,7 +175,6 @@ public class TaskView extends JPanel implements IView, Transferable {
 				return true;
 			}
 		}
-		
 		return false;
 	}
 
