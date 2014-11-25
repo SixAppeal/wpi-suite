@@ -221,8 +221,7 @@ public class TaskPresenter implements IPresenter{
 	 * @param tasks An array of tasks to be added
 	 */
 	public void addAllToView( Task[] tasks ) {
-		for( Task t : tasks) addToView(t);
-		//this.gateway.toView("ColumnView", "refreshView");
+		this.gateway.toView("ColumnView", "setTasks", new Object[] { tasks });
 	}
 	
 	/**
