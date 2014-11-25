@@ -6,6 +6,7 @@ package edu.wpi.cs.wpisuitetng.modules.taskmanager.model;
  * @author nhhughes
  * @author srojas
  * @author jrhennessy
+ * 
  */
 public class Activity {
 	String comment;
@@ -31,5 +32,9 @@ public class Activity {
 	 */
 	public void setComment(String comment) {
 		this.comment = comment;
+	}
+	
+	public String toString(){
+		return this.comment;
 	}
 }

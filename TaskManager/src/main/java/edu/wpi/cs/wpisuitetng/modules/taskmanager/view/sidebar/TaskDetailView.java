@@ -13,6 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Activity;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
@@ -60,7 +61,7 @@ public class TaskDetailView extends JPanel implements IView {
 	JList<String> taskMemberList;
 	
 	JLabel activitiesLabel;
-	JList<String> taskActivitiesList;
+	JList<Activity> taskActivitiesList;
 	
 	JButton archiveButton; //Archives the task.
 	JButton editButton; //Opens the task for editing.
@@ -92,7 +93,7 @@ public class TaskDetailView extends JPanel implements IView {
 		
 		activitiesLabel = new JLabel ("Activities History");
 		activitiesLabel.setForeground(labelColor);
-		taskActivitiesList = new JList<String> ();
+		taskActivitiesList = new JList<Activity> ();
 		
 		archiveButton = new JButton("Archive");
 		archiveButton.addActionListener( new ActionListener() {
@@ -202,7 +203,7 @@ public class TaskDetailView extends JPanel implements IView {
 		taskEstLabel.setText(this.t.getEstimatedEffort().toString());
 		taskActLabel.setText(this.t.getActualEffort().toString());
 		taskMemberList.setListData(t.getAssignedTo().toArray(new String[0]));
-		taskActivitiesList.setListData(t.getActivities().toArray(new String[0]));
+		taskActivitiesList.setListData(t.getActivities().toArray(new Activity[0]));
 		editButton.setEnabled(true);
 		this.revalidate();
 	}

@@ -59,6 +59,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.FormGroup;
  * @author rwang3
  * @author akshoop
  * @author rnorlando
+ * @author krpeffer
  *
  * A view to be displayed when creating or modifying a task object in the GUI.
  *

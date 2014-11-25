@@ -15,6 +15,8 @@ import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
  * @author nhhughes
  * @author srojas
  * @author jrhennessy
+ * @author krpeffer
+ * @author rwang3
  */
 public class Task extends AbstractModel {
 
@@ -228,7 +230,14 @@ public class Task extends AbstractModel {
 
 		return true;
 	}
-	
+	/**
+	 * Checks to see if anything new has been set in the task, and if so
+	 * will add what happened to the list of Activities.
+	 * 
+	 * @param oldObj
+	 * @param newObj
+	 * @param objType
+	 */
 	public void addToActivitiesList(Object oldObj, Object newObj, String objType){
 		if (!oldObj.equals(newObj)){
 			activities.add(new Activity("Set " + objType + " to " + newObj.toString()));
@@ -272,12 +281,13 @@ public class Task extends AbstractModel {
 
 	/**
 	 * Setter for title.  If title is too long, throws an exception
+	 * adds any changes to the Activities List
 	 * @param title
 	 * @throws IllegalArgumentException
 	 */
 	public void setTitle(String title) throws IllegalArgumentException {
-		this.title = title;
 		this.addToActivitiesList(this.getTitle(), title, "Title");
+		this.title = title;
 	}
 
 	/**
@@ -288,12 +298,13 @@ public class Task extends AbstractModel {
 	}
 
 	/**
-	 * 
+	 * Setter of the Description
+	 * adds any changes to the Activities List
 	 * @param description Description of task
 	 */
 	public void setDescription(String description) {
-		this.description = description;
 		this.addToActivitiesList(this.getDescription(), description, "Description");
+		this.description = description;
 	}
 
 	/**
@@ -305,13 +316,13 @@ public class Task extends AbstractModel {
 	}
 
 	/**
-	 * 
+	 * Setter for the Status of the task
+	 * adds any changes to the Activities List
 	 * @param status status of task
 	 */
 	public void setStatus(TaskStatus status) {
-		this.status = status;
 		this.addToActivitiesList(this.getStatus(), status, "Status");
-	
+		this.status = status;
 	}
 
 	/**
@@ -323,16 +334,24 @@ public class Task extends AbstractModel {
 	}
 
 	/**
-	 * 
+	 * Sets members to the task
+	 * adds any changes to the Activities List
 	 * @param assignedTo members associated with task
 	 */
 	public void setAssignedTo(List<String> assignedTo) {
-		this.assignedTo = assignedTo;
 		this.addMembersToActivities(this.getAssignedTo(), assignedTo);
+		this.assignedTo = assignedTo;
 		
 	}
 	
+	/**
+	 * Checks to see if there are any changes to the members on the task, and if so
+	 * adds it to the list of Activities
+	 * @param oldMembers
+	 * @param newMembers
+	 */
 	public void addMembersToActivities(List<String> oldMembers, List<String> newMembers){
+		System.out.println("addMembersToActivities: " + oldMembers + " " + newMembers);
 		for(String member : oldMembers){
 			if(!newMembers.contains(member)){
 				this.activities.add(new Activity (member + " was removed"));
@@ -354,6 +373,7 @@ public class Task extends AbstractModel {
 	}
 
 	/**
+	 * Sets the ID for the task
 	 * 
 	 * @param id Task ID (used to discriminate between different tasks)
 	 */
@@ -371,14 +391,15 @@ public class Task extends AbstractModel {
 
 	/**
 	 * This setter checks to make sure that the estimated effort is a positive integer and throws an error otherwise
+	 * adds any changes to the Activities List
 	 * @param estimatedEffort estimated effort for the task
 	 * @throws IllegalArgumentException
 	 */
 	public void setEstimatedEffort(Integer estimatedEffort) throws IllegalArgumentException {
 		//checks that estimatedEffort is positive
 		if (estimatedEffort > 0){
-			this.estimatedEffort = estimatedEffort;
 			this.addToActivitiesList(this.getEstimatedEffort(), estimatedEffort, "Estimated Effort");
+			this.estimatedEffort = estimatedEffort;
 		}
 		else {
 			throw new IllegalArgumentException("Estimated Effort Must Be Greater Than Zero!");
@@ -395,14 +416,16 @@ public class Task extends AbstractModel {
 
 	/**
 	 * This setter checks to make sure that the actual effort is a positive integer and throws an error otherwise
+	 * adds any changes to the Activities List
+	 * 
 	 * @param actualEffort actual effort for task
 	 * @throws IllegalArgumentException
 	 */
 	public void setActualEffort(Integer actualEffort) throws IllegalArgumentException {
 		// making sure that the inputted value is positive
 		if (actualEffort >= 0){
-			this.actualEffort = actualEffort;
 			this.addToActivitiesList(this.getActualEffort(), actualEffort, "Actual Effort");
+			this.actualEffort = actualEffort;
 		}
 		else {
 			throw new IllegalArgumentException("Actual Effort Must Be Greater Than Or Equal To Zero!");
@@ -418,12 +441,13 @@ public class Task extends AbstractModel {
 	}
 
 	/**
-	 * 
+	 * Sets the due date of the task
+	 * adds any changes to the Activities List
 	 * @param dueDate due date for the task
 	 */
 	public void setDueDate(Date dueDate) {
-		this.dueDate = dueDate;
 		this.addToActivitiesList(this.getDueDate(), dueDate, "Due Date");
+		this.dueDate = dueDate;
 	}
 
 	/**
@@ -451,12 +475,13 @@ public class Task extends AbstractModel {
 	}
 
 	/**
-	 * 
+	 * Sets the column location of the task
+	 * adds any changes to the Activities List
 	 * @param column column task is associated with
 	 */
 	public void setColumn(Integer column) {
-		this.column = column;
 		this.addToActivitiesList(this.getColumn(), column, "Column");
+		this.column = column;
 	}
 	
 	/**
@@ -467,7 +492,7 @@ public class Task extends AbstractModel {
 	}
 	
 	/**
-	 * Set archival status to false
+	 * Set archival status to true and adds it to the Activities List
 	 */
 	public void archive() {
 		this.archived = true;
@@ -475,7 +500,7 @@ public class Task extends AbstractModel {
 	}
 	
 	/**
-	 * Set archival status to true
+	 * Set archival status to false and adds it to the Activities List
 	 */
 	public void unarchive() {
 		this.archived = false;
