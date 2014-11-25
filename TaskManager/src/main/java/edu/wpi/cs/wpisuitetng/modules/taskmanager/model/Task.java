@@ -45,7 +45,6 @@ public class Task extends AbstractModel {
 	 * 
 	 * @param title name for the task
 	 * @param description explanation of the task
-	 * @param status what point the task is at (in progress, not started, etc.)
 	 * @param assignedTo list of members that are assigned to the task
 	 * @param estimatedEffort number that represents how much effort (units of work)
 	 * @param actualEffort number that represents the actual effort
@@ -329,5 +328,4 @@ public class Task extends AbstractModel {
 		this.dueDate = TaskUtil.validateDueDate(new Date(updatedTask.getDueDate().getTime()));
 		this.activities = new LinkedList<Activity>(updatedTask.getActivities());
 	}
-	
 }
