@@ -71,12 +71,12 @@ public class TestSearch {
 		testAssignedTo.add("bunch");
 		
 		someSearch.initialize();
-		Task task1 = new Task("sometitle bunch");
-		task1.setDescription("sometitle bunch of words HERE ARE CAPITAL lettersWith, commas's yeah!?");
+		Task task1 = new Task("someTitle bunch");
+		task1.setDescription("someTitle bunch of words HERE ARE CAPITAL lettersWith, commas's yeah!?");
 		task1.setAssignedTo(testAssignedTo);
 		task1.setId(3);
 		
-		Task task2 = new Task("another title bunch");
+		Task task2 = new Task("another title testing");
 		task2.setDescription("sometitle bunch of's yeah!?");
 		task2.setAssignedTo(testAssignedTo);
 		task2.setId(4);
@@ -94,15 +94,7 @@ public class TestSearch {
 		
 		
 		someSearch.createIndex(testList);
-//		String result1 = someSearch.searchFor("sometitle");
-//		System.out.println("result1 should be " + result1);
-//		
-//		String result2 = someSearch.searchFor("capital");
-//		System.out.println("result2 should be " + result2);
-//		
-//		String result3 = someSearch.searchFor("nhhughes");
-//		System.out.println("result3 should be " + result3);
-//		
+		
 		System.out.println("******************************************************");
 		System.out.println("Searching for: sometitle");
 		System.out.println("******************************************************");
@@ -127,11 +119,25 @@ public class TestSearch {
 		}
 		
 		System.out.println("******************************************************");
-		System.out.println("Searching for: bunch");
+		System.out.println("Searching for: testing AND bunch");
 		System.out.println("******************************************************");
 		
 		
-		result = someSearch.searchFor("bunch");
+		result = someSearch.searchFor("testing AND bunch");
+		
+		
+		count = 1;
+		for (Integer i: result) {
+			System.out.println(count + ": " + i);
+			count++;
+		}
+		
+		System.out.println("******************************************************");
+		System.out.println("Searching for: another");
+		System.out.println("******************************************************");
+		
+		
+		result = someSearch.searchFor("another");
 		
 		
 		count = 1;

@@ -2,6 +2,7 @@ package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.io.IOException;
 
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
@@ -31,8 +32,9 @@ public class SidebarView extends JPanel implements IView {
 	
 	/**
 	 * Constructs a sidebar view
+	 * @throws IOException 
 	 */
-	public SidebarView() {
+	public SidebarView() throws IOException {
 		this.container = new JPanel();
 		this.detailView = new TaskDetailView();
 		this.createView = new TaskCreateView();
@@ -135,6 +137,7 @@ public class SidebarView extends JPanel implements IView {
 		this.detailView.setGateway(this.gateway);
 		this.editView.setGateway(this.gateway);
 		this.createView.setGateway(this.gateway);
+		this.searchBox.setGateway(this.gateway);
 	}
 
 }

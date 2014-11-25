@@ -42,6 +42,7 @@ public class Search {
 	private boolean isInit;
 	private boolean create = true;
 	private Directory index;
+	
 	/**
 	 * General constructor for Search class
 	 */
@@ -60,6 +61,7 @@ public class Search {
 	 * Main search method
 	 * 
 	 * @param input The string that user wants to search for
+	 * @return toReturn The list of tasks that have the search results
 	 * @throws SearchException 
 	 * @throws IOException
 	 * @throws ParseException 
@@ -131,10 +133,13 @@ public class Search {
 		    	rankings.put(id, 2*i);
 		    }
 		}
+		
 		PriorityQueue<IdRanking> idList = new PriorityQueue<IdRanking>();
 		
 		for (Map.Entry<Integer, Integer> i: rankings.entrySet()) {
 			idList.add(new IdRanking(i.getKey(), i.getValue()));
+//			System.out.println("i get key is: " + i.getKey());
+//			System.out.println("i get value is: " + i.getValue());
 		}
 		
 		while (!idList.isEmpty()) {
@@ -146,7 +151,7 @@ public class Search {
 	}
 	
 	/**
-	 * Creates index for each task which is necessary for searching
+	 * Creates index for each task, which is necessary for searching
 	 * @param taskList The list of tasks through which we will make an index for each one
 	 * @throws IOException 
 	 */
@@ -179,11 +184,9 @@ public class Search {
 	 * @param taskList The list of tasks to go through to make indexes
 	 * @throws IOException 
 	 */
-	private void indexTasks(IndexWriter writer, List<Task> taskList) throws IOException {
-		// make a new empty document
-		
-		
+	private void indexTasks(IndexWriter writer, List<Task> taskList) throws IOException {		
 		for (Task t: taskList) {
+			// make a new empty document
 			Document doc = new Document();
 			
 			String members = "";
@@ -221,7 +224,9 @@ class IdRanking implements Comparable<IdRanking> {
 
 	@Override
 	public int compareTo(IdRanking o) {
-		return this.ranking.compareTo(o.ranking);
+		// The return is negative because PriorityQueue is low to high,
+		// but we want high to low because we want highest results first.
+		return -(this.ranking.compareTo(o.ranking));
 	}
 	
 	public int getId() {
