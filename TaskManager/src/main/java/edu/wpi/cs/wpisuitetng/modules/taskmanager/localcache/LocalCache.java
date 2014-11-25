@@ -14,7 +14,7 @@ import com.google.gson.Gson;
 import edu.wpi.cs.wpisuitetng.exceptions.NotImplementedException;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.TaskStatus;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Stage;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
 import edu.wpi.cs.wpisuitetng.network.Network;
 import edu.wpi.cs.wpisuitetng.network.Request;
@@ -30,7 +30,7 @@ public class LocalCache implements Cache {
 	List<Task> tasks;
 	List<Task> archive;
 	List<User> members;
-	List<TaskStatus> statuses;
+	List<Stage> stages;
 	Gateway gateway;
 	Map<String, List<String>> callbacks;
 
@@ -42,7 +42,7 @@ public class LocalCache implements Cache {
 		tasks = new ArrayList<Task>();
 		archive = new ArrayList<Task>();
 		members = new ArrayList<User>();
-		statuses = new ArrayList<TaskStatus>();
+		stages = new ArrayList<Stage>();
 		this.gateway = gateway;
 		callbacks = new HashMap<String, List<String>>();
 		callbacks.put("task", new ArrayList<String>());
@@ -66,7 +66,7 @@ public class LocalCache implements Cache {
 			members = new ArrayList<User>();
 		}
 		if (request.equals("stage")) {
-			statuses = new ArrayList<TaskStatus>();
+			stages = new ArrayList<Stage>();
 		}
 	}
 	
@@ -98,7 +98,7 @@ public class LocalCache implements Cache {
 			return members.toArray(new User[0]);
 		}
 		if (request.equals("stage")) {
-			return members.toArray(new TaskStatus[0]);
+			return members.toArray(new Stage[0]);
 		}
 		return null;
 	}

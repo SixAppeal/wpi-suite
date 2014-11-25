@@ -34,7 +34,7 @@ public class TestTask {
 		 * Description	= Dummy
 		 * Efforts 		= 1
 		 * Date 		= new Date()
-		 * Status		= New
+		 * Stage		= New
 		 * 
 		 */
 	}
@@ -54,7 +54,7 @@ public class TestTask {
 		assertEquals(newTask.getDueDate(), new Date());
 		assertEquals(newTask.getEstimatedEffort(), new Integer(1));
 		assertEquals(newTask.getId(), 0);
-		assertEquals(newTask.getStatus(), new TaskStatus("New"));
+		assertEquals(newTask.getStage(), new Stage("New"));
 
 	}
 	

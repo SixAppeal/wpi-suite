@@ -1,5 +1,7 @@
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.model;
 
+import com.google.gson.Gson;
+
 import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
 
 /**
@@ -55,8 +57,7 @@ public class Stage extends AbstractModel {
 
 	@Override
 	public String toJson() {
-		// TODO Auto-generated method stub
-		return null;
+		return new Gson().toJson(this, Task.class);
 	}
 
 	@Override
@@ -69,5 +70,15 @@ public class Stage extends AbstractModel {
 	public boolean equals(Object o) {
 		return o instanceof Stage
 			&& this.name.equals(((Stage) o).getName());
+	}
+	
+	@Override
+	public int hashCode() {
+		return this.name.hashCode();
+	}
+	
+	@Override
+	public String toString() {
+		return this.name;
 	}
 }

@@ -10,16 +10,13 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.DefaultListSelectionModel;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -27,7 +24,6 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
-import javax.swing.ListSelectionModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -41,7 +37,7 @@ import javax.swing.event.ListSelectionListener;
 import org.jdesktop.swingx.JXDatePicker;
 
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.TaskStatus;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Stage;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.Form;
@@ -78,7 +74,7 @@ public class TaskEditView extends JPanel implements IView {
 	JTextField titleEntry;
 	JTextArea descEntry;
 	JScrollPane descEntryScroller;
-	JComboBox<TaskStatus> statusBox;
+	JComboBox<Stage> stageBox;
 	JSpinner estEffortSpinner;
 	JSpinner actEffortSpinner;
 	SpinnerNumberModel estEffortSpinnerModel;
@@ -164,11 +160,11 @@ public class TaskEditView extends JPanel implements IView {
 			}
 		});
 		
-		statusBox = new JComboBox<TaskStatus>();
-		statusBox.addItem(new TaskStatus("New"));
-		statusBox.addItem(new TaskStatus("Scheduled"));
-		statusBox.addItem(new TaskStatus("In Progress"));
-		statusBox.addItem(new TaskStatus("Complete"));
+		stageBox = new JComboBox<Stage>();
+		stageBox.addItem(new Stage("New"));
+		stageBox.addItem(new Stage("Scheduled"));
+		stageBox.addItem(new Stage("In Progress"));
+		stageBox.addItem(new Stage("Complete"));
 
 		saveButton = new JButton("Save");
 		saveButton.setEnabled(false);
@@ -274,7 +270,7 @@ public class TaskEditView extends JPanel implements IView {
 				buttonBox,
 				new FormField("Assigned", assignedMembersListScroller)
 			),
-			new FormField("Status", statusBox),
+			new FormField("Stage", stageBox),
 			new FormGroup(saveButton, cancelButton),
 			new FormField(null, errorText)
 		);
@@ -444,9 +440,9 @@ public class TaskEditView extends JPanel implements IView {
 		}
 		dueDatePicker.setDate( d );
 		
-		statusBox.setSelectedItem(t.getStatus());
+		stageBox.setSelectedItem(t.getStage());
 
-		String stat = t.getStatus().toString();
+		String stat = t.getStage().toString();
 	
 		//This is hard coded and should be fixed at some point in the future
 		//I agree
@@ -464,9 +460,9 @@ public class TaskEditView extends JPanel implements IView {
 
 		String title = titleEntry.getText();
 		String desc = descEntry.getText();
-		TaskStatus st = (TaskStatus)statusBox.getSelectedItem();
-		int est = (Integer)estEffortSpinnerModel.getValue();
-		int act = (Integer)actEffortSpinnerModel.getValue();
+		Stage stage = (Stage) stageBox.getSelectedItem();
+		int est = (Integer) estEffortSpinnerModel.getValue();
+		int act = (Integer) actEffortSpinnerModel.getValue();
 
 		if(title.isEmpty() || desc.isEmpty())
 		{
@@ -477,12 +473,10 @@ public class TaskEditView extends JPanel implements IView {
 
 			t.setTitle(title);
 			t.setDescription(desc);
-			t.setStatus(st);
-			t.setStage(st.getStatus());
+			t.setStage(stage);
 			t.setEstimatedEffort(est);
 			t.setActualEffort(act);
 			t.setDueDate( dueDatePicker.getDate() );
-			//t.setColumn(statusBox.getSelectedIndex());  //TODO change this to new status implementtation
 			t.setAssignedTo(new ArrayList<String>(this.EditViewMemberHandler.getAssigned()));
 			System.out.println(t.toJson());
 		} catch (IllegalArgumentException ex) {

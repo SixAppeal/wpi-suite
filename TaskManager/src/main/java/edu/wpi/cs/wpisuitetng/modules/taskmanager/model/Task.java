@@ -24,8 +24,7 @@ public class Task extends AbstractModel {
 	private boolean archived;
 	private String title;
 	private String description;
-	private String stage;
-	private TaskStatus status;
+	private Stage stage;
 	private List<String> assignedTo;
 	private Integer estimatedEffort; 
 	private Integer actualEffort;
@@ -37,7 +36,7 @@ public class Task extends AbstractModel {
 	 * Default constructor (dummy task for initialization)
 	 */
 	public Task() {
-		this("Dummy", "Dummy", "", new TaskStatus("New"), new LinkedList<String>(), 1, 1,
+		this("Dummy", "Dummy", new Stage("New"), new LinkedList<String>(), 1, 1,
 				new Date(), new LinkedList<Activity>());
 	}
 
@@ -46,7 +45,6 @@ public class Task extends AbstractModel {
 	 * 
 	 * @param title name for the task
 	 * @param description explanation of the task
-	 * @param status what point the task is at (in progress, not started, etc.)
 	 * @param assignedTo list of members that are assigned to the task
 	 * @param estimatedEffort number that represents how much effort (units of work)
 	 * @param actualEffort number that represents the actual effort
@@ -54,14 +52,13 @@ public class Task extends AbstractModel {
 	 * @param activities list of activities (comments that members can put) for the task
 	 * @throws IllegalArgumentException
 	 */
-	public Task(String title, String description, String stage, TaskStatus status,
+	public Task(String title, String description, Stage stage,
 			List<String> assignedTo, Integer estimatedEffort,
 			Integer actualEffort, Date dueDate, List<Activity> activities) throws IllegalArgumentException {
 		super();
 		this.title = TaskUtil.validateTitle(title);
 		this.description = TaskUtil.validateDescription(description);
-		this.stage = stage;
-		this.status = TaskUtil.validateStage(status);
+		this.stage = TaskUtil.validateStage(stage);
 		this.assignedTo = assignedTo;
 		this.estimatedEffort = TaskUtil.validateEffort(estimatedEffort);
 		this.actualEffort = TaskUtil.validateEffort(actualEffort);
@@ -78,8 +75,7 @@ public class Task extends AbstractModel {
 		this.id = t.getId();
 		this.title = new String(t.getTitle());
 		this.description = new String(t.getDescription());
-		this.stage = new String(t.getStage());
-		this.status = new TaskStatus(t.getStatus());
+		this.stage = t.getStage();
 		this.assignedTo = new LinkedList<String>(t.getAssignedTo());
 		this.estimatedEffort = new Integer(t.getEstimatedEffort());
 		this.actualEffort = new Integer(t.getActualEffort());
@@ -176,7 +172,7 @@ public class Task extends AbstractModel {
 	 * Gets the stage of this task
 	 * @return The stage that this task belongs to
 	 */
-	public String getStage() {
+	public Stage getStage() {
 		return this.stage;
 	}
 	
@@ -184,24 +180,8 @@ public class Task extends AbstractModel {
 	 * Sets the stage of this task
 	 * @param stage A stage
 	 */
-	public void setStage(String stage) {
+	public void setStage(Stage stage) {
 		this.stage = stage;
-	}
-
-	/**
-	 * 
-	 * @return status of task
-	 */
-	public TaskStatus getStatus() {
-		return status;
-	}
-
-	/**
-	 * 
-	 * @param status status of task
-	 */
-	public void setStatus(TaskStatus status) {
-		this.status = status;
 	}
 
 	/**
