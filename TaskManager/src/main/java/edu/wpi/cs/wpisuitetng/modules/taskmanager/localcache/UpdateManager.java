@@ -7,17 +7,15 @@ public class UpdateManager implements RequestObserver {
 
 	private Cache localCache;
 	private String toUpdate;
-	private Object oldObject;
 
-	public UpdateManager(Cache localCache, String toUpdate, Object oldObject) {
+	public UpdateManager(Cache localCache, String toUpdate) {
 		this.localCache = localCache;
 		this.toUpdate = toUpdate;
-		this.oldObject = oldObject;
 	}
 
 	@Override
 	public void responseSuccess(IRequest iReq) {
-		localCache.updateVerified(toUpdate, iReq.getBody(), oldObject);
+		localCache.updateVerified(toUpdate, iReq.getBody());
 	}
 
 	/**

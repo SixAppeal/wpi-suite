@@ -11,12 +11,13 @@ public class AddManager implements RequestObserver {
 	public AddManager(Cache localCache, String toUpdate) {
 		this.localCache = localCache;
 		this.toUpdate = toUpdate;
+
 	}
 
 	
 	@Override
 	public void responseSuccess(IRequest iReq) {
-		localCache.addVerified(toUpdate, iReq.getBody());
+		localCache.addVerified(toUpdate, iReq.getResponse().getBody());
 	}
 
 	/**

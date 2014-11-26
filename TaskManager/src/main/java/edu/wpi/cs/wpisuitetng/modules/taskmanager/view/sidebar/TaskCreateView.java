@@ -28,7 +28,8 @@ public class TaskCreateView extends TaskEditView implements IView {
 	@Override
 	protected void taskOut() {
 		this.clearForm();
-		gateway.toPresenter("TaskPresenter", "createTask", t);
+		gateway.toPresenter("LocalCache", "store", "task", t);
+		//gateway.toPresenter("TaskPresenter", "createTask", t);
 		//gateway.toPresenter("TaskPresenter", "getAllTasks");
 	}
 	

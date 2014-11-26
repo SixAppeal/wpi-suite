@@ -2,8 +2,11 @@
  * 
  */
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache;
+import java.util.List;
 
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Stage;
 import edu.wpi.cs.wpisuitetng.exceptions.NotImplementedException;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.IPresenter;
 
 /**
@@ -14,9 +17,13 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.IPresenter;
  */
 public interface Cache extends IPresenter {
 
-	public void store(String request, Object toStore);
+	public void store(String request, Task toStore);
 	
-	public void update(String request, Object oldOjbect, Object newObject);
+	public void store(String request, List<Stage> toStore);
+	
+	public void update(String request, Task newObject);
+	
+	public void update(String request, List<Stage> newObject);
 	
 	public Object[] retrieve(String request);
 	
@@ -32,7 +39,7 @@ public interface Cache extends IPresenter {
 	
 	public void addVerified(String request, String data);
 	
-	public void updateVerified(String request, String data, Object oldData);
+	public void updateVerified(String request, String data);
 
 }
 

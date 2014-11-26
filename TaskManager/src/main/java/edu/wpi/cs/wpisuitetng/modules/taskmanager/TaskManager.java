@@ -59,7 +59,6 @@ public class TaskManager implements IJanewayModule {
 		name = "Task Manager";
 		tabs = new ArrayList<JanewayTabModel>();
 		
-		taskPresenter = new TaskPresenter();
 		
 		gateway = new Gateway();
 		mainPanel = new JPanel();
@@ -67,6 +66,8 @@ public class TaskManager implements IJanewayModule {
 		sidebarView = new SidebarView();
 		
 		localCache = new LocalCache();
+		taskPresenter = new TaskPresenter(localCache);
+		localCache.subscribe("task:TaskPresenter:updateStages");
 		
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.X_AXIS));
 		mainPanel.add(sidebarView);
@@ -114,11 +115,13 @@ public class TaskManager implements IJanewayModule {
 			@Override
 			public void run() {
 				gateway.toPresenter("LocalCache", "sync", "task");
-				gateway.toPresenter("localCache", "sync", "member");
+				gateway.toPresenter("LocalCache", "sync", "member");
+				gateway.toPresenter("LocalCache", "sync", "archive");
+				gateway.toPresenter("LocalCache", "sync", "stage");
 			}
 			
 		}, 0, 3000);
-		gateway.toPresenter("TaskPresenter", "getMembers");
+		//gateway.toPresenter("TaskPresenter", "getMembers");
 	}
 
 	/**

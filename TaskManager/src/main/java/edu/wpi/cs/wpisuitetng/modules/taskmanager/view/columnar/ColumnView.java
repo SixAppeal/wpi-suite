@@ -73,8 +73,9 @@ public class ColumnView extends JPanel implements IView {
 	 * Sets the state of tasks within the view
 	 * @param tasks The new task array
 	 */
-	public void setTasks(Task[] tasks) {
+	public void setTasks(Task... tasks) {
 		this.setState(tasks, this.stages);
+		System.out.println("Number of Tasks inside column view: " + this.tasks.length);
 	}
 	
 	/**
@@ -116,6 +117,7 @@ public class ColumnView extends JPanel implements IView {
 	 * Reflows the view when it's state changes.
 	 */
 	public void reflow() {
+		System.out.println(this.stages.length);
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.anchor = GridBagConstraints.FIRST_LINE_START;
 		gbc.fill = GridBagConstraints.VERTICAL;
@@ -132,9 +134,12 @@ public class ColumnView extends JPanel implements IView {
 			} else if (!stageView.getStage().equals(this.stages[i])) {
 				stageView.setState(this.stages[i],
 						this.getTasksForStage(this.stages[i]));
+			} else {
+				stageView.setTasks(this.getTasksForStage(this.stages[i]));
 			}
 		}
 		for (; i < this.stages.length; i++) {
+			System.out.println("Something should happen here!");
 			gbc.insets.left = i == 0 ? 20 : 0;
 			gbc.gridx = i;
 			this.container.add(new StageView(this.stages[i],
@@ -151,7 +156,7 @@ public class ColumnView extends JPanel implements IView {
 	 */
 	private Task[] getTasksForStage(Stage stage) {
 		List<Task> tasks = new ArrayList<Task>();
-		
+		System.out.println("Reflowing for Stage: " + stage.getName());
 		for (int i = 0; i < this.tasks.length; i++) {
 			if (this.tasks[i].getStage().equals(stage)) {
 				tasks.add(this.tasks[i]);

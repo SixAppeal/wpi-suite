@@ -186,10 +186,6 @@ public class TaskEditView extends JPanel implements IView {
 		//Member Stuff
 		EditViewMemberHandler = new MemberListHandler();
 		
-		// TODO: Delete below lists after cache information is working. 
-//		allMembersList = new ArrayList<String>();
-//		assignedMembersList = new ArrayList<String>();
-//		globalMembersList = new ArrayList<String>();
 		
 		// Set UI for members
 		allMembers = new JList<String>();
@@ -456,7 +452,7 @@ public class TaskEditView extends JPanel implements IView {
 	 * grabs all the data from the form
 	 */
 	private void processTask() {
-
+		
 		String title = titleEntry.getText();
 		String desc = descEntry.getText();
 		Stage stage = (Stage) stageBox.getSelectedItem();
@@ -477,7 +473,6 @@ public class TaskEditView extends JPanel implements IView {
 			t.setActualEffort(act);
 			t.setDueDate( dueDatePicker.getDate() );
 			t.setAssignedTo(new ArrayList<String>(this.EditViewMemberHandler.getAssigned()));
-			System.out.println(t.toJson());
 		} catch (IllegalArgumentException ex) {
 			System.err.println(ex.toString());
 			return;
@@ -502,7 +497,7 @@ public class TaskEditView extends JPanel implements IView {
 	 * sends the task to the presenter
 	 */
 	protected void taskOut() {
-		gateway.toPresenter("TaskPresenter", "updateTask", t);
+		gateway.toPresenter("LocalCache", "updateTask", "task", t);
 	}
 
 	/**
