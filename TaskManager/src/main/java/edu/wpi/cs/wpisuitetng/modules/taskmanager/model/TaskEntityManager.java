@@ -189,7 +189,7 @@ public class TaskEntityManager implements EntityManager<Task>{
 		Task existingTask = (Task)oldTasks.get(0);		
 
 		// copy values to old Task and fill in our changeset appropriately
-		existingTask = new Task(updatedTask);
+		existingTask.updateFrom(updatedTask);
 
 		if(!db.save(existingTask, session.getProject())) {
 			throw new WPISuiteException();

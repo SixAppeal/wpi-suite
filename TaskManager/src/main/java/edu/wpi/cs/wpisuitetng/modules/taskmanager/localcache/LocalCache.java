@@ -13,6 +13,7 @@ import com.google.gson.Gson;
 
 import edu.wpi.cs.wpisuitetng.exceptions.NotImplementedException;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Stage;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Stage;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;

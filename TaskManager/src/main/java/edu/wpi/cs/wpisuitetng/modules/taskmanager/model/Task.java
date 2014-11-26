@@ -36,7 +36,7 @@ public class Task extends AbstractModel {
 	 * Default constructor (dummy task for initialization)
 	 */
 	public Task() {
-		this("Dummy", "Dummy", new Stage("New"), new LinkedList<String>(), 1, 1,
+		this("A New Task", "A New Task", new Stage("New"), new LinkedList<String>(), 1, 1,
 				new Date(), new LinkedList<Activity>());
 	}
 
@@ -104,7 +104,15 @@ public class Task extends AbstractModel {
 	/**
 	 * Determines the hashCode of the task to be its ID
 	 */
+	@Override
 	public int hashCode() { return this.id; }
+	
+	/**
+	 * A simple toString
+	 */
+	public String toString() {
+		return "Task[" + this.id + "][" + this.title + "](" + this.stage + ")";
+	}
 	
 	/**
 	 * @return a JSON text representation of this task
@@ -118,7 +126,7 @@ public class Task extends AbstractModel {
 	 */
 	@Override
 	public void save() {
-		throw new RuntimeException("Someone called save() on a task. This violates our methodology.");
+		throw new RuntimeException("Called save() on a task. This violates our methodology.");
 	}
 
 	/**
@@ -126,7 +134,7 @@ public class Task extends AbstractModel {
 	 */
 	@Override
 	public void delete() {
-		throw new RuntimeException("Someone called delete() on a task. This violates our methodology.");
+		throw new RuntimeException("Called delete() on a task. This violates our methodology.");
 	}
 
 	/**
@@ -134,7 +142,7 @@ public class Task extends AbstractModel {
 	 */
 	@Override
 	public Boolean identify(Object o) {
-		throw new RuntimeException("Someone called identify() on a task. Please use equals() instead.");
+		throw new RuntimeException("Called identify() on a task. Please use equals() instead.");
 	}
 
 	/**
@@ -150,7 +158,7 @@ public class Task extends AbstractModel {
 	 * @throws IllegalArgumentException
 	 */
 	public void setTitle(String title) throws IllegalArgumentException {
-		this.title = title;
+		this.title = TaskUtil.validateTitle(title);
 	}
 
 	/**
@@ -164,8 +172,8 @@ public class Task extends AbstractModel {
 	 * 
 	 * @param description Description of task
 	 */
-	public void setDescription(String description) {
-		this.description = description;
+	public void setDescription(String description) throws IllegalArgumentException  {
+		this.description = TaskUtil.validateDescription(description);
 	}
 	
 	/**
@@ -180,8 +188,8 @@ public class Task extends AbstractModel {
 	 * Sets the stage of this task
 	 * @param stage A stage
 	 */
-	public void setStage(Stage stage) {
-		this.stage = stage;
+	public void setStage(Stage stage) throws IllegalArgumentException {
+		this.stage = TaskUtil.validateStage(stage);
 	}
 
 	/**
@@ -231,12 +239,7 @@ public class Task extends AbstractModel {
 	 */
 	public void setEstimatedEffort(Integer estimatedEffort) throws IllegalArgumentException {
 		//checks that estimatedEffort is positive
-		if (estimatedEffort > 0){
-			this.estimatedEffort = estimatedEffort;
-		}
-		else {
-			throw new IllegalArgumentException("Estimated Effort Must Be Greater Than Zero!");
-		}
+		this.estimatedEffort = TaskUtil.validateEffort(estimatedEffort);
 	}
 
 	/**
@@ -253,13 +256,8 @@ public class Task extends AbstractModel {
 	 * @throws IllegalArgumentException
 	 */
 	public void setActualEffort(Integer actualEffort) throws IllegalArgumentException {
-		// making sure that the inputted value is positive
-		if (actualEffort >= 0){
-			this.actualEffort = actualEffort;
-		}
-		else {
-			throw new IllegalArgumentException("Actual Effort Must Be Greater Than Or Equal To Zero!");
-		}
+		// making sure that the input value is positive
+		this.actualEffort = TaskUtil.validateEffort(actualEffort);
 	}
 
 	/**
@@ -274,8 +272,8 @@ public class Task extends AbstractModel {
 	 * 
 	 * @param dueDate due date for the task
 	 */
-	public void setDueDate(Date dueDate) {
-		this.dueDate = dueDate;
+	public void setDueDate(Date dueDate) throws IllegalArgumentException  {
+		this.dueDate = TaskUtil.validateDueDate(dueDate);
 	}
 
 	/**
@@ -290,7 +288,7 @@ public class Task extends AbstractModel {
 	 * 
 	 * @param activities list of comments on the task
 	 */
-	public void setActivities(List<Activity> activities) {
+	public void setActivities(List<Activity> activities) throws IllegalArgumentException  {
 		this.activities = activities;
 	}
 	
@@ -314,5 +312,20 @@ public class Task extends AbstractModel {
 	public void unarchive() {
 		this.archived = false;
 	}
-	
+
+	/**
+	 * Master setter which updates this task according to a new task without changing its id.
+	 * @param updatedTask
+	 * @throws IllegalArgumentException
+	 */
+	public void updateFrom(Task updatedTask) throws IllegalArgumentException {
+		this.title = new String(TaskUtil.validateTitle(updatedTask.getTitle()));
+		this.description = new String(TaskUtil.validateDescription(updatedTask.getDescription()));
+		this.stage = TaskUtil.validateStage(updatedTask.getStage());
+		this.assignedTo = new LinkedList<String>(updatedTask.getAssignedTo());
+		this.estimatedEffort = TaskUtil.validateEffort(new Integer(updatedTask.getEstimatedEffort()));
+		this.actualEffort = TaskUtil.validateEffort(new Integer(updatedTask.getActualEffort()));
+		this.dueDate = TaskUtil.validateDueDate(new Date(updatedTask.getDueDate().getTime()));
+		this.activities = new LinkedList<Activity>(updatedTask.getActivities());
+	}
 }

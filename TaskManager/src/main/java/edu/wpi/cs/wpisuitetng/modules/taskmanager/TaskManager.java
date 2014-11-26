@@ -117,7 +117,8 @@ public class TaskManager implements IJanewayModule {
 				gateway.toPresenter("localCache", "sync", "member");
 			}
 			
-		}, 0, 500);
+		}, 0, 3000);
+		gateway.toPresenter("TaskPresenter", "getMembers");
 	}
 
 	/**

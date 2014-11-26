@@ -46,11 +46,11 @@ public class TestTask {
 	public void testConstructor() {
 		Task newTask = new Task();
 		assertNotNull(newTask);
-		assertEquals(newTask.getTitle(), "Dummy");
+		assertEquals(newTask.getTitle(), "A New Task");
 		assertEquals(newTask.getActivities().size(),0);
 		assertEquals(newTask.getActualEffort(), new Integer(1));
 		assertEquals(newTask.getAssignedTo().size(), 0);
-		assertEquals(newTask.getDescription(), "Dummy");
+		assertEquals(newTask.getDescription(), "A New Task");
 		assertEquals(newTask.getDueDate(), new Date());
 		assertEquals(newTask.getEstimatedEffort(), new Integer(1));
 		assertEquals(newTask.getId(), 0);
@@ -65,7 +65,7 @@ public class TestTask {
 	@Test
 	public void testCopyConstructor() {
 		Task newTask = new Task(this.task);
-		assertEquals(newTask.getTitle(), "Dummy");
+		assertEquals(newTask.getTitle(), "A New Task");
 	}
 
 	/**

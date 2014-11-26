@@ -23,7 +23,6 @@ public class TaskUtil {
 	 */
 	public static Task fromJson(String json) {
 		return new Gson().fromJson(json, Task.class);
-
 	}
 	
 	/**
@@ -68,19 +67,19 @@ public class TaskUtil {
 	 * @throws IllegalArgumentException
 	 */
 	public static Integer validateEffort(Integer input) throws IllegalArgumentException {
-		if ( input <= 0 ) throw new IllegalArgumentException("Estimated Effort must be greater than zero.");
+		if ( input <= 0 ) throw new IllegalArgumentException("Effort values must be greater than zero.");
 		return input;
 	}
 	
 	/**
 	 * 
-	 * @param input
+	 * @param stage
 	 * @return
 	 * @throws IllegalArgumentException
 	 */
-	public static Stage validateStage(Stage input) throws IllegalArgumentException {
+	public static Stage validateStage(Stage stage) throws IllegalArgumentException {
 		//TODO: Define implementation of validation
-		return input;
+		return stage;
 	}
 	
 	/**
