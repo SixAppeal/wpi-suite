@@ -4,6 +4,7 @@
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache;
 
 import edu.wpi.cs.wpisuitetng.exceptions.NotImplementedException;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.IPresenter;
 
 /**
  * Interface to describe cache functionality 
@@ -11,7 +12,7 @@ import edu.wpi.cs.wpisuitetng.exceptions.NotImplementedException;
  * @author nhhughes
  *
  */
-public interface Cache {
+public interface Cache extends IPresenter {
 
 	public void store(String request, Object toStore);
 	

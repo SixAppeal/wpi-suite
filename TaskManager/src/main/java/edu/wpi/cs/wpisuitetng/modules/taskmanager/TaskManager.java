@@ -12,6 +12,8 @@ import javax.swing.JPanel;
 
 import edu.wpi.cs.wpisuitetng.janeway.modules.IJanewayModule;
 import edu.wpi.cs.wpisuitetng.janeway.modules.JanewayTabModel;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.Cache;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.LocalCache;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.*;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar.ColumnView;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar.SidebarView;
@@ -47,7 +49,7 @@ public class TaskManager implements IJanewayModule {
 	ColumnView columnView;
 	SidebarView sidebarView;
 	TaskPresenter taskPresenter;
-	
+	Cache localCache;
 	ToolbarView toolbarview = new ToolbarView(true);
 	
 	/**
@@ -58,11 +60,13 @@ public class TaskManager implements IJanewayModule {
 		tabs = new ArrayList<JanewayTabModel>();
 		
 		taskPresenter = new TaskPresenter();
-
+		
 		gateway = new Gateway();
 		mainPanel = new JPanel();
 		columnView = new ColumnView();
 		sidebarView = new SidebarView();
+		
+		localCache = new LocalCache();
 		
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.X_AXIS));
 		mainPanel.add(sidebarView);
@@ -75,6 +79,7 @@ public class TaskManager implements IJanewayModule {
 				mainPanel));
 		
 		gateway.addPresenter("TaskPresenter", taskPresenter);
+		gateway.addPresenter("LocalCache", localCache);
 		gateway.addView("SidebarView", sidebarView);
 		gateway.addView("ColumnView", columnView);
 		gateway.addView("ToolbarView", toolbarview);
@@ -108,12 +113,11 @@ public class TaskManager implements IJanewayModule {
 
 			@Override
 			public void run() {
-				gateway.toPresenter("TaskPresenter", "getAllTasks");
-				
+				gateway.toPresenter("LocalCache", "sync", "task");
+				gateway.toPresenter("localCache", "sync", "member");
 			}
 			
 		}, 0, 500);
-		gateway.toPresenter("TaskPresenter", "getMembers");
 	}
 
 	/**
@@ -121,9 +125,7 @@ public class TaskManager implements IJanewayModule {
 	 */
 	@Override
 	public void cleanup() {
-		
 		t.cancel();
-		
 	}
 
 }

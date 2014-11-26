@@ -16,19 +16,20 @@ import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Stage;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.IPresenter;
 import edu.wpi.cs.wpisuitetng.network.Network;
 import edu.wpi.cs.wpisuitetng.network.Request;
 import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
 
 /**
- * This class is responsible for managing local copies of the database information
+ * This class is responsible for managing local copies of the database information and for communicating directly with the server
  * @author nhhughes
  *
  */
-public class LocalCache implements Cache {
+public class LocalCache implements Cache, IPresenter {
 	
 	List<Task> tasks;
-	List<Task> archive;
+	List<Task> archives;
 	List<User> members;
 	List<Stage> stages;
 	Gateway gateway;
@@ -38,12 +39,11 @@ public class LocalCache implements Cache {
 	 * Initializes the local cache with a lookup table and some cache data structures
 	 * @author nhhughes
 	 */
-	public LocalCache(Gateway gateway) {
+	public LocalCache() {
 		tasks = new ArrayList<Task>();
-		archive = new ArrayList<Task>();
+		archives = new ArrayList<Task>();
 		members = new ArrayList<User>();
 		stages = new ArrayList<Stage>();
-		this.gateway = gateway;
 		callbacks = new HashMap<String, List<String>>();
 		callbacks.put("task", new ArrayList<String>());
 		callbacks.put("archive", new ArrayList<String>());
@@ -60,7 +60,7 @@ public class LocalCache implements Cache {
 			tasks = new ArrayList<Task>();
 		}
 		if (request.equals("archive")) {
-			archive = new ArrayList<Task>();
+			archives = new ArrayList<Task>();
 		}
 		if (request.equals("member")) {
 			members = new ArrayList<User>();
@@ -92,7 +92,7 @@ public class LocalCache implements Cache {
 			return tasks.toArray(new Task[0]);
 		}
 		if (request.equals("archive")) {
-			return archive.toArray(new Task[0]);
+			return archives.toArray(new Task[0]);
 		}
 		if (request.equals("member")) {
 			return members.toArray(new User[0]);
@@ -128,7 +128,7 @@ public class LocalCache implements Cache {
 			networkRequest.send();
 		}
 		if (request.equals("stage")) {
-			//TODO Implement this part of the cache
+			//TODO Implement this
 		}
 	}
 
@@ -150,7 +150,7 @@ public class LocalCache implements Cache {
 			networkRequest.send();
 		}
 		if (request.equals("stage")) {
-			//TODO Implement this part of the cache
+			//TODO Implement
 		}
 	}
 
@@ -175,7 +175,7 @@ public class LocalCache implements Cache {
 			networkRequest.send();
 		}
 		if (request.equals("stage")) {
-			//TODO Implement this part of the cache
+			//TODO Implement this
 		}
 	}
 	
@@ -193,10 +193,10 @@ public class LocalCache implements Cache {
 		if (request.equals("archive")) {
 			Task t = new Gson().fromJson(updateValue, Task.class);
 			System.out.println(t);
-			archive.add(t);
+			archives.add(t);
 		}
 		if (request.equals("stage")) {
-			//TODO figure this out
+			//TODO implement this
 		}
 	}
 	
@@ -205,7 +205,25 @@ public class LocalCache implements Cache {
 	 */
 	@Override
 	public void updateVerified(String request, String updateValue, Object oldValue) {
-		//do shit
+		if (request.equals("task") || request.equals("archive")) {
+			Task newValue = new Gson().fromJson(updateValue, Task.class);
+			if (((Task)oldValue).isArchived()) {
+				archives.remove((Task)oldValue);
+			}
+			else {
+				tasks.remove((Task)oldValue);
+			}
+			if (newValue.isArchived()) {
+				archives.add(newValue);
+			}
+			else {
+				tasks.add(newValue);
+			}
+		}
+		if (request.equals("stage")) {
+			//TODO implement this
+		}
+		
 	}
 	
 	/**
@@ -224,10 +242,10 @@ public class LocalCache implements Cache {
 		}
 		if (request.equals("archive")) {
 			Task[] returned  = new Gson().fromJson(updateValue, Task[].class);
-			archive = new ArrayList<Task>();
+			archives = new ArrayList<Task>();
 			for (Task t: returned) {
 				if (t.isArchived()) {
-					archive.add(t);
+					archives.add(t);
 				}
 			}
 		}
@@ -238,6 +256,11 @@ public class LocalCache implements Cache {
 		if (request.equals("stage")) {
 			//TODO implement this
 		}
+	}
+
+	@Override
+	public void setGateway(Gateway gateway) {
+		this.gateway = gateway;
 	}
 
 }
