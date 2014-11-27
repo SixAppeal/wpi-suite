@@ -497,7 +497,7 @@ public class TaskEditView extends JPanel implements IView {
 	 * sends the task to the presenter
 	 */
 	protected void taskOut() {
-		gateway.toPresenter("LocalCache", "updateTask", "task", t);
+		gateway.toPresenter("LocalCache", "update", "task", t);
 	}
 
 	/**

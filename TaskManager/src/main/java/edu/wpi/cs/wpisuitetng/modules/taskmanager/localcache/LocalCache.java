@@ -1,6 +1,3 @@
-/**
- * 
- */
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache;
 
 import java.util.ArrayList;
@@ -168,6 +165,7 @@ public class LocalCache implements Cache, IPresenter {
 			networkRequest.send();
 		}
 		if (request.equals("archive")) {
+			newObject.archive();
 			final Request networkRequest = Network.getInstance().makeRequest(
 					"taskmanager/task", HttpMethod.POST);
 			networkRequest.setBody(((Task) newObject).toJson());

@@ -27,6 +27,16 @@ public class TaskView extends JPanel implements IView {
 	 * The cutoff point for the title string in the task
 	 */
 	public static final int MAX_TITLE_LENGTH = 20;
+
+	/**
+	 * Background color of the TaskView
+	 */
+	public static final Color BACKGROUND_COLOR = new Color(255, 255, 255);
+	
+	/**
+	 * Background color when the mouse is over the TaskView
+	 */
+	public static final Color HOVER_COLOR = new Color(245, 245, 245);
 	
 	private Gateway gateway;
 	
@@ -43,8 +53,32 @@ public class TaskView extends JPanel implements IView {
 	public TaskView(Task task) {
 		this.titleLabel = new JLabel("", JLabel.LEFT);
 
-		this.setBackground(new Color(255, 255, 255));
+		this.setBackground(TaskView.BACKGROUND_COLOR);
 		this.setLayout(new GridBagLayout());
+		this.addMouseListener(new MouseListener() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				gateway.toPresenter("TaskPresenter", "viewTask", task);
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				setBackground(TaskView.HOVER_COLOR);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				setBackground(TaskView.BACKGROUND_COLOR);
+			}
+		});
 		
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.fill = GridBagConstraints.HORIZONTAL;

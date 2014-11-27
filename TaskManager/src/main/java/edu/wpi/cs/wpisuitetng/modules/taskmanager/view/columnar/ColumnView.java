@@ -1,5 +1,6 @@
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar;
 
+import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -139,8 +140,10 @@ public class ColumnView extends JPanel implements IView {
 		for (; i < this.stages.length; i++) {
 			gbc.insets.left = i == 0 ? 20 : 0;
 			gbc.gridx = i;
-			this.container.add(new StageView(this.stages[i],
-					this.getTasksForStage(this.stages[i])), gbc);
+			stageView = new StageView(this.stages[i],
+					this.getTasksForStage(this.stages[i]));
+			stageView.setGateway(this.gateway);
+			this.container.add(stageView, gbc);
 		}
 		
 		this.scrollPane.revalidate();
@@ -168,5 +171,10 @@ public class ColumnView extends JPanel implements IView {
 	@Override
 	public void setGateway(Gateway gateway) {
 		this.gateway = gateway;
+		for (Component c : this.container.getComponents()) {
+			if (c instanceof IView) {
+				((IView) c).setGateway(this.gateway);
+			}
+		}
 	}
 }

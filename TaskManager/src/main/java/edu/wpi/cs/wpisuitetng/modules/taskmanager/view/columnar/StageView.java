@@ -1,6 +1,7 @@
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -150,6 +151,7 @@ public class StageView extends JPanel implements IView {
 		for (; i < this.tasks.length; i++) {
 			gbc.gridy = i;
 			taskView = new TaskView(this.tasks[i]);
+			taskView.setGateway(this.gateway);
 			this.container.add(taskView, gbc);
 			this.updateConstraints(taskView, i);
 		}
@@ -175,5 +177,10 @@ public class StageView extends JPanel implements IView {
 	@Override
 	public void setGateway(Gateway gateway) {
 		this.gateway = gateway;
+		for (Component c : this.container.getComponents()) {
+			if (c instanceof IView) {
+				((IView) c).setGateway(this.gateway);
+			}
+		}
 	}
 }

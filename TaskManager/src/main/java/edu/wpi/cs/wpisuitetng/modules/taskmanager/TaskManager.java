@@ -70,8 +70,8 @@ public class TaskManager implements IJanewayModule {
 		localCache.subscribe("task:TaskPresenter:updateStages");
 		
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.X_AXIS));
-		mainPanel.add(sidebarView);
 		mainPanel.add(columnView);
+		mainPanel.add(sidebarView);
 		
 		tabs.add(new JanewayTabModel(
 				name,
