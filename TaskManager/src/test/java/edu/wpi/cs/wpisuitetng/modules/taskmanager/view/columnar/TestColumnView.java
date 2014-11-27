@@ -5,32 +5,59 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Stage;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar.ColumnView;
 
 /**
- * Tests for the multi-column view
+ * Tests for the ColumnView class
  * @author wavanrensselaer
  */
 public class TestColumnView {
-	ColumnView multiColumnView;
+	ColumnView columnView;
+	Stage[] stages;
+	Task[] tasks;
 	
-	/**
-	 * Initialize a <code>MultiColumnView</code> for testing
-	 */
 	@Before
 	public void setup() {
-		multiColumnView = new ColumnView();
+		columnView = new ColumnView();
+		stages = new Stage[] {
+			new Stage("New"),
+			new Stage("Scheduled"),
+			new Stage("In Progress"),
+			new Stage("Complete")
+		};
+		tasks = new Task[] {
+			new Task(),
+			new Task(),
+			new Task()
+		};
 	}
-	
-	/**
-	 * Tests the constructor of MultiColumnView
-	 */
+
 	@Test
 	public void testConstructor() {
+		assertNotNull(columnView.getTasks());
+		assertNotNull(columnView.getStages());
+		assertArrayEquals(new Task[0], columnView.getTasks());
+		assertArrayEquals(stages, columnView.getStages());
 	}
 	
-	public void testRemoveTask() {
-
+	@Test
+	public void testSetTasks() {
+		columnView.setTasks(tasks);
+		assertArrayEquals(tasks, columnView.getTasks());
+	}
+	
+	@Test
+	public void testSetStages() {
+		columnView.setStages(stages);
+		assertArrayEquals(stages, columnView.getStages());
+	}
+	
+	@Test
+	public void testSetState() {
+		columnView.setState(tasks, stages);
+		assertArrayEquals(tasks, columnView.getTasks());
+		assertArrayEquals(stages, columnView.getStages());
 	}
 }
