@@ -16,6 +16,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.Cache;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.LocalCache;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.*;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar.ColumnView;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar.MemberListHandler;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar.SidebarView;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.toolbar.ToolbarView;
 
@@ -51,6 +52,7 @@ public class TaskManager implements IJanewayModule {
 	TaskPresenter taskPresenter;
 	Cache localCache;
 	ToolbarView toolbarview = new ToolbarView(true);
+	MemberListHandler memberHandler;
 	
 	/**
 	 * Constructs a TaskManager module and its tabs for the Janeway client.
@@ -63,11 +65,11 @@ public class TaskManager implements IJanewayModule {
 		gateway = new Gateway();
 		mainPanel = new JPanel();
 		columnView = new ColumnView();
-		sidebarView = new SidebarView();
+		memberHandler = new MemberListHandler();
+		sidebarView = new SidebarView(memberHandler);
 		
 		localCache = new LocalCache();
 		taskPresenter = new TaskPresenter(localCache);
-		localCache.subscribe("task:TaskPresenter:updateStages");
 		
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.X_AXIS));
 		mainPanel.add(columnView);
@@ -84,6 +86,10 @@ public class TaskManager implements IJanewayModule {
 		gateway.addView("SidebarView", sidebarView);
 		gateway.addView("ColumnView", columnView);
 		gateway.addView("ToolbarView", toolbarview);
+		gateway.addView("MemberListHandler", memberHandler);
+		
+		localCache.subscribe("task:TaskPresenter:updateStages");
+		localCache.subscribe("member:TaskPresenter:notifyMemberHandler");
 		
 		t = new Timer();
 
@@ -120,7 +126,7 @@ public class TaskManager implements IJanewayModule {
 				gateway.toPresenter("LocalCache", "sync", "stage");
 			}
 			
-		}, 0, 3000);
+		}, 0, 500);
 		//gateway.toPresenter("TaskPresenter", "getMembers");
 	}
 

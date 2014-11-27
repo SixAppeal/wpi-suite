@@ -29,17 +29,17 @@ public class SidebarView extends JPanel implements IView {
 	private TaskEditView editView;
 	private TaskCreateView createView;
 	private TaskDefaultView defaultView;
-	
+	private MemberListHandler memberHandler;
 	/**
 	 * Constructs a sidebar view
 	 */
-	public SidebarView() {
+	public SidebarView(MemberListHandler memberHandler) {
+		this.memberHandler = memberHandler;
 		this.container = new JPanel();
 		this.detailView = new TaskDetailView();
-		this.createView = new TaskCreateView();
-		this.editView = new TaskEditView();
+		this.createView = new TaskCreateView(this.memberHandler);
+		this.editView = new TaskEditView(this.memberHandler);
 		this.defaultView = new TaskDefaultView();
-		
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
 		this.container.setLayout(new BoxLayout(this.container, BoxLayout.X_AXIS));
@@ -58,22 +58,6 @@ public class SidebarView extends JPanel implements IView {
 		this.container.add(this.editView);
 		this.container.add(this.detailView);
 		this.add(container);
-	}
-	
-	/**
-	 * Updates the sidebar with all members from the server
-	 * @param members All members available to assign to a task
-	 */
-	public void updateMembers(String member) {
-			this.editView.addMember(member);
-			this.createView.addMember(member);
-	}
-	
-	
-	// Need to edit //
-	public void clearMembers() {
-		this.editView.setAllMembers(new String[0]);
-		this.createView.setAllMembers(new String[0]);
 	}
 	
 	/**

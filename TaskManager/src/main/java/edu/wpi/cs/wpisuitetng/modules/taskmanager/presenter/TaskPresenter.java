@@ -39,8 +39,11 @@ public class TaskPresenter implements IPresenter{
 		this.gateway.toView("ColumnView", "setTasks", new Object[] { tasks });
 	}
 	
+	public void notifyMemberHandler() {
+		this.gateway.toView("MemberListHandler", "updateAll", cache);
+	};
+	
 	public void updateStages() {
-		System.out.println("Synced Here!");
 		Task[] tasks_from_cache =  (Task[]) cache.retrieve("task");
 		this.gateway.toView("ColumnView", "setTasks", new Object[] {tasks_from_cache});
 		this.gateway.toView("ColumnView", "reflow");

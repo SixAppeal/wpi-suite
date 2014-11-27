@@ -1,6 +1,7 @@
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -8,8 +9,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.ArrayList;
@@ -84,21 +83,14 @@ public class TaskEditView extends JPanel implements IView {
 	JLabel errorText;	
 	HashMap<String, Boolean> requirderFieldFlags = new HashMap<String,Boolean>();
 	
-
-	JScrollPane allMembersListScroller;
-	JScrollPane assignedMembersListScroller;
-	//Member stuff
 	JList<String> allMembers;
 	JList<String> assignedMembers;
+	JScrollPane allMembersListScroller;
+	JScrollPane assignedMembersListScroller;
 	JButton addMemberButton;
 	JButton removeMemberButton;
 	
 	MemberListHandler EditViewMemberHandler;
-	
-	// Being replaced by MemberListHandler, uncommented to not throw errors. 
-	List<String> allMembersList;
-	List<String> assignedMembersList;
-	List<String> globalMembersList;
 	
 	JListMouseHandler allMembersMouseHandler;
 	JListMouseHandler assignedMembersMouseHandler;
@@ -107,8 +99,8 @@ public class TaskEditView extends JPanel implements IView {
 	/**
 	 * Create a new TaskEditView
 	 */
-	public TaskEditView () {
-		
+	public TaskEditView (MemberListHandler memberHandler) {
+		this.EditViewMemberHandler = memberHandler;
 		t = new Task();		// Internal Task
 
 		this.setOpaque(false);
@@ -182,9 +174,6 @@ public class TaskEditView extends JPanel implements IView {
 		});
 
 		this.descEntryScroller = new JScrollPane(descEntry);
-
-		//Member Stuff
-		EditViewMemberHandler = new MemberListHandler();
 		
 		
 		// Set UI for members
@@ -213,7 +202,9 @@ public class TaskEditView extends JPanel implements IView {
 			}
 		});
 		assignedMembersListScroller = new JScrollPane(assignedMembers);
-		
+		//assignedMembersListScroller.setPreferredSize(100);
+		assignedMembersListScroller.setMinimumSize(new Dimension(assignedMembersListScroller.getMinimumSize().width, 100));
+		allMembersListScroller.setMinimumSize(new Dimension(allMembersListScroller.getMinimumSize().width, 100));
 		addMemberButton = new JButton(">");
 		addMemberButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -260,10 +251,10 @@ public class TaskEditView extends JPanel implements IView {
 				new FormField("Est. Effort", estEffortSpinner),
 				new FormField("Act. Effort", actEffortSpinner)
 			),
-			new FormGroup(
-				new FormField("Members", allMembersListScroller),
-				buttonBox,
-				new FormField("Assigned", assignedMembersListScroller)
+			new FormGroup(true,
+				new FormField("Members", allMembersListScroller, true),
+				new FormField("", buttonBox, true),
+				new FormField("Assigned", assignedMembersListScroller, true)
 			),
 			new FormField("Stage", stageBox),
 			new FormGroup(saveButton, cancelButton),
@@ -271,6 +262,7 @@ public class TaskEditView extends JPanel implements IView {
 		);
 		
 		this.add(this.form, gbc);
+		
 	}
 
 	public void notifyAllMembersMouseHandler() {
@@ -281,27 +273,6 @@ public class TaskEditView extends JPanel implements IView {
 		this.assignedMembersMouseHandler.just_changed = true;
 	}
 	
-
-
-	/*
-	 * TODO: setAllMembers should be removed. 
-	 * Currently is not removed because the system throws 
-	 * errors because it expects it
-	 */
-	
-	/**
-	 * Allows a request from the server to add to the list of all members available to assign to a task
-	 * @param to_add Members from the server that are going to be added to the All Members list
-	 */
-	public void setAllMembers(String [] to_add) {
-		for (int i = 0; i < to_add.length; i++) {
-			if (!this.allMembersList.contains(to_add[i])) {
-				allMembersList.add(to_add[i]);
-			}
-		}
-		allMembers.setListData(allMembersList.toArray(new String[allMembersList.size()]));
-	}
-
 	/**
 	 * 
 	 * @param assigned
@@ -309,89 +280,31 @@ public class TaskEditView extends JPanel implements IView {
 	 * 
 	 *  Update Panels is used to redraw the lists once something is changed
 	 */
-	public void updatePanels(List<String> assigned, List<String> all) {
-		allMembers.setListData(all.toArray(new String[all.size()]));
-		assignedMembers.setListData(assigned.toArray(new String[assigned.size()]));
-		fixPanel();
-	}
-	
-	/**
-	 * Fixes the display of the panel containing the member information
-	 * 
-	 */
-	public void fixPanel() {
-		if(EditViewMemberHandler.getAssigned().size() == 0){
-			String [] empty_string_list = new String[1];
-			empty_string_list[0] = "";
-			this.assignedMembers.setListData(empty_string_list);	
-		}
-		if (EditViewMemberHandler.getUnassigned().size() == 0) {
-			String [] empty_string_list = new String[1];
-			empty_string_list[0] = "";
-			this.allMembers.setListData(empty_string_list);
-		}
-		this.allMembers.revalidate();
-		this.allMembersListScroller.revalidate();
-		this.allMembers.repaint();
-		this.allMembersListScroller.repaint();
-		this.assignedMembers.revalidate();
-		this.assignedMembersListScroller.revalidate();
-		this.assignedMembers.repaint();
-		this.assignedMembersListScroller.repaint();
+	public void updateMembers() {
+		allMembers.setListData(EditViewMemberHandler.getUnassigned().toArray(new String[0]));
+		assignedMembers.setListData(EditViewMemberHandler.getAssigned().toArray(new String[0]));
 		this.revalidate();
 		this.repaint();
-	}
-	
-	/*
-	 * TODO: Remove addMember(String ...)
-	 * 
-	 * Currently in the system to avoid errors due to refactoring
-	 */
-	public void addMember(String member_to_add) {
-		
-		this.globalMembersList.add(member_to_add);
-		this.allMembersList = new ArrayList<String>(globalMembersList);
-		String to_print = "";
-		for (String s: allMembersList) {
-			to_print = to_print + ", " + s;
-		}
-		System.out.println(to_print);
-		allMembers.setListData(allMembersList.toArray(new String[allMembersList.size()]));
-		fixPanel();
 	}
 	
 	/**
 	 * Takes the members that the user has selected and moves them to the list of members assigned to a task
 	 */
 	public void moveMembersToAssigned() {	
-		// Add selected members
 		EditViewMemberHandler.assignMember(allMembers.getSelectedValuesList());
-		
-		
-		// Set the unsassigned/assigned JList
-		allMembers.setListData(EditViewMemberHandler.getUnassigned().toArray(new String[EditViewMemberHandler.getNumUnAssigned()]));
-		allMembers.setListData(EditViewMemberHandler.getAssigned().toArray(new String[EditViewMemberHandler.getNumAssigned()]));
-		
+		updateMembers();
 		this.allMembersMouseHandler.clear();
 		this.assignedMembersMouseHandler.clear();
-		fixPanel();
 	}
 	
 	/**
 	 * Take the members that are selected in the Assigned Members list and moves them back to the All Members list
 	 */
 	public void moveMembersToAll() {
-		// Add selected members
-		EditViewMemberHandler.unAssignMember(allMembers.getSelectedValuesList());
-		
-		
-		// Set the unsassigned/assigned JList
-		allMembers.setListData(EditViewMemberHandler.getUnassigned().toArray(new String[EditViewMemberHandler.getNumUnAssigned()]));
-		allMembers.setListData(EditViewMemberHandler.getAssigned().toArray(new String[EditViewMemberHandler.getNumAssigned()]));
-		
+		EditViewMemberHandler.unAssignMember(assignedMembers.getSelectedValuesList());
+		updateMembers();
 		this.allMembersMouseHandler.clear();
 		this.assignedMembersMouseHandler.clear();
-		fixPanel();
 	}
 
 	/**
@@ -408,13 +321,11 @@ public class TaskEditView extends JPanel implements IView {
 	 * @param t The task with which to populate the view.
 	 */
 	public void updateView( Task t ) {
-
 		this.t = t;
 		populate();
 		updateBorder(titleEntry, titleEntry.getText());
 		updateBorder(descEntryScroller, descEntry.getText());
 		saveButton.setEnabled(true);
-
 	}
 
 	/**
@@ -439,13 +350,10 @@ public class TaskEditView extends JPanel implements IView {
 
 		String stat = t.getStage().toString();
 	
-		//This is hard coded and should be fixed at some point in the future
-		//I agree
 		actEffortSpinner.setEnabled( (stat.equals("In Progress")) || (stat.equals("Complete")) );
-		
-		
+				
 		EditViewMemberHandler.populateMembers(t.getAssignedTo());
-		updatePanels(EditViewMemberHandler.getAssigned(), EditViewMemberHandler.getUnassigned());
+		updateMembers();
 	}
 	
 	/**
@@ -465,7 +373,6 @@ public class TaskEditView extends JPanel implements IView {
 		}
 
 		try {
-
 			t.setTitle(title);
 			t.setDescription(desc);
 			t.setStage(stage);
@@ -478,9 +385,6 @@ public class TaskEditView extends JPanel implements IView {
 			return;
 		}
 		
-		// Why do we do this?? 
-//		this.assignedMembersList = new ArrayList<String> ();
-//		this.allMembersList = new ArrayList<String> ();
 		taskOut();
 		
 	}
@@ -617,69 +521,5 @@ public class TaskEditView extends JPanel implements IView {
 	}
 
 	
-	private class JListMouseHandler implements MouseListener {
-
-		JList<String> list;
-		Boolean just_changed;
-		int[] previous_indexes;
-		int keyboard_event_count;
-		
-		public JListMouseHandler (JList<String> list) {
-			this.list = list;
-			just_changed = false;
-			previous_indexes = list.getSelectedIndices();
-		}
-
-		public void mousePressed(MouseEvent e) {
-			int clicked_index = this.list.locationToIndex(e.getPoint());
-			if (this.just_changed) {
-				this.just_changed = false;
-				
-				for (int i : previous_indexes) {
-					if (!this.inArray(i, this.list.getSelectedIndices())) {
-						this.list.addSelectionInterval(i, i);
-					}
-				}
-				if (this.inArray(clicked_index, this.list.getSelectedIndices()) && this.inArray(clicked_index, previous_indexes)) {
-					this.list.removeSelectionInterval(clicked_index, clicked_index);
-				}
-			}
-			else {
-				list.removeSelectionInterval(clicked_index, clicked_index);
-			}
-			this.previous_indexes = this.list.getSelectedIndices();
-
-		}
-
-		public void mouseReleased(MouseEvent e) {}
-
-		public void mouseEntered(MouseEvent e) {}
-
-		public void mouseExited(MouseEvent e) {}
-
-		public void mouseClicked(MouseEvent e) {}
-		
-		public void update_selected() {
-			if (this.keyboard_event_count == 0) {
-				this.previous_indexes = this.list.getSelectedIndices();
-				this.keyboard_event_count++;
-			}
-		}
-		
-		public void clear() {
-			this.list.clearSelection();
-			this.previous_indexes = this.list.getSelectedIndices();
-		}
-		
-		private Boolean inArray(int to_check, int[] array) {
-			for (int i : array) {
-				if (i == to_check) {
-					return true;
-				}
-			}
-			return false;
-		}
-
-	}
-
+	
 }

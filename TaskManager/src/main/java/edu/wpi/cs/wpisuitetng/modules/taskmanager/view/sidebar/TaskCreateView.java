@@ -12,6 +12,11 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
  *
  */
 public class TaskCreateView extends TaskEditView implements IView {
+	
+	public TaskCreateView(MemberListHandler memberHandler) {
+		super(memberHandler);
+	}
+
 	private static final long serialVersionUID = -1055431537990755671L;
 
 	/**
@@ -29,8 +34,6 @@ public class TaskCreateView extends TaskEditView implements IView {
 	protected void taskOut() {
 		this.clearForm();
 		gateway.toPresenter("LocalCache", "store", "task", t);
-		//gateway.toPresenter("TaskPresenter", "createTask", t);
-		//gateway.toPresenter("TaskPresenter", "getAllTasks");
 	}
 	
 }

@@ -1,3 +1,14 @@
+/*******************************************************************************
+ * Copyright (c) 2013 -- WPI Suite
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors: Nathan Hughes
+ ******************************************************************************/
+
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache;
 
 import java.util.ArrayList;
@@ -21,9 +32,6 @@ import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
 /**
  * This class is responsible for managing local copies of the database
  * information and for communicating directly with the server
- * 
- * @author nhhughes
- *
  */
 public class LocalCache implements Cache, IPresenter {
 
@@ -37,8 +45,6 @@ public class LocalCache implements Cache, IPresenter {
 	/**
 	 * Initializes the local cache with a lookup table and some cache data
 	 * structures
-	 * 
-	 * @author nhhughes
 	 */
 	public LocalCache() {
 		tasks = new ArrayList<Task>();
@@ -124,18 +130,14 @@ public class LocalCache implements Cache, IPresenter {
 		if (request.equals("task")) {
 			final Request networkRequest = Network.getInstance().makeRequest(
 					"taskmanager/task", HttpMethod.PUT);
-			networkRequest.addObserver(new CallbackManager(gateway, callbacks
-					.get("task")));
-			networkRequest.addObserver(new AddManager(this, request));
+			networkRequest.addObserver(new AddManager(this, request, gateway, callbacks.get("task")));
 			networkRequest.setBody(toStore.toJson());
 			networkRequest.send();
 		}
 		if (request.equals("archive")) {
 			final Request networkRequest = Network.getInstance().makeRequest(
 					"taskmanager/task", HttpMethod.PUT);
-			networkRequest.addObserver(new CallbackManager(gateway, callbacks
-					.get("archive")));
-			networkRequest.addObserver(new AddManager(this, request));
+			networkRequest.addObserver(new AddManager(this, request, gateway, callbacks.get("task")));
 			networkRequest.setBody(toStore.toJson());
 			networkRequest.send();
 		}
@@ -160,8 +162,8 @@ public class LocalCache implements Cache, IPresenter {
 			final Request networkRequest = Network.getInstance().makeRequest(
 					"taskmanager/task", HttpMethod.POST);
 			networkRequest.setBody(((Task) newObject).toJson());
-			networkRequest.addObserver(new CallbackManager(gateway, callbacks
-					.get("tasks")));
+			networkRequest.addObserver(new UpdateManager(this, request, gateway, callbacks
+					.get("task")));
 			networkRequest.send();
 		}
 		if (request.equals("archive")) {
@@ -169,7 +171,7 @@ public class LocalCache implements Cache, IPresenter {
 			final Request networkRequest = Network.getInstance().makeRequest(
 					"taskmanager/task", HttpMethod.POST);
 			networkRequest.setBody(((Task) newObject).toJson());
-			networkRequest.addObserver(new CallbackManager(gateway, callbacks
+			networkRequest.addObserver(new UpdateManager(this, request, gateway, callbacks
 					.get("archive")));
 			networkRequest.send();
 		}

@@ -157,6 +157,7 @@ public class StageView extends JPanel implements IView {
 		}
 		
 		this.scrollPane.revalidate();
+		this.scrollPane.repaint();
 	}
 	
 	/**
