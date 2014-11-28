@@ -43,7 +43,10 @@ public class Form extends JPanel {
 		
 		for (int i = 0; i < fields.length; i++) {
 			this.fields.add(fields[i]);
-			
+			if (fields[i] instanceof FormGroup && ((FormGroup)fields[i]).getExpandVertical()) {
+				//gbc.weighty = 1.0;
+				//gbc.weightx = 1.0;
+			}
 			if (i == fields.length - 1) {
 				gbc.anchor = GridBagConstraints.FIRST_LINE_END;
 				gbc.fill = GridBagConstraints.NONE;
@@ -54,6 +57,8 @@ public class Form extends JPanel {
 			
 			gbc.gridy = i;
 			this.add(fields[i], gbc);
+			gbc.weighty = 0.0;
+			gbc.weightx = 1.0;
 		}
 	}
 	

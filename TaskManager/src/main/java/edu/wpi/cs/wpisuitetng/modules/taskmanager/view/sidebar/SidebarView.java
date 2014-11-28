@@ -16,6 +16,8 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
  * @author wavanrensselaer
  * @author akshoop
  * @author rnorlando
+ * @author Thhughes
+ * 
  */
 public class SidebarView extends JPanel implements IView {
 	private static final long serialVersionUID = -9157611802121055998L;
@@ -29,19 +31,20 @@ public class SidebarView extends JPanel implements IView {
 	private TaskCreateView createView;
 	private TaskDefaultView defaultView;
 	private SearchBox searchBox;
-	
+	private MemberListHandler memberHandler;
 	/**
 	 * Constructs a sidebar view
 	 * @throws IOException 
 	 */
-	public SidebarView() throws IOException {
+	public SidebarView(MemberListHandler memberHandler) throws IOException {
+		this.memberHandler = memberHandler;
 		this.container = new JPanel();
 		this.detailView = new TaskDetailView();
-		this.createView = new TaskCreateView();
-		this.editView = new TaskEditView();
+		this.createView = new TaskCreateView(this.memberHandler);
+		this.editView = new TaskEditView(this.memberHandler);
 		this.defaultView = new TaskDefaultView();
 		this.searchBox = new SearchBox();
-		
+
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
 		this.container.setLayout(new BoxLayout(this.container, BoxLayout.X_AXIS));
@@ -61,20 +64,6 @@ public class SidebarView extends JPanel implements IView {
 		this.container.add(this.detailView);
 		this.container.add(this.searchBox);
 		this.add(container);
-	}
-	
-	/**
-	 * Updates the sidebar with all members from the server
-	 * @param members All members available to assign to a task
-	 */
-	public void updateMembers(String member) {
-			this.editView.addMember(member);
-			this.createView.addMember(member);
-	}
-	
-	public void clearMembers() {
-		this.editView.setAllMembers(new String[0]);
-		this.createView.setAllMembers(new String[0]);
 	}
 	
 	/**

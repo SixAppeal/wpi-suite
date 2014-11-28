@@ -65,6 +65,32 @@ public class FormField extends JPanel {
 		this.add(this.field, gbc);
 	}
 	
+	public FormField(String name, JComponent field, Boolean expandVertical) {
+		this.name = name;
+		this.label = new JLabel(this.name);
+		this.field = field;
+		
+		this.field.setBorder(BORDER_NORMAL);
+		this.field.setBackground(Color.WHITE);
+		
+		this.setOpaque(false);
+		this.setLayout(new GridBagLayout());
+		
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.weightx = 1.0;
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		this.add(this.label, gbc);
+		if (expandVertical) {
+			//gbc.weightx = 1.0;
+			//gbc.weighty = 1.0;
+		}
+		gbc.insets = new Insets(5, 0, 0, 0);
+		gbc.gridy = 1;
+		this.add(this.field, gbc);
+	}
+	
 	/**
 	 * Gets the name of the field.
 	 * @return The name of the field
