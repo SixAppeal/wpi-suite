@@ -21,7 +21,11 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
  * @author wavanrensselaer
  * @author akshoop
  * @author rnorlando
+<<<<<<< HEAD
  * @author srojas
+=======
+ * @author Thhughes
+>>>>>>> start-of-refactor
  * 
  */
 public class SidebarView extends JPanel implements IView {
@@ -31,6 +35,7 @@ public class SidebarView extends JPanel implements IView {
 
 
 	private TaskDefaultView defaultView;
+<<<<<<< HEAD
 	private JTabbedPane tabPane;
 	/**
 	 * @return the tabPane
@@ -65,11 +70,43 @@ public class SidebarView extends JPanel implements IView {
 		gbc.gridx = 0;
 		gbc.gridy = 0;
 		this.add(tabPane, gbc);
+=======
+	private MemberListHandler memberHandler;
+	/**
+	 * Constructs a sidebar view
+	 */
+	public SidebarView(MemberListHandler memberHandler) {
+		this.memberHandler = memberHandler;
+		this.container = new JPanel();
+		this.detailView = new TaskDetailView();
+		this.createView = new TaskCreateView(this.memberHandler);
+		this.editView = new TaskEditView(this.memberHandler);
+		this.defaultView = new TaskDefaultView();
+		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		
+		this.container.setLayout(new BoxLayout(this.container, BoxLayout.X_AXIS));
+		this.container.setBackground(new Color(250, 250, 250));
+		this.container.setMinimumSize(new Dimension(300, 0));
+		this.container.setPreferredSize(new Dimension(300, 500));
+		this.container.setMaximumSize(new Dimension(300, Integer.MAX_VALUE));
+		
+		this.curView = this.defaultView;
+		this.createView.setVisible(false);
+		this.editView.setVisible(false);
+		this.detailView.setVisible(false);
+		
+		this.container.add(this.defaultView);
+		this.container.add(this.createView);
+		this.container.add(this.editView);
+		this.container.add(this.detailView);
+		this.add(container);
+>>>>>>> start-of-refactor
 	}
 
 
 
 	/**
+<<<<<<< HEAD
 	 * Shows the creation panel 
 	 */
 	public void addCreatePanel() {
@@ -88,6 +125,9 @@ public class SidebarView extends JPanel implements IView {
 	/**
 	 * this method checks all of the views in the tabs to see if there is an empty tab open
 	 * @return boolean , it returns true if there is an empty tab open, false if there is not
+=======
+	 * Shows the default panel
+>>>>>>> start-of-refactor
 	 */
 	public boolean isThereAnEmptyTab(){
 		for (IView view : viewList){
