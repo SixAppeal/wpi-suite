@@ -71,17 +71,20 @@ public class TestSearch {
 		testAssignedTo.add("bunch");
 		
 		someSearch.initialize();
-		Task task1 = new Task("someTitle bunch");
+		Task task1 = new Task();
+		task1.setTitle("someTitle bunch");
 		task1.setDescription("someTitle bunch of words HERE ARE CAPITAL lettersWith, commas's yeah!?");
 		task1.setAssignedTo(testAssignedTo);
 		task1.setId(3);
 		
-		Task task2 = new Task("another title testing");
+		Task task2 = new Task();
+		task2.setTitle("another title testing");
 		task2.setDescription("sometitle bunch of's yeah!?");
 		task2.setAssignedTo(testAssignedTo);
 		task2.setId(4);
 		
-		Task task3 = new Task("testing bunch");
+		Task task3 = new Task();
+		task3.setTitle("testing bunch");
 		task3.setDescription(" other description bunch");
 		task3.setAssignedTo(testAssignedTo);
 		task3.setId(5);
