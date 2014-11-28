@@ -11,15 +11,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javafx.scene.input.KeyCode;
-
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import org.apache.lucene.queryparser.classic.ParseException;
-import org.jdesktop.swingx.JXSearchPanel;
 
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.search.Search;
@@ -27,7 +24,6 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.search.SearchException;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.Form;
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.FormField;
 
 /**
  * The GUI Search Box for the Sidebar
@@ -50,6 +46,8 @@ public class SearchBox extends JPanel implements IView {
 	List<Task> taskList;
 	Form form;
 	GridBagConstraints gbc;
+	int quotationCount;
+	String fullString;
 	
 	/**
 	 * General constructor
@@ -60,6 +58,8 @@ public class SearchBox extends JPanel implements IView {
 		toSearch.initialize();
 		resultsBox = new JPanel();
 		taskList = new ArrayList<Task>();
+		quotationCount = 0;
+		fullString = "";
 		
 		// testing purposes
 		Task task1 = new Task();
@@ -69,7 +69,7 @@ public class SearchBox extends JPanel implements IView {
 		
 		Task task2 = new Task();
 		task2.setTitle("another title testing");
-		task2.setDescription("sometitle bunch of's yeah!?");
+		task2.setDescription("sometitle bunch of yeah!?");
 		task2.setId(2);
 		
 		Task task3 = new Task();
@@ -83,30 +83,26 @@ public class SearchBox extends JPanel implements IView {
 		
 		toSearch.createIndex(taskList);
 		
+		resultsBox.setLayout(new GridBagLayout());
+		resultsBox.setOpaque(false);;
+		
 		searchBox = new JTextField();
 		searchBox.addKeyListener(new KeyAdapter() {
 			public void keyReleased(KeyEvent e) {
-				try {
-					System.out.println("length of results is: " + toSearch.searchFor(searchBox.getText()).size());
-					displayResults(toSearch.searchFor(searchBox.getText() /*+"*"*/));
-				} catch (SearchException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (ParseException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-			}
-			public void keyPressed(KeyEvent e)
-			{
-				if (e.getKeyChar() == '\n') {
-					// THIS IS FINE-ish
+//				System.out.println("e keycode is " + e.getKeyCode());
+//				System.out.println("e char is " + e.getKeyChar());
+				
+				// This is to wipe the results panel when user backspaces all that they typed
+				if (e.getKeyChar() == '\b') {
+					fullString = "";
 					try {
-						System.out.println("length of results is: " + toSearch.searchFor(searchBox.getText()).size());
-						displayResults(toSearch.searchFor(searchBox.getText()));
+						if (searchBox.getText().length() > 1) {
+							System.out.println("length of backspace results is: " + toSearch.searchFor(searchBox.getText() + "*").size());
+							displayResults(toSearch.searchFor(searchBox.getText() + "*"));
+						}
+						else if (searchBox.getText().length() == 1) {
+							displayResults(toSearch.searchFor(searchBox.getText()));
+						}
 					} catch (SearchException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -117,6 +113,60 @@ public class SearchBox extends JPanel implements IView {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
+					return;
+				}
+				
+				// For case where user starts quotation marks
+				if ((e.getKeyCode() == 222 || e.getKeyChar() == '\"') && quotationCount == 0) {
+//					System.out.println("first quote, quotCount is" + quotationCount + " and fullString is " + fullString);
+					quotationCount = 1;
+					fullString += "\"";
+					return;
+				}
+				
+				// For case where user is typing within quotation marks
+				if ((e.getKeyCode() != 16 || e.getKeyCode() != 222) && quotationCount == 1) {
+//					System.out.println("get here, quotcount is" + quotationCount);
+					fullString += e.getKeyChar();
+//					System.out.println("fullString doing quotes is "+ fullString);
+				}
+				
+				// For case where user is typing regular text
+				if ((e.getKeyCode() != 16 || e.getKeyCode() != 222) && quotationCount == 0) {
+					fullString += e.getKeyChar();
+//					System.out.println("fullString is " + fullString);
+				}
+				
+				// For case where user finishes quotation marks
+				if ((e.getKeyCode() == 222 || e.getKeyChar() == '\"') && quotationCount == 1) {
+//					System.out.println("second quote, quotCount is" + quotationCount + " and fullString is " + fullString);
+					quotationCount = 0;
+				}
+				
+				try {
+					fullString = fullString.replaceAll("\uFFFF", "");
+					
+					// Check if full string contains the quotation mark
+					if (fullString.indexOf("\"") != -1) {
+//						System.out.println("full string for quote is " + fullString);
+						System.out.println("length of full quote results is: " + toSearch.searchFor(fullString).size());
+						displayResults(toSearch.searchFor(fullString));
+					}
+					else {
+						System.out.println("full string for wild is " + fullString);
+						System.out.println("string of gettext is " + searchBox.getText());
+						System.out.println("length of full wild results is: " + toSearch.searchFor(fullString + "*").size());
+						displayResults(toSearch.searchFor(fullString + "*"));
+					}
+				} catch (SearchException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (ParseException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
 				}
 			}
 		});
@@ -137,8 +187,6 @@ public class SearchBox extends JPanel implements IView {
 		gbc.insets = new Insets(20, 20, 0, 20);
 		
 		this.add(new JLabel("Search", JLabel.CENTER), gbc);
-		this.resultsBox.setLayout(new GridBagLayout());
-		this.resultsBox.setOpaque(false);;
 		gbc.gridy = 1;
 		this.add(searchBox, gbc);
 		
