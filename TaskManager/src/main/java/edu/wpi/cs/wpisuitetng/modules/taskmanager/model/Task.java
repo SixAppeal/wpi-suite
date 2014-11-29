@@ -31,6 +31,7 @@ public class Task extends AbstractModel {
 	Date dueDate;
 	List<Activity> activities;
 	Integer column;
+	List<Comment> comments;
 	//List<Requirement> associatedRequirement;
 
 	/**
@@ -49,6 +50,7 @@ public class Task extends AbstractModel {
 		this.activities.add(new Activity("Task created, bro"));
 		this.column = 0;
 		this.archived = false;
+		this.comments = new LinkedList<Comment>();
 	}
 
 	/**
@@ -61,12 +63,13 @@ public class Task extends AbstractModel {
 	 * @param estimatedEffort number that represents how much effort (units of work)
 	 * @param actualEffort number that represents the actual effort
 	 * @param dueDate when the task is due
-	 * @param activities list of activities (comments that members can put) for the task
+	 * @param activities list of activities (History of changes and comments) for the task
+	 * @param comments List of Comments on the task
 	 * @throws IllegalArgumentException
 	 */
 	public Task(String title, String description, TaskStatus status,
 			List<String> assignedTo, Integer estimatedEffort,
-			Integer actualEffort, Date dueDate, List<Activity> activities) throws IllegalArgumentException {
+			Integer actualEffort, Date dueDate, List<Activity> activities, List<Comment> comments) throws IllegalArgumentException {
 		super();
 		this.title = title;
 		this.description = description;
@@ -90,6 +93,7 @@ public class Task extends AbstractModel {
 
 		this.dueDate = dueDate;
 		this.activities = activities;
+		this.comments = comments;
 		this.column = 0;
 		this.archived = false;
 	}
@@ -489,6 +493,30 @@ public class Task extends AbstractModel {
 	 */
 	public boolean isArchived() {
 		return archived;
+	}
+	
+	/**
+	 * @return list of comments
+	 */
+	public List<Comment> getComments(){
+		return this.comments;
+	}
+	
+	/**
+	 * sets the current list of comments to a new list of comments
+	 * @param comments
+	 */
+	public void setComments(List<Comment> comments){
+		this.comments = comments;
+	}
+	
+	/**
+	 * adds a comment to the list of comments and to the list of activities
+	 * @param comment
+	 */
+	public void addComment(String user, String comment){
+		this.comments.add(new Comment(user, comment));
+		this.activities.add(new Activity(user + " made a comment!"));
 	}
 	
 	/**

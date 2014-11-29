@@ -6,14 +6,18 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.LinkedList;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Activity;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Comment;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
@@ -58,10 +62,13 @@ public class TaskDetailView extends JPanel implements IView {
 	JLabel taskActLabel;		//Displays the Task's Actual Effort Value
 	
 	JLabel memberLabel;
-	JList<String> taskMemberList;
+	JList<String> taskMemberList;	//Displays the members assigned to the task
 	
 	JLabel activitiesLabel;
-	JList<Activity> taskActivitiesList;
+	JList<Activity> taskActivitiesList; //Displays the Task's activity history
+	
+	JLabel commentLabel;
+	JList<Comment> taskCommentList;	//Displays the Task's comment history
 	
 	JButton archiveButton; //Archives the task.
 	JButton editButton; //Opens the task for editing.
@@ -91,9 +98,13 @@ public class TaskDetailView extends JPanel implements IView {
 		memberLabel.setForeground(labelColor);
 		taskMemberList = new JList<String> ();
 		
-		activitiesLabel = new JLabel ("Activities History");
+		activitiesLabel = new JLabel ("Task History");
 		activitiesLabel.setForeground(labelColor);
 		taskActivitiesList = new JList<Activity> ();
+		
+		commentLabel = new JLabel ("Comments");
+		commentLabel.setForeground(labelColor);
+		taskCommentList = new JList<Comment>();
 		
 		archiveButton = new JButton("Archive");
 		archiveButton.addActionListener( new ActionListener() {
