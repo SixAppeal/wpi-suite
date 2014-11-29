@@ -1,15 +1,9 @@
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.BoxLayout;
-import javax.swing.JPanel;
+import javax.swing.ImageIcon;
 import javax.swing.JTabbedPane;
 
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
@@ -21,175 +15,77 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
  * @author wavanrensselaer
  * @author akshoop
  * @author rnorlando
-<<<<<<< HEAD
  * @author srojas
-=======
  * @author Thhughes
->>>>>>> start-of-refactor
  * 
  */
-public class SidebarView extends JPanel implements IView {
+public class SidebarView extends JTabbedPane implements IView {
 	private static final long serialVersionUID = -9157611802121055998L;
 
-	Gateway gateway;
-
-
-	private TaskDefaultView defaultView;
-<<<<<<< HEAD
-	private JTabbedPane tabPane;
-	/**
-	 * @return the tabPane
-	 */
-
-
-	private List<IView>  viewList; // list for views
+	private Gateway gateway;
+	
+	// Components
+	private List<IView> viewList;
 
 	/**
 	 * Constructs a sidebar view
 	 */
 	public SidebarView() {
-		this.defaultView = new TaskDefaultView();
-
-		this.tabPane = new JTabbedPane(JTabbedPane.LEFT);
-		this.tabPane.addTab("Default View",this.defaultView);
+		super();
+		
 		this.viewList = new ArrayList<IView>();
-
-		this.setBackground(new Color(250, 250, 250));
-		this.setMinimumSize(new Dimension(300, 0));
-		this.setPreferredSize(new Dimension(300, 500));
-		this.setMaximumSize(new Dimension(300, Integer.MAX_VALUE));
-		this.add(tabPane);
-
-		this.setLayout(new GridBagLayout());
-		GridBagConstraints gbc = new GridBagConstraints();
-
-		gbc.anchor = GridBagConstraints.PAGE_START;
-		gbc.fill = GridBagConstraints.BOTH;
-		gbc.weightx = 1.0;
-		gbc.weighty = 1.0;
-		gbc.gridx = 0;
-		gbc.gridy = 0;
-		this.add(tabPane, gbc);
-=======
-	private MemberListHandler memberHandler;
-	/**
-	 * Constructs a sidebar view
-	 */
-	public SidebarView(MemberListHandler memberHandler) {
-		this.memberHandler = memberHandler;
-		this.container = new JPanel();
-		this.detailView = new TaskDetailView();
-		this.createView = new TaskCreateView(this.memberHandler);
-		this.editView = new TaskEditView(this.memberHandler);
-		this.defaultView = new TaskDefaultView();
-		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
-		this.container.setLayout(new BoxLayout(this.container, BoxLayout.X_AXIS));
-		this.container.setBackground(new Color(250, 250, 250));
-		this.container.setMinimumSize(new Dimension(300, 0));
-		this.container.setPreferredSize(new Dimension(300, 500));
-		this.container.setMaximumSize(new Dimension(300, Integer.MAX_VALUE));
+		TaskSearchView searchView = new TaskSearchView();
+		this.viewList.add(searchView);
 		
-		this.curView = this.defaultView;
-		this.createView.setVisible(false);
-		this.editView.setVisible(false);
-		this.detailView.setVisible(false);
-		
-		this.container.add(this.defaultView);
-		this.container.add(this.createView);
-		this.container.add(this.editView);
-		this.container.add(this.detailView);
-		this.add(container);
->>>>>>> start-of-refactor
+		this.setTabPlacement(JTabbedPane.LEFT);
+		this.addTab(null, new ImageIcon(this.getClass().getResource("icon_search.png")),
+				searchView);
 	}
-
-
-
+	
 	/**
-<<<<<<< HEAD
-	 * Shows the creation panel 
+	 * Adds a creation panel to the sidebar
 	 */
 	public void addCreatePanel() {
-		//add logic to avoid creating multiple empty tabs
-		if (isThereAnEmptyTab()){
-			return;
-		}
 		TaskCreateView createView = new TaskCreateView();
 		createView.setGateway(this.gateway);
-		tabPane.addTab("Create Task", createView);
-		this.tabPane.setSelectedIndex(this.tabPane.indexOfComponent(createView));
-		this.viewList.add(createView);
+		this.addTab(null, new ImageIcon(this.getClass().getResource("icon_plus.png")),
+				createView);
+		this.setSelectedComponent(createView);
 	}
-
 	
 	/**
-	 * this method checks all of the views in the tabs to see if there is an empty tab open
-	 * @return boolean , it returns true if there is an empty tab open, false if there is not
-=======
-	 * Shows the default panel
->>>>>>> start-of-refactor
+	 * Removes a creation panel from the sidebar
+	 * @param createView The create panel to remove
 	 */
-	public boolean isThereAnEmptyTab(){
-		for (IView view : viewList){
-			if (view instanceof TaskCreateView){
-				boolean titleEmpty = (((TaskCreateView)view).titleEntry.getText().equals("")) ;
-				boolean descEmpty = (((TaskCreateView)view).descEntry.getText().equals(""));
-				boolean estEffortDefault =(((TaskCreateView)view).estEffortSpinner.getValue().equals(0)) ;
-
-				//if fields empty switch to existing empty tab
-				if (titleEmpty && descEmpty && estEffortDefault){
-					this.tabPane.setSelectedIndex(this.tabPane.indexOfComponent((TaskCreateView)view));	
-					return true;
-				}
-			}
+	public void removeCreatePanel(TaskCreateView createView) {
+		try {
+			this.removeTabAt(this.indexOfComponent(createView));
+		} catch (IndexOutOfBoundsException e) {
 		}
-		return false;
 	}
-	
-	
-
-	
-	
-	/**
-	 * getter for Tab pane
-	 * @return tabPane
-	 */
-	public JTabbedPane getTabPane() {
-		return tabPane;
-	}
-	
 
 	/**
-	 * Shows the edit panel
+	 * Adds an edit panel to the sidebar
 	 * @param task The task to edit
 	 */
 	public void addEditPanel(Task task) {
-
-		for (IView view : viewList){
-			if (view instanceof TaskEditView){
-				if (((TaskEditView)view).getTask().equals(task)){
-					this.tabPane.setSelectedIndex(this.tabPane.indexOfComponent((TaskEditView)view));
-					return;
-				}
-			}
-		}
 		TaskEditView editView = new TaskEditView();
 		editView.setGateway(this.gateway);
-		tabPane.addTab("Edit Task", editView);
-		this.tabPane.setSelectedIndex(this.tabPane.indexOfComponent(editView));
-
+		this.addTab(null, new ImageIcon(this.getClass().getResource("icon_pencil.png")),
+				editView);
+		this.setSelectedComponent(editView);
 	}
-
+	
 	/**
-	 * Shows the detail panel
-	 * @param task The task to display
+	 * Removes an edit view from the sidebar
+	 * @param editView The edit view to remove
 	 */
-	public void addDetailPanel(Task task) {
-		TaskDetailView detailView = new TaskDetailView();
-		detailView.setGateway(this.gateway);
-		tabPane.addTab("Create Task", detailView);
-		this.tabPane.setSelectedIndex(this.tabPane.indexOfComponent(detailView));
-
+	public void removeEditPanel(TaskEditView editView) {
+		try {
+			this.removeTabAt(this.indexOfComponent(editView));
+		} catch (IndexOutOfBoundsException e) {
+		}
 	}
 
 	/**
@@ -198,7 +94,9 @@ public class SidebarView extends JPanel implements IView {
 	@Override
 	public void setGateway(Gateway gateway) {
 		this.gateway = gateway;
-
+		for (IView view : this.viewList) {
+			view.setGateway(this.gateway);
+		}
 	}
 
 }

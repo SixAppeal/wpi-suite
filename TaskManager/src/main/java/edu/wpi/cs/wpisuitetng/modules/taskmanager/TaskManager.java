@@ -66,7 +66,7 @@ public class TaskManager implements IJanewayModule {
 		mainPanel = new JPanel();
 		columnView = new ColumnView();
 		memberHandler = new MemberListHandler();
-		sidebarView = new SidebarView(memberHandler);
+		sidebarView = new SidebarView();
 		
 		localCache = new LocalCache();
 		taskPresenter = new TaskPresenter(localCache);

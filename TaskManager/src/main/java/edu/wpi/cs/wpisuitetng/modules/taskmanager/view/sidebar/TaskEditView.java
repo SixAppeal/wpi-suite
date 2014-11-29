@@ -9,10 +9,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -23,11 +24,6 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
-<<<<<<< HEAD
-import javax.swing.JTabbedPane;
-import javax.swing.ListSelectionModel;
-=======
->>>>>>> start-of-refactor
 import javax.swing.SpinnerNumberModel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -45,7 +41,6 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.Form;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.FormField;
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.FormGroup;
 
 /**
  * 
@@ -104,11 +99,9 @@ public class TaskEditView extends JPanel implements IView {
 	/**
 	 * Create a new TaskEditView
 	 */
-	public TaskEditView (MemberListHandler memberHandler) {
-		this.EditViewMemberHandler = memberHandler;
+	public TaskEditView() {
 		t = new Task();		// Internal Task
 
-		this.setOpaque(false);
 		this.setLayout(new GridBagLayout());
 
 		// Gui Setup
@@ -170,12 +163,11 @@ public class TaskEditView extends JPanel implements IView {
 			}
 		});
 
+		TaskEditView that = this;
 		cancelButton = new JButton("Cancel");
 		cancelButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//modify to remove a tab
-				//SidebarView.getTabPane().remove(this);
-				gateway.toPresenter("TaskPresenter", "toolbarDefault");
+				gateway.toView("SidebarView", "removeEditPanel", that);
 			}
 		});
 
@@ -187,7 +179,6 @@ public class TaskEditView extends JPanel implements IView {
 		allMembers.setVisibleRowCount(4);
 		allMembers.setLayoutOrientation(JList.VERTICAL);
 		this.allMembersMouseHandler = new JListMouseHandler(allMembers);
-		allMembers.addMouseListener(allMembersMouseHandler);
 		allMembers.addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
@@ -200,7 +191,6 @@ public class TaskEditView extends JPanel implements IView {
 		assignedMembers.setVisibleRowCount(4);
 		assignedMembers.setLayoutOrientation(JList.VERTICAL);
 		this.assignedMembersMouseHandler = new JListMouseHandler(assignedMembers);
-		assignedMembers.addMouseListener(assignedMembersMouseHandler);
 		assignedMembers.addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
@@ -243,7 +233,7 @@ public class TaskEditView extends JPanel implements IView {
 		gbc.weightx = 1.0;
 		gbc.gridx = 0;
 		gbc.gridy = 0;
-		gbc.insets = new Insets(20, 0, 0, 0);
+		gbc.insets = new Insets(20, 20, 20, 20);
 		this.add(new JLabel(this.getTitle(), JLabel.CENTER), gbc);
 
 		gbc.insets.top = 0;
@@ -253,17 +243,18 @@ public class TaskEditView extends JPanel implements IView {
 			new FormField("Title", titleEntry),
 			new FormField("Description", descEntryScroller),
 			new FormField("Due Date", dueDatePicker),
-			new FormGroup(
+			new Form(
+				Form.HORIZONTAL,
 				new FormField("Est. Effort", estEffortSpinner),
 				new FormField("Act. Effort", actEffortSpinner)
 			),
-			new FormGroup(true,
-				new FormField("Members", allMembersListScroller, true),
-				new FormField("", buttonBox, true),
-				new FormField("Assigned", assignedMembersListScroller, true)
+			new Form(
+				Form.HORIZONTAL,
+				new FormField("Members", allMembersListScroller),
+				new FormField("Assigned", assignedMembersListScroller)
 			),
 			new FormField("Stage", stageBox),
-			new FormGroup(saveButton, cancelButton),
+			new Form(Form.HORIZONTAL, saveButton, cancelButton),
 			new FormField(null, errorText)
 		);
 		
@@ -530,8 +521,7 @@ public class TaskEditView extends JPanel implements IView {
 	
 		
 	}
-
-<<<<<<< HEAD
+	
 	private class JListMouseHandler implements MouseListener {
 
 		JList<String> list;
@@ -600,9 +590,4 @@ public class TaskEditView extends JPanel implements IView {
 		
 
 	}
-
-=======
-	
-	
->>>>>>> start-of-refactor
 }

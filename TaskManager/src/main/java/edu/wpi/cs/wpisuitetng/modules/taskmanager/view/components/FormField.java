@@ -35,60 +35,67 @@ public class FormField extends JPanel {
 	private String name;
 	private JLabel label;
 	private JComponent field;
+	private JLabel message;
+	private FormFieldValidator validator;
+	
+	/**
+	 * Constructs a <code>FormField</code> with a field
+	 * @param field The component to be displayed as the field
+	 */
+	public FormField(JComponent field) {
+		this(null, field, null);
+	}
 	
 	/**
 	 * Constructs a <code>FormField</code> with a name and an input component.
 	 * The name will be displayed as a label for the field.
 	 * @param name The name of the field
-	 * @param field
+	 * @param field The component to be displayed as the field
 	 */
 	public FormField(String name, JComponent field) {
-		this.name = name;
-		this.label = new JLabel(this.name);
-		this.field = field;
-		
-		this.field.setBorder(BORDER_NORMAL);
-		this.field.setBackground(Color.WHITE);
-		
-		this.setOpaque(false);
-		this.setLayout(new GridBagLayout());
-		
-		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.fill = GridBagConstraints.HORIZONTAL;
-		gbc.weightx = 1.0;
-		gbc.gridx = 0;
-		gbc.gridy = 0;
-		this.add(this.label, gbc);
-		
-		gbc.insets = new Insets(5, 0, 0, 0);
-		gbc.gridy = 1;
-		this.add(this.field, gbc);
+		this(name, field, null);
 	}
 	
-	public FormField(String name, JComponent field, Boolean expandVertical) {
+	/**
+	 * Constructs a <code>FormField</code> with a name, field, and validator.
+	 * @param name The name of the field
+	 * @param field The component to be displayed as the field
+	 * @param validator A validator for the field
+	 */
+	public FormField(String name, JComponent field, FormFieldValidator validator) {
 		this.name = name;
 		this.label = new JLabel(this.name);
 		this.field = field;
+		this.message = new JLabel();
+		this.validator = validator;
+		
+		if (this.name == null) {
+			this.label.setVisible(false);
+		}
 		
 		this.field.setBorder(BORDER_NORMAL);
 		this.field.setBackground(Color.WHITE);
+		
+		this.message.setForeground(Color.RED);
+		this.message.setVisible(false);
 		
 		this.setOpaque(false);
 		this.setLayout(new GridBagLayout());
 		
 		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.anchor = GridBagConstraints.PAGE_END;
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.weightx = 1.0;
 		gbc.gridx = 0;
 		gbc.gridy = 0;
 		this.add(this.label, gbc);
-		if (expandVertical) {
-			//gbc.weightx = 1.0;
-			//gbc.weighty = 1.0;
-		}
+		
 		gbc.insets = new Insets(5, 0, 0, 0);
 		gbc.gridy = 1;
 		this.add(this.field, gbc);
+		
+		gbc.gridy = 2;
+		this.add(this.message, gbc);
 	}
 	
 	/**
@@ -105,5 +112,42 @@ public class FormField extends JPanel {
 	 */
 	public JComponent getField() {
 		return this.field;
+	}
+	
+	/**
+	 * Gets the validator for this field
+	 * @return A <code>FormFieldValidator</code> for this field
+	 */
+	public FormFieldValidator getValidator() {
+		return this.validator;
+	}
+	
+	/**
+	 * Checks if the input for this field is valid
+	 * @return True if the input is valid and false otherwise
+	 */
+	public boolean hasValidInput() {
+		return this.validator == null
+			? true : this.validator.validate(this.field);
+	}
+	
+	/**
+	 * Validates the input for this field
+	 * @return True if the input is valid and false otherwise
+	 */
+	public boolean validateInput() {
+		if (this.validator != null) {
+			if (!this.validator.validate(this.field)) {
+				this.field.setBorder(BORDER_ERROR);
+				if (this.validator.getMessage() != null) {
+					this.message.setText("<html>" + this.validator.getMessage() + "</html>");
+					this.message.setVisible(true);
+				}
+				return false;
+			}
+			this.message.setVisible(false);
+			this.field.setBorder(BORDER_NORMAL);
+		}
+		return true;
 	}
 }

@@ -9,7 +9,7 @@ import org.junit.Test;
 
 public class TestForm {
 	FormField field;
-	FormGroup group;
+	Form group;
 	
 	Form form1;
 	Form form2;
@@ -17,7 +17,7 @@ public class TestForm {
 	@Before
 	public void setup() {
 		this.field = new FormField("A", new JTextField());
-		this.group = new FormGroup();
+		this.group = new Form(Form.HORIZONTAL);
 		this.form1 = new Form();
 		this.form2 = new Form(this.field, this.group);
 	}
