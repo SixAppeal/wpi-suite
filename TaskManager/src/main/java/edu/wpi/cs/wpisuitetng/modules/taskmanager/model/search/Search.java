@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.PriorityQueue;
 
 import org.apache.lucene.analysis.Analyzer;
@@ -155,7 +154,7 @@ public class Search {
 	 * @param taskList The list of tasks through which we will make an index for each one
 	 * @throws IOException 
 	 */
-	public void createIndex(List<Task> taskList) throws IOException {
+	public void createIndex(Task[] taskList) throws IOException {
 		this.index = new RAMDirectory();
 		Analyzer analyzer = new StandardAnalyzer();
 		IndexWriterConfig iwc = new IndexWriterConfig(Version.LATEST, analyzer);
@@ -184,7 +183,7 @@ public class Search {
 	 * @param taskList The list of tasks to go through to make indexes
 	 * @throws IOException 
 	 */
-	private void indexTasks(IndexWriter writer, List<Task> taskList) throws IOException {		
+	private void indexTasks(IndexWriter writer, Task[] taskList) throws IOException {		
 		for (Task t: taskList) {
 			// make a new empty document
 			Document doc = new Document();

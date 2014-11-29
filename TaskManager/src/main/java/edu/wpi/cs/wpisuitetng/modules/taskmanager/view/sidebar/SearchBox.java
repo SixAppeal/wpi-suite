@@ -18,6 +18,7 @@ import javax.swing.JTextField;
 
 import org.apache.lucene.queryparser.classic.ParseException;
 
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.LocalCache;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.search.Search;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.search.SearchException;
@@ -43,11 +44,12 @@ public class SearchBox extends JPanel implements IView {
 	Search toSearch;
 	JTextField searchBox;
 	JPanel resultsBox;
-	List<Task> taskList;
+	Task[] taskList;
 	Form form;
 	GridBagConstraints gbc;
 	int quotationCount;
 	String fullString;
+	LocalCache localCache;
 	
 	/**
 	 * General constructor
@@ -57,34 +59,38 @@ public class SearchBox extends JPanel implements IView {
 		toSearch = new Search();
 		toSearch.initialize();
 		resultsBox = new JPanel();
-		taskList = new ArrayList<Task>();
 		quotationCount = 0;
 		fullString = "";
+		localCache = new LocalCache();
 		
 		// testing purposes
-		Task task1 = new Task();
-		task1.setTitle("someTitle bunch");
-		task1.setDescription("someTitle bunch of words HERE ARE CAPITAL lettersWith, commas's yeah!?");
-		task1.setId(1);
+//		Task task1 = new Task();
+//		task1.setTitle("someTitle bunch");
+//		task1.setDescription("someTitle bunch of words HERE ARE CAPITAL lettersWith, commas's yeah!?");
+//		task1.setId(1);
+//		
+//		Task task2 = new Task();
+//		task2.setTitle("another title testing");
+//		task2.setDescription("sometitle bunch of yeah!?");
+//		task2.setId(2);
+//		
+//		Task task3 = new Task();
+//		task3.setTitle("testing bunch");
+//		task3.setDescription("other description bunch");
+//		task3.setId(3);
 		
-		Task task2 = new Task();
-		task2.setTitle("another title testing");
-		task2.setDescription("sometitle bunch of yeah!?");
-		task2.setId(2);
+//		taskList.add(task1);
+//		taskList.add(task2);
+//		taskList.add(task3);
 		
-		Task task3 = new Task();
-		task3.setTitle("testing bunch");
-		task3.setDescription("other description bunch");
-		task3.setId(3);
-		
-		taskList.add(task1);
-		taskList.add(task2);
-		taskList.add(task3);
+		// I dont init the Task[] taskList, is that bad?
+		taskList = getTasks();
+		System.out.println("task list is" + taskList);
 		
 		toSearch.createIndex(taskList);
 		
 		resultsBox.setLayout(new GridBagLayout());
-		resultsBox.setOpaque(false);;
+		resultsBox.setOpaque(false);
 		
 		searchBox = new JTextField();
 		searchBox.addKeyListener(new KeyAdapter() {
@@ -196,7 +202,7 @@ public class SearchBox extends JPanel implements IView {
 		this.add(resultsBox, gbc);
 		gbc.weighty = 0.0;
 	}
-	
+
 	/**
 	 * Display the results
 	 * @param results The list of task IDs to print 
@@ -265,6 +271,20 @@ public class SearchBox extends JPanel implements IView {
 	 */
 	public void viewTask(Task t) {
 		this.gateway.toPresenter("TaskPresenter", "viewTask", t);
+	}
+	
+	/**
+	 * Retrieves tasks from the local cache
+	 * @return tasks_from_cache An array of tasks retrieved
+	 */
+	public Task[] getTasks() {
+		gateway.toPresenter("LocalCache", "sync", "task");
+//		gateway.toPresenter("LocalCache", "sync", "member");
+//		gateway.toPresenter("LocalCache", "sync", "archive");
+//		gateway.toPresenter("LocalCache", "sync", "stage");
+//		gateway.toPresenter("LocalCache", "retrieve", "task");
+		Task[] tasks_from_cache = (Task[]) localCache.retrieve("task");
+		return tasks_from_cache;
 	}
 	
 	/**
