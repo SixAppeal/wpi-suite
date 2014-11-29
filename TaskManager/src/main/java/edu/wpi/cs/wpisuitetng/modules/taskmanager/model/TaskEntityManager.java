@@ -117,19 +117,6 @@ public class TaskEntityManager implements EntityManager<Task>{
 	}
 
 	/**
-	 * Ensures that a user is of the specified role
-	 * 
-	 * @param session the session
-	 * @param role the role being verified
-	 * @throws WPISuiteException user isn't authorized for the given role */
-	private void ensureRole(Session session, Role role) throws WPISuiteException {
-		User user = (User) db.retrieve(User.class, "username", session.getUsername()).get(0);
-		if(!user.getRole().equals(role)) {
-			throw new UnauthorizedException();
-		}
-	}
-
-	/**
 	 * Deletes a Task from the database
 	 * 
 	 * @param s the session
