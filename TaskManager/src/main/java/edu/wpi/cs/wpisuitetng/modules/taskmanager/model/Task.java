@@ -300,14 +300,14 @@ public class Task extends AbstractModel {
 	}
 	
 	/**
-	 * Set archival status to false
+	 * Set archival status to true
 	 */
 	public void archive() {
 		this.archived = true;
 	}
 	
 	/**
-	 * Set archival status to true
+	 * Set archival status to false
 	 */
 	public void unarchive() {
 		this.archived = false;
@@ -327,5 +327,6 @@ public class Task extends AbstractModel {
 		this.actualEffort = TaskUtil.validateEffort(new Integer(updatedTask.getActualEffort()));
 		this.dueDate = TaskUtil.validateDueDate(new Date(updatedTask.getDueDate().getTime()));
 		this.activities = new LinkedList<Activity>(updatedTask.getActivities());
+		this.archived = updatedTask.archived;
 	}
 }
