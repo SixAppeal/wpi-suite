@@ -1,35 +1,40 @@
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.draganddrop;
 
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
-import javax.swing.JComponent;
-import javax.swing.TransferHandler;
+import java.awt.event.MouseEvent;
 
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar.TaskView;
 
-public class TaskDraggableMouseListener extends MouseAdapter{
+/**
+ *  This is a custom class to watch the mouse actions on a task View
+ * @author RnOrlando
+ *
+ */
+public class TaskDraggableMouseListener extends DraggableMouseListener{
 	
-	TaskView assoc;
+	private TaskView taskAssoc;
 	
 	public TaskDraggableMouseListener(TaskView t) {
-		this.assoc = t;
+		super(t);
+		this.taskAssoc = t;
+		
 	}
 	
 	@Override
 	public void mouseClicked(MouseEvent e) 
 	{
-		assoc.getGateway().toPresenter("TaskPresenter", "viewTask", assoc.getTask());
+		taskAssoc.getGateway().toPresenter("TaskPresenter", "viewTask", taskAssoc.getTask());
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) 
 	{
-		assoc.getGateway().toPresenter("TaskPresenter", "viewTask", assoc.getTask());
+		taskAssoc.getGateway().toPresenter("TaskPresenter", "viewTask", taskAssoc.getTask());
 	}
 
 	@Override
-	public void mouseEntered(MouseEvent e) {
+	public void mouseEntered(MouseEvent e) 
+	{
 		assoc.setBackground(TaskView.HOVER_COLOR);
 	}
 
@@ -41,9 +46,7 @@ public class TaskDraggableMouseListener extends MouseAdapter{
 	@Override
 	public void mousePressed(MouseEvent e) 
 	{
-		assoc.getGateway().toPresenter("TaskPresenter", "viewTask", assoc.getTask());
-		JComponent c = (JComponent) assoc;
-		TransferHandler handler = c.getTransferHandler();
-		handler.exportAsDrag(c, e, TransferHandler.COPY);
+		taskAssoc.getGateway().toPresenter("TaskPresenter", "viewTask", taskAssoc.getTask());
+		super.mousePressed(e);
 	}
 }

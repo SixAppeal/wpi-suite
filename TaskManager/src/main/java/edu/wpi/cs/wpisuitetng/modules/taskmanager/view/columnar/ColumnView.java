@@ -1,9 +1,6 @@
 /**
  * Issues:
  * 	1) The only available space to drag is where tasks aren't (need to make task view drop targets as well
- *  2) Dragging between columns adds the new task, but forgets to delete the old one
- *  3) my code broke the gateway stuff.  You can't have a gateway or task inside the taskview, so we need a way of checking if we click on a task
- *  4) highlight of mousing over persists after drag and drop
  *  5) database clears drag and drop order
  * Order of things I'm going to take a look at if you guys don't get to them:
  *  1) the available space thing.  I have a workaround, I think.
