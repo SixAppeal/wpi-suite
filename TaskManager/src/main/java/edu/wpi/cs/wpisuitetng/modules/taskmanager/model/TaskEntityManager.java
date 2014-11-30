@@ -14,6 +14,7 @@ import edu.wpi.cs.wpisuitetng.modules.Model;
 import edu.wpi.cs.wpisuitetng.modules.core.models.Role;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.util.TaskUtil;
 
 /**
  * Entity Manager for the Task Model.  This is responsible for storing and retrieving all data requests
@@ -23,6 +24,8 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
  * @author nhhughes
  * @author srojas
  * @author jrhennessy
+ * @author Thhughes
+ * 
  */
 public class TaskEntityManager implements EntityManager<Task>{
 
@@ -57,8 +60,8 @@ public class TaskEntityManager implements EntityManager<Task>{
 	 */
 	@Override
 	public Task makeEntity(Session s, String content) throws WPISuiteException {
-		final Task newTask = Task.fromJson(content);
-		newTask.id = this.Count();
+		final Task newTask = TaskUtil.fromJson(content);
+		newTask.setId(this.Count());
 		if(!db.save(newTask, s.getProject())) {
 			throw new WPISuiteException();
 		}
@@ -114,19 +117,6 @@ public class TaskEntityManager implements EntityManager<Task>{
 	}
 
 	/**
-	 * Ensures that a user is of the specified role
-	 * 
-	 * @param session the session
-	 * @param role the role being verified
-	 * @throws WPISuiteException user isn't authorized for the given role */
-	private void ensureRole(Session session, Role role) throws WPISuiteException {
-		User user = (User) db.retrieve(User.class, "username", session.getUsername()).get(0);
-		if(!user.getRole().equals(role)) {
-			throw new UnauthorizedException();
-		}
-	}
-
-	/**
 	 * Deletes a Task from the database
 	 * 
 	 * @param s the session
@@ -175,7 +165,7 @@ public class TaskEntityManager implements EntityManager<Task>{
 	@Override
 	public Task update(Session session, String content) throws WPISuiteException {
 
-		Task updatedTask = Task.fromJson(content);
+		Task updatedTask = TaskUtil.fromJson(content);
 
 		//Gets old task, modifies it, and saves it again
 		List<Model> oldTasks = db.retrieve(Task.class, "id", updatedTask.getId(), session.getProject());
@@ -186,7 +176,7 @@ public class TaskEntityManager implements EntityManager<Task>{
 		Task existingTask = (Task)oldTasks.get(0);		
 
 		// copy values to old Task and fill in our changeset appropriately
-		existingTask.copyFrom(updatedTask);
+		existingTask.updateFrom(updatedTask);
 
 		if(!db.save(existingTask, session.getProject())) {
 			throw new WPISuiteException();

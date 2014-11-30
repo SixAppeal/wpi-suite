@@ -1,5 +1,7 @@
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter;
 
+import java.io.Serializable;
+
 /**
  * Presenter interface that all presenters implement
  * 

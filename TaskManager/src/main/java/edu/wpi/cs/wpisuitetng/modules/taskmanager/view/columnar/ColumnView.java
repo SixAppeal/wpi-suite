@@ -17,6 +17,7 @@
 
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar;
 
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.datatransfer.DataFlavor;
@@ -24,84 +25,201 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import java.awt.Component;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.swing.BorderFactory;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
+
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Stage;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
 
 /**
- * View for an individual column in the columnal layout
+ * View for displaying multiple horizontal columns with associated tasks
  * @author wavanrensselaer
+ * @author akshoop
  * @author rnorlando
  */
 public class ColumnView extends JPanel implements IView {
-	private static final long serialVersionUID = 2174190454852340046L;
-	
+	private static final long serialVersionUID = 7965275386426411767L;
+
 	private Gateway gateway;
-	private String title;
-	private JPanel columnPanel;
-	private JLabel titleLabel;
-	private JPanel titlePanel;
-	private ArrayList<TaskView> tasks;
+	
+	// State-related fields
+	private Stage[] stages;
+	private Task[] tasks;
+	
+	// Components
+	private JPanel container;
+	private JScrollPane scrollPane;
 	
 	private static DataFlavor dragAndDropPanelDataFlavor = null;
 	
 	/**
-	 * Constructs a <code>ColumnView</code> which has a title and an
-	 * <code>ArrayList</code> of the tasks to display.
-	 * @param title The title of the column
+	 * Constructs a <code>ColumnView</code> which holds an <code>ArrayList</code>
+	 * of <code>StageView</code>s.
 	 */
-	public ColumnView(String title) {
-		this.title = title;
-		this.columnPanel = new ColumnDragDropPanel(this);
+	public ColumnView() {
+		this.container = new JPanel();
+		this.scrollPane = new JScrollPane(this.container);
+
 		
-		this.titleLabel = new JLabel(this.title, JLabel.LEFT);
-		this.titlePanel = new JPanel();
-		this.tasks = new ArrayList<TaskView>();
+		this.container.setLayout(new GridBagLayout());
+
+		this.scrollPane.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+		this.scrollPane.setVerticalScrollBarPolicy(
+				ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 		
-		this.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 20));
+		this.setLayout(new GridBagLayout());
 		this.setOpaque(false);
-		this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		
-		this.titlePanel.setOpaque(false);
-		this.titlePanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-		this.titlePanel.setLayout(new BoxLayout(this.titlePanel, BoxLayout.X_AXIS));
-		this.titlePanel.add(this.titleLabel);
-		
-		this.columnPanel.setBackground(new Color(220, 220, 220));
-		this.columnPanel.setLayout(new BoxLayout(this.columnPanel, BoxLayout.Y_AXIS));
-		this.columnPanel.setMinimumSize(new Dimension(260, 0));
-		this.columnPanel.setPreferredSize(new Dimension(260, 0));
-		this.columnPanel.setMaximumSize(new Dimension(260, Integer.MAX_VALUE));
-		
-		this.add(this.columnPanel);
-		
-		
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.anchor = GridBagConstraints.PAGE_START;
+		gbc.fill = GridBagConstraints.BOTH;
+		gbc.weightx = 1.0;
+		gbc.weighty = 1.0;
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		this.add(this.scrollPane, gbc);
+	
+	
+		this.setState(new Task[0], new Stage[] {
+			new Stage("New"),
+			new Stage("Scheduled"),
+			new Stage("In Progress"),
+			new Stage("Complete")
+		});
 	}
 	
 	/**
-	 * Refresh the contents of this view
+	 * Sets the state of tasks within the view
+	 * @param tasks The new task array
 	 */
-	public void refreshView() {
-		
-		columnPanel.revalidate();
-		this.revalidate();
-		
+	public void setTasks(Task... tasks) {
+		this.setState(tasks, this.stages);
+	}
+
+	
+	/**
+	 * Gets the state of stages within this view
+	 * @return The stages within this view
+	 */
+	public Task[] getTasks() 
+	{
+		return this.tasks;
 	}
 	
 	/**
-	 * Adds a task to the column
-	 * @param task A task model
+	 * adds a Tasks to the COlumn View
+	 * @param task
 	 */
-	public void addTask(Task task) {
-		TaskView taskView = new TaskView(task);
-		//taskView.setGateway(this.gateway);
-		tasks.add(taskView);
-		this.columnPanel.add(taskView);
+	public void addTask(Task task) 
+	{
+		//This seems ineffecnsent
+		
+		Task[] oldTasks = this.getTasks();
+		Task[] tempTaskList = new Task[oldTasks.length +1];
+		for(int i = 0; i< oldTasks.length; i++ )
+		{
+			tempTaskList[i] = oldTasks[i];
+		}
+		tempTaskList[oldTasks.length] = task;
+		
+		this.setTasks(tempTaskList);
+	}
+		
+	
+	/**
+	 * Sets the state of stages within the view
+	 * @param stages The new stages array
+	 */
+
+
+	public void setStages(Stage[] stages) {
+		this.setState(this.tasks, stages);
+
+	}
+	
+	/**
+	 * Gets the state of stages within this view
+	 * @return The stages within this view
+	 */
+	public Stage[] getStages() {
+		return this.stages;
+	}
+	
+	/**
+	 * Sets the state (both tasks and stages) of this view.
+	 * @param tasks The new task array
+	 * @param stages The new stages array
+	 */
+	public void setState(Task[] tasks, Stage[] stages) {
+		this.tasks = tasks == null ? new Task[0] : tasks;
+		this.stages = stages == null ? new Stage[0] : stages;
+		this.reflow();
+	}
+	
+	/**
+	 * Reflows the view when it's state changes.
+	 */
+	public void reflow() {
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.anchor = GridBagConstraints.FIRST_LINE_START;
+		gbc.fill = GridBagConstraints.VERTICAL;
+		gbc.weighty = 1.0;
+		gbc.insets = new Insets(20, 0, 20, 20);
+		gbc.gridy = 0;
+		
+		StageView stageView;
+		int i;
+		for (i = 0; i < this.container.getComponentCount(); i++) {
+			stageView = (StageView) this.container.getComponent(i);
+			if (i >= this.stages.length) {
+				this.container.remove(i--);
+			} else if (!stageView.getStage().equals(this.stages[i])) {
+				stageView.setState(this.stages[i],
+						this.getTasksForStage(this.stages[i]));
+			} else {
+				stageView.setTasks(this.getTasksForStage(this.stages[i]));
+			}
+		}
+		for (; i < this.stages.length; i++) {
+			gbc.insets.left = i == 0 ? 20 : 0;
+			gbc.gridx = i;
+			stageView = new StageView(this.stages[i],
+					this.getTasksForStage(this.stages[i]));
+			stageView.setGateway(this.gateway);
+			this.container.add(stageView, gbc);
+		}
+		
+		//Order the cards based on piroity
+		
+		this.scrollPane.revalidate();
+	}
+	
+	
+	/**
+	 * Gets the array of tasks that are associated with a stage
+	 * @param stage The stage to which the tasks should belong
+	 * @return An array of <code>Task</code>s
+	 */
+	private Task[] getTasksForStage(Stage stage) {
+		List<Task> tasks = new ArrayList<Task>();
+		for (int i = 0; i < this.tasks.length; i++) {
+			if (this.tasks[i].getStage().equals(stage)) {
+				tasks.add(this.tasks[i]);
+			}
+		}
+		
+		return tasks.toArray(new Task[0]);
 	}
 	
 	/**
@@ -110,77 +228,14 @@ public class ColumnView extends JPanel implements IView {
 	@Override
 	public void setGateway(Gateway gateway) {
 		this.gateway = gateway;
-		for (TaskView taskView : this.tasks) {
-			//taskView.setGateway(this.gateway);
-		}
-	}
-	
-	/**
-	 * removes all tasks from this column
-	 */
-	public void removeAllTasks() {
-		for(TaskView t : this.tasks) {
-			this.columnPanel.remove(t);
-		}
-		this.tasks.clear(); //removing a task from the array we are currently iterating over is /illegal/
-		
-	}
-	
-	/**
-	 * removes a task from this column
-	 * @param task the task to be removed
-	 */
-	public void removeTask(final Task task) {
-		for (TaskView t: this.tasks){
-			if (t.getTaskID() == task.getId()) {
-				this.columnPanel.remove(t);
-				
+		for (Component c : this.container.getComponents()) {
+			if (c instanceof IView) {
+				((IView) c).setGateway(this.gateway);
 			}
 		}
-		
-		//This predicate is used to remove the tasks outside of the iterator
-		this.tasks.removeIf( new Predicate<TaskView>() {
-			@Override
-			public boolean test(TaskView t) {
-				return t.getTaskID() == task.getId();
-			}		
-		});
-		
-		this.columnPanel.revalidate();
-		this.columnPanel.repaint();
-		
-		this.revalidate();
-		
 	}
 
-	/**
-	 * @return title of this Column
-	 */
-	public String getTitle() {
-		return title;
-	}
-	
-	/**
-	 * @return the number of tasks in this column
-	 */
-	public int getTaskCount() {
-		return this.tasks.size();
-	}
-	
-	///////////////////////////////////////////////////////////////////////////////////////
-	
-	public void redrawTasks() {
-		this.columnPanel.removeAll();
-		for (TaskView t : this.tasks) {
-			this.columnPanel.add(t);
-		}
-		this.validate();
-		this.repaint();
-	}
-	
-	public List<TaskView> getTasks() {
-		return tasks;
-	}
+
 	
 	public static DataFlavor getTaskDataFlavor() throws Exception {
         if (dragAndDropPanelDataFlavor == null) {

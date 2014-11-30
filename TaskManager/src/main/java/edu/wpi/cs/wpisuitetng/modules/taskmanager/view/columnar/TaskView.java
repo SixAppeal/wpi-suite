@@ -1,19 +1,20 @@
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.draganddrop.DragAndDropTransferHandler;
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.draganddrop.DraggableMouseListener;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.draganddrop.TaskDraggableMouseListener;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Stage;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
@@ -24,74 +25,97 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
  * @author akshoop
  * @author rnorlando
  */
-public class TaskView extends JPanel implements Transferable {
+public class TaskView extends JPanel implements Transferable, IView {
 	private static final long serialVersionUID = 6255679649898290535L;
 	
 	/**
 	 * The cutoff point for the title string in the task
 	 */
 	public static final int MAX_TITLE_LENGTH = 20;
+
+	/**
+	 * Background color of the TaskView
+	 */
+	public static final Color BACKGROUND_COLOR = new Color(255, 255, 255);
 	
+	/**
+	 * Background color when the mouse is over the TaskView
+	 */
+	public static final Color HOVER_COLOR = new Color(245, 245, 245);
+
 //	private Gateway gateway;
 	//private Task task;
-	private JPanel taskPanel;
-	private JLabel nameLabel;
+	
+	private Gateway gateway;
+	
+	// State-related fields
+	private Task task;
 	private int id;
+	
+	// Components
+	private JLabel titleLabel;
+	
+
 	/**
 	 * Constructs a <code>TaskView</code>
 	 * @param name The name of the task
 	 */
-	public TaskView(Task task) {
-		//this.task = task;
-		this.taskPanel = new JPanel();
-		this.id = task.getId();
-		String title = task.getTitle();
-		if (title.length() > MAX_TITLE_LENGTH) {
-			title = title.substring(0,  MAX_TITLE_LENGTH) + "\u2026";
-		}
+	public TaskView(Task task) 
+	{
 		
-		this.nameLabel = new JLabel(title);
-		
-		this.setBorder(BorderFactory.createEmptyBorder(0, 20, 20, 20));
-		this.setOpaque(false);
-		this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-		this.taskPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
-		
-		this.taskPanel.setBackground(new Color(255, 255, 255));
-		
-		this.taskPanel.addMouseListener(new MouseListener() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				//gateway.toPresenter("TaskPresenter", "viewTask", task);
-			}
+		this.titleLabel = new JLabel("", JLabel.LEFT);
 
-			@Override
-			public void mousePressed(MouseEvent e) {
-				
-			}
-
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				taskPanel.setBackground(new Color(245, 245, 245));
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e) {
-				taskPanel.setBackground(new Color(255, 255, 255));
-			}
-		});
+		this.setBackground(TaskView.BACKGROUND_COLOR);
+		this.setLayout(new GridBagLayout());		
 		
-		this.nameLabel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 20));
-		this.taskPanel.add(nameLabel);
-		this.add(this.taskPanel);
-		
-		this.taskPanel.addMouseListener(new DraggableMouseListener(this));
+		this.addMouseListener(new TaskDraggableMouseListener(this));
 		this.setTransferHandler(new DragAndDropTransferHandler());
+		
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.insets = new Insets(10, 10, 10, 10);
+		gbc.weightx = 1.0;
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		this.add(this.titleLabel, gbc);
+		
+		this.setState(task);
+	}
+	
+	/**
+	 * Gets the task associated with this view
+	 * @return The task associated with this view
+	 */
+	public Task getTask() {
+		return this.task;
+	}
+	
+	/**
+	 * sets the stage for the task in the task view
+	 * @param s stage that is being set to
+	 */
+	public void setStage(Stage s)
+	{
+		this.task.setStage(s);
+	}
+	
+	/**
+	 * Sets the state of this view, currently the task it represents.
+	 * @param task The new task
+	 */
+	public void setState(Task task) {
+		this.task = task == null ? new Task() : task;
+		this.reflow();
+	}
+	
+	/**
+	 * Reflows this view when it's state changes
+	 */
+	public void reflow() {
+		this.titleLabel.setText(this.task.getTitle());
+		this.titleLabel.revalidate();
+		this.revalidate();
+
 	}
 //	
 //	public void archiveTask() {
@@ -178,4 +202,18 @@ public class TaskView extends JPanel implements Transferable {
 		return false;
 	}
 
+
+	@Override
+	public void setGateway(Gateway gateway) {
+		this.gateway = gateway;
+	}
+	
+	/**
+	 * gets the gateway
+	 * @return gateway gotten
+	 */
+	public Gateway getGateway()
+	{
+		return gateway;
+	}
 }

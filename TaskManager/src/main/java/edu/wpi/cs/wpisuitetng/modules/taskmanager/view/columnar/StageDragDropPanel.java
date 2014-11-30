@@ -7,21 +7,21 @@ import java.awt.dnd.DropTarget;
 
 import javax.swing.JPanel;
 
-public class ColumnDragDropPanel extends JPanel {
+public class StageDragDropPanel extends JPanel {
 	
 	private static final long serialVersionUID = 6924509690789899864L;
-	private ColumnView view;
+	private StageView view;
 
-	public ColumnDragDropPanel(ColumnView view) {
+	public StageDragDropPanel(StageView view) {
 		super();
 		this.view = view;
 
 		setTransferHandler(new DragAndDropTransferHandler());
-		setDropTarget(new DropTarget(ColumnDragDropPanel.this,
-				new CustomDropTargetListener(ColumnDragDropPanel.this)));
+		setDropTarget(new DropTarget(StageDragDropPanel.this,
+				new CustomDropTargetListener(StageDragDropPanel.this)));
 	}
 
-	public ColumnView getColumnView() {
+	public StageView getStageView() {
 		return view;
 	}
 }
