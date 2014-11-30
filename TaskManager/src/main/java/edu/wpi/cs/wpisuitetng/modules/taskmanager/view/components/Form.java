@@ -1,12 +1,15 @@
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components;
 
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Insets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.JComponent;
 import javax.swing.JPanel;
-
-import net.miginfocom.swing.MigLayout;
 
 /**
  * A panel that handles layout of <code>FormField</code>s or
@@ -43,21 +46,33 @@ public class Form extends JPanel {
 	public Form(int orientation, JComponent... fields) {
 		this.orientation = orientation;
 		this.fields = new ArrayList<JComponent>();
+		this.fields.addAll(Arrays.asList(fields));
 		
 		this.setOpaque(false);
-		this.setLayout(new MigLayout("fillx, ins 0, gap 10px"));
 		
-		String constraint;
-		for (int i = 0; i < fields.length; i++) {
-			this.fields.add(fields[i]);
+		if (this.orientation == VERTICAL) {
+			this.setLayout(new GridBagLayout());
+			GridBagConstraints gbc = new GridBagConstraints();
+			gbc.anchor = GridBagConstraints.PAGE_START;
+			gbc.fill = GridBagConstraints.HORIZONTAL;
+			gbc.insets = new Insets(0, 0, 10, 0);
+			gbc.weightx = 1.0;
+			gbc.gridx = 0;
 			
-			if (this.orientation == HORIZONTAL) {
-				constraint = "growy, w " + 100.0 / fields.length + "%";
-			} else {
-				constraint = "growx, wrap";
+			for (int i = 0; i < fields.length; i++) {
+				if (i == fields.length - 1) {
+					gbc.insets.bottom = 0;
+					gbc.weighty = 1.0;
+				}
+				gbc.gridy = i;
+				this.add(fields[i], gbc);
 			}
+		} else {
+			this.setLayout(new GridLayout(1, fields.length, 10, 0));
 			
-			this.add(fields[i], constraint);
+			for (int i = 0; i < fields.length; i++) {
+				this.add(fields[i]);
+			}
 		}
 	}
 	

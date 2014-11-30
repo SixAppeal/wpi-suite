@@ -1,14 +1,15 @@
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components;
 
 import java.awt.Color;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
-
-import net.miginfocom.swing.MigLayout;
 
 /**
  * A form field to place in a form
@@ -31,9 +32,21 @@ public class FormField extends JPanel {
 			BorderFactory.createLineBorder(Color.RED, 1),
 			BorderFactory.createEmptyBorder(5, 5, 5, 5));
 	
+	/**
+	 * This will give the field a default border
+	 */
+	public static final int INPUT_BOX = 1;
+	
+	/**
+	 * This will give the field no border styling
+	 */
+	public static final int LABEL = 0;
+	
+	private GridBagLayout layout;
 	private String name;
 	private JLabel label;
 	private JComponent field;
+	private int type;
 	private JLabel message;
 	private FormFieldValidator validator;
 	
@@ -42,7 +55,16 @@ public class FormField extends JPanel {
 	 * @param field The component to be displayed as the field
 	 */
 	public FormField(JComponent field) {
-		this(null, field, null);
+		this(null, field, INPUT_BOX, null);
+	}
+	
+	/**
+	 * Constructs a <code>FormField</code> with a field and type
+	 * @param field A component
+	 * @param type The type of component being added (will determine styling)
+	 */
+	public FormField(JComponent field, int type) {
+		this(null, field, type, null);
 	}
 	
 	/**
@@ -52,19 +74,42 @@ public class FormField extends JPanel {
 	 * @param field The component to be displayed as the field
 	 */
 	public FormField(String name, JComponent field) {
-		this(name, field, null);
+		this(name, field, INPUT_BOX, null);
+	}
+	
+	/**
+	 * Constructs a <code>FormField</code>.
+	 * @param name The name of the field
+	 * @param field A component
+	 * @param type The type of field
+	 */
+	public FormField(String name, JComponent field, int type) {
+		this(name, field, type, null);
+	}
+	
+	/**
+	 * Constructs a <code>FormField</code>
+	 * @param name The name of the field
+	 * @param field A component
+	 * @param validator The validator for this field
+	 */
+	public FormField(String name, JComponent field, FormFieldValidator validator) {
+		this(name, field, INPUT_BOX, validator);
 	}
 	
 	/**
 	 * Constructs a <code>FormField</code> with a name, field, and validator.
 	 * @param name The name of the field
 	 * @param field The component to be displayed as the field
+	 * @param type The type of field
 	 * @param validator A validator for the field
 	 */
-	public FormField(String name, JComponent field, FormFieldValidator validator) {
+	public FormField(String name, JComponent field, int type, FormFieldValidator validator) {
+		this.layout = new GridBagLayout();
 		this.name = name;
 		this.label = new JLabel(this.name);
 		this.field = field;
+		this.type = type;
 		this.message = new JLabel();
 		this.validator = validator;
 		
@@ -72,18 +117,31 @@ public class FormField extends JPanel {
 			this.label.setVisible(false);
 		}
 		
-		this.field.setBorder(BORDER_NORMAL);
-		this.field.setBackground(Color.WHITE);
+		if (this.type == INPUT_BOX) {
+			this.field.setBorder(BORDER_NORMAL);
+			this.field.setBackground(Color.WHITE);
+		}
 		
 		this.message.setForeground(Color.RED);
 		this.message.setVisible(false);
 		
 		this.setOpaque(false);
-		this.setLayout(new MigLayout("wrap 1, fillx, ins 0, gap 5px"));
+		this.setLayout(this.layout);
 		
-		this.add(this.label, "growx");
-		this.add(this.field, "growx");
-		this.add(this.message, "growx");
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.insets = new Insets(0, 0, 5, 0);
+		gbc.weightx = 1.0;
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		this.add(this.label, gbc);
+		
+		gbc.gridy = 1;
+		this.add(this.field, gbc);
+		
+		gbc.insets.bottom = 0;
+		gbc.gridy = 2;
+		this.add(this.message, gbc);
 	}
 	
 	/**
@@ -92,6 +150,32 @@ public class FormField extends JPanel {
 	 */
 	public String getName() {
 		return this.name;
+	}
+	
+	/**
+	 * Sets the component for this field
+	 * @param component A component
+	 */
+	public void setField(JComponent component) {
+		this.setField(component, INPUT_BOX);
+	}
+	
+	/**
+	 * Sets the component of this field
+	 * @param component A component
+	 * @param type The type of field
+	 */
+	public void setField(JComponent component, int type) {
+		GridBagConstraints gbc = this.layout.getConstraints(this.field);
+		this.remove(this.field);
+		this.field = component;
+		
+		if (type == INPUT_BOX) {
+			this.field.setBorder(BORDER_NORMAL);
+			this.field.setBackground(Color.WHITE);
+		}
+		
+		this.add(this.field, gbc, 1);
 	}
 	
 	/**

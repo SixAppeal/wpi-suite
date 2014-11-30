@@ -28,8 +28,6 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import net.miginfocom.swing.MigLayout;
-
 import org.jdesktop.swingx.JXDatePicker;
 
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Stage;
@@ -60,9 +58,12 @@ public class TaskEditView extends JPanel implements IView {
 	private JScrollPane scrollPane;
 
 	private JTextField titleInput;
+	private JTextArea titleLabel;
 	private JTextArea descInput;
+	private JTextArea descLabel;
 	private JScrollPane descScrollPane;
 	private JXDatePicker dateInput;
+	private JLabel dateLabel;
 	private JSpinner estEffortInput;
 	private JSpinner actEffortInput;
 	private JList<String> members;
@@ -82,9 +83,12 @@ public class TaskEditView extends JPanel implements IView {
 		this.container = new JPanel();
 		this.scrollPane = new JScrollPane(this.container);
 		this.titleInput = new JTextField(this.task.getTitle());
+		this.titleLabel = new JTextArea(this.task.getTitle());
 		this.descInput = new JTextArea(this.task.getDescription(), 5, 0);
+		this.descLabel = new JTextArea(this.task.getDescription());
 		this.descScrollPane = new JScrollPane(this.descInput);
 		this.dateInput = new JXDatePicker(this.task.getDueDate());
+		this.dateLabel = new JLabel();
 		this.estEffortInput = new JSpinner(new SpinnerNumberModel(1, null, null, 1));
 		this.actEffortInput = new JSpinner(new SpinnerNumberModel(1, null, null, 1));
 		this.members = new JList<String>();
@@ -96,6 +100,11 @@ public class TaskEditView extends JPanel implements IView {
 		this.closeButton = new JButton("Close");
 		
 		this.container.setOpaque(false);
+		
+		this.titleLabel.setOpaque(false);
+		this.titleLabel.setBorder(BorderFactory.createEmptyBorder());
+		this.titleLabel.setLineWrap(true);
+		this.titleLabel.setWrapStyleWord(true);
 
 		this.scrollPane.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
 		this.scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -218,11 +227,14 @@ public class TaskEditView extends JPanel implements IView {
 			)
 		);
 		
-		this.container.setLayout(new MigLayout("fillx, ins 20", "[300]"));
-		this.container.add(this.form, "growx");
+		this.container.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+		this.container.setMinimumSize(new Dimension(300, 0));
+		this.container.setMaximumSize(new Dimension(300, Integer.MAX_VALUE));
+		this.container.setLayout(new BorderLayout());
+		this.container.add(this.form, BorderLayout.CENTER);
 		
-		this.setLayout(new MigLayout("fill, ins 0", "[340]"));
-		this.add(this.scrollPane, "grow");
+		this.setLayout(new BorderLayout());
+		this.add(this.scrollPane, BorderLayout.CENTER);
 	}
 	
 	@Override

@@ -10,7 +10,6 @@ import java.awt.event.KeyEvent;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComponent;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JComboBox;
 import javax.swing.JScrollPane;
@@ -22,7 +21,6 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import net.miginfocom.swing.MigLayout;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Stage;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
@@ -177,11 +175,12 @@ public class TaskCreateView extends JPanel implements IView {
 			)
 		);
 		
-		this.container.setLayout(new MigLayout("fillx, ins 20", "[300]"));
-		this.container.add(this.form, "growx");
+		this.container.setMinimumSize(new Dimension(300, 0));
+		this.container.setLayout(new BorderLayout());
+		this.container.add(this.form, BorderLayout.CENTER);
 		
-		this.setLayout(new MigLayout("fill, ins 0", "[340]"));
-		this.add(this.scrollPane, "grow");
+		this.setLayout(new BorderLayout());
+		this.add(this.scrollPane, BorderLayout.CENTER);
 	}
 	
 	/**
