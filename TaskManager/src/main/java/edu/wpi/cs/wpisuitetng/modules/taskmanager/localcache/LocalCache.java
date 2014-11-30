@@ -218,16 +218,12 @@ public class LocalCache implements Cache, IPresenter {
 	 */
 	@Override
 	public void addVerified(String request, String updateValue) {
-		System.out.println(updateValue);
 		if (request.equals("task")) {
 			Task t = new Gson().fromJson(updateValue, Task.class);
-			System.out.println(t.getId() + t.getTitle() + t.getActualEffort()
-					+ t.getEstimatedEffort() + t.getDueDate());
 			tasks.add(t);
 		}
 		if (request.equals("archive")) {
 			Task t = new Gson().fromJson(updateValue, Task.class);
-			System.out.println(t);
 			archives.add(t);
 		}
 		if (request.equals("stage")) {
@@ -242,8 +238,8 @@ public class LocalCache implements Cache, IPresenter {
 	@Override
 	public void updateVerified(String request, String updateValue) {
 		if (request.equals("task") || request.equals("archive")) {
+			
 			Task newValue = new Gson().fromJson(updateValue, Task.class);
-
 			for (int i = 0; i < archives.size(); i++) {
 				if (archives.get(i).getId() == newValue.getId()) {
 					archives.remove(i);
