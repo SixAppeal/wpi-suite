@@ -49,7 +49,6 @@ public class SearchBox extends JPanel implements IView {
 	GridBagConstraints gbc;
 	int quotationCount;
 	String fullString;
-	LocalCache localCache;
 	
 	/**
 	 * General constructor
@@ -61,28 +60,8 @@ public class SearchBox extends JPanel implements IView {
 		resultsBox = new JPanel();
 		quotationCount = 0;
 		fullString = "";
-		localCache = new LocalCache();
 		
-		// testing purposes
-//		Task task1 = new Task();
-//		task1.setTitle("someTitle bunch");
-//		task1.setDescription("someTitle bunch of words HERE ARE CAPITAL lettersWith, commas's yeah!?");
-//		task1.setId(1);
-//		
-//		Task task2 = new Task();
-//		task2.setTitle("another title testing");
-//		task2.setDescription("sometitle bunch of yeah!?");
-//		task2.setId(2);
-//		
-//		Task task3 = new Task();
-//		task3.setTitle("testing bunch");
-//		task3.setDescription("other description bunch");
-//		task3.setId(3);
-		
-//		taskList.add(task1);
-//		taskList.add(task2);
-//		taskList.add(task3);
-		
+
 		// I dont init the Task[] taskList, is that bad?
 		taskList = getTasks();
 		System.out.println("task list is" + taskList);
@@ -276,15 +255,15 @@ public class SearchBox extends JPanel implements IView {
 	/**
 	 * Retrieves tasks from the local cache
 	 * @return tasks_from_cache An array of tasks retrieved
+	 * @throws IOException 
 	 */
-	public Task[] getTasks() {
-		gateway.toPresenter("LocalCache", "sync", "task");
-//		gateway.toPresenter("LocalCache", "sync", "member");
-//		gateway.toPresenter("LocalCache", "sync", "archive");
-//		gateway.toPresenter("LocalCache", "sync", "stage");
-//		gateway.toPresenter("LocalCache", "retrieve", "task");
-		Task[] tasks_from_cache = (Task[]) localCache.retrieve("task");
-		return tasks_from_cache;
+	public void updateIndex(Task [] taskList) throws IOException {
+		if (this.toSearch.isInitialized()) {
+			this.toSearch.updateIndex(taskList);
+		}
+		else {
+			this.toSearch.createIndex(taskList);
+		}
 	}
 	
 	/**

@@ -41,6 +41,7 @@ public class Search {
 	private boolean isInit;
 	private boolean create = true;
 	private Directory index;
+	private Directory temp_index = null;
 	
 	/**
 	 * General constructor for Search class
@@ -68,6 +69,12 @@ public class Search {
 	public List<Integer> searchFor(String input) throws SearchException, IOException, ParseException {
 		if (!isInit)
 			throw new SearchException("Search is not initialized.");
+		
+		if (this.temp_index != null) {
+			this.index.close();
+			this.index = temp_index;
+			this.temp_index = null;
+		}
 		
 		IndexReader reader = DirectoryReader.open(index);
 		IndexSearcher searcher = new IndexSearcher(reader);
@@ -173,6 +180,20 @@ public class Search {
 		indexTasks(writer, taskList);
 		
 		writer.close();
+	}
+	
+	public void updateIndex(Task[] taskList) throws IOException {
+		this.temp_index = new RAMDirectory();
+		Analyzer analyzer = new StandardAnalyzer();
+		IndexWriterConfig iwc = new IndexWriterConfig(Version.LATEST, analyzer);
+		iwc.setOpenMode(OpenMode.CREATE_OR_APPEND);
+		IndexWriter writer = new IndexWriter(temp_index, iwc);
+		indexTasks(writer, taskList);
+		writer.close();
+	}
+	
+	public boolean isInitialized() {
+		return this.isInit;
 	}
 	
 	/**
