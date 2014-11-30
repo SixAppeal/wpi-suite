@@ -70,7 +70,7 @@ public class SidebarView extends JTabbedPane implements IView {
 	 * @param task The task to edit
 	 */
 	public void addEditPanel(Task task) {
-		TaskEditView editView = new TaskEditView();
+		TaskEditView editView = new TaskEditView(task);
 		editView.setGateway(this.gateway);
 		this.addTab(null, new ImageIcon(this.getClass().getResource("icon_pencil.png")),
 				editView);
@@ -85,6 +85,7 @@ public class SidebarView extends JTabbedPane implements IView {
 		try {
 			this.removeTabAt(this.indexOfComponent(editView));
 		} catch (IndexOutOfBoundsException e) {
+			// Do nothing
 		}
 	}
 

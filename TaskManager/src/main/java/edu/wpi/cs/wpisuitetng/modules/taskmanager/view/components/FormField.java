@@ -1,15 +1,14 @@
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components;
 
 import java.awt.Color;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
 
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
+
+import net.miginfocom.swing.MigLayout;
 
 /**
  * A form field to place in a form
@@ -80,22 +79,11 @@ public class FormField extends JPanel {
 		this.message.setVisible(false);
 		
 		this.setOpaque(false);
-		this.setLayout(new GridBagLayout());
+		this.setLayout(new MigLayout("wrap 1, fillx, ins 0, gap 5px"));
 		
-		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.anchor = GridBagConstraints.PAGE_END;
-		gbc.fill = GridBagConstraints.HORIZONTAL;
-		gbc.weightx = 1.0;
-		gbc.gridx = 0;
-		gbc.gridy = 0;
-		this.add(this.label, gbc);
-		
-		gbc.insets = new Insets(5, 0, 0, 0);
-		gbc.gridy = 1;
-		this.add(this.field, gbc);
-		
-		gbc.gridy = 2;
-		this.add(this.message, gbc);
+		this.add(this.label, "growx");
+		this.add(this.field, "growx");
+		this.add(this.message, "growx");
 	}
 	
 	/**

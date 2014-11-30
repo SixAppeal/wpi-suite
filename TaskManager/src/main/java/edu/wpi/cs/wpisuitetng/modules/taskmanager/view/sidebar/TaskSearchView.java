@@ -23,6 +23,7 @@ public class TaskSearchView extends JPanel implements IView {
 		this.setOpaque(false);
 		this.setMinimumSize(new Dimension(300, 0));
 		this.setPreferredSize(new Dimension(300, 1));
+		this.setMaximumSize(new Dimension(300, Integer.MAX_VALUE));
 	}
 	
 	@Override

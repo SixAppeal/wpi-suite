@@ -1,25 +1,28 @@
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JComboBox;
+import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import net.miginfocom.swing.MigLayout;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Stage;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
@@ -42,9 +45,11 @@ public class TaskCreateView extends JPanel implements IView {
 	private Gateway gateway;
 
 	// Components
-	private JLabel panelTitle;
+	private JPanel container;
+	private JScrollPane scrollPane;
 	private JTextField title;
 	private JTextArea description;
+	private JScrollPane descScrollPane;
 	private JSpinner estimatedEffort;
 	private JComboBox<Stage> stage;
 	private JButton createButton;
@@ -55,15 +60,22 @@ public class TaskCreateView extends JPanel implements IView {
 	 * Constructs a <code>TaskCreateView</code>
 	 */
 	public TaskCreateView() {
-		this.panelTitle = new JLabel("Create Task", JLabel.CENTER);
+		this.container = new JPanel();
+		this.scrollPane = new JScrollPane(this.container);
 		this.title = new JTextField();
 		this.description = new JTextArea(5, 0);
+		this.descScrollPane = new JScrollPane(this.description);
 		this.estimatedEffort = new JSpinner(
-				new SpinnerNumberModel(0, null, null, 1));
+				new SpinnerNumberModel(1, null, null, 1));
 		this.stage = new JComboBox<Stage>();
 		this.createButton = new JButton("Create");
 		this.cancelButton = new JButton("Cancel");
 		TaskCreateView that = this;
+		
+		this.container.setOpaque(false);
+		
+		this.scrollPane.setBorder(BorderFactory.createEmptyBorder());
+		this.scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		
 		this.description.setLineWrap(true);
 		this.description.setWrapStyleWord(true);
@@ -94,19 +106,17 @@ public class TaskCreateView extends JPanel implements IView {
 			}
 		});
 		
-		FormField titleField = new FormField("Title", this.title,
-			new FormFieldValidator() {
-				@Override
-				public boolean validate(JComponent component) {
-					return !((JTextField) component).getText().trim().equals("");
-				}
-				
-				@Override
-				public String getMessage() {
-					return "Please enter a title.";
-				}
+		FormField titleField = new FormField("Title", this.title, new FormFieldValidator() {
+			@Override
+			public boolean validate(JComponent component) {
+				return !((JTextField) component).getText().trim().equals("");
 			}
-		);
+			
+			@Override
+			public String getMessage() {
+				return "Please enter a title.";
+			}
+		});
 		this.title.addKeyListener(new KeyAdapter() {
 			public void keyReleased(KeyEvent e) {
 				if (e.getKeyCode() != 9) { // tab key
@@ -116,19 +126,17 @@ public class TaskCreateView extends JPanel implements IView {
 			}
 		});
 		
-		FormField descriptionField = new FormField("Description", this.description,
-			new FormFieldValidator() {
-				@Override
-				public boolean validate(JComponent component) {
-					return !((JTextArea) component).getText().trim().equals("");
-				}
-				
-				@Override
-				public String getMessage() {
-					return "Please enter a description.";
-				}
+		FormField descriptionField = new FormField("Description", this.descScrollPane, new FormFieldValidator() {
+			@Override
+			public boolean validate(JComponent component) {
+				return !description.getText().trim().equals("");
 			}
-		);
+			
+			@Override
+			public String getMessage() {
+				return "Please enter a description.";
+			}
+		});
 		this.description.addKeyListener(new KeyAdapter() {
 			public void keyReleased(KeyEvent e) {
 				if (e.getKeyCode() != 9) { // tab key
@@ -138,19 +146,17 @@ public class TaskCreateView extends JPanel implements IView {
 			}
 		});
 		
-		FormField effortField = new FormField("Estimated Effort", this.estimatedEffort,
-			new FormFieldValidator() {
-				@Override
-				public boolean validate(JComponent component) {
-					return ((Integer) ((JSpinner) component).getValue()).intValue() > 0;
-				}
-				
-				@Override
-				public String getMessage() {
-					return "Effort must be greater than zero.";
-				}
+		FormField effortField = new FormField("Estimated Effort", this.estimatedEffort, new FormFieldValidator() {
+			@Override
+			public boolean validate(JComponent component) {
+				return ((Integer) ((JSpinner) component).getValue()).intValue() > 0;
 			}
-		);
+			
+			@Override
+			public String getMessage() {
+				return "Effort must be greater than zero.";
+			}
+		});
 		this.estimatedEffort.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {
@@ -171,21 +177,11 @@ public class TaskCreateView extends JPanel implements IView {
 			)
 		);
 		
-		this.setLayout(new GridBagLayout());
+		this.container.setLayout(new MigLayout("fillx, ins 20", "[300]"));
+		this.container.add(this.form, "growx");
 		
-		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.anchor = GridBagConstraints.PAGE_START;
-		gbc.fill = GridBagConstraints.HORIZONTAL;
-		gbc.insets = new Insets(20, 20, 20, 20);
-		gbc.weightx = 1.0;
-		gbc.gridx = 0;
-		gbc.gridy = 0;
-		this.add(this.panelTitle, gbc);
-		
-		gbc.insets.top = 0;
-		gbc.weighty = 1.0;
-		gbc.gridy = 1;
-		this.add(this.form, gbc);
+		this.setLayout(new MigLayout("fill, ins 0", "[340]"));
+		this.add(this.scrollPane, "grow");
 	}
 	
 	/**
