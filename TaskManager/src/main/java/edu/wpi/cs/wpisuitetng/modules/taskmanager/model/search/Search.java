@@ -71,7 +71,9 @@ public class Search {
 			throw new SearchException("Search is not initialized.");
 		
 		if (this.temp_index != null) {
-			this.index.close();
+			if (this.index != null) {
+				this.index.close();
+			}
 			this.index = temp_index;
 			this.temp_index = null;
 		}
@@ -88,9 +90,6 @@ public class Search {
 		searcher.search(queryTitle, collectorTitle);
 		ScoreDoc[] hits = collectorTitle.topDocs().scoreDocs;
 		
-		
-		//System.out.println("Found " + hits.length + " hit(s) for title.");
-		
 		List<Integer> toReturn = new ArrayList<Integer>();
 		Map<Integer, Integer> rankings = new HashMap<Integer, Integer>();
 		
@@ -98,7 +97,6 @@ public class Search {
 		for(int i=0;i<hits.length;++i) {
 		    int docId = hits[i].doc;
 		    Document d = searcher.doc(docId);
-		    //System.out.println((i + 1) + ". " + d.get("id"));
 		    rankings.put(Integer.parseInt(d.get("id")), 3*(hits.length-i));
 		}
 		
@@ -106,12 +104,9 @@ public class Search {
 		searcher.search(queryDescription, collectorDescription);
 		hits = collectorDescription.topDocs().scoreDocs;
 		
-		//System.out.println("Found " + hits.length + " hit(s) for description.");
-		
 		for(int i=0;i<hits.length;++i) {
 		    int docId = hits[i].doc;
 		    Document d = searcher.doc(docId);
-		    //System.out.println((i + 1) + ". " + d.get("id"));
 		    Integer id = Integer.parseInt(d.get("id"));
 		    if (rankings.containsKey(id)) {
 		    	rankings.put(id, 2*(hits.length -i) + rankings.get(id));
@@ -125,12 +120,9 @@ public class Search {
 		searcher.search(queryMembers, collectorMembers);
 		hits = collectorMembers.topDocs().scoreDocs;
 		
-		//System.out.println("Found " + hits.length + " hit(s) for members.");
-		
 		for(int i=0;i<hits.length;++i) {
 		    int docId = hits[i].doc;
 		    Document d = searcher.doc(docId);
-		    //System.out.println((i + 1) + ". " + d.get("id"));
 		    Integer id = Integer.parseInt(d.get("id"));
 		    if (rankings.containsKey(id)) {
 		    	rankings.put(id, (hits.length - i) + rankings.get(id));
@@ -144,8 +136,6 @@ public class Search {
 		
 		for (Map.Entry<Integer, Integer> i: rankings.entrySet()) {
 			idList.add(new IdRanking(i.getKey(), i.getValue()));
-//			System.out.println("i get key is: " + i.getKey());
-//			System.out.println("i get value is: " + i.getValue());
 		}
 		
 		while (!idList.isEmpty()) {
@@ -218,6 +208,7 @@ public class Search {
 	 */
 	private void indexTasks(IndexWriter writer, List<Task> taskList) throws IOException {		
 		for (Task t: taskList) {
+			
 			// make a new empty document
 			Document doc = new Document();
 			

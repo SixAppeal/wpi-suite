@@ -21,33 +21,35 @@ public class SearchUserInput implements KeyListener {
 	JTextField searchBox;
 	Search toSearch;
 	SearchBox searchPanel;
-	
-	public SearchUserInput(JTextField searchBox, Search toSearch, SearchBox searchPanel) {
+	String fullString;
+
+	public SearchUserInput(JTextField searchBox, Search toSearch,
+			SearchBox searchPanel) {
 		this.searchBox = searchBox;
 		this.toSearch = toSearch;
 		this.searchPanel = searchPanel;
+		this.fullString = "";
 	}
-	
-	public void keyReleased(KeyEvent e) {
-		String fullString = "";
-		int quotationCount = 0;
-		// System.out.println("e keycode is " + e.getKeyCode());
-		// System.out.println("e char is " + e.getKeyChar());
 
+	public void keyReleased(KeyEvent e) {
+		int quotationCount = 0;
 
 		// This is to wipe the results panel when user backspaces all that they
 		// typed
 		if (e.getKeyChar() == '\b') {
 			fullString = "";
+			System.out.println("gettext length is " + searchBox.getText().length());
 			try {
-				if (searchBox.getText().length() > 1) {
-					System.out.println("length of backspace results is: "
+				if (searchBox.getText().length() >= 1) {
+					System.out.println("length of backspace1 results is: "
 							+ toSearch.searchFor(searchBox.getText() + "*")
 									.size());
-					searchPanel.displayResults(toSearch
-							.searchFor(searchBox.getText() + "*"));
-				} else if (searchBox.getText().length() == 1) {
-					searchPanel.displayResults(toSearch.searchFor(searchBox.getText()));
+					searchPanel.displayResults(toSearch.searchFor(searchBox
+							.getText() + "*"));
+				} else if (searchBox.getText().length() == 0) {
+					searchPanel.resultsBox.removeAll();
+					searchPanel.revalidate();
+					searchPanel.repaint();
 				}
 			} catch (SearchException e1) {
 				// TODO Auto-generated catch block
@@ -65,8 +67,6 @@ public class SearchUserInput implements KeyListener {
 		// For case where user starts quotation marks
 		if ((e.getKeyCode() == 222 || e.getKeyChar() == '\"')
 				&& quotationCount == 0) {
-			// System.out.println("first quote, quotCount is" + quotationCount +
-			// " and fullString is " + fullString);
 			quotationCount = 1;
 			fullString += "\"";
 			return;
@@ -75,23 +75,18 @@ public class SearchUserInput implements KeyListener {
 		// For case where user is typing within quotation marks
 		if ((e.getKeyCode() != 16 || e.getKeyCode() != 222)
 				&& quotationCount == 1) {
-			// System.out.println("get here, quotcount is" + quotationCount);
 			fullString += e.getKeyChar();
-			// System.out.println("fullString doing quotes is "+ fullString);
 		}
 
 		// For case where user is typing regular text
 		if ((e.getKeyCode() != 16 || e.getKeyCode() != 222)
 				&& quotationCount == 0) {
 			fullString += e.getKeyChar();
-			// System.out.println("fullString is " + fullString);
 		}
 
 		// For case where user finishes quotation marks
 		if ((e.getKeyCode() == 222 || e.getKeyChar() == '\"')
 				&& quotationCount == 1) {
-			// System.out.println("second quote, quotCount is" + quotationCount
-			// + " and fullString is " + fullString);
 			quotationCount = 0;
 		}
 
@@ -100,7 +95,6 @@ public class SearchUserInput implements KeyListener {
 
 			// Check if full string contains the quotation mark
 			if (fullString.indexOf("\"") != -1) {
-				// System.out.println("full string for quote is " + fullString);
 				System.out.println("length of full quote results is: "
 						+ toSearch.searchFor(fullString).size());
 				searchPanel.displayResults(toSearch.searchFor(fullString));
@@ -110,7 +104,8 @@ public class SearchUserInput implements KeyListener {
 						+ searchBox.getText());
 				System.out.println("length of full wild results is: "
 						+ toSearch.searchFor(fullString + "*").size());
-				searchPanel.displayResults(toSearch.searchFor(fullString + "*"));
+				searchPanel
+						.displayResults(toSearch.searchFor(fullString + "*"));
 			}
 		} catch (SearchException e1) {
 			// TODO Auto-generated catch block

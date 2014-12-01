@@ -80,15 +80,9 @@ public class TaskPresenter implements IPresenter{
 	 */
 	public void updateSearch() {
 		Task[] tasks_from_cache = (Task[]) cache.retrieve("task");
-		System.out.println("got here1");
-		System.out.println("tasks from cache is " + tasks_from_cache);
 		Task[] archived_tasks = (Task[]) cache.retrieve("archive");
-		System.out.println("got here2");
-		System.out.println("archived tasks is " + archived_tasks);
 		ArrayList<Task> all_tasks = concat(tasks_from_cache, archived_tasks);
-		System.out.println("got here3");
 		this.gateway.toView("SidebarView", "updateSearchBox", all_tasks);
-		System.out.println("got here4");
 	}
 	
 	/**
@@ -98,7 +92,7 @@ public class TaskPresenter implements IPresenter{
 	 * @return all_tasks All tasks in a list<task>
 	 */
 	public ArrayList<Task> concat(Task[] t1, Task[] t2) {
-		ArrayList<Task> all_tasks = (ArrayList<Task>)Arrays.asList(t1);
+		ArrayList<Task> all_tasks = new ArrayList<Task>(Arrays.asList(t1));
 		all_tasks.addAll(Arrays.asList(t2));
 		return all_tasks;
 	}
