@@ -3,6 +3,7 @@ package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
@@ -16,7 +17,8 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
  * @author wavanrensselaer
  * @author akshoop
  * @author rnorlando
- * @author Thhughes
+ * @author thhughes
+ * @author nhhughes
  * 
  */
 public class SidebarView extends JPanel implements IView {
@@ -115,6 +117,15 @@ public class SidebarView extends JPanel implements IView {
 		this.curView.setVisible(false);
 		this.curView = this.searchBox;
 		this.curView.setVisible(true);
+	}
+	
+	/**
+	 * Updates local cache for search box
+	 * @param all_tasks All tasks (archived and unarchived) from local cache
+	 * @throws IOException 
+	 */
+	public void updateSearchBox(ArrayList<Task> all_tasks) throws IOException {
+		this.searchBox.updateIndex(all_tasks);
 	}
 	
 	/**

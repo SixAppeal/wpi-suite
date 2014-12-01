@@ -92,6 +92,7 @@ public class TaskManager implements IJanewayModule {
 		
 		localCache.subscribe("task:TaskPresenter:updateStages");
 		localCache.subscribe("member:TaskPresenter:notifyMemberHandler");
+		localCache.subscribe("task:TaskPresenter:updateSearch");
 		
 		t = new Timer();
 

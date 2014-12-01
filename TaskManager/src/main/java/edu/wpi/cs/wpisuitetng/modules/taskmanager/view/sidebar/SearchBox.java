@@ -44,11 +44,9 @@ public class SearchBox extends JPanel implements IView {
 	Search toSearch;
 	JTextField searchBox;
 	JPanel resultsBox;
-	Task[] taskList;
 	Form form;
 	GridBagConstraints gbc;
-	int quotationCount;
-	String fullString;
+	List<Task> taskList;
 	
 	/**
 	 * General constructor
@@ -58,104 +56,12 @@ public class SearchBox extends JPanel implements IView {
 		toSearch = new Search();
 		toSearch.initialize();
 		resultsBox = new JPanel();
-		quotationCount = 0;
-		fullString = "";
-		
-
-		// I dont init the Task[] taskList, is that bad?
-		taskList = getTasks();
-		System.out.println("task list is" + taskList);
-		
-		toSearch.createIndex(taskList);
 		
 		resultsBox.setLayout(new GridBagLayout());
 		resultsBox.setOpaque(false);
 		
 		searchBox = new JTextField();
-		searchBox.addKeyListener(new KeyAdapter() {
-			public void keyReleased(KeyEvent e) {
-//				System.out.println("e keycode is " + e.getKeyCode());
-//				System.out.println("e char is " + e.getKeyChar());
-				
-				// This is to wipe the results panel when user backspaces all that they typed
-				if (e.getKeyChar() == '\b') {
-					fullString = "";
-					try {
-						if (searchBox.getText().length() > 1) {
-							System.out.println("length of backspace results is: " + toSearch.searchFor(searchBox.getText() + "*").size());
-							displayResults(toSearch.searchFor(searchBox.getText() + "*"));
-						}
-						else if (searchBox.getText().length() == 1) {
-							displayResults(toSearch.searchFor(searchBox.getText()));
-						}
-					} catch (SearchException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					} catch (ParseException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-					return;
-				}
-				
-				// For case where user starts quotation marks
-				if ((e.getKeyCode() == 222 || e.getKeyChar() == '\"') && quotationCount == 0) {
-//					System.out.println("first quote, quotCount is" + quotationCount + " and fullString is " + fullString);
-					quotationCount = 1;
-					fullString += "\"";
-					return;
-				}
-				
-				// For case where user is typing within quotation marks
-				if ((e.getKeyCode() != 16 || e.getKeyCode() != 222) && quotationCount == 1) {
-//					System.out.println("get here, quotcount is" + quotationCount);
-					fullString += e.getKeyChar();
-//					System.out.println("fullString doing quotes is "+ fullString);
-				}
-				
-				// For case where user is typing regular text
-				if ((e.getKeyCode() != 16 || e.getKeyCode() != 222) && quotationCount == 0) {
-					fullString += e.getKeyChar();
-//					System.out.println("fullString is " + fullString);
-				}
-				
-				// For case where user finishes quotation marks
-				if ((e.getKeyCode() == 222 || e.getKeyChar() == '\"') && quotationCount == 1) {
-//					System.out.println("second quote, quotCount is" + quotationCount + " and fullString is " + fullString);
-					quotationCount = 0;
-				}
-				
-				try {
-					fullString = fullString.replaceAll("\uFFFF", "");
-					
-					// Check if full string contains the quotation mark
-					if (fullString.indexOf("\"") != -1) {
-//						System.out.println("full string for quote is " + fullString);
-						System.out.println("length of full quote results is: " + toSearch.searchFor(fullString).size());
-						displayResults(toSearch.searchFor(fullString));
-					}
-					else {
-						System.out.println("full string for wild is " + fullString);
-						System.out.println("string of gettext is " + searchBox.getText());
-						System.out.println("length of full wild results is: " + toSearch.searchFor(fullString + "*").size());
-						displayResults(toSearch.searchFor(fullString + "*"));
-					}
-				} catch (SearchException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (ParseException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-			}
-		});
-		
+		searchBox.addKeyListener(new SearchUserInput(this.searchBox, this.toSearch, this));
 		
 		this.setLayout(new GridBagLayout());
 		this.setOpaque(false);
@@ -257,12 +163,15 @@ public class SearchBox extends JPanel implements IView {
 	 * @return tasks_from_cache An array of tasks retrieved
 	 * @throws IOException 
 	 */
-	public void updateIndex(Task [] taskList) throws IOException {
+	public void updateIndex(ArrayList<Task> all_tasks) throws IOException {
+		this.taskList = all_tasks;
+		
 		if (this.toSearch.isInitialized()) {
-			this.toSearch.updateIndex(taskList);
+			this.toSearch.updateIndex(all_tasks);
 		}
 		else {
-			this.toSearch.createIndex(taskList);
+			this.toSearch.initialize();
+			this.toSearch.createIndex(all_tasks);
 		}
 	}
 	

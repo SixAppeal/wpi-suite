@@ -1,5 +1,9 @@
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.Cache;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.network.Request;
@@ -69,5 +73,33 @@ public class TaskPresenter implements IPresenter{
 	 */
 	public void showSearch() {
 		this.gateway.toView("SidebarView", "showSearchBox");
+	}
+	
+	/**
+	 * Updates local cache for search engine to search through.
+	 */
+	public void updateSearch() {
+		Task[] tasks_from_cache = (Task[]) cache.retrieve("task");
+		System.out.println("got here1");
+		System.out.println("tasks from cache is " + tasks_from_cache);
+		Task[] archived_tasks = (Task[]) cache.retrieve("archive");
+		System.out.println("got here2");
+		System.out.println("archived tasks is " + archived_tasks);
+		ArrayList<Task> all_tasks = concat(tasks_from_cache, archived_tasks);
+		System.out.println("got here3");
+		this.gateway.toView("SidebarView", "updateSearchBox", all_tasks);
+		System.out.println("got here4");
+	}
+	
+	/**
+	 * Concatenates two task index arrays.
+	 * @param t1 First task array
+	 * @param t2 Second task array
+	 * @return all_tasks All tasks in a list<task>
+	 */
+	public ArrayList<Task> concat(Task[] t1, Task[] t2) {
+		ArrayList<Task> all_tasks = (ArrayList<Task>)Arrays.asList(t1);
+		all_tasks.addAll(Arrays.asList(t2));
+		return all_tasks;
 	}
 }

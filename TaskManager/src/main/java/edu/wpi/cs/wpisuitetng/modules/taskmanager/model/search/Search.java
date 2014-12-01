@@ -161,7 +161,7 @@ public class Search {
 	 * @param taskList The list of tasks through which we will make an index for each one
 	 * @throws IOException 
 	 */
-	public void createIndex(Task[] taskList) throws IOException {
+	public void createIndex(List<Task> taskList) throws IOException {
 		this.index = new RAMDirectory();
 		Analyzer analyzer = new StandardAnalyzer();
 		IndexWriterConfig iwc = new IndexWriterConfig(Version.LATEST, analyzer);
@@ -182,16 +182,28 @@ public class Search {
 		writer.close();
 	}
 	
-	public void updateIndex(Task[] taskList) throws IOException {
-		this.temp_index = new RAMDirectory();
+	/**
+	 * Have a temp new index so that the search engine can use this
+	 * only when an update occurs such as when a task is created or a task is updated.
+	 * 
+	 * @param taskList List of tasks to create indexes for
+	 * @throws IOException
+	 */
+	public void updateIndex(List<Task> taskList) throws IOException {
+		Directory some_index = new RAMDirectory();
 		Analyzer analyzer = new StandardAnalyzer();
 		IndexWriterConfig iwc = new IndexWriterConfig(Version.LATEST, analyzer);
 		iwc.setOpenMode(OpenMode.CREATE_OR_APPEND);
-		IndexWriter writer = new IndexWriter(temp_index, iwc);
+		IndexWriter writer = new IndexWriter(some_index, iwc);
 		indexTasks(writer, taskList);
 		writer.close();
+		this.temp_index = some_index;
 	}
 	
+	/**
+	 * Simply return boolean isInit variable
+	 * @return Return true if class is initialized. Else false.
+	 */
 	public boolean isInitialized() {
 		return this.isInit;
 	}
@@ -204,7 +216,7 @@ public class Search {
 	 * @param taskList The list of tasks to go through to make indexes
 	 * @throws IOException 
 	 */
-	private void indexTasks(IndexWriter writer, Task[] taskList) throws IOException {		
+	private void indexTasks(IndexWriter writer, List<Task> taskList) throws IOException {		
 		for (Task t: taskList) {
 			// make a new empty document
 			Document doc = new Document();

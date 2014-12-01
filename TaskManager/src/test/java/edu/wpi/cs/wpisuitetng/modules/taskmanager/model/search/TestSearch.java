@@ -96,7 +96,7 @@ public class TestSearch {
 		
 		
 		
-		someSearch.createIndex(testList.toArray(new Task[0]));
+		someSearch.createIndex(testList);
 		
 		System.out.println("******************************************************");
 		System.out.println("Searching for: sometitle");
