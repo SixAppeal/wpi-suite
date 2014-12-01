@@ -59,8 +59,6 @@ public class CustomDropTargetListener implements DropTargetListener {
 	
 	@Override
 	public void drop(DropTargetDropEvent dtde) {
-		System.out.println("Step 5 of 7: The user dropped the panel. The drop(...) method will compare the drops location with other panels and reorder the panels accordingly.");
-        
 		this.column.setCursor(Cursor.getDefaultCursor());
 		
 		DataFlavor dragAndDropTaskFlavor = null;
@@ -94,19 +92,13 @@ public class CustomDropTargetListener implements DropTargetListener {
 		
 		Map<Integer, TaskView> yLocMapForTasks = new HashMap<Integer, TaskView>();
 		yLocMapForTasks.put(dropYLoc, droppedTask);
-		
 		for (TaskView nextPanel : column.getStageView().getTaskViews()) {
 			
 			int y = nextPanel.getY();
-			
 			if (nextPanel.getTaskID() != (droppedTask.getTaskID())) {
 				yLocMapForTasks.put(y, nextPanel);
 			}
 		}
-		for (Integer t: yLocMapForTasks.keySet()) {
-			System.out.println(t);
-		}
-		System.out.println("drop \n \n");
 		
 		//TODO: change this so it uses priority/ changes priority
 		List<Integer> sortableYValues = new ArrayList<Integer>();
@@ -122,25 +114,15 @@ public class CustomDropTargetListener implements DropTargetListener {
 		inMemoryTaskList.clear();
 		inMemoryTaskList.addAll(orderedTasks);
 		
-		int priority = 1;
+		double priority = 1;
 		for(TaskView t : inMemoryTaskList)
 		{
 			Task tr = t.getTask(); 
 			tr.setPriority(priority);
 			this.column.getStageView().getGateway().toPresenter("LocalCache", "update", "task", tr);
-			priority++;
+			priority+=1.0;
 		}
-		
-		this.column.getStageView().setAllTasks(new ArrayList<TaskView>(inMemoryTaskList));
-		
-		this.column.getStageView().reflow();
-		
-		column.getStageView().getGateway().toPresenter("LocalCache", "update", "task", droppedTask.getTask());
-		
-		//this.column.getStageView().addTask(droppedTask.getTask());
-		
-		
-		
+		//this.column.getStageView().reflow();
 	}
 	
 

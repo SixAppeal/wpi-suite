@@ -133,7 +133,7 @@ public class TaskView extends JPanel implements Transferable, IView {
 //	}
 	
 	public int getTaskID() {
-		return this.id;
+		return this.task.getId();
 	}
 	
 	////////////////////////////////////////////////////////////////////////
@@ -144,7 +144,6 @@ public class TaskView extends JPanel implements Transferable, IView {
 	 * @return
 	 */
 	public Object getTransferData(DataFlavor flavor){
-		 System.out.println("Step 7 of 7: Returning the data from the Transferable object. In this case, the actual panel is now transfered!");
 	       
 		DataFlavor thisFlavor = null;
 		try {
@@ -167,8 +166,7 @@ public class TaskView extends JPanel implements Transferable, IView {
 	public DataFlavor[] getTransferDataFlavors() {
 		
 		DataFlavor[] flavors = {null};
-		System.out.println("Step 4 of 7: Querying for acceptable DataFlavors to determine what is available. Our example only supports our custom RandomDragAndDropPanel DataFlavor.");
-        
+	    
 		try{
 			flavors[0] = ColumnView.getTaskDataFlavor();
 		} catch (Exception ex) {

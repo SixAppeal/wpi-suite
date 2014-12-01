@@ -9,6 +9,7 @@ import java.awt.Insets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
@@ -173,7 +174,7 @@ public class StageView extends JPanel implements IView {
 		gbc.insets = new Insets(0, 10, 10, 10);
 		gbc.gridx = 0;
 		
-		this.sortTasks();
+		this.tasks = this.sortTasks().toArray(new Task[0]);
 		
 		TaskView taskView;
 		int i;
@@ -202,14 +203,13 @@ public class StageView extends JPanel implements IView {
 	
 	
 	/**
-	 * sorts the tasks base on prioity
+	 * sorts the tasks base on priority
 	 */
-	private void sortTasks()
+	private List<Task> sortTasks()
 	{
 		ArrayList <Task> tempList = new ArrayList<Task>();
 		for(Task t : tasks)
 		{
-			System.out.println(t.getPriority());
 			tempList.add(t);
 		}
 		Collections.sort(tempList, new Comparator<Task>() {
@@ -218,7 +218,7 @@ public class StageView extends JPanel implements IView {
 				return ((Double)t1.getPriority()).compareTo((Double)t2.getPriority());
 			}
 		});
-		
+		return tempList;
 	}
 	
 	
@@ -254,7 +254,7 @@ public class StageView extends JPanel implements IView {
 	public ArrayList<TaskView> getTaskViews()
 	{
 		ArrayList<TaskView> allTaskViews = new ArrayList<TaskView>();
-		for (int i = 0; i < this.container.getComponentCount(); i++) {
+		for (int i = 0; i < this.container.getComponentCount(); i++) {			
 			allTaskViews.add((TaskView) this.container.getComponent(i));
 		}
 		return allTaskViews;
