@@ -10,6 +10,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.LinkedList;
 
 import javax.swing.BorderFactory;
@@ -27,6 +29,8 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import org.jdesktop.swingx.JXDatePicker;
 
@@ -98,6 +102,7 @@ public class TaskEditView extends JPanel implements IView {
 		this.stageInput = new JComboBox<Stage>();
 		this.archiveButton = new JButton("Archive");
 		this.closeButton = new JButton("Close");
+		TaskEditView that = this;
 		
 		this.container.setOpaque(false);
 		
@@ -128,6 +133,21 @@ public class TaskEditView extends JPanel implements IView {
 		this.stageInput.addItem(new Stage("Complete"));
 		this.stageInput.setSelectedItem(this.task.getStage());
 		
+		this.archiveButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				gateway.toPresenter("Localcache", "update", "archive", task);
+				gateway.toView("SidebarView", "removeEditPanel", that);
+			}
+		});
+		
+		this.closeButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				gateway.toView("SidebarView", "removeEditPanel", that);
+			}
+		});
+		
 		// Predefine title field hook up listener
 		FormField titleField = new FormField("Title", this.titleInput, new FormFieldValidator() {
 			@Override
@@ -145,6 +165,23 @@ public class TaskEditView extends JPanel implements IView {
 				if (e.getKeyCode() != 9) { // tab key
 					titleField.validateInput();
 				}
+			}
+		});
+		this.titleInput.getDocument().addDocumentListener(new DocumentListener() {
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				if (titleField.hasValidInput()) {
+					task.setTitle(titleInput.getText());
+					saveTask();
+				}
+			}
+			
+			@Override
+			public void insertUpdate(DocumentEvent e) {	
+			}
+
+			@Override
+			public void removeUpdate(DocumentEvent e) {	
 			}
 		});
 		
@@ -167,6 +204,31 @@ public class TaskEditView extends JPanel implements IView {
 				}
 			}
 		});
+		this.descInput.getDocument().addDocumentListener(new DocumentListener() {
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				if (descField.hasValidInput()) {
+					task.setDescription(descInput.getText());
+					saveTask();
+				}
+			}
+			
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+			}
+
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+			}
+		});
+		
+		this.dateInput.addPropertyChangeListener("date", new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				task.setDueDate(dateInput.getDate());
+				saveTask();
+			}
+		});
 		
 		// Predefine effort fields to hook up listeners
 		FormField estEffortField = new FormField("Est. Effort", this.estEffortInput, new FormFieldValidator() {
@@ -184,6 +246,10 @@ public class TaskEditView extends JPanel implements IView {
 			@Override
 			public void stateChanged(ChangeEvent e) {
 				estEffortField.validateInput();
+				if (estEffortField.hasValidInput()) {
+					task.setEstimatedEffort((Integer) estEffortInput.getValue());
+					saveTask();
+				}
 			}
 		});
 		
@@ -202,6 +268,18 @@ public class TaskEditView extends JPanel implements IView {
 			@Override
 			public void stateChanged(ChangeEvent e) {
 				actEffortField.validateInput();
+				if (actEffortField.hasValidInput()) {
+					task.setActualEffort((Integer) actEffortInput.getValue());
+					saveTask();
+				}
+			}
+		});
+		
+		this.stageInput.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				task.setStage((Stage) stageInput.getSelectedItem());
+				saveTask();
 			}
 		});
 		
@@ -235,6 +313,13 @@ public class TaskEditView extends JPanel implements IView {
 		
 		this.setLayout(new BorderLayout());
 		this.add(this.scrollPane, BorderLayout.CENTER);
+	}
+	
+	/**
+	 * Saves the task currently being edited
+	 */
+	private void saveTask() {
+		this.gateway.toPresenter("LocalCache", "update", "task", this.task);
 	}
 	
 	@Override

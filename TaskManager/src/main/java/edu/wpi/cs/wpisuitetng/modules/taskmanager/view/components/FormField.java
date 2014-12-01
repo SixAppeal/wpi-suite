@@ -200,7 +200,7 @@ public class FormField extends JPanel {
 	 */
 	public boolean hasValidInput() {
 		return this.validator == null
-			? true : this.validator.validate(this.field);
+			|| this.validator.validate(this.field);
 	}
 	
 	/**
