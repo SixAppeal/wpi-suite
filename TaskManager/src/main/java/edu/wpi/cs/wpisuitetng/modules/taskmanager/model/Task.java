@@ -291,6 +291,10 @@ public class Task extends AbstractModel {
 		return (this.priority).doubleValue();
 	}
 	
+	/**
+	 *  sets the prioity for the task
+	 * @param what the prioirty should be
+	 */
 	public void setPriority(double d)
 	{
 		this.priority = new Double(d);
@@ -311,6 +315,7 @@ public class Task extends AbstractModel {
 	public void setActivities(List<Activity> activities) throws IllegalArgumentException  {
 		this.activities = activities;
 	}
+	
 	
 	/**
 	 * @return whether or not this task is archived

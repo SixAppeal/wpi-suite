@@ -122,11 +122,24 @@ public class CustomDropTargetListener implements DropTargetListener {
 		inMemoryTaskList.clear();
 		inMemoryTaskList.addAll(orderedTasks);
 		
-		column.getStageView().getGateway().toPresenter("LocalCache", "update", "task", droppedTask.getTask());
+		int priority = 1;
+		for(TaskView t : inMemoryTaskList)
+		{
+			Task tr = t.getTask(); 
+			tr.setPriority(priority);
+			this.column.getStageView().getGateway().toPresenter("LocalCache", "update", "task", tr);
+			priority++;
+		}
 		
-		this.column.getStageView().addTask(droppedTask.getTask());
+		this.column.getStageView().setAllTasks(new ArrayList<TaskView>(inMemoryTaskList));
 		
 		this.column.getStageView().reflow();
+		
+		column.getStageView().getGateway().toPresenter("LocalCache", "update", "task", droppedTask.getTask());
+		
+		//this.column.getStageView().addTask(droppedTask.getTask());
+		
+		
 		
 	}
 	

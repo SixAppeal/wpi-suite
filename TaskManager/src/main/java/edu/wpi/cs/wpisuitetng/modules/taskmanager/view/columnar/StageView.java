@@ -7,6 +7,8 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
@@ -136,6 +138,19 @@ public class StageView extends JPanel implements IView {
 	}
 	
 	/**
+	 * 
+	 */
+	public void setAllTasks(ArrayList<TaskView> list)
+	{
+		ArrayList<Task> tempList = new ArrayList<Task> ();
+		for(TaskView view: list)
+		{
+			tempList.add(view.getTask());
+		}
+		this.tasks = tempList.toArray(new Task[0]);
+	}
+	
+	/**
 	 * Sets the state of this view, the name and the tasks within this stage.
 	 * @param tasks The new task array
 	 */
@@ -158,7 +173,7 @@ public class StageView extends JPanel implements IView {
 		gbc.insets = new Insets(0, 10, 10, 10);
 		gbc.gridx = 0;
 		
-		this.orderTasks();
+		this.sortTasks();
 		
 		TaskView taskView;
 		int i;
@@ -184,12 +199,26 @@ public class StageView extends JPanel implements IView {
 		this.scrollPane.repaint();
 	}
 	
+	
+	
 	/**
-	 * Reorders the tasks based on prioirty
+	 * sorts the tasks base on prioity
 	 */
-	private void orderTasks()
+	private void sortTasks()
 	{
-		//TODO
+		ArrayList <Task> tempList = new ArrayList<Task>();
+		for(Task t : tasks)
+		{
+			System.out.println(t.getPriority());
+			tempList.add(t);
+		}
+		Collections.sort(tempList, new Comparator<Task>() {
+			@Override
+			public int compare(Task t1, Task t2) {
+				return ((Double)t1.getPriority()).compareTo((Double)t2.getPriority());
+			}
+		});
+		
 	}
 	
 	
