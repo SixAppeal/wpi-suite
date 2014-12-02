@@ -136,10 +136,12 @@ public class FormField extends JPanel {
 		gbc.gridy = 0;
 		this.add(this.label, gbc);
 		
+		gbc.weighty = 1.0;
 		gbc.gridy = 1;
 		this.add(this.field, gbc);
 		
 		gbc.insets.bottom = 0;
+		gbc.weighty = 1.0;
 		gbc.gridy = 2;
 		this.add(this.message, gbc);
 	}

@@ -8,6 +8,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
@@ -167,21 +169,17 @@ public class TaskEditView extends JPanel implements IView {
 				}
 			}
 		});
-		this.titleInput.getDocument().addDocumentListener(new DocumentListener() {
+		this.titleInput.addFocusListener(new FocusListener() {
 			@Override
-			public void changedUpdate(DocumentEvent e) {
+			public void focusGained(FocusEvent e) {
+			}
+
+			@Override
+			public void focusLost(FocusEvent e) {
 				if (titleField.hasValidInput()) {
 					task.setTitle(titleInput.getText());
 					saveTask();
 				}
-			}
-			
-			@Override
-			public void insertUpdate(DocumentEvent e) {	
-			}
-
-			@Override
-			public void removeUpdate(DocumentEvent e) {	
 			}
 		});
 		
@@ -204,22 +202,19 @@ public class TaskEditView extends JPanel implements IView {
 				}
 			}
 		});
-		this.descInput.getDocument().addDocumentListener(new DocumentListener() {
+		this.descInput.addFocusListener(new FocusListener() {
 			@Override
-			public void changedUpdate(DocumentEvent e) {
+			public void focusGained(FocusEvent e) {
+			}
+
+			@Override
+			public void focusLost(FocusEvent e) {
 				if (descField.hasValidInput()) {
 					task.setDescription(descInput.getText());
 					saveTask();
 				}
 			}
 			
-			@Override
-			public void insertUpdate(DocumentEvent e) {
-			}
-
-			@Override
-			public void removeUpdate(DocumentEvent e) {
-			}
 		});
 		
 		this.dateInput.addPropertyChangeListener("date", new PropertyChangeListener() {
@@ -305,11 +300,19 @@ public class TaskEditView extends JPanel implements IView {
 			)
 		);
 		
-		this.container.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-		this.container.setMinimumSize(new Dimension(300, 0));
-		this.container.setMaximumSize(new Dimension(300, Integer.MAX_VALUE));
-		this.container.setLayout(new BorderLayout());
-		this.container.add(this.form, BorderLayout.CENTER);
+		this.form.setMinimumSize(new Dimension(300, 0));
+		this.form.setMaximumSize(new Dimension(300, Integer.MAX_VALUE));
+		
+		this.container.setLayout(new GridBagLayout());
+		
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.insets = new Insets(20, 20, 20, 20);
+		gbc.weightx = 1.0;
+		gbc.weighty = 1.0;
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		this.container.add(this.form, gbc);
 		
 		this.setLayout(new BorderLayout());
 		this.add(this.scrollPane, BorderLayout.CENTER);
