@@ -219,7 +219,7 @@ public class TaskDetailView extends JPanel implements IView {
 	 * Archives the task in the presenter.
 	 */
 	public void archiveTask() {
-		this.gateway.toPresenter("TaskPresenter", "archiveTask", t);
+		this.gateway.toPresenter("LocalCache", "update", "archive", t);
 	}
 
 	/**

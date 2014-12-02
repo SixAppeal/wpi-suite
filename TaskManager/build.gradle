@@ -2,7 +2,7 @@ dependencies{
 
 	compile 'com.miglayout:miglayout-swing:4.1'
 	compile 'org.swinglabs.swingx:swingx-all:1.6.5-1'
-
+	compile 'org.apache.lucene:lucene-parent:4.10.2'
 	compile project(':Network')
 	compile project(':WPISuite-Interfaces')
 	compile project(':JanewayAPI')
