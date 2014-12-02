@@ -6,9 +6,10 @@ import java.awt.event.MouseEvent;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
+import org.mockito.*;
 
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.draganddrop.TaskDraggableMouseListener;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
@@ -20,6 +21,7 @@ public class TestTaskDraggableMouseListener {
 	TaskView testTaskView;
 	Task testTask;
 	Gateway mockGateway;
+	Gateway spy;
 	
 	
 	@Before
@@ -29,12 +31,20 @@ public class TestTaskDraggableMouseListener {
 		testTaskView = new TaskView(testTask);
 		testTaskDraggableMouseListener = new TaskDraggableMouseListener(testTaskView);
 		
-	//	mockGateway = Mockito.mock(Gateway.class);
 		
-		//when(mockGateway.toPresenter("TaskPresenter", "viewTask", taskAssoc.getTask()).thenReturn("Iz Returned");
+/*
+ * Below is attempt for utilizing Mock Objects for testing. Had troubles because of void methods. 
+ * Thought about making public identifiers for methods to implement testing. Still in process of figuring
+ * out best way to 'fully' test these. 
+ */
+//		mockGateway = new Gateway();
+//		spy = spy(mockGateway);
+		
+//		when(spy.toPresenter(new String(), new String(), new Object())).thenReturn("Mock Message 1");
+//		when(mockGateway.toPresenter(new String(), new String(), new Object())).thenReturn("Iz Returned");
 		
 	}
-	
+
 	@Test
 	public void testConstructor(){
 		assertNotNull(testTaskDraggableMouseListener);
