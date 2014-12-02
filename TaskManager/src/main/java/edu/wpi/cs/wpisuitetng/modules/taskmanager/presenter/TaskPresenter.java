@@ -67,7 +67,7 @@ public class TaskPresenter implements IPresenter{
 	public void updateStages() {
 		StageList newStages = new StageList( Arrays.asList((Stage[]) cache.retrieve("stages")) );
 		this.gateway.toView("ColumnView", "setStages", newStages);
-		this.gateway.toView("ColumnView", "reflow");
+		//this.gateway.toView("ColumnView", "reflow");
 		this.gateway.toView("SidebarView", "updateStages", newStages);
 	}
 	

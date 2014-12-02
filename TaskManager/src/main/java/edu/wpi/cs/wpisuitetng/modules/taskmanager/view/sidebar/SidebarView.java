@@ -61,6 +61,7 @@ public class SidebarView extends JPanel implements IView {
 		this.container.add(this.createView);
 		this.container.add(this.editView);
 		this.container.add(this.detailView);
+		this.container.add(this.colEditView);
 		this.add(container);
 	}
 	
