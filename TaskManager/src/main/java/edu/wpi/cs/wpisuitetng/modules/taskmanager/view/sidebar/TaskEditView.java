@@ -591,7 +591,7 @@ public class TaskEditView extends JPanel implements IView {
 			this.requirderFieldFlags.put(key, false);
 		}
 		saveButton.setEnabled(false);
-
+		this.commentEntry.setText("");
 		updateBorder(titleEntry, titleEntry.getText());
 		updateBorder(descEntryScroller, descEntry.getText());
 	}
