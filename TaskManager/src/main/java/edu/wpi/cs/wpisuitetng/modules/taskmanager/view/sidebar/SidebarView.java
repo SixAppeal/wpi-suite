@@ -25,20 +25,17 @@ public class SidebarView extends JPanel implements IView {
 	
 	private JPanel container;
 	private JPanel curView;
-	private TaskDetailView detailView;
 	private TaskEditView editView;
 	private TaskCreateView createView;
 	private TaskDefaultView defaultView;
-	private MemberListHandler memberHandler;
+	
 	/**
 	 * Constructs a sidebar view
 	 */
-	public SidebarView(MemberListHandler memberHandler) {
-		this.memberHandler = memberHandler;
+	public SidebarView() {
 		this.container = new JPanel();
-		this.detailView = new TaskDetailView();
-		this.createView = new TaskCreateView(this.memberHandler);
-		this.editView = new TaskEditView(this.memberHandler);
+		this.createView = new TaskCreateView();
+		this.editView = new TaskEditView();
 		this.defaultView = new TaskDefaultView();
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
@@ -51,12 +48,10 @@ public class SidebarView extends JPanel implements IView {
 		this.curView = this.defaultView;
 		this.createView.setVisible(false);
 		this.editView.setVisible(false);
-		this.detailView.setVisible(false);
 		
 		this.container.add(this.defaultView);
 		this.container.add(this.createView);
 		this.container.add(this.editView);
-		this.container.add(this.detailView);
 		this.add(container);
 	}
 	
@@ -91,24 +86,11 @@ public class SidebarView extends JPanel implements IView {
 	}
 	
 	/**
-	 * Shows the detail panel
-	 * @param task The task to display
-	 */
-	public void showDetailPanel(Task task) {
-		this.curView.setVisible(false);
-		this.curView = this.detailView;
-		this.detailView.updateView(task);
-		this.curView.setVisible(true);
-		this.detailView.revalidate();
-	}
-	
-	/**
 	 * @see IView.setGateway
 	 */
 	@Override
 	public void setGateway(Gateway gateway) {
 		this.gateway = gateway;
-		this.detailView.setGateway(this.gateway);
 		this.editView.setGateway(this.gateway);
 		this.createView.setGateway(this.gateway);
 	}
