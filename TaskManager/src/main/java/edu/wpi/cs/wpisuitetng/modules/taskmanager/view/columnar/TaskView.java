@@ -1,3 +1,16 @@
+/*******************************************************************************
+ * Copyright (c) 2014 -- WPI Suite
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors: Will Rensselaer, Alex Shoop, Thomas Meehan, Ryan Orlando
+ ******************************************************************************/
+
+
+
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar;
 
 import java.awt.Color;
@@ -23,9 +36,10 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
  * View for a task that display in the ColumnView
  * @author wavanrensselaer
  * @author akshoop
+ * @author tmeehan
  * @author rnorlando
  */
-public class TaskView extends JPanel implements Transferable, IView {
+public class TaskView extends JPanel implements  IView {
 	private static final long serialVersionUID = 6255679649898290535L;
 	
 	/**
@@ -132,75 +146,21 @@ public class TaskView extends JPanel implements Transferable, IView {
 //		this.gateway = gateway;
 //	}
 	
+	/**
+	 * get task ID
+	 * @return the task ID
+	 */
 	public int getTaskID() {
 		return this.task.getId();
 	}
 	
 	////////////////////////////////////////////////////////////////////////
 	
-	/**
-	 * 
-	 * @param flavor
-	 * @return
-	 */
-	public Object getTransferData(DataFlavor flavor){
-	       
-		DataFlavor thisFlavor = null;
-		try {
-			thisFlavor = ColumnView.getTaskDataFlavor();
-		} catch (Exception ex) {
-			System.err.println("Problem Lazy Loading: " + ex.getMessage());
-			ex.printStackTrace(System.err);
-			return null;
-		}
-		if (thisFlavor != null && flavor.equals(thisFlavor)) {
-			return (Object)TaskView.this;  //This is the problem
-		}
-		return null;
-	}
 	
+
 	/**
-	 * 
-	 * @return
+	 * @see edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView.setGateway
 	 */
-	public DataFlavor[] getTransferDataFlavors() {
-		
-		DataFlavor[] flavors = {null};
-	    
-		try{
-			flavors[0] = ColumnView.getTaskDataFlavor();
-		} catch (Exception ex) {
-			System.err.println("Problem Lazy Loading: " + ex.getMessage());
-			ex.printStackTrace(System.err);
-			return null;
-		}
-		return flavors;
-	}
-	
-	public boolean isDataFlavorSupported(DataFlavor flavor) {
-		
-
-		DataFlavor[] flavors = {null};
-		
-		 System.out.println("Step 6 of 7: Verifying that DataFlavor is supported.  Our example only supports our custom RandomDragAndDropPanel DataFlavor.");
-	        
-		try{
-			flavors[0] = ColumnView.getTaskDataFlavor();
-		} catch (Exception ex) {
-			System.err.println("Problem Lazy Loading: " + ex.getMessage());
-			ex.printStackTrace(System.err);
-			return false;
-		}
-		
-		for (DataFlavor f : flavors) {
-			if (f.equals(flavor)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-
 	@Override
 	public void setGateway(Gateway gateway) {
 		this.gateway = gateway;
