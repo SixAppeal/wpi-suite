@@ -18,7 +18,7 @@ public class FormGroup extends JPanel {
 	private static final long serialVersionUID = 7117806918063764495L;
 	
 	private List<JComponent> fields;
-	
+	private Boolean expandVertical;
 	/**
 	 * Constructs a <code>FormGroup</code>
 	 * @param fields
@@ -28,7 +28,7 @@ public class FormGroup extends JPanel {
 		
 		this.setOpaque(false);
 		this.setLayout(new GridBagLayout());
-		
+		this.expandVertical = false;
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.weightx = 1.0;
 		gbc.fill = GridBagConstraints.BOTH;
@@ -44,6 +44,41 @@ public class FormGroup extends JPanel {
 				gbc.insets = new Insets(0, 20, 0, 0);
 			}
 		}
+	}
+	
+	/**
+	 * Constructs a <code>FormGroup</code>
+	 * @param fields
+	 */
+	public FormGroup(Boolean expandVertical, JComponent... fields) {
+		this.fields = new ArrayList<JComponent>();
+		
+		this.setOpaque(false);
+		this.setLayout(new GridBagLayout());
+		
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.weightx = 1.0;
+		gbc.fill = GridBagConstraints.BOTH;
+		gbc.gridy = 0;
+		if (expandVertical) {
+			//gbc.weightx = 0.0;
+			//gbc.weighty = 1.0;
+		}
+		this.expandVertical = expandVertical;
+		for (int i = 0; i < fields.length; i++) {
+			this.fields.add(fields[i]);
+			
+			gbc.gridx = i;
+			this.add(fields[i], gbc);
+			
+			if (i == 0) {
+				gbc.insets = new Insets(0, 20, 0, 0);
+			}
+		}
+	}
+	
+	public boolean getExpandVertical() {
+		return this.expandVertical;
 	}
 	
 	/**
