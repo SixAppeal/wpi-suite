@@ -118,5 +118,20 @@ public class TransferableTaskString implements Transferable  {
 	{
 		return this.jsonTaskValue;
 	}
+	
+	@Override
+	public boolean equals(Object obj)
+	{
+		if(obj.getClass().equals(this.getClass()))
+		{
+			return false;
+		}
+		TransferableTaskString testing = (TransferableTaskString)obj;
+		if(!testing.getJsonTaskValue().equals(this.getJsonTaskValue()))
+		{
+			return false;
+		}
+		return true;
+	}
 
 }
