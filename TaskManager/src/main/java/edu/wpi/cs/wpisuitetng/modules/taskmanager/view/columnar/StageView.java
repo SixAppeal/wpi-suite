@@ -1,3 +1,16 @@
+/*******************************************************************************
+ * Copyright (c) 2014 -- WPI Suite
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors: Will Rensselaer, Thomas Meehan, Ryan Orlando
+ ******************************************************************************/
+
+
+
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar;
 
 import java.awt.Color;
@@ -26,6 +39,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
  * View for an individual column in the columnal layout
  * @author wavanrensselaer
  * @author rnorlando
+ * @author tmeehan
  */
 public class StageView extends JPanel implements IView {
 	private static final long serialVersionUID = 2174190454852340046L;
@@ -139,7 +153,8 @@ public class StageView extends JPanel implements IView {
 	}
 	
 	/**
-	 * 
+	 * upadate the state of the stage view with the new task array 
+	 * @param list array of tasks for that stage
 	 */
 	public void setAllTasks(ArrayList<TaskView> list)
 	{
@@ -154,6 +169,8 @@ public class StageView extends JPanel implements IView {
 	/**
 	 * Sets the state of this view, the name and the tasks within this stage.
 	 * @param tasks The new task array
+	 * @param stage The new stage
+	 * 
 	 */
 	public void setState(Stage stage, Task[] tasks) {
 		this.stage = stage;
@@ -248,8 +265,8 @@ public class StageView extends JPanel implements IView {
 	}
 	
 	/**
-	 * 
-	 * 
+	 * gets the task views
+	 * @return the returned array of task views
 	 */
 	public ArrayList<TaskView> getTaskViews()
 	{
