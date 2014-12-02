@@ -1,0 +1,57 @@
+package edu.wpi.cs.wpusuitetng.modules.taskmanager.draganddrop;
+
+import static org.junit.Assert.*;
+
+import java.awt.event.MouseEvent;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mockito;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.draganddrop.TaskDraggableMouseListener;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar.TaskView;
+
+public class TestTaskDraggableMouseListener {
+	TaskDraggableMouseListener testTaskDraggableMouseListener;
+	TaskView testTaskView;
+	Task testTask;
+	Gateway mockGateway;
+	
+	
+	@Before
+	public void setup(){
+		testTask = new Task();
+		
+		testTaskView = new TaskView(testTask);
+		testTaskDraggableMouseListener = new TaskDraggableMouseListener(testTaskView);
+		
+	//	mockGateway = Mockito.mock(Gateway.class);
+		
+		//when(mockGateway.toPresenter("TaskPresenter", "viewTask", taskAssoc.getTask()).thenReturn("Iz Returned");
+		
+	}
+	
+	@Test
+	public void testConstructor(){
+		assertNotNull(testTaskDraggableMouseListener);
+	}
+
+	@Test
+	public void testMouseEntered(){
+		testTaskDraggableMouseListener.mouseEntered(new MouseEvent(testTaskView, 0, 0, 0, 0, 0, 0, false));
+		assertEquals(testTaskView.getBackground(), TaskView.HOVER_COLOR);
+	
+	}
+	@Test
+	public void testMouseExited(){
+		testTaskDraggableMouseListener.mouseExited(new MouseEvent(testTaskView, 0, 0, 0, 0, 0, 0, false));
+		assertEquals(testTaskView.getBackground(), TaskView.BACKGROUND_COLOR);
+	
+	}
+	
+	
+}

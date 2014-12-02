@@ -22,7 +22,7 @@ public class DragAndDropTransferHandler extends TransferHandler implements DragS
 	public Transferable createTransferable(JComponent c) {
 		if (c instanceof TaskView) {
 			TaskView task = (TaskView) c;
-			Transferable trans = new TransferableTaskString(task.getTask().toJson());
+			Transferable trans = new TransferableTaskString(task.getTask());
 			return trans;
 		}
 		return null;

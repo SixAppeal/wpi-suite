@@ -5,6 +5,7 @@ import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
 
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar.TaskView;
 
 public class TransferableTaskString implements Transferable  {
@@ -18,6 +19,11 @@ public class TransferableTaskString implements Transferable  {
 	public TransferableTaskString(String s)
 	{
 		this.jsonTaskValue = s;
+	}
+	
+	public TransferableTaskString (Task task)
+	{
+		this.jsonTaskValue = task.toJson();
 	}
 	
 	@Override
