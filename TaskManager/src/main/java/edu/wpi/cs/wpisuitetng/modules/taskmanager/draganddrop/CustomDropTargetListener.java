@@ -30,7 +30,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 
 import com.google.gson.Gson;
 
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar.ColumnView;
+
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar.StageDragDropPanel;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar.TaskView;
 
