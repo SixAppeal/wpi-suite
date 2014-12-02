@@ -1,3 +1,15 @@
+/*******************************************************************************
+ * Copyright (c) 2014 -- WPI Suite
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors: Ryan Orlando, Thomas Meehan
+ ******************************************************************************/
+
+
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.draganddrop;
 
 import java.awt.Cursor;
@@ -23,8 +35,12 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar.StageDragDropPan
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar.TaskView;
 
 /**
+ * Our own custom listener
+ * Listens for if the drag and drop is dropped on this entity
+ * 
  * 
  * @author rnOrlando
+ * @author tmeehan
  *
  */
 
@@ -34,21 +50,36 @@ public class CustomDropTargetListener implements DropTargetListener {
 	
 	private static final Cursor droppableCursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR),
 			notDroppableCursor = Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR);
-	
+	/**
+	 * @param sheet		The location where the element is potentially dropped
+	 */
 	public CustomDropTargetListener(StageDragDropPanel sheet) {
 		this.column = sheet;
 	}
 
+	/**
+	 * @see  java.awt.dnd.DropTargetListener.dragEnter
+	 */
 	@Override
 	public void dragEnter(DropTargetDragEvent dtde) {}
+	
+	/**
+	 * @see  java.awt.dnd.DropTargetListener.dropActionChanged
+	 */
 	@Override
 	public void dropActionChanged(DropTargetDragEvent dtde) {}
 
+	/**
+	 * @see  java.awt.dnd.DropTargetListener.dragExit
+	 */
 	@Override
 	public void dragExit(DropTargetEvent dte) {
 		this.column.setCursor(notDroppableCursor);
 	}
 
+	/**
+	 * @see  java.awt.dnd.DropTargetListener.dragOver
+	 */
 	@Override
 	public void dragOver(DropTargetDragEvent dtde) {
 		if (!this.column.getCursor().equals(droppableCursor)) {
@@ -56,7 +87,9 @@ public class CustomDropTargetListener implements DropTargetListener {
 		}
 	}
 	
-	
+	/**
+	 * @see  java.awt.dnd.DropTargetListener.drop
+	 */
 	@Override
 	public void drop(DropTargetDropEvent dtde) {
 		this.column.setCursor(Cursor.getDefaultCursor());
@@ -100,7 +133,7 @@ public class CustomDropTargetListener implements DropTargetListener {
 			}
 		}
 		
-		//TODO: change this so it uses priority/ changes priority
+		
 		List<Integer> sortableYValues = new ArrayList<Integer>();
 		sortableYValues.addAll(yLocMapForTasks.keySet());
 		Collections.sort(sortableYValues);
