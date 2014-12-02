@@ -1,3 +1,15 @@
+/*******************************************************************************
+ * Copyright (c) 2014 -- WPI Suite
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors: Will Rensselaer, Alex Shoop, Ryan Orlando, Thomas Meehan
+ ******************************************************************************/
+
+
 /**
  * Issues:
  * 	1) The only available space to drag is where tasks aren't (need to make task view drop targets as well
@@ -44,6 +56,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
  * @author wavanrensselaer
  * @author akshoop
  * @author rnorlando
+ * @author tmeehan
  */
 public class ColumnView extends JPanel implements IView {
 	private static final long serialVersionUID = 7965275386426411767L;
@@ -233,7 +246,12 @@ public class ColumnView extends JPanel implements IView {
 	}
 
 
-	
+	/**
+	 * Creates a descriptive DataFlavor for the task that is to be moved so that the data can be packaged for drag and drop 
+	 * and recognized as the type of data that it is by the drop target. 
+	 * @return returns a DataFlavor for the task being moved
+	 * @throws Exception if the data attempting to be dragged is not draggable 
+	 */
 	public static DataFlavor getTaskDataFlavor() throws Exception {
         if (dragAndDropPanelDataFlavor == null) {
             dragAndDropPanelDataFlavor = new DataFlavor(TaskView.class, "TaskView");// new DataFlavor(DataFlavor.javaJVMLocalObjectMimeType + ";class=TaskView");
