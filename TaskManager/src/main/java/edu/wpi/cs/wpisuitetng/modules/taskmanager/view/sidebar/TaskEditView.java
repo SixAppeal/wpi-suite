@@ -1,7 +1,6 @@
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -14,7 +13,6 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.LinkedList;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -31,8 +29,6 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 
 import org.jdesktop.swingx.JXDatePicker;
 
@@ -40,9 +36,11 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Stage;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.ButtonGroup;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.Form;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.FormField;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.FormFieldValidator;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.HorizontalForm;
 
 /**
  * Displays and allows editing of task properties.
@@ -220,7 +218,6 @@ public class TaskEditView extends JPanel implements IView {
 					saveTask();
 				}
 			}
-			
 		});
 		
 		this.dateInput.addPropertyChangeListener("date", new PropertyChangeListener() {
@@ -288,19 +285,16 @@ public class TaskEditView extends JPanel implements IView {
 			titleField,
 			descField,
 			new FormField("Due Date", this.dateInput),
-			new Form(
-				Form.HORIZONTAL,
+			new HorizontalForm(
 				estEffortField,
 				actEffortField
 			),
-			new Form(
-				Form.HORIZONTAL,
+			new HorizontalForm(
 				new FormField("Members", this.membersScrollPane),
 				new FormField("Assigned", this.assignedMembersScrollPane)
 			),
 			new FormField("Stage", this.stageInput),
-			new Form(
-				Form.HORIZONTAL,
+			new ButtonGroup(
 				this.archiveButton,
 				this.closeButton
 			)

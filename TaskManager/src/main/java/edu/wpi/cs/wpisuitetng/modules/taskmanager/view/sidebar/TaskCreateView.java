@@ -33,9 +33,11 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Stage;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.ButtonGroup;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.Form;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.FormField;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.FormFieldValidator;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.HorizontalForm;
 
 /**
  * A view to be displayed when creating or modifying a task object in the GUI.
@@ -201,20 +203,18 @@ public class TaskCreateView extends JPanel implements IView {
 		});
 
 		this.form = new Form(
-				titleField,
-				descriptionField,
-				new Form(
-						Form.HORIZONTAL,
-						estEffortField,
-						actEffortField
-						),
-						new FormField("Stage", stage),
-						new Form(
-								Form.HORIZONTAL,
-								this.createButton,
-								this.cancelButton
-								)
-				);
+			titleField,
+			descriptionField,
+			new HorizontalForm(
+				estEffortField,
+				actEffortField
+			),
+			new FormField("Stage", stage),
+			new ButtonGroup(
+				this.createButton,
+				this.cancelButton
+			)
+		);
 
 		this.form.setMinimumSize(new Dimension(300, 0));
 		this.form.setMaximumSize(new Dimension(300, Integer.MAX_VALUE));
@@ -242,7 +242,7 @@ public class TaskCreateView extends JPanel implements IView {
 	 * Validates the form
 	 */
 	public void validateForm() {
-		this.createButton.setEnabled(this.form.hasValidFields());
+		this.createButton.setEnabled(this.form.hasValidInput());
 	}
 
 	@Override

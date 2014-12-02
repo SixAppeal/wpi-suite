@@ -17,7 +17,7 @@ public class TestForm {
 	@Before
 	public void setup() {
 		this.field = new FormField("A", new JTextField());
-		this.group = new Form(Form.HORIZONTAL);
+		this.group = new HorizontalForm();
 		this.form1 = new Form();
 		this.form2 = new Form(this.field, this.group);
 	}
@@ -25,11 +25,11 @@ public class TestForm {
 	@Test
 	public void testConstructor() {
 		assertNotNull(this.form1.getFields());
-		assertEquals(0, this.form1.getFields().size());
+		assertEquals(0, this.form1.getFields().length);
 		
 		assertNotNull(this.form2.getFields());
-		assertEquals(2, this.form2.getFields().size());
-		assertEquals(this.field, this.form2.getFields().get(0));
-		assertEquals(this.group, this.form2.getFields().get(1));
+		assertEquals(2, this.form2.getFields().length);
+		assertEquals(this.field, this.form2.getFields()[0]);
+		assertEquals(this.group, this.form2.getFields()[1]);
 	}
 }

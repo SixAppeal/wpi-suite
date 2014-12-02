@@ -8,14 +8,13 @@ import java.awt.Insets;
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.border.Border;
 
 /**
  * A form field to place in a form
  * @author wavanrensselaer
  */
-public class FormField extends JPanel {
+public class FormField extends FormElement {
 	private static final long serialVersionUID = -2031130076773334170L;
 	
 	/**
@@ -136,7 +135,6 @@ public class FormField extends JPanel {
 		gbc.gridy = 0;
 		this.add(this.label, gbc);
 		
-		gbc.weighty = 1.0;
 		gbc.gridy = 1;
 		this.add(this.field, gbc);
 		
@@ -196,19 +194,13 @@ public class FormField extends JPanel {
 		return this.validator;
 	}
 	
-	/**
-	 * Checks if the input for this field is valid
-	 * @return True if the input is valid and false otherwise
-	 */
+	@Override
 	public boolean hasValidInput() {
 		return this.validator == null
 			|| this.validator.validate(this.field);
 	}
 	
-	/**
-	 * Validates the input for this field
-	 * @return True if the input is valid and false otherwise
-	 */
+	@Override
 	public boolean validateInput() {
 		if (this.validator != null) {
 			if (!this.validator.validate(this.field)) {

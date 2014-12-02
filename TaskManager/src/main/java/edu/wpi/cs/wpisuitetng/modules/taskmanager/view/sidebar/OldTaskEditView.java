@@ -39,8 +39,10 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Stage;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.ButtonGroup;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.Form;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.FormField;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.HorizontalForm;
 
 /**
  * 
@@ -243,18 +245,16 @@ public class OldTaskEditView extends JPanel implements IView {
 			new FormField("Title", titleEntry),
 			new FormField("Description", descEntryScroller),
 			new FormField("Due Date", dueDatePicker),
-			new Form(
-				Form.HORIZONTAL,
+			new HorizontalForm(
 				new FormField("Est. Effort", estEffortSpinner),
 				new FormField("Act. Effort", actEffortSpinner)
 			),
-			new Form(
-				Form.HORIZONTAL,
+			new HorizontalForm(
 				new FormField("Members", allMembersListScroller),
 				new FormField("Assigned", assignedMembersListScroller)
 			),
 			new FormField("Stage", stageBox),
-			new Form(Form.HORIZONTAL, saveButton, cancelButton),
+			new ButtonGroup(saveButton, cancelButton),
 			new FormField(null, errorText)
 		);
 		
