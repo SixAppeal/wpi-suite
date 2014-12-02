@@ -1,3 +1,17 @@
+/*******************************************************************************
+ * 
+ * Copyright (c) 2014 -- WPI Suite
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors: 
+ * Nathan Hughes
+ * Alexander Shoop
+ ******************************************************************************/
+
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
 
 import java.awt.event.KeyEvent;
@@ -12,8 +26,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.search.Search;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.search.SearchException;
 
 /**
- * This key listener parses user input and passes it to the search engine.
- * 
+ * This key listener parses user input and passes it to the search engine
  * @author nhhughes
  * @author akshoop
  */
@@ -23,6 +36,12 @@ public class SearchUserInput implements KeyListener {
 	SearchBox searchPanel;
 	String fullString;
 
+	/**
+	 * Constructor for SearchUserInput
+	 * @param searchBox JTextField parameter
+	 * @param toSearch Search parameter
+	 * @param searchPanel SearchBox parameter
+	 */
 	public SearchUserInput(JTextField searchBox, Search toSearch,
 			SearchBox searchPanel) {
 		this.searchBox = searchBox;
@@ -31,11 +50,13 @@ public class SearchUserInput implements KeyListener {
 		this.fullString = "";
 	}
 
+	/**
+	 * Main method to search what the user typed
+	 */
 	public void keyReleased(KeyEvent e) {
 		int quotationCount = 0;
 
-		// This is to wipe the results panel when user backspaces all that they
-		// typed
+		// This is to wipe the results panel when user backspaces all that they typed
 		if (e.getKeyChar() == '\b') {
 			fullString = "";
 			System.out.println("gettext length is " + searchBox.getText().length());
@@ -119,12 +140,18 @@ public class SearchUserInput implements KeyListener {
 		}
 	}
 
+	/**
+	 * Generated method for KeyEvent
+	 */
 	@Override
 	public void keyTyped(KeyEvent e) {
 		// TODO Auto-generated method stub
 
 	}
 
+	/**
+	 * Generated method for KeyEvent
+	 */
 	@Override
 	public void keyPressed(KeyEvent e) {
 		// TODO Auto-generated method stub

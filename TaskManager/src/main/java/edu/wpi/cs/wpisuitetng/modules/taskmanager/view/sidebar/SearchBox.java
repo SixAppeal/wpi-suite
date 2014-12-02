@@ -1,3 +1,16 @@
+/*******************************************************************************
+ * 
+ * Copyright (c) 2014 -- WPI Suite
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors: Nathan Hughes
+ * Alexander Shoop
+ ******************************************************************************/
+
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
 
 import java.awt.GridBagConstraints;
@@ -5,8 +18,6 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,19 +27,14 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import org.apache.lucene.queryparser.classic.ParseException;
-
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.LocalCache;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.search.Search;
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.search.SearchException;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.Form;
 
 /**
  * The GUI Search Box for the Sidebar
- * 
  * @author akshoop
  * @author nhhughes
  */
@@ -99,12 +105,13 @@ public class SearchBox extends JPanel implements IView {
 		gbc.gridy = 0;
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		
-		
 		int count = 0;
 		
 		for (Integer r: results) {
 			gbc.fill = GridBagConstraints.HORIZONTAL;
 			Task t = getTask(r);
+			
+			// The purpose of the html tags is to properly display the results
 			JLabel content = new JLabel("<html><i>Title:</i><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" 
 										+ t.getTitle() 
 										+ "<br>"
@@ -125,6 +132,7 @@ public class SearchBox extends JPanel implements IView {
 			this.resultsBox.add(viewButton, gbc);
 			count += 2;
 		}
+		
 		gbc.weighty = 1.0;
 		gbc.gridy = count + 1;
 		JPanel filler = new JPanel();

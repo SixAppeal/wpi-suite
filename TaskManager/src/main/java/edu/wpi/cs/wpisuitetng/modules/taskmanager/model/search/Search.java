@@ -1,3 +1,17 @@
+/*******************************************************************************
+ * 
+ * Copyright (c) 2014 -- WPI Suite
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors: 
+ * Nathan Hughes
+ * Alexander Shoop
+ ******************************************************************************/
+
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.model.search;
 
 import java.io.IOException;
@@ -33,7 +47,6 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 
 /**
  * Search functionality to find tasks within cache
- * 
  * @author akshoop
  * @author nhhughes
  */
@@ -59,7 +72,6 @@ public class Search {
 	
 	/**
 	 * Main search method
-	 * 
 	 * @param input The string that user wants to search for
 	 * @return toReturn The list of tasks that have the search results
 	 * @throws SearchException 
@@ -174,8 +186,7 @@ public class Search {
 	
 	/**
 	 * Have a temp new index so that the search engine can use this
-	 * only when an update occurs such as when a task is created or a task is updated.
-	 * 
+	 * only when an update occurs such as when a task is created or a task is updated
 	 * @param taskList List of tasks to create indexes for
 	 * @throws IOException
 	 */
@@ -200,8 +211,7 @@ public class Search {
 	
 	/**
 	 * Indexes the given file using the given writer, or if a directory is given,
-	 * recurses over files and directories found under the given directory.
-	 * 
+	 * recurses over files and directories found under the given directory
 	 * @param writer Writer to the index where the given file/dir info will be stored
 	 * @param taskList The list of tasks to go through to make indexes
 	 * @throws IOException 
@@ -230,21 +240,32 @@ public class Search {
 			
 			writer.addDocument(doc);
 		}
-		
-		
 	}
 }
 
-
+/**
+ * Primary purpose of this class is to implement compareTo method
+ * @author akshoop
+ * @author nhhughes
+ */
 class IdRanking implements Comparable<IdRanking> {
 	private int id;
 	private Integer ranking;
 	
+	/**
+	 * Generic constructor
+	 * @param id ID of ranking
+	 * @param ranking Ranking of the class
+	 */
 	IdRanking(int id, Integer ranking) {
 		this.id = id;
 		this.ranking = ranking;
 	}
 
+	/**
+	 * Method to return the necessary priority queue for search
+	 * @return priority queue
+	 */
 	@Override
 	public int compareTo(IdRanking o) {
 		// The return is negative because PriorityQueue is low to high,
@@ -252,6 +273,10 @@ class IdRanking implements Comparable<IdRanking> {
 		return -(this.ranking.compareTo(o.ranking));
 	}
 	
+	/**
+	 * Getter for ID
+	 * @return id The ID of IdRanking
+	 */
 	public int getId() {
 		return id;
 	}
