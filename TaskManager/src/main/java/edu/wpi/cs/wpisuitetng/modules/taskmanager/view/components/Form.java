@@ -13,7 +13,7 @@ import javax.swing.JPanel;
 
 /**
  * A panel that handles layout of <code>FormField</code>s or
- * <code>FormGroup</code>s. It is important to note that in it's current state,
+ * <code>FormGroup</code>s. It is important to note that in its current state,
  * this only handles layout, not validation or automatic submission. You should
  * keep needed references to any components added to this form as they will not
  * be easily accessible.
@@ -56,16 +56,17 @@ public class Form extends JPanel {
 			gbc.anchor = GridBagConstraints.PAGE_START;
 			gbc.fill = GridBagConstraints.HORIZONTAL;
 			gbc.insets = new Insets(0, 0, 10, 0);
-			gbc.weightx = 1.0;
+			gbc.weightx = 1;
 			gbc.gridx = 0;
 			
 			for (int i = 0; i < fields.length; i++) {
+				gbc.gridy = i;
+				this.add(fields[i], gbc);
 				if (i == fields.length - 1) {
 					gbc.insets.bottom = 0;
 					gbc.weighty = 1.0;
 				}
-				gbc.gridy = i;
-				this.add(fields[i], gbc);
+				
 			}
 		} else {
 			this.setLayout(new GridLayout(1, fields.length, 10, 0));

@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.ImageIcon;
+import javax.swing.JComponent;
 import javax.swing.JTabbedPane;
+import javax.swing.ScrollPaneConstants;
 
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
@@ -39,6 +41,7 @@ public class SidebarView extends JTabbedPane implements IView {
 		this.viewList.add(searchView);
 		
 		this.setTabPlacement(JTabbedPane.LEFT);
+		this.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
 		this.addTab(null, new ImageIcon(this.getClass().getResource("icon_search.png")),
 				searchView);
 	}
@@ -47,8 +50,20 @@ public class SidebarView extends JTabbedPane implements IView {
 	 * Adds a creation panel to the sidebar
 	 */
 	public void addCreatePanel() {
+		
+		//if there is a tab with the edit pane 
+		for (IView view : viewList){
+			if (view instanceof TaskCreateView){
+				if (((TaskCreateView)view).isEmpty()){
+					this.setSelectedComponent((TaskCreateView)view);
+					return;
+				}
+			}
+		}
+		
 		TaskCreateView createView = new TaskCreateView();
 		createView.setGateway(this.gateway);
+		this.viewList.add(createView);
 		this.addTab(null, new ImageIcon(this.getClass().getResource("icon_plus.png")),
 				createView);
 		this.setSelectedComponent(createView);
@@ -61,6 +76,7 @@ public class SidebarView extends JTabbedPane implements IView {
 	public void removeCreatePanel(TaskCreateView createView) {
 		try {
 			this.removeTabAt(this.indexOfComponent(createView));
+			this.viewList.remove(createView);
 		} catch (IndexOutOfBoundsException e) {
 		}
 	}
@@ -70,8 +86,21 @@ public class SidebarView extends JTabbedPane implements IView {
 	 * @param task The task to edit
 	 */
 	public void addEditPanel(Task task) {
+		
+		//if there is a tab with the edit pane 
+		for (IView view : viewList){
+			if (view instanceof TaskEditView){
+				if (task.equals(((TaskEditView)view).getTask())){
+					setSelectedComponent((TaskEditView)view);
+					return;
+				}
+			}
+		}
+		
+		
 		TaskEditView editView = new TaskEditView(task);
 		editView.setGateway(this.gateway);
+		this.viewList.add(editView);
 		this.addTab(null, new ImageIcon(this.getClass().getResource("icon_pencil.png")),
 				editView);
 		this.setSelectedComponent(editView);
@@ -84,6 +113,7 @@ public class SidebarView extends JTabbedPane implements IView {
 	public void removeEditPanel(TaskEditView editView) {
 		try {
 			this.removeTabAt(this.indexOfComponent(editView));
+			this.viewList.remove(editView);
 		} catch (IndexOutOfBoundsException e) {
 			// Do nothing
 		}

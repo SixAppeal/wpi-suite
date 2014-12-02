@@ -51,6 +51,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.FormFieldValid
  * @author wmtemple
  * @author krpeffer
  * @author wavanrensselaer
+ * @author srojas
  */
 public class TaskEditView extends JPanel implements IView {
 	private static final long serialVersionUID = -8972626054612267276L;
@@ -98,9 +99,14 @@ public class TaskEditView extends JPanel implements IView {
 		this.estEffortInput = new JSpinner(new SpinnerNumberModel(1, null, null, 1));
 		this.actEffortInput = new JSpinner(new SpinnerNumberModel(1, null, null, 1));
 		this.members = new JList<String>();
+		
+
 		this.membersScrollPane = new JScrollPane(this.members);
+
 		this.assignedMembers = new JList<String>();
 		this.assignedMembersScrollPane = new JScrollPane(this.assignedMembers);
+		
+		
 		this.stageInput = new JComboBox<Stage>();
 		this.archiveButton = new JButton("Archive");
 		this.closeButton = new JButton("Close");
@@ -300,14 +306,22 @@ public class TaskEditView extends JPanel implements IView {
 			)
 		);
 		
+		//trying all the 0xffffffff possible ways to make the jtabbedpane stay the same size 
+		membersScrollPane.setPreferredSize(new Dimension(50,50)); 
+		assignedMembersScrollPane.setPreferredSize(new Dimension(50,50)); 
+		
 		this.form.setMinimumSize(new Dimension(300, 0));
 		this.form.setMaximumSize(new Dimension(300, Integer.MAX_VALUE));
-		
+
 		this.container.setLayout(new GridBagLayout());
+		this.container.setMinimumSize(new Dimension(300, 0));
+		this.container.setMaximumSize(new Dimension(300, Integer.MAX_VALUE));
+
 		
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.insets = new Insets(20, 20, 20, 20);
+		gbc.anchor = GridBagConstraints.PAGE_START;
 		gbc.weightx = 1.0;
 		gbc.weighty = 1.0;
 		gbc.gridx = 0;
@@ -319,6 +333,13 @@ public class TaskEditView extends JPanel implements IView {
 	}
 	
 	/**
+	 * @return the task
+	 */
+	public Task getTask() {
+		return task;
+	}
+
+	/**
 	 * Saves the task currently being edited
 	 */
 	private void saveTask() {
@@ -329,4 +350,7 @@ public class TaskEditView extends JPanel implements IView {
 	public void setGateway(Gateway gateway) {
 		this.gateway = gateway;
 	}
+	
+	
+	
 }
