@@ -1,6 +1,22 @@
+/*******************************************************************************
+ * Copyright (c) 2014 -- WPI Suite
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors: Nathan Hughes
+ ******************************************************************************/
+
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter;
 
+import java.util.Arrays;
+import java.util.Collection;
+
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.Cache;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Stage;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.StageList;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 
 public class TaskPresenter implements IPresenter{
@@ -30,7 +46,6 @@ public class TaskPresenter implements IPresenter{
 		this.gateway.toView("SidebarView", "showDetailPanel", task);
 	}
 	
-	
 	public void editTask(Task task) {
 		this.gateway.toView("SidebarView", "showEditPanel", task);
 	}
@@ -43,11 +58,22 @@ public class TaskPresenter implements IPresenter{
 		this.gateway.toView("MemberListHandler", "updateAll", cache);
 	};
 	
-	public void updateStages() {
+	public void updateTasks() {
 		Task[] tasks_from_cache =  (Task[]) cache.retrieve("task");
 		this.gateway.toView("ColumnView", "setTasks", new Object[] {tasks_from_cache});
 		this.gateway.toView("ColumnView", "reflow");
 	}
 
+	public void updateStages() {
+		StageList newStages = new StageList( Arrays.asList((Stage[]) cache.retrieve("stages")) );
+		this.gateway.toView("ColumnView", "setStages", newStages);
+		this.gateway.toView("ColumnView", "reflow");
+		this.gateway.toView("SidebarView", "updateStages", newStages);
+	}
+	
+	public void publishChanges(StageList sl) {
+		this.gateway.toPresenter("LocalCache", "update", "stages", sl);
+	}
 	
 }
+

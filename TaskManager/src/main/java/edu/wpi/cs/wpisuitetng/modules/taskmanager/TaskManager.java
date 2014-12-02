@@ -16,6 +16,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.Cache;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.LocalCache;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.*;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar.ColumnView;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar.ColumnEditView;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar.MemberListHandler;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar.SidebarView;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.toolbar.ToolbarView;
@@ -48,6 +49,7 @@ public class TaskManager implements IJanewayModule {
 	Gateway gateway;
 	JPanel mainPanel;
 	ColumnView columnView;
+	ColumnEditView columnEditView;
 	SidebarView sidebarView;
 	TaskPresenter taskPresenter;
 	Cache localCache;
@@ -67,6 +69,7 @@ public class TaskManager implements IJanewayModule {
 		columnView = new ColumnView();
 		memberHandler = new MemberListHandler();
 		sidebarView = new SidebarView(memberHandler);
+		columnEditView = new ColumnEditView();
 		
 		localCache = new LocalCache();
 		taskPresenter = new TaskPresenter(localCache);
@@ -88,8 +91,9 @@ public class TaskManager implements IJanewayModule {
 		gateway.addView("ToolbarView", toolbarview);
 		gateway.addView("MemberListHandler", memberHandler);
 		
-		localCache.subscribe("task:TaskPresenter:updateStages");
+		localCache.subscribe("task:TaskPresenter:updateTasks");
 		localCache.subscribe("member:TaskPresenter:notifyMemberHandler");
+		localCache.subscribe("stages:TaskPresenter:updateStages");
 		
 		t = new Timer();
 
@@ -116,6 +120,7 @@ public class TaskManager implements IJanewayModule {
 	 */
 	@Override
 	public void finishInit() {
+		
 		t.scheduleAtFixedRate(new TimerTask() {
 
 			@Override
@@ -123,7 +128,7 @@ public class TaskManager implements IJanewayModule {
 				gateway.toPresenter("LocalCache", "sync", "task");
 				gateway.toPresenter("LocalCache", "sync", "member");
 				gateway.toPresenter("LocalCache", "sync", "archive");
-				gateway.toPresenter("LocalCache", "sync", "stage");
+				gateway.toPresenter("LocalCache", "sync", "stages");
 			}
 			
 		}, 0, 500);

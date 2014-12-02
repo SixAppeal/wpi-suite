@@ -34,7 +34,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
 public class CreateTaskButtonPanel extends ToolbarGroupView implements IView {
 	private JButton createTaskButton = new JButton("<html>Create<br />Task</html>");
 	private JButton createPanelButton = new JButton("<html>Create<br />Panel</html>");
-	//private JButton refreshPanelButton = new JButton("<html>Refresh<br />Panel</html>");
+	private JButton columnPanelButton = new JButton("<html>Column<br />Edit</html>");
 	private final Action createTask = new CreateTaskAction();
 	private final Action createPanel = new CreatePanelAction();
 	private final JPanel contentPanel = new JPanel();
@@ -57,15 +57,12 @@ public class CreateTaskButtonPanel extends ToolbarGroupView implements IView {
 		// Action listener for createTaskButton
 		createTaskButton.setAction(createTask);
 		
-		//Action Listener for refreshPanelButton
-		/*refreshPanelButton.addActionListener( new ActionListener() {
-
+		//Action Listener for ColumnEditButton
+		columnPanelButton.addActionListener( new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				gateway.toPresenter("TaskPresenter", "getAllTasks");
-			}
-			
-		});*/
+				gateway.toView("SidebarView", "showColEditPanel");
+			}});
 		
 		// Action listener for createPanelButton
 		createPanelButton.setAction(createPanel);
@@ -73,7 +70,8 @@ public class CreateTaskButtonPanel extends ToolbarGroupView implements IView {
 		contentPanel.add(createTaskButton, gbc);
 		//uncomment the line below once the controller can handle creating multiple columns
 		//contentPanel.add(createPanelButton);
-		//contentPanel.add(refreshPanelButton);
+		gbc.gridx = 1;
+		contentPanel.add(columnPanelButton);
 		contentPanel.setOpaque(false);
 		this.add(contentPanel);
 	}

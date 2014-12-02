@@ -1,8 +1,6 @@
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
@@ -24,6 +22,7 @@ public class MemberListHandler implements IView {
 	private List<String> unassignedMembersList;
 	private List<String> assignedMembersList;
 	private List<String> allMembersList; // Only updated through localCache
+	@SuppressWarnings("unused")
 	private Gateway gateway;
 
 	public MemberListHandler() {

@@ -1,9 +1,5 @@
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.model;
 
-import com.google.gson.Gson;
-
-import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
-
 /**
  * Basic stage model
  * 

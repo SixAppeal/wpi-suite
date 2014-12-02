@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.StageList;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
@@ -29,6 +30,7 @@ public class SidebarView extends JPanel implements IView {
 	private TaskEditView editView;
 	private TaskCreateView createView;
 	private TaskDefaultView defaultView;
+	private ColumnEditView colEditView;
 	private MemberListHandler memberHandler;
 	/**
 	 * Constructs a sidebar view
@@ -40,6 +42,7 @@ public class SidebarView extends JPanel implements IView {
 		this.createView = new TaskCreateView(this.memberHandler);
 		this.editView = new TaskEditView(this.memberHandler);
 		this.defaultView = new TaskDefaultView();
+		this.colEditView = new ColumnEditView();
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
 		this.container.setLayout(new BoxLayout(this.container, BoxLayout.X_AXIS));
@@ -52,6 +55,7 @@ public class SidebarView extends JPanel implements IView {
 		this.createView.setVisible(false);
 		this.editView.setVisible(false);
 		this.detailView.setVisible(false);
+		this.colEditView.setVisible(false);
 		
 		this.container.add(this.defaultView);
 		this.container.add(this.createView);
@@ -102,6 +106,12 @@ public class SidebarView extends JPanel implements IView {
 		this.detailView.revalidate();
 	}
 	
+	public void showColEditPanel() {
+		this.curView.setVisible(false);
+		this.curView = this.colEditView;
+		this.curView.setVisible(true);
+	}
+	
 	/**
 	 * @see IView.setGateway
 	 */
@@ -111,6 +121,12 @@ public class SidebarView extends JPanel implements IView {
 		this.detailView.setGateway(this.gateway);
 		this.editView.setGateway(this.gateway);
 		this.createView.setGateway(this.gateway);
+	}
+	
+	public void updateStages(StageList sl) {
+		this.createView.updateStages(sl);
+		this.editView.updateStages(sl);
+		this.colEditView.setStages(sl);
 	}
 
 }

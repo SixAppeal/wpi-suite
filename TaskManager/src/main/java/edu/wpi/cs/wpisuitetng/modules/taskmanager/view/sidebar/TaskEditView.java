@@ -1,3 +1,14 @@
+/*******************************************************************************
+ * Copyright (c) 2014 -- WPI Suite
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors: Nathan Hughes
+ ******************************************************************************/
+
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
 
 import java.awt.Color;
@@ -12,7 +23,6 @@ import java.awt.event.KeyEvent;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -35,6 +45,7 @@ import javax.swing.event.ListSelectionListener;
 import org.jdesktop.swingx.JXDatePicker;
 
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Stage;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.StageList;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
@@ -152,10 +163,6 @@ public class TaskEditView extends JPanel implements IView {
 		});
 		
 		stageBox = new JComboBox<Stage>();
-		stageBox.addItem(new Stage("New"));
-		stageBox.addItem(new Stage("Scheduled"));
-		stageBox.addItem(new Stage("In Progress"));
-		stageBox.addItem(new Stage("Complete"));
 
 		saveButton = new JButton("Save");
 		saveButton.setEnabled(false);
@@ -520,6 +527,9 @@ public class TaskEditView extends JPanel implements IView {
 		
 	}
 
-	
+	public void updateStages( StageList sl ) {
+		this.stageBox.removeAll();
+		for (Stage s : sl) this.stageBox.addItem(s);
+	}
 	
 }
