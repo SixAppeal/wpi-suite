@@ -46,6 +46,11 @@ public class Comment {
 		this.comment = comment;
 	}
 	
+	@Override
+	public String toString(){
+		return (this.user + ": " + this.comment);
+	}
+	
 	/**
 	 * sets the user to a new user
 	 * @param user

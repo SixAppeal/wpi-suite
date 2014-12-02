@@ -185,13 +185,23 @@ public class TaskDetailView extends JPanel implements IView {
 		gbc.gridy = 10;
 		this.add(taskActivitiesList, gbc);
 		
+		gbc.insets.top = 20;
+		gbc.gridy = 11;
+		gbc.gridx = 0;
+		this.add(commentLabel,gbc);
+		
+		gbc.insets.top = 5;
+		gbc.gridy = 12;
+		this.add(taskCommentList, gbc);
+		
+		
 		
 		gbc.anchor = GridBagConstraints.FIRST_LINE_START;
 		gbc.fill = GridBagConstraints.NONE;
 		gbc.insets.top = 20;
 		gbc.weighty = 1.0;
 		gbc.gridx = 0;
-		gbc.gridy = 11;
+		gbc.gridy = 13;
 		this.add(archiveButton, gbc);
 		
 		gbc.anchor = GridBagConstraints.FIRST_LINE_END;
@@ -215,6 +225,7 @@ public class TaskDetailView extends JPanel implements IView {
 		taskActLabel.setText(this.t.getActualEffort().toString());
 		taskMemberList.setListData(t.getAssignedTo().toArray(new String[0]));
 		taskActivitiesList.setListData(t.getActivities().toArray(new Activity[0]));
+		taskCommentList.setListData(t.getComments().toArray(new Comment[0]));
 		editButton.setEnabled(true);
 		this.revalidate();
 	}

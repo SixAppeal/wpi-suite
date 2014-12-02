@@ -102,6 +102,10 @@ public class TaskEditView extends JPanel implements IView {
 	List<String> globalMembersList;
 	JListMouseHandler allMembersMouseHandler;
 	JListMouseHandler assignedMembersMouseHandler;
+	
+	//comments stuff
+	JTextArea commentEntry;
+	//JButton commentPost; possible post button different from the save button?
 
 
 	/**
@@ -231,6 +235,11 @@ public class TaskEditView extends JPanel implements IView {
 		buttonBox.add(new JLabel(""));
 		buttonBox.add(removeMemberButton);
 		
+		//Comment box
+		commentEntry = new JTextArea(5,0);
+		commentEntry.setLineWrap(true);
+		commentEntry.setWrapStyleWord(true);
+		
 		errorText = new JLabel("Invalid Input", JLabel.CENTER);
 		errorText.setForeground(Color.RED);
 		errorText.setBorder(FormField.BORDER_ERROR);
@@ -264,6 +273,7 @@ public class TaskEditView extends JPanel implements IView {
 				new FormField("Assigned", assignedMembersListScroller)
 			),
 			new FormField("Status", statusBox),
+			new FormField("Comment", commentEntry),			
 			new FormGroup(saveButton, cancelButton),
 			new FormField(null, errorText)
 		);
@@ -448,6 +458,7 @@ public class TaskEditView extends JPanel implements IView {
 		TaskStatus st = (TaskStatus)statusBox.getSelectedItem();
 		int est = (Integer)estEffortSpinnerModel.getValue();
 		int act = (Integer)actEffortSpinnerModel.getValue();
+		String comment = commentEntry.getText();
 
 		if(title.isEmpty() || desc.isEmpty())
 		{
@@ -464,6 +475,7 @@ public class TaskEditView extends JPanel implements IView {
 			t.setDueDate( dueDatePicker.getDate() );
 			t.setColumn(statusBox.getSelectedIndex());
 			t.setAssignedTo(new ArrayList<String>(this.assignedMembersList));
+			t.addComment("current user", comment);//need to figure out how to get current logged in user. look at Janeway.gui.login
 			System.out.println(t.toJson());
 		} catch (IllegalArgumentException ex) {
 			System.err.println(ex.toString());
