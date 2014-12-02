@@ -2,6 +2,7 @@ package edu.wpi.cs.wpisuitetng.modules.taskmanager.model.search;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -41,7 +42,7 @@ public class TestSearch {
 	public void testInitialize() throws SearchException, IOException, ParseException {
 		Search someSearch = new Search();
 		someSearch.initialize();
-		//someSearch.searchFor("blah");
+		assertTrue(someSearch.isInitialized());
 	}
 	
 	/**
@@ -57,7 +58,7 @@ public class TestSearch {
 	}
 	
 	/**
-	 * 
+	 * Test for createIndex and overall searching
 	 * @throws SearchException 
 	 * @throws ParseException 
 	 * @throws IOException 
@@ -89,67 +90,53 @@ public class TestSearch {
 		task3.setAssignedTo(testAssignedTo);
 		task3.setId(5);
 		
-		
 		testList.add(task1);
 		testList.add(task2);
 		testList.add(task3);
 		
-		
-		
 		someSearch.createIndex(testList);
 		
-		System.out.println("******************************************************");
-		System.out.println("Searching for: sometitle");
-		System.out.println("******************************************************");
-		
 		List<Integer> result = someSearch.searchFor("sometitle");
-		int count = 1;
-		for (Integer i: result) {
-			System.out.println(count + ": " + i);
-			count++;
-		}
-		
-		System.out.println("******************************************************");
-		System.out.println("Searching for: akshoop");
-		System.out.println("******************************************************");
 		
 		result = someSearch.searchFor("akshoop");
 		
-		count = 1;
-		for (Integer i: result) {
-			System.out.println(count + ": " + i);
-			count++;
-		}
-		
-		System.out.println("******************************************************");
-		System.out.println("Searching for: testing AND bunch");
-		System.out.println("******************************************************");
-		
-		
 		result = someSearch.searchFor("testing AND bunch");
 		
-		
-		count = 1;
-		for (Integer i: result) {
-			System.out.println(count + ": " + i);
-			count++;
-		}
-		
-		System.out.println("******************************************************");
-		System.out.println("Searching for: another");
-		System.out.println("******************************************************");
-		
-		
 		result = someSearch.searchFor("another");
-		
-		
-		count = 1;
-		for (Integer i: result) {
-			System.out.println(count + ": " + i);
-			count++;
-		}
-		//assertEquals(result.compareTo("sometitle"), 0);
 	}
 	
-	
+	/**
+	 * Test for updateIndex
+	 * @throws IOException 
+	 * @throws ParseException 
+	 * @throws SearchException 
+	 */
+	@Test
+	public void testUpdateIndex() throws IOException, SearchException, ParseException {
+		Search someSearch = new Search();
+		someSearch.initialize();
+		testList = new ArrayList<Task>();
+		List<String> testAssignedTo = new LinkedList<String>();
+		testAssignedTo.add("title");
+		
+		Task task1 = new Task();
+		task1.setTitle("a title");
+		task1.setDescription("a random title");
+		task1.setAssignedTo(testAssignedTo);
+		task1.setId(2);
+		
+		Task task2 = new Task();
+		task2.setTitle("another title");
+		task2.setDescription("gotta do tests");
+		task2.setId(3);
+		
+		testList.add(task1);
+		testList.add(task2);
+		
+		someSearch.updateIndex(testList);
+		
+		List<Integer> result = someSearch.searchFor("title");
+		
+		result = someSearch.searchFor("description");
+	}
 }

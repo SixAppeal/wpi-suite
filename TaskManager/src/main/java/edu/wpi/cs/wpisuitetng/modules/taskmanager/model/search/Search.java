@@ -167,20 +167,9 @@ public class Search {
 		this.index = new RAMDirectory();
 		Analyzer analyzer = new StandardAnalyzer();
 		IndexWriterConfig iwc = new IndexWriterConfig(Version.LATEST, analyzer);
-		
-		if (create) {
-			// Create a new index in directory, removing any previously indexed documents
-			iwc.setOpenMode(OpenMode.CREATE);
-		}
-		else {
-			// Add new documents to an existing index
-			iwc.setOpenMode(OpenMode.CREATE_OR_APPEND);
-		}
-		
+		iwc.setOpenMode(OpenMode.CREATE);		
 		IndexWriter writer = new IndexWriter(index, iwc);
-		
 		indexTasks(writer, taskList);
-		
 		writer.close();
 	}
 	
