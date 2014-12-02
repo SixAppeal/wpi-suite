@@ -38,7 +38,7 @@ public class TaskDetailView extends JPanel implements IView {
 	/**
 	 * Generated Serial Number
 	 */
-	private static final long serialVersionUID = -8972626054612267276L;
+	private static final long serialVersionUID = -8972626054612267276L;//currently this is the same as taskdetailview
 
 	private Gateway gateway;
 	
@@ -193,7 +193,7 @@ public class TaskDetailView extends JPanel implements IView {
 		gbc.insets.top = 5;
 		gbc.gridy = 12;
 		this.add(taskCommentList, gbc);
-		
+			
 		
 		
 		gbc.anchor = GridBagConstraints.FIRST_LINE_START;
@@ -203,6 +203,8 @@ public class TaskDetailView extends JPanel implements IView {
 		gbc.gridx = 0;
 		gbc.gridy = 13;
 		this.add(archiveButton, gbc);
+		
+		
 		
 		gbc.anchor = GridBagConstraints.FIRST_LINE_END;
 		//gbc.gridwidth = 2;
