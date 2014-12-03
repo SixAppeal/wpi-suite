@@ -50,8 +50,7 @@ public class SidebarView extends JTabbedPane implements IView {
 	 * Adds a creation panel to the sidebar
 	 */
 	public void addCreatePanel() {
-		
-		//if there is a tab with the edit pane 
+		// if there is a tab with the edit pane 
 		for (IView view : viewList){
 			if (view instanceof TaskCreateView){
 				if (((TaskCreateView)view).isEmpty()){

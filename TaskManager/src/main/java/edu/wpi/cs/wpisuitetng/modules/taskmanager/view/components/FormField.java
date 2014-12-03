@@ -128,6 +128,7 @@ public class FormField extends FormElement {
 		this.setLayout(this.layout);
 		
 		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.anchor = GridBagConstraints.PAGE_START;
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.insets = new Insets(0, 0, 5, 0);
 		gbc.weightx = 1.0;
@@ -136,10 +137,10 @@ public class FormField extends FormElement {
 		this.add(this.label, gbc);
 		
 		gbc.gridy = 1;
+		gbc.weighty = 1.0;
 		this.add(this.field, gbc);
 		
 		gbc.insets.bottom = 0;
-		gbc.weighty = 1.0;
 		gbc.gridy = 2;
 		this.add(this.message, gbc);
 	}

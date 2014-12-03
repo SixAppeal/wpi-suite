@@ -1,10 +1,7 @@
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
@@ -29,6 +26,8 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+
+import net.miginfocom.swing.MigLayout;
 
 import org.jdesktop.swingx.JXDatePicker;
 
@@ -98,12 +97,10 @@ public class TaskEditView extends JPanel implements IView {
 		this.actEffortInput = new JSpinner(new SpinnerNumberModel(1, null, null, 1));
 		this.members = new JList<String>();
 		
-
 		this.membersScrollPane = new JScrollPane(this.members);
 
 		this.assignedMembers = new JList<String>();
 		this.assignedMembersScrollPane = new JScrollPane(this.assignedMembers);
-		
 		
 		this.stageInput = new JComboBox<Stage>();
 		this.archiveButton = new JButton("Archive");
@@ -300,27 +297,9 @@ public class TaskEditView extends JPanel implements IView {
 			)
 		);
 		
-		//trying all the 0xffffffff possible ways to make the jtabbedpane stay the same size 
-		membersScrollPane.setPreferredSize(new Dimension(50,50)); 
-		assignedMembersScrollPane.setPreferredSize(new Dimension(50,50)); 
-		
-		this.form.setMinimumSize(new Dimension(300, 0));
-		this.form.setMaximumSize(new Dimension(300, Integer.MAX_VALUE));
-
-		this.container.setLayout(new GridBagLayout());
-		this.container.setMinimumSize(new Dimension(300, 0));
-		this.container.setMaximumSize(new Dimension(300, Integer.MAX_VALUE));
-
-		
-		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.fill = GridBagConstraints.HORIZONTAL;
-		gbc.insets = new Insets(20, 20, 20, 20);
-		gbc.anchor = GridBagConstraints.PAGE_START;
-		gbc.weightx = 1.0;
-		gbc.weighty = 1.0;
-		gbc.gridx = 0;
-		gbc.gridy = 0;
-		this.container.add(this.form, gbc);
+		this.container.setBackground(new Color(230, 230, 230));
+		this.container.setLayout(new MigLayout("fill, ins 20", "[260]"));
+		this.container.add(this.form, "grow");
 		
 		this.setLayout(new BorderLayout());
 		this.add(this.scrollPane, BorderLayout.CENTER);
