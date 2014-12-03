@@ -191,6 +191,9 @@ public class StageView extends JPanel implements IView {
 		gbc.gridx = 0;
 
 		this.tasks = this.sortTasks().toArray(new Task[0]);
+		for (Task t : tasks) {
+			System.out.println(t.getTitle() + " : " + t.getPriority());
+		}
 		
 		TaskView taskView;
 		int i;

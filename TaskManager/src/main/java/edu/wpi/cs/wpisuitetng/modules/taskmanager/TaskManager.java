@@ -80,11 +80,12 @@ public class TaskManager implements IJanewayModule {
 		gateway = new Gateway();
 		mainPanel = new JPanel();
 		columnView = new ColumnView();
-		memberHandler = new MemberListHandler();
+		//memberHandler = new MemberListHandler();
 		sidebarView = new SidebarView();
-
+		
 		localCache = new LocalCache();
 		taskPresenter = new TaskPresenter(localCache);
+		sidebarView.setCache((LocalCache)localCache);
 		
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.X_AXIS));
 		mainPanel.add(columnView);
@@ -101,7 +102,7 @@ public class TaskManager implements IJanewayModule {
 		gateway.addView("SidebarView", sidebarView);
 		gateway.addView("ColumnView", columnView);
 		gateway.addView("ToolbarView", toolbarview);
-		gateway.addView("MemberListHandler", memberHandler);
+		gateway.addView("MemberListHandler", MemberListHandler.getInstance());
 		
 		localCache.subscribe("task:TaskPresenter:updateTasks");
 		localCache.subscribe("member:TaskPresenter:notifyMemberHandler");
@@ -149,7 +150,7 @@ public class TaskManager implements IJanewayModule {
 				gateway.toPresenter("LocalCache", "sync", "archive");
 				gateway.toPresenter("LocalCache", "sync", "stages");
 				gateway.toView("ColumnView", "reflow");
-				gateway.toView("SidebarView", "reflowTasks", localCache);
+				gateway.toView("SidebarView", "reflowTasks");
 			}
 			
 		}, 0, 2000);
