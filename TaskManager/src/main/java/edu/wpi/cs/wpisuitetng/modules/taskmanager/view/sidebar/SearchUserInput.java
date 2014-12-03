@@ -82,8 +82,8 @@ public class SearchUserInput implements KeyListener {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			} catch (ParseException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+				System.out.println("Cannot parse " + fullString + "*");
+				//e1.printStackTrace();
 			}
 			return;
 		}
@@ -138,8 +138,8 @@ public class SearchUserInput implements KeyListener {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		} catch (ParseException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			System.out.println("Cannot parse " + fullString + "*");
+			//e1.printStackTrace();
 		}
 	}
 
