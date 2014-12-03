@@ -1,7 +1,5 @@
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -153,6 +151,7 @@ public class TaskCreateView extends JPanel implements IView {
 		this.container.add(this.form, "grow");
 
 		this.scrollPane.setMinimumSize(new Dimension(300, 0));
+		this.scrollPane.setMaximumSize(new Dimension(300, Integer.MAX_VALUE));
 		
 		this.setLayout(new MigLayout("fill, ins 0", "[300]"));
 		this.add(this.scrollPane, "grow");

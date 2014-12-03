@@ -51,7 +51,6 @@ public class ColumnView extends JPanel implements IView {
 				ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 		
 		this.setLayout(new GridBagLayout());
-		this.setOpaque(false);
 		
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.anchor = GridBagConstraints.PAGE_START;

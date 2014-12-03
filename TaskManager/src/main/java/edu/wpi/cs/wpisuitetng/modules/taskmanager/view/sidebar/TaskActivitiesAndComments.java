@@ -9,6 +9,7 @@
  ******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -81,11 +82,13 @@ public class TaskActivitiesAndComments extends JPanel implements IView {
 		
 		activitiesLabel = new JLabel("Task History");
 		activitiesLabel.setForeground(labelColor);
-		taskActivitiesList = new JList<Activity> ();
+		taskActivitiesList = new JList<Activity>();
 		
 		commentLabel = new JLabel ("Comments");
 		commentLabel.setForeground(labelColor);
 		taskCommentList = new JList<Comment>();
+		
+		taskCommentArea = new JTextArea();
 		
 		saveCommentButton = new JButton("Save");
 		saveCommentButton.addActionListener( new ActionListener() {
@@ -144,6 +147,9 @@ public class TaskActivitiesAndComments extends JPanel implements IView {
 		
 		activitiesAndComments.addTab("History", activitiesPanel);
 		activitiesAndComments.addTab("Comments", commentPanel);
+		
+		this.setLayout(new BorderLayout());
+		this.add(activitiesAndComments, BorderLayout.CENTER);
 	}
 	
 	/**

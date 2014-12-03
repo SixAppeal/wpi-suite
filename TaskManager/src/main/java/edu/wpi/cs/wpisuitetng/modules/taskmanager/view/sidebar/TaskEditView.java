@@ -59,6 +59,7 @@ public class TaskEditView extends JPanel implements IView {
 	// Components
 	private JPanel container;
 	private JScrollPane scrollPane;
+	private TaskActivitiesAndComments commentPanel;
 
 	private JTextField titleInput;
 	private JTextArea titleLabel;
@@ -84,6 +85,7 @@ public class TaskEditView extends JPanel implements IView {
 		this.task = task;
 		this.container = new JPanel();
 		this.scrollPane = new JScrollPane(this.container);
+		this.commentPanel = new TaskActivitiesAndComments();
 		this.titleInput = new JTextField(this.task.getTitle());
 		this.titleLabel = new JTextArea(this.task.getTitle());
 		this.descInput = new JTextArea(this.task.getDescription(), 5, 0);
@@ -93,6 +95,8 @@ public class TaskEditView extends JPanel implements IView {
 		this.estEffortInput = new JSpinner(new SpinnerNumberModel(1, null, null, 1));
 		this.actEffortInput = new JSpinner(new SpinnerNumberModel(1, null, null, 1));
 		this.members = new JList<String>();
+		
+		this.commentPanel.updateView(this.task);
 		
 		this.membersScrollPane = new JScrollPane(this.members);
 
@@ -298,8 +302,9 @@ public class TaskEditView extends JPanel implements IView {
 
 		this.scrollPane.setMinimumSize(new Dimension(300, 0));
 		
-		this.setLayout(new MigLayout("fill, ins 0", "[300]"));
+		this.setLayout(new MigLayout("fill, ins 0", "[300][300]"));
 		this.add(this.scrollPane, "grow");
+		this.add(this.commentPanel, "grow");
 	}
 	
 	/**
@@ -319,5 +324,6 @@ public class TaskEditView extends JPanel implements IView {
 	@Override
 	public void setGateway(Gateway gateway) {
 		this.gateway = gateway;
+		this.commentPanel.setGateway(this.gateway);
 	}
 }
