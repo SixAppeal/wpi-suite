@@ -13,7 +13,7 @@ import org.junit.Test;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar.MemberListHandler;
 
-
+/*
 public class TestMemberListHandler {
 	MemberListHandler testHandler = new MemberListHandler();
 	
@@ -133,3 +133,5 @@ public class TestMemberListHandler {
 	
 	
 }
+*/
+

@@ -23,13 +23,26 @@ public class MemberListHandler implements IView {
 	private List<String> unassignedMembersList;
 	private List<String> assignedMembersList;
 	private List<String> allMembersList; // Only updated through localCache
+	private static MemberListHandler instance = null;
+	
 	@SuppressWarnings("unused")
 	private Gateway gateway;
 
-	public MemberListHandler() {
+	private MemberListHandler() {
 		unassignedMembersList = new ArrayList<String>();
 		assignedMembersList = new ArrayList<String>();
 		allMembersList = new ArrayList<String>();
+	}
+	
+	/**
+	 * Returns the singleton instance of a MemberListHandler
+	 * @return the singleton instance of a MemberListHandler
+	 */
+	public static MemberListHandler getInstance(){
+		if (instance == null){
+			instance = new MemberListHandler();
+		}
+		return instance;
 	}
 
 	/**

@@ -180,6 +180,7 @@ public class OldTaskEditView extends JPanel implements IView {
 		// Set UI for members
 		allMembers = new JList<String>();
 		allMembers.setVisibleRowCount(4);
+		
 		allMembers.setLayoutOrientation(JList.VERTICAL);
 		this.allMembersMouseHandler = new JListMouseHandler(allMembers);
 		allMembers.addListSelectionListener(new ListSelectionListener() {
@@ -204,6 +205,10 @@ public class OldTaskEditView extends JPanel implements IView {
 		//assignedMembersListScroller.setPreferredSize(100);
 		assignedMembersListScroller.setMinimumSize(new Dimension(assignedMembersListScroller.getMinimumSize().width, 100));
 		allMembersListScroller.setMinimumSize(new Dimension(allMembersListScroller.getMinimumSize().width, 100));
+		
+		
+		// Buttons below
+		
 		addMemberButton = new JButton(">");
 		addMemberButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

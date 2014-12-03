@@ -19,6 +19,8 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
@@ -37,6 +39,8 @@ import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import net.miginfocom.swing.MigLayout;
 
@@ -94,12 +98,24 @@ public class TaskEditView extends JPanel implements IView {
 	
 	private ActionListener stageBoxListener;
 	
+	
+	JListMouseHandler allMembersMouseHandler;
+	JListMouseHandler assignedMembersMouseHandler;
+	
+	
 	/**
 	 * Constructor
 	 */
 	public TaskEditView(Task iTask, StageList stages) {
 		this.task = iTask;
 		this.stages = stages;
+		// Poplulates the member list handler with the assigned members
+		MemberListHandler.getInstance().populateMembers(this.task.getAssignedTo());
+		
+		
+		
+		
+		// UI stuff
 		this.container = new JPanel();
 		this.scrollPane = new JScrollPane(this.container);
 		this.commentPanel = new TaskActivitiesAndComments();
@@ -111,10 +127,10 @@ public class TaskEditView extends JPanel implements IView {
 		this.dateLabel = new JLabel();
 		this.estEffortInput = new JSpinner(new SpinnerNumberModel(1, null, null, 1));
 		this.actEffortInput = new JSpinner(new SpinnerNumberModel(1, null, null, 1));
-		this.members = new JList<String>();
-		
+
 		this.commentPanel.updateView(this.task);
 		
+		this.members = new JList<String>();
 		this.membersScrollPane = new JScrollPane(this.members);
 
 		this.assignedMembers = new JList<String>();
@@ -147,7 +163,26 @@ public class TaskEditView extends JPanel implements IView {
 		this.stageInput.setSelectedItem(task.getStage());
 		
 		this.members.setVisibleRowCount(4);
+		this.members.setLayoutOrientation(JList.VERTICAL);
 		this.assignedMembers.setVisibleRowCount(4);
+		this.assignedMembers.setLayoutOrientation(JList.VERTICAL);
+		
+		// Member JList Action Listeners
+		this.members.addListSelectionListener(new ListSelectionListener() {
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				notifyAllMembersMouseHandler();
+			}
+		});
+		
+		assignedMembers.addListSelectionListener(new ListSelectionListener() {
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				notifyAssignedMembersMouseHandler();
+			}
+		});
+		
+		
 		
 		this.archiveButton.addActionListener(new ActionListener() {
 			@Override
@@ -381,6 +416,120 @@ public class TaskEditView extends JPanel implements IView {
 			if(pSelected != null && stages.contains(pSelected)) stageInput.setSelectedItem(pSelected);
 			stageInput.addActionListener(stageBoxListener);
 		}
+	}
+	
+	
+	
+	public void notifyAllMembersMouseHandler() {
+		this.allMembersMouseHandler.just_changed = true;
+	}
+
+	public void notifyAssignedMembersMouseHandler() {
+		this.assignedMembersMouseHandler.just_changed = true;
+	}
+	
+	/**
+	 * 
+	 * @param assigned
+	 * @param all
+	 * 
+	 *  Update Panels is used to redraw the lists once something is changed
+	 */
+	public void updateMembers() {
+		members.setListData(MemberListHandler.getInstance().getUnassigned().toArray(new String[0]));
+		assignedMembers.setListData(MemberListHandler.getInstance().getAssigned().toArray(new String[0]));
+		this.revalidate();
+		this.repaint();
+	}
+	
+	/**
+	 * Takes the members that the user has selected and moves them to the list of members assigned to a task
+	 */
+	public void moveMembersToAssigned() {	
+		MemberListHandler.getInstance().assignMember(members.getSelectedValuesList());
+		updateMembers();
+		this.allMembersMouseHandler.clear();
+		this.assignedMembersMouseHandler.clear();
+	}
+	
+	/**
+	 * Take the members that are selected in the Assigned Members list and moves them back to the All Members list
+	 */
+	public void moveMembersToAll() {
+		MemberListHandler.getInstance().unAssignMember(assignedMembers.getSelectedValuesList());
+		updateMembers();
+		this.allMembersMouseHandler.clear();
+		this.assignedMembersMouseHandler.clear();
+	}
+	
+	
+	private class JListMouseHandler implements MouseListener {
+
+		JList<String> list;
+		Boolean just_changed;
+		int[] previous_indexes;
+		int keyboard_event_count;
+		
+		public JListMouseHandler (JList<String> list) {
+			this.list = list;
+			just_changed = false;
+			previous_indexes = list.getSelectedIndices();
+		}
+
+		public void mousePressed(MouseEvent e) {
+			int clicked_index = this.list.locationToIndex(e.getPoint());
+			if (this.just_changed) {
+				this.just_changed = false;
+				
+				for (int i : previous_indexes) {
+					if (!this.inArray(i, this.list.getSelectedIndices())) {
+						this.list.addSelectionInterval(i, i);
+					}
+				}
+				if (this.inArray(clicked_index, this.list.getSelectedIndices()) && this.inArray(clicked_index, previous_indexes)) {
+					this.list.removeSelectionInterval(clicked_index, clicked_index);
+				}
+			}
+			else {
+				list.removeSelectionInterval(clicked_index, clicked_index);
+			}
+			this.previous_indexes = this.list.getSelectedIndices();
+
+		}
+
+		public void mouseReleased(MouseEvent e) {}
+
+		public void mouseEntered(MouseEvent e) {}
+
+		public void mouseExited(MouseEvent e) {}
+
+		public void mouseClicked(MouseEvent e) {}
+		
+		public void update_selected() {
+			if (this.keyboard_event_count == 0) {
+				this.previous_indexes = this.list.getSelectedIndices();
+				this.keyboard_event_count++;
+			}
+		}
+		
+		public void clear() {
+			this.list.clearSelection();
+			this.previous_indexes = this.list.getSelectedIndices();
+		}
+		
+		private Boolean inArray(int to_check, int[] array) {
+			for (int i : array) {
+				if (i == to_check) {
+					return true;
+				}
+			}
+			return false;
+		}
+		
+		
+		
+		
+
 	}
 }
 
