@@ -36,11 +36,8 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.FormFieldValid
  * @author rnorlando
  * @author srojas
  */
-<<<<<<< HEAD
-public class TaskCreateView extends TaskEditView implements IView {
-=======
+
 public class TaskCreateView extends JPanel implements IView {
->>>>>>> task-tab-sidebar
 	private static final long serialVersionUID = -1055431537990755671L;
 
 	private Gateway gateway;

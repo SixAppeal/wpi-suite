@@ -26,44 +26,17 @@ public class SidebarView extends JTabbedPane implements IView {
 
 	private Gateway gateway;
 	
-<<<<<<< HEAD
-	private JPanel container;
-	private JPanel curView;
-	private TaskEditView editView;
-	private TaskCreateView createView;
-	private TaskDefaultView defaultView;
-	
-=======
 	// Components
 	private List<IView> viewList;
 
->>>>>>> task-tab-sidebar
 	/**
 	 * Constructs a sidebar view
 	 */
 	public SidebarView() {
-<<<<<<< HEAD
-		this.container = new JPanel();
-		this.createView = new TaskCreateView();
-		this.editView = new TaskEditView();
-		this.defaultView = new TaskDefaultView();
-		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-=======
 		super();
->>>>>>> task-tab-sidebar
 		
 		this.viewList = new ArrayList<IView>();
 		
-<<<<<<< HEAD
-		this.curView = this.defaultView;
-		this.createView.setVisible(false);
-		this.editView.setVisible(false);
-		
-		this.container.add(this.defaultView);
-		this.container.add(this.createView);
-		this.container.add(this.editView);
-		this.add(container);
-=======
 		TaskSearchView searchView = new TaskSearchView();
 		this.viewList.add(searchView);
 		
@@ -71,7 +44,6 @@ public class SidebarView extends JTabbedPane implements IView {
 		this.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
 		this.addTab(null, new ImageIcon(this.getClass().getResource("icon_search.png")),
 				searchView);
->>>>>>> task-tab-sidebar
 	}
 	
 	/**
@@ -79,9 +51,9 @@ public class SidebarView extends JTabbedPane implements IView {
 	 */
 	public void addCreatePanel() {
 		// if there is a tab with the edit pane 
-		for (IView view : viewList){
-			if (view instanceof TaskCreateView){
-				if (((TaskCreateView)view).isEmpty()){
+		for (IView view : viewList) {
+			if (view instanceof TaskCreateView) {
+				if (((TaskCreateView) view).isEmpty()) {
 					this.setSelectedComponent((TaskCreateView)view);
 					return;
 				}
@@ -115,9 +87,9 @@ public class SidebarView extends JTabbedPane implements IView {
 	public void addEditPanel(Task task) {
 		
 		//if there is a tab with the edit pane 
-		for (IView view : viewList){
-			if (view instanceof TaskEditView){
-				if (task.equals(((TaskEditView)view).getTask())){
+		for (IView view : viewList) {
+			if (view instanceof TaskEditView) {
+				if (task.equals(((TaskEditView) view).getTask())) {
 					setSelectedComponent((TaskEditView)view);
 					return;
 				}
@@ -134,8 +106,6 @@ public class SidebarView extends JTabbedPane implements IView {
 	}
 	
 	/**
-<<<<<<< HEAD
-=======
 	 * Removes an edit view from the sidebar
 	 * @param editView The edit view to remove
 	 */
@@ -148,21 +118,12 @@ public class SidebarView extends JTabbedPane implements IView {
 		}
 	}
 
-	/**
->>>>>>> task-tab-sidebar
-	 * @see IView.setGateway
-	 */
 	@Override
 	public void setGateway(Gateway gateway) {
 		this.gateway = gateway;
-<<<<<<< HEAD
-		this.editView.setGateway(this.gateway);
-		this.createView.setGateway(this.gateway);
-=======
 		for (IView view : this.viewList) {
 			view.setGateway(this.gateway);
 		}
->>>>>>> task-tab-sidebar
 	}
 
 }
