@@ -15,14 +15,10 @@ package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
 import java.util.ArrayList;
 import java.util.List;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.io.IOException;
-import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
-import javax.swing.JComponent;
 import javax.swing.JTabbedPane;
-import javax.swing.ScrollPaneConstants;
 
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
@@ -36,10 +32,11 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
  * @author srojas
  * @author thhughes
  * @author nhhughes
+ * @author tmeehan
  */
 public class SidebarView extends JTabbedPane implements IView {
 	private static final long serialVersionUID = -9157611802121055998L;
-	
+
 	public static final Color SIDEBAR_COLOR = new Color(245, 245, 245);
 
 	private Gateway gateway;
@@ -89,6 +86,7 @@ public class SidebarView extends JTabbedPane implements IView {
 	/**
 	 * Removes a creation panel from the sidebar
 	 * @param createView The create panel to remove
+	 * Shows the default panel
 	 */
 	public void removeCreatePanel(TaskCreateView createView) {
 		try {

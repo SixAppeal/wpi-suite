@@ -170,7 +170,6 @@ public class TaskCreateView extends JPanel implements IView {
 		this.gateway = gateway;
 	}
 
-
 	public boolean isEmpty() {
 		if (this.title.getText().trim().equals("") && this.description.getText().trim().equals("")) {
 			return true;
