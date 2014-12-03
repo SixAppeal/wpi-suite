@@ -34,8 +34,10 @@ import javax.swing.event.ListSelectionListener;
 
 
 
+
 import org.jdesktop.swingx.JXDatePicker;
 
+import edu.wpi.cs.wpisuitetng.janeway.config.ConfigManager;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Stage;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
@@ -85,6 +87,10 @@ public class TaskEditView extends JPanel implements IView {
 	JButton cancelButton;
 	JLabel errorText;	
 	HashMap<String, Boolean> requirderFieldFlags = new HashMap<String,Boolean>();
+	
+	//Comment stuff
+	JTextArea commentEntry;
+	JButton commentPostButton;
 	
 	JList<String> allMembers;
 	JList<String> assignedMembers;
@@ -234,6 +240,21 @@ public class TaskEditView extends JPanel implements IView {
 		// GUI Layout Stuff
 		checkValidityOfSpinner(estEffortSpinner , "Est. Effort");
 		
+		//Comment stuff
+		commentEntry = new JTextArea(5,0);
+		commentEntry.setLineWrap(true);
+		commentEntry.setWrapStyleWord(true);
+		
+		commentPostButton = new JButton("Post");
+		commentPostButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				t.addComment(ConfigManager.getConfig().getUserName(), commentEntry.getText());
+				commentEntry.setText("");
+			}
+		});
+		
+		
+		
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.anchor = GridBagConstraints.PAGE_START;
@@ -260,6 +281,7 @@ public class TaskEditView extends JPanel implements IView {
 				new FormField("Assigned", assignedMembersListScroller, true)
 			),
 			new FormField("Stage", stageBox),
+			new FormGroup(commentEntry, commentPostButton),
 			new FormGroup(saveButton, cancelButton),
 			new FormField(null, errorText)
 		);

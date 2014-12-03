@@ -106,6 +106,38 @@ public class Task extends AbstractModel {
 	}
 	
 	/**
+	 * adds changes to the task's history
+	 */
+	public void addToHistory(Object original, Object newInfo, String field) {
+		if(!newInfo.equals(original))
+		{
+			activities.add(new Activity("The" + field + " was changed to " + newInfo.toString()));
+		}
+	}
+	
+	/**
+	 * checks to see if the assigned members changed
+	 * If so, it adds to the changes to the task history
+	 */
+	public void checkMemberChange(List<String> oldMembers, List<String> newMembers) {
+		if(!oldMembers.equals(newMembers))
+		{
+			for(String mem: oldMembers)
+			{
+				if(!newMembers.contains(mem))
+					this.activities.add(new Activity(mem + " was removed from " + this.getTitle()));
+			}
+			
+			for(String mem: newMembers)
+			{
+				if(!oldMembers.contains(mem))
+					this.activities.add(new Activity(mem + " was added to " + this.getTitle()));
+			}
+		}
+	}
+	
+	
+	/**
 	 * Determines the hashCode of the task to be its ID
 	 */
 	@Override
@@ -162,6 +194,7 @@ public class Task extends AbstractModel {
 	 * @throws IllegalArgumentException
 	 */
 	public void setTitle(String title) throws IllegalArgumentException {
+		this.addToHistory(this.getTitle(), title, "Title");
 		this.title = TaskUtil.validateTitle(title);
 	}
 
@@ -177,6 +210,7 @@ public class Task extends AbstractModel {
 	 * @param description Description of task
 	 */
 	public void setDescription(String description) throws IllegalArgumentException  {
+		this.addToHistory(this.getDescription(), description, "Description");
 		this.description = TaskUtil.validateDescription(description);
 	}
 	
@@ -193,6 +227,7 @@ public class Task extends AbstractModel {
 	 * @param stage A stage
 	 */
 	public void setStage(Stage stage) throws IllegalArgumentException {
+		this.addToHistory(this.getStage(), stage, "Stage");
 		this.stage = TaskUtil.validateStage(stage);
 	}
 
@@ -209,6 +244,7 @@ public class Task extends AbstractModel {
 	 * @param assignedTo members associated with task
 	 */
 	public void setAssignedTo(List<String> assignedTo) {
+		this.checkMemberChange(this.getAssignedTo(), assignedTo);
 		this.assignedTo = assignedTo;
 	}
 
@@ -242,6 +278,7 @@ public class Task extends AbstractModel {
 	 * @throws IllegalArgumentException
 	 */
 	public void setEstimatedEffort(Integer estimatedEffort) throws IllegalArgumentException {
+		this.addToHistory(this.getEstimatedEffort(), estimatedEffort, "Estimated Effort");
 		//checks that estimatedEffort is positive
 		this.estimatedEffort = TaskUtil.validateEffort(estimatedEffort);
 	}
@@ -260,6 +297,7 @@ public class Task extends AbstractModel {
 	 * @throws IllegalArgumentException
 	 */
 	public void setActualEffort(Integer actualEffort) throws IllegalArgumentException {
+		this.addToHistory(this.getActualEffort(), actualEffort, "Actual Effort");
 		// making sure that the input value is positive
 		this.actualEffort = TaskUtil.validateEffort(actualEffort);
 	}
@@ -277,6 +315,7 @@ public class Task extends AbstractModel {
 	 * @param dueDate due date for the task
 	 */
 	public void setDueDate(Date dueDate) throws IllegalArgumentException  {
+		this.addToHistory(this.getDueDate(), dueDate, "Due Date");
 		this.dueDate = TaskUtil.validateDueDate(dueDate);
 	}
 
@@ -307,6 +346,7 @@ public class Task extends AbstractModel {
 	 * Set archival status to true
 	 */
 	public void archive() {
+		this.activities.add(new Activity("This task was Archived on " + this.getDueDate().toString()));
 		this.archived = true;
 	}
 	
@@ -314,6 +354,7 @@ public class Task extends AbstractModel {
 	 * Set archival status to false
 	 */
 	public void unarchive() {
+		this.activities.add(new Activity("This task was Unarchived on " + this.getDueDate().toString()));
 		this.archived = false;
 	}
 
