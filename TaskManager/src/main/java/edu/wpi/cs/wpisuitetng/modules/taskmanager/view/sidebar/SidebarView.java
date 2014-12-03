@@ -1,10 +1,12 @@
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
 
-import java.awt.Color;
-import java.awt.Dimension;
+import java.util.ArrayList;
+import java.util.List;
 
-import javax.swing.BoxLayout;
-import javax.swing.JPanel;
+import javax.swing.ImageIcon;
+import javax.swing.JComponent;
+import javax.swing.JTabbedPane;
+import javax.swing.ScrollPaneConstants;
 
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
@@ -15,36 +17,44 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
  * @author wavanrensselaer
  * @author akshoop
  * @author rnorlando
+ * @author srojas
  * @author Thhughes
  * 
  */
-public class SidebarView extends JPanel implements IView {
+public class SidebarView extends JTabbedPane implements IView {
 	private static final long serialVersionUID = -9157611802121055998L;
 
-	Gateway gateway;
+	private Gateway gateway;
 	
+<<<<<<< HEAD
 	private JPanel container;
 	private JPanel curView;
 	private TaskEditView editView;
 	private TaskCreateView createView;
 	private TaskDefaultView defaultView;
 	
+=======
+	// Components
+	private List<IView> viewList;
+
+>>>>>>> task-tab-sidebar
 	/**
 	 * Constructs a sidebar view
 	 */
 	public SidebarView() {
+<<<<<<< HEAD
 		this.container = new JPanel();
 		this.createView = new TaskCreateView();
 		this.editView = new TaskEditView();
 		this.defaultView = new TaskDefaultView();
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+=======
+		super();
+>>>>>>> task-tab-sidebar
 		
-		this.container.setLayout(new BoxLayout(this.container, BoxLayout.X_AXIS));
-		this.container.setBackground(new Color(250, 250, 250));
-		this.container.setMinimumSize(new Dimension(300, 0));
-		this.container.setPreferredSize(new Dimension(300, 500));
-		this.container.setMaximumSize(new Dimension(300, Integer.MAX_VALUE));
+		this.viewList = new ArrayList<IView>();
 		
+<<<<<<< HEAD
 		this.curView = this.defaultView;
 		this.createView.setVisible(false);
 		this.editView.setVisible(false);
@@ -53,46 +63,106 @@ public class SidebarView extends JPanel implements IView {
 		this.container.add(this.createView);
 		this.container.add(this.editView);
 		this.add(container);
+=======
+		TaskSearchView searchView = new TaskSearchView();
+		this.viewList.add(searchView);
+		
+		this.setTabPlacement(JTabbedPane.LEFT);
+		this.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
+		this.addTab(null, new ImageIcon(this.getClass().getResource("icon_search.png")),
+				searchView);
+>>>>>>> task-tab-sidebar
 	}
 	
 	/**
-	 * Shows the default panel
+	 * Adds a creation panel to the sidebar
 	 */
-	public void showDefaultPanel() {
-		this.curView.setVisible(false);
-		this.curView = this.defaultView;
-		this.curView.setVisible(true);
+	public void addCreatePanel() {
+		// if there is a tab with the edit pane 
+		for (IView view : viewList){
+			if (view instanceof TaskCreateView){
+				if (((TaskCreateView)view).isEmpty()){
+					this.setSelectedComponent((TaskCreateView)view);
+					return;
+				}
+			}
+		}
+		
+		TaskCreateView createView = new TaskCreateView();
+		createView.setGateway(this.gateway);
+		this.viewList.add(createView);
+		this.addTab(null, new ImageIcon(this.getClass().getResource("icon_plus.png")),
+				createView);
+		this.setSelectedComponent(createView);
+	}
+	
+	/**
+	 * Removes a creation panel from the sidebar
+	 * @param createView The create panel to remove
+	 */
+	public void removeCreatePanel(TaskCreateView createView) {
+		try {
+			this.removeTabAt(this.indexOfComponent(createView));
+			this.viewList.remove(createView);
+		} catch (IndexOutOfBoundsException e) {
+		}
 	}
 
 	/**
-	 * Shows the creation panel 
-	 */
-	public void showCreatePanel() {
-		this.curView.setVisible(false);
-		this.curView = this.createView;
-		this.curView.setVisible(true);
-		this.createView.updateView(new Task());
-	}
-	
-	/**
-	 * Shows the edit panel
+	 * Adds an edit panel to the sidebar
 	 * @param task The task to edit
 	 */
-	public void showEditPanel(Task task) {
-		this.editView.updateView(task);
-		this.curView.setVisible(false);
-		this.curView = this.editView;
-		this.curView.setVisible(true);
+	public void addEditPanel(Task task) {
+		
+		//if there is a tab with the edit pane 
+		for (IView view : viewList){
+			if (view instanceof TaskEditView){
+				if (task.equals(((TaskEditView)view).getTask())){
+					setSelectedComponent((TaskEditView)view);
+					return;
+				}
+			}
+		}
+		
+		
+		TaskEditView editView = new TaskEditView(task);
+		editView.setGateway(this.gateway);
+		this.viewList.add(editView);
+		this.addTab(null, new ImageIcon(this.getClass().getResource("icon_pencil.png")),
+				editView);
+		this.setSelectedComponent(editView);
 	}
 	
 	/**
+<<<<<<< HEAD
+=======
+	 * Removes an edit view from the sidebar
+	 * @param editView The edit view to remove
+	 */
+	public void removeEditPanel(TaskEditView editView) {
+		try {
+			this.removeTabAt(this.indexOfComponent(editView));
+			this.viewList.remove(editView);
+		} catch (IndexOutOfBoundsException e) {
+			// Do nothing
+		}
+	}
+
+	/**
+>>>>>>> task-tab-sidebar
 	 * @see IView.setGateway
 	 */
 	@Override
 	public void setGateway(Gateway gateway) {
 		this.gateway = gateway;
+<<<<<<< HEAD
 		this.editView.setGateway(this.gateway);
 		this.createView.setGateway(this.gateway);
+=======
+		for (IView view : this.viewList) {
+			view.setGateway(this.gateway);
+		}
+>>>>>>> task-tab-sidebar
 	}
 
 }

@@ -2,36 +2,31 @@ package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.Insets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
 /**
- * A panel that handles layout of <code>FormField</code>s or
- * <code>FormGroup</code>s. It is important to note that in it's current state,
- * this only handles layout, not validation or automatic submission. You should
- * keep needed references to any components added to this form as they will not
- * be easily accessible.
+ * A panel that handles the layout of form elements.
  * @author wavanrensselaer
  */
-public class Form extends JPanel {
+public class Form extends FormElement {
 	private static final long serialVersionUID = -395511593512770018L;
-	
-	private List<JComponent> fields;
+
+	protected FormElement[] fields;
 	
 	/**
-	 * Constructs a <code>Form</code> with the fields specified.
+	 * Creates a form that aligns fields vertically.
 	 * @param fields Either <code>FormField</code> or <code>FormGroup</code>.
 	 */
-	public Form(JComponent... fields) {
-		this.fields = new ArrayList<JComponent>();
-		
+	public Form(FormElement... fields) {
+		this.fields = fields;
 		this.setOpaque(false);
-		this.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 		this.setLayout(new GridBagLayout());
 		
 		GridBagConstraints gbc = new GridBagConstraints();
@@ -42,31 +37,41 @@ public class Form extends JPanel {
 		gbc.gridx = 0;
 		
 		for (int i = 0; i < fields.length; i++) {
-			this.fields.add(fields[i]);
-			if (fields[i] instanceof FormGroup && ((FormGroup)fields[i]).getExpandVertical()) {
-				//gbc.weighty = 1.0;
-				//gbc.weightx = 1.0;
-			}
 			if (i == fields.length - 1) {
-				gbc.anchor = GridBagConstraints.FIRST_LINE_END;
-				gbc.fill = GridBagConstraints.NONE;
 				gbc.insets.bottom = 0;
-				gbc.weightx = 0.0;
 				gbc.weighty = 1.0;
 			}
-			
 			gbc.gridy = i;
 			this.add(fields[i], gbc);
-			gbc.weighty = 0.0;
-			gbc.weightx = 1.0;
 		}
 	}
 	
 	/**
-	 * Gets the fields associated with this Form
-	 * @return An <code>ArrayList</code> of the fields in this form
+	 * Gets the fields contained in this form
+	 * @return The fields in this form
 	 */
-	public List<JComponent> getFields() {
+	public FormElement[] getFields() {
 		return this.fields;
+	}
+	
+	@Override
+	public boolean hasValidInput() {
+		for (FormElement field : this.fields) {
+			if (!field.hasValidInput()) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	@Override
+	public boolean validateInput() {
+		boolean isValid = true;
+		for (FormElement field : this.fields) {
+			if (!field.validateInput()) {
+				isValid = false;
+			}
+		}
+		return isValid;
 	}
 }

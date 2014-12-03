@@ -18,21 +18,12 @@ public class TaskPresenter implements IPresenter{
 		this.gateway = gateway;
 	}
 	
-	public void toolbarDefault() {
-		this.gateway.toView("SidebarView", "showDefaultPanel");
-	}
-	
 	public void toolbarCreate() {
-		this.gateway.toView("SidebarView", "showCreatePanel");
+		this.gateway.toView("SidebarView", "addCreatePanel");
 	}
-	
-	public void viewTask(Task task) {
-		this.gateway.toView("SidebarView", "showDetailPanel", task);
-	}
-	
 	
 	public void editTask(Task task) {
-		this.gateway.toView("SidebarView", "showEditPanel", task);
+		this.gateway.toView("SidebarView", "addEditPanel", task);
 	}
 	
 	public void addAllToView( Task[] tasks ) {
@@ -46,8 +37,5 @@ public class TaskPresenter implements IPresenter{
 	public void updateStages() {
 		Task[] tasks_from_cache =  (Task[]) cache.retrieve("task");
 		this.gateway.toView("ColumnView", "setTasks", new Object[] {tasks_from_cache});
-		this.gateway.toView("ColumnView", "reflow");
-	}
-
-	
+	}	
 }

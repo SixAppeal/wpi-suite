@@ -58,7 +58,7 @@ public class TaskView extends JPanel implements IView {
 		this.addMouseListener(new MouseListener() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				gateway.toPresenter("TaskPresenter", "viewTask", task);
+				gateway.toPresenter("TaskPresenter", "editTask", task);
 			}
 
 			@Override

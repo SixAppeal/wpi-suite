@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
 
 import java.awt.Color;
@@ -10,6 +9,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.ArrayList;
@@ -38,9 +39,10 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Stage;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.ButtonGroup;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.Form;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.FormField;
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.FormGroup;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.HorizontalForm;
 
 /**
  * 
@@ -58,7 +60,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.FormGroup;
  * A view to be displayed when creating or modifying a task object in the GUI.
  *
  */
-public class TaskEditView extends JPanel implements IView {
+public class OldTaskEditView extends JPanel implements IView {
 
 	/**
 	 * Eclipse-generated Serial Version UID	compile 'com.miglayout:miglayout-swing:4.1'
@@ -99,10 +101,9 @@ public class TaskEditView extends JPanel implements IView {
 	/**
 	 * Create a new TaskEditView
 	 */
-	public TaskEditView() {
+	public OldTaskEditView() {
 		t = new Task();		// Internal Task
 
-		this.setOpaque(false);
 		this.setLayout(new GridBagLayout());
 
 		// Gui Setup
@@ -164,11 +165,11 @@ public class TaskEditView extends JPanel implements IView {
 			}
 		});
 
+		OldTaskEditView that = this;
 		cancelButton = new JButton("Cancel");
 		cancelButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				clearForm();
-				gateway.toPresenter("TaskPresenter", "toolbarDefault");
+				gateway.toView("SidebarView", "removeEditPanel", that);
 			}
 		});
 
@@ -180,7 +181,6 @@ public class TaskEditView extends JPanel implements IView {
 		allMembers.setVisibleRowCount(4);
 		allMembers.setLayoutOrientation(JList.VERTICAL);
 		this.allMembersMouseHandler = new JListMouseHandler(allMembers);
-		allMembers.addMouseListener(allMembersMouseHandler);
 		allMembers.addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
@@ -193,7 +193,6 @@ public class TaskEditView extends JPanel implements IView {
 		assignedMembers.setVisibleRowCount(4);
 		assignedMembers.setLayoutOrientation(JList.VERTICAL);
 		this.assignedMembersMouseHandler = new JListMouseHandler(assignedMembers);
-		assignedMembers.addMouseListener(assignedMembersMouseHandler);
 		assignedMembers.addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
@@ -236,7 +235,7 @@ public class TaskEditView extends JPanel implements IView {
 		gbc.weightx = 1.0;
 		gbc.gridx = 0;
 		gbc.gridy = 0;
-		gbc.insets = new Insets(20, 0, 0, 0);
+		gbc.insets = new Insets(20, 20, 20, 20);
 		this.add(new JLabel(this.getTitle(), JLabel.CENTER), gbc);
 
 		gbc.insets.top = 0;
@@ -246,22 +245,25 @@ public class TaskEditView extends JPanel implements IView {
 			new FormField("Title", titleEntry),
 			new FormField("Description", descEntryScroller),
 			new FormField("Due Date", dueDatePicker),
-			new FormGroup(
+			new HorizontalForm(
 				new FormField("Est. Effort", estEffortSpinner),
 				new FormField("Act. Effort", actEffortSpinner)
 			),
-			new FormGroup(true,
-				new FormField("Members", allMembersListScroller, true),
-				new FormField("", buttonBox, true),
-				new FormField("Assigned", assignedMembersListScroller, true)
+			new HorizontalForm(
+				new FormField("Members", allMembersListScroller),
+				new FormField("Assigned", assignedMembersListScroller)
 			),
 			new FormField("Stage", stageBox),
-			new FormGroup(saveButton, cancelButton),
+			new ButtonGroup(saveButton, cancelButton),
 			new FormField(null, errorText)
 		);
 		
 		this.add(this.form, gbc);
 		
+	}
+	
+	public Task getTask(){
+		return this.t;
 	}
 
 	public void notifyAllMembersMouseHandler() {
@@ -494,6 +496,7 @@ public class TaskEditView extends JPanel implements IView {
 
 		updateBorder(titleEntry, titleEntry.getText());
 		updateBorder(descEntryScroller, descEntry.getText());
+
 	}
 	
 	/**
@@ -518,335 +521,73 @@ public class TaskEditView extends JPanel implements IView {
 	
 		
 	}
-}
-=======
-package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
-
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSpinner;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.ScrollPaneConstants;
-import javax.swing.SpinnerNumberModel;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-
-import net.miginfocom.swing.MigLayout;
-
-import org.jdesktop.swingx.JXDatePicker;
-
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Stage;
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.ButtonGroup;
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.Form;
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.FormField;
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.FormFieldValidator;
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.HorizontalForm;
-
-/**
- * Displays and allows editing of task properties.
- * 
- * @author tmeehan
- * @author wmtemple
- * @author krpeffer
- * @author wavanrensselaer
- * @author srojas
- */
-public class TaskEditView extends JPanel implements IView {
-	private static final long serialVersionUID = -8972626054612267276L;
-
-	private Gateway gateway;
 	
-	private Task task;
-	
-	// Components
-	private JPanel container;
-	private JScrollPane scrollPane;
+	private class JListMouseHandler implements MouseListener {
 
-	private JTextField titleInput;
-	private JTextArea titleLabel;
-	private JTextArea descInput;
-	private JTextArea descLabel;
-	private JScrollPane descScrollPane;
-	private JXDatePicker dateInput;
-	private JLabel dateLabel;
-	private JSpinner estEffortInput;
-	private JSpinner actEffortInput;
-	private JList<String> members;
-	private JScrollPane membersScrollPane;
-	private JList<String> assignedMembers;
-	private JScrollPane assignedMembersScrollPane;
-	private JComboBox<Stage> stageInput;
-	private JButton archiveButton;
-	private JButton closeButton;
-	private Form form;
-	
-	/**
-	 * Constructor
-	 */
-	public TaskEditView(Task task) {
-		this.task = task;
-		this.container = new JPanel();
-		this.scrollPane = new JScrollPane(this.container);
-		this.titleInput = new JTextField(this.task.getTitle());
-		this.titleLabel = new JTextArea(this.task.getTitle());
-		this.descInput = new JTextArea(this.task.getDescription(), 5, 0);
-		this.descLabel = new JTextArea(this.task.getDescription());
-		this.descScrollPane = new JScrollPane(this.descInput);
-		this.dateInput = new JXDatePicker(this.task.getDueDate());
-		this.dateLabel = new JLabel();
-		this.estEffortInput = new JSpinner(new SpinnerNumberModel(1, null, null, 1));
-		this.actEffortInput = new JSpinner(new SpinnerNumberModel(1, null, null, 1));
-		this.members = new JList<String>();
+		JList<String> list;
+		Boolean just_changed;
+		int[] previous_indexes;
+		int keyboard_event_count;
 		
-		this.membersScrollPane = new JScrollPane(this.members);
+		public JListMouseHandler (JList<String> list) {
+			this.list = list;
+			just_changed = false;
+			previous_indexes = list.getSelectedIndices();
+		}
 
-		this.assignedMembers = new JList<String>();
-		this.assignedMembersScrollPane = new JScrollPane(this.assignedMembers);
-		
-		this.stageInput = new JComboBox<Stage>();
-		this.archiveButton = new JButton("Archive");
-		this.closeButton = new JButton("Close");
-		TaskEditView that = this;
-		
-		this.container.setOpaque(false);
-		
-		this.titleLabel.setOpaque(false);
-		this.titleLabel.setBorder(BorderFactory.createEmptyBorder());
-		this.titleLabel.setLineWrap(true);
-		this.titleLabel.setWrapStyleWord(true);
+		public void mousePressed(MouseEvent e) {
+			int clicked_index = this.list.locationToIndex(e.getPoint());
+			if (this.just_changed) {
+				this.just_changed = false;
+				
+				for (int i : previous_indexes) {
+					if (!this.inArray(i, this.list.getSelectedIndices())) {
+						this.list.addSelectionInterval(i, i);
+					}
+				}
+				if (this.inArray(clicked_index, this.list.getSelectedIndices()) && this.inArray(clicked_index, previous_indexes)) {
+					this.list.removeSelectionInterval(clicked_index, clicked_index);
+				}
+			}
+			else {
+				list.removeSelectionInterval(clicked_index, clicked_index);
+			}
+			this.previous_indexes = this.list.getSelectedIndices();
 
-		this.scrollPane.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-		this.scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		}
+
+		public void mouseReleased(MouseEvent e) {}
+
+		public void mouseEntered(MouseEvent e) {}
+
+		public void mouseExited(MouseEvent e) {}
+
+		public void mouseClicked(MouseEvent e) {}
 		
-		this.descInput.setLineWrap(true);
-		this.descInput.setWrapStyleWord(true);
-		
-		if (!this.task.getStage().getName().equals("Complete")) {
-			this.actEffortInput.setEnabled(false);
+		public void update_selected() {
+			if (this.keyboard_event_count == 0) {
+				this.previous_indexes = this.list.getSelectedIndices();
+				this.keyboard_event_count++;
+			}
 		}
 		
-		this.estEffortInput.setValue(this.task.getEstimatedEffort());
-		this.actEffortInput.setValue(this.task.getActualEffort());
+		public void clear() {
+			this.list.clearSelection();
+			this.previous_indexes = this.list.getSelectedIndices();
+		}
 		
-		this.members.setVisibleRowCount(4);
-		this.assignedMembers.setVisibleRowCount(4);
-		
-		this.stageInput.addItem(new Stage("New"));
-		this.stageInput.addItem(new Stage("Scheduled"));
-		this.stageInput.addItem(new Stage("In Progress"));
-		this.stageInput.addItem(new Stage("Complete"));
-		this.stageInput.setSelectedItem(this.task.getStage());
-		
-		this.archiveButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				gateway.toPresenter("Localcache", "update", "archive", task);
-				gateway.toView("SidebarView", "removeEditPanel", that);
+		private Boolean inArray(int to_check, int[] array) {
+			for (int i : array) {
+				if (i == to_check) {
+					return true;
+				}
 			}
-		});
+			return false;
+		}
 		
-		this.closeButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				gateway.toView("SidebarView", "removeEditPanel", that);
-			}
-		});
 		
-		// Predefine title field hook up listener
-		FormField titleField = new FormField("Title", this.titleInput, new FormFieldValidator() {
-			@Override
-			public boolean validate(JComponent component) {
-				return !((JTextField) component).getText().trim().equals("");
-			}
+		
+		
 
-			@Override
-			public String getMessage() {
-				return "Please enter a title.";
-			}
-		});
-		this.titleInput.addKeyListener(new KeyAdapter() {
-			public void keyReleased(KeyEvent e) {
-				if (e.getKeyCode() != 9) { // tab key
-					titleField.validateInput();
-				}
-			}
-		});
-		this.titleInput.addFocusListener(new FocusListener() {
-			@Override
-			public void focusGained(FocusEvent e) {
-			}
-
-			@Override
-			public void focusLost(FocusEvent e) {
-				if (titleField.hasValidInput()) {
-					task.setTitle(titleInput.getText());
-					saveTask();
-				}
-			}
-		});
-		
-		// Predefine description field to hook up listener
-		FormField descField = new FormField("Description", this.descScrollPane, new FormFieldValidator() {
-			@Override
-			public boolean validate(JComponent component) {
-				return !descInput.getText().trim().equals("");
-			}
-			
-			@Override
-			public String getMessage() {
-				return "Please enter a description.";
-			}
-		});
-		this.descInput.addKeyListener(new KeyAdapter() {
-			public void keyReleased(KeyEvent e) {
-				if (e.getKeyCode() != 9) { // tab key
-					descField.validateInput();
-				}
-			}
-		});
-		this.descInput.addFocusListener(new FocusListener() {
-			@Override
-			public void focusGained(FocusEvent e) {
-			}
-
-			@Override
-			public void focusLost(FocusEvent e) {
-				if (descField.hasValidInput()) {
-					task.setDescription(descInput.getText());
-					saveTask();
-				}
-			}
-		});
-		
-		this.dateInput.addPropertyChangeListener("date", new PropertyChangeListener() {
-			@Override
-			public void propertyChange(PropertyChangeEvent evt) {
-				task.setDueDate(dateInput.getDate());
-				saveTask();
-			}
-		});
-		
-		// Predefine effort fields to hook up listeners
-		FormField estEffortField = new FormField("Est. Effort", this.estEffortInput, new FormFieldValidator() {
-			@Override
-			public boolean validate(JComponent component) {
-				return ((Integer) ((JSpinner) component).getValue()).intValue() > 0;
-			}
-			
-			@Override
-			public String getMessage() {
-				return "Effort must be greater than zero.";
-			}
-		});
-		this.estEffortInput.addChangeListener(new ChangeListener() {
-			@Override
-			public void stateChanged(ChangeEvent e) {
-				estEffortField.validateInput();
-				if (estEffortField.hasValidInput()) {
-					task.setEstimatedEffort((Integer) estEffortInput.getValue());
-					saveTask();
-				}
-			}
-		});
-		
-		FormField actEffortField = new FormField("Act. Effort", this.actEffortInput, new FormFieldValidator() {
-			@Override
-			public boolean validate(JComponent component) {
-				return ((Integer) ((JSpinner) component).getValue()).intValue() >= 0;
-			}
-			
-			@Override
-			public String getMessage() {
-				return "Effort must be greater than zero.";
-			}
-		});
-		this.actEffortInput.addChangeListener(new ChangeListener() {
-			@Override
-			public void stateChanged(ChangeEvent e) {
-				actEffortField.validateInput();
-				if (actEffortField.hasValidInput()) {
-					task.setActualEffort((Integer) actEffortInput.getValue());
-					saveTask();
-				}
-			}
-		});
-		
-		this.stageInput.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				task.setStage((Stage) stageInput.getSelectedItem());
-				saveTask();
-			}
-		});
-		
-		this.form = new Form(
-			titleField,
-			descField,
-			new FormField("Due Date", this.dateInput),
-			new HorizontalForm(
-				estEffortField,
-				actEffortField
-			),
-			new HorizontalForm(
-				new FormField("Members", this.membersScrollPane),
-				new FormField("Assigned", this.assignedMembersScrollPane)
-			),
-			new FormField("Stage", this.stageInput),
-			new ButtonGroup(
-				this.archiveButton,
-				this.closeButton
-			)
-		);
-		
-		this.container.setBackground(new Color(230, 230, 230));
-		this.container.setLayout(new MigLayout("fill, ins 20", "[260]"));
-		this.container.add(this.form, "grow");
-		
-		this.setLayout(new BorderLayout());
-		this.add(this.scrollPane, BorderLayout.CENTER);
 	}
-	
-	/**
-	 * @return the task
-	 */
-	public Task getTask() {
-		return task;
-	}
-
-	/**
-	 * Saves the task currently being edited
-	 */
-	private void saveTask() {
-		this.gateway.toPresenter("LocalCache", "update", "task", this.task);
-	}
-	
-	@Override
-	public void setGateway(Gateway gateway) {
-		this.gateway = gateway;
-	}
-	
-	
-	
 }
->>>>>>> task-tab-sidebar
