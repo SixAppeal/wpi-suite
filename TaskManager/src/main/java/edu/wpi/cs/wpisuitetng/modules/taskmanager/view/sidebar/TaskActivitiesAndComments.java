@@ -168,7 +168,6 @@ public class TaskActivitiesAndComments extends JPanel implements IView {
 
 		taskActivitiesList.setListData(t.getActivities().toArray(new Activity[0]));
 		taskCommentList.setListData(t.getComments().toArray(new Comment[0]));
-		taskCommentArea.setText("");
 		saveCommentButton.setEnabled(true);
 		this.revalidate();
 	}
@@ -180,6 +179,7 @@ public class TaskActivitiesAndComments extends JPanel implements IView {
 	public void addToComments(){
 		t.addComment(ConfigManager.getConfig().getUserName(), taskCommentArea.getText());
 		updateView(t);
+		taskCommentArea.setText("");
 	}
 	
 	/**

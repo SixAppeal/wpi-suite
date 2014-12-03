@@ -56,7 +56,12 @@ public class SearchUserInput implements KeyListener {
 
 		// This is to wipe the results panel when user backspaces all that they typed
 		if (e.getKeyChar() == '\b') {
-			fullString = "";
+			if (searchBox.getText().length() == 0) {
+				fullString = "";	
+			}
+			else {
+				fullString = fullString.substring(0, fullString.length() - 1);
+			}
 			System.out.println("gettext length is " + searchBox.getText().length());
 			try {
 				if (searchBox.getText().length() >= 1) {
@@ -77,8 +82,8 @@ public class SearchUserInput implements KeyListener {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			} catch (ParseException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+				System.out.println("Cannot parse " + fullString + "*");
+				//e1.printStackTrace();
 			}
 			return;
 		}
@@ -133,8 +138,8 @@ public class SearchUserInput implements KeyListener {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		} catch (ParseException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			System.out.println("Cannot parse " + fullString + "*");
+			//e1.printStackTrace();
 		}
 	}
 
