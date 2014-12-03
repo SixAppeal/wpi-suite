@@ -1,7 +1,5 @@
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -21,10 +19,10 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
-import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -321,5 +319,5 @@ public class TaskEditView extends JPanel implements IView {
 	@Override
 	public void setGateway(Gateway gateway) {
 		this.gateway = gateway;
-	}	
+	}
 }
