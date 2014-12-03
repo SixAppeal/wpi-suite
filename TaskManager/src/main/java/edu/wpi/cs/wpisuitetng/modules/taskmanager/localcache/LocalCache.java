@@ -330,4 +330,13 @@ public class LocalCache implements Cache, IPresenter {
 		this.store("stages", stages);
 	}
 
+	public void renameStage(String oldName, String newName) {
+		for (Task t : tasks) {
+			if (t.getStage().toString().equals(oldName)) {
+				t.setStage(new Stage(newName));
+				update("task", t );
+			}
+		}
+	}
+	
 }
