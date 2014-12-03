@@ -1,6 +1,7 @@
 package edu.wpi.cs.wpisuitetng.modules.taskmanager;
 
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -56,8 +57,9 @@ public class TaskManager implements IJanewayModule {
 	
 	/**
 	 * Constructs a TaskManager module and its tabs for the Janeway client.
+	 * @throws IOException 
 	 */
-	public TaskManager() {
+	public TaskManager() throws IOException {
 		name = "Task Manager";
 		tabs = new ArrayList<JanewayTabModel>();
 		
@@ -90,6 +92,7 @@ public class TaskManager implements IJanewayModule {
 		
 		localCache.subscribe("task:TaskPresenter:updateStages");
 		localCache.subscribe("member:TaskPresenter:notifyMemberHandler");
+		localCache.subscribe("task:TaskPresenter:updateSearch");
 		
 		t = new Timer();
 

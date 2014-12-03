@@ -1,7 +1,23 @@
+/*******************************************************************************
+ * 
+ * Copyright (c) 2014 -- WPI Suite
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors: Nathan Hughes, Alexander Shoop
+ ******************************************************************************/
+
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
@@ -18,26 +34,26 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
  * @author akshoop
  * @author rnorlando
  * @author srojas
- * @author Thhughes
- * 
+ * @author thhughes
+ * @author nhhughes
  */
 public class SidebarView extends JTabbedPane implements IView {
 	private static final long serialVersionUID = -9157611802121055998L;
 
 	private Gateway gateway;
-	
+
 	// Components
 	private List<IView> viewList;
+	private SearchBox searchView;
 
 	/**
 	 * Constructs a sidebar view
+	 * @throws IOException 
 	 */
-	public SidebarView() {
-		super();
-		
+	public SidebarView() throws IOException {
 		this.viewList = new ArrayList<IView>();
 		
-		TaskSearchView searchView = new TaskSearchView();
+		this.searchView = new SearchBox();
 		this.viewList.add(searchView);
 		
 		this.setTabPlacement(JTabbedPane.LEFT);
@@ -125,5 +141,13 @@ public class SidebarView extends JTabbedPane implements IView {
 			view.setGateway(this.gateway);
 		}
 	}
-
+	
+	/**
+	 * Updates local cache for search box
+	 * @param all_tasks All tasks (archived and unarchived) from local cache
+	 * @throws IOException 
+	 */
+	public void updateSearchBox(ArrayList<Task> all_tasks) throws IOException {
+		this.searchView.updateIndex(all_tasks);
+	}
 }

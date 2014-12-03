@@ -297,10 +297,10 @@ public class TaskEditView extends JPanel implements IView {
 			)
 		);
 		
-		this.container.setBackground(new Color(230, 230, 230));
 		this.container.setLayout(new MigLayout("fill, ins 20", "[260]"));
 		this.container.add(this.form, "grow");
-		
+
+		this.setBackground(new Color(230, 230, 230));
 		this.setLayout(new BorderLayout());
 		this.add(this.scrollPane, BorderLayout.CENTER);
 	}
