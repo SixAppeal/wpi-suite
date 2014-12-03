@@ -50,12 +50,16 @@ public class ColumnEditView extends JPanel implements IView {
 	private JList<Stage> stageJList;
 	private JTextField titleEntry;
 	private JButton addButton;
+	private JButton moveUpBtn;
+	private JButton moveDnBtn;
 	private Gateway gateway;
 	
 	public ColumnEditView() {
 		stages = new StageList();
 		this.stageJList = new JList<Stage>();
 		this.addButton = new JButton("+");
+		this.moveUpBtn = new JButton("▲");
+		this.moveDnBtn = new JButton("▼");
 		this.titleEntry = new JTextField();
 		
 		addButton.addActionListener( new ActionListener() {
@@ -64,7 +68,7 @@ public class ColumnEditView extends JPanel implements IView {
 				stages.add(new Stage(titleEntry.getText()));
 				updateJListAndPublish();
 				titleEntry.setText("");
-				updateTextBox();
+				addButton.setEnabled(false);
 				}});
 		
 		titleEntry.addKeyListener( new KeyListener() {
@@ -103,6 +107,18 @@ public class ColumnEditView extends JPanel implements IView {
 			
 		});
 		
+		moveUpBtn.addActionListener( new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				moveCurrentTaskUp();
+			}});
+		
+		moveDnBtn.addActionListener( new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				moveCurrentTaskDn();
+			}});
+		
 		GridBagConstraints gbc = new GridBagConstraints();
 		this.setLayout(new GridBagLayout());
 		
@@ -124,14 +140,42 @@ public class ColumnEditView extends JPanel implements IView {
 		gbc.gridy = 1;
 		gbc.weighty = 1.0;
 		gbc.weightx = 1.0;
-		gbc.insets = new Insets(10, 20, 20, 20);
+		gbc.insets = new Insets(10, 20, 10, 20);
 		gbc.fill = GridBagConstraints.BOTH;
 		this.add(stageJList, gbc);
 		
-		updateTextBox();
+		gbc.gridwidth = 1;
+		gbc.weightx = 1.0;
+		gbc.gridx = 0;
+		gbc.gridy = 2;
+		gbc.weighty = 0.0;
+		gbc.insets = new Insets(10, 20, 20, 10);
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		this.add(moveDnBtn, gbc);
+		
+		gbc.gridx = 1;
+		gbc.gridy = 2;
+		gbc.insets = new Insets(10, 10, 20, 20);
+		this.add(moveUpBtn, gbc);
 		
 	}
 	
+	protected void moveCurrentTaskUp() {
+		int index = stageJList.getSelectedIndex();
+		if( index == 0 ) return;
+		Stage st = stages.remove(index);
+		stages.add(index-1, st);
+		updateJListAndPublish();
+	}
+
+	protected void moveCurrentTaskDn() {
+		int index = stageJList.getSelectedIndex();
+		if( (index+1) == stages.size() ) return;
+		Stage st = stages.remove(index);
+		stages.add(index+1, st);
+		updateJListAndPublish();
+	}
+
 	public void setStages(StageList newStages) {
 		if( !newStages.equals(stages)) {
 			Stage pSelected = stageJList.getSelectedValue();
@@ -144,9 +188,9 @@ public class ColumnEditView extends JPanel implements IView {
 	}
 	
 	private void updateTextBox() {
-		titleEntry.setBorder(TaskUtil.sanitizeInput(titleEntry.getText()).isEmpty()
-				? FormField.BORDER_ERROR
-				: FormField.BORDER_NORMAL);
+		boolean valid = !TaskUtil.sanitizeInput(titleEntry.getText()).isEmpty();
+		titleEntry.setBorder(valid ? FormField.BORDER_ERROR : FormField.BORDER_NORMAL);
+		addButton.setEnabled(valid);
 	}
 	
 
@@ -156,7 +200,9 @@ public class ColumnEditView extends JPanel implements IView {
 	}
 	
 	private void updateJListAndPublish() {
+		Stage pS = stageJList.getSelectedValue();
 		stageJList.setListData(stages.toArray(new Stage[0]));
+		stageJList.setSelectedValue(pS, true);
 		publishStages();
 		
 	}

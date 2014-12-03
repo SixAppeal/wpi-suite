@@ -175,10 +175,12 @@ public class TaskCreateView extends JPanel implements IView {
 
 	@Override
 	public void setStages(StageList sl) {
-		Object pSelected = stages.getSelectedItem();
-		stages.removeAllItems();
-		for (Stage s : sl) stages.addItem(s);
-		if (pSelected != null && sl.contains(pSelected)) stages.setSelectedItem(pSelected);
+		if( !stages.equals(sl) ) {
+			Object pSelected = stages.getSelectedItem();
+			stages.removeAllItems();
+			for (Stage s : sl) stages.addItem(s);
+			if (pSelected != null && sl.contains(pSelected)) stages.setSelectedItem(pSelected);
+		}
 	}
 
 }
