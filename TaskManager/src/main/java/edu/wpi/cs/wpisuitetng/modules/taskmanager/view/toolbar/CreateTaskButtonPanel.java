@@ -12,6 +12,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.ToolbarGroupView;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.StageList;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
 
@@ -63,7 +64,6 @@ public class CreateTaskButtonPanel extends ToolbarGroupView implements IView {
 		contentPanel.add(createTaskButton, gbc);
 		//uncomment the line below once the controller can handle creating multiple columns
 		//contentPanel.add(createPanelButton);
-		//contentPanel.add(refreshPanelButton);
 		contentPanel.setOpaque(false);
 		this.add(contentPanel);
 	}
@@ -154,5 +154,11 @@ public class CreateTaskButtonPanel extends ToolbarGroupView implements IView {
 	@Override
 	public void setGateway(Gateway gateway) {
 		this.gateway = gateway;
+	}
+
+
+	@Override
+	public void setStages(StageList sl) {
+		// no purpose here
 	}
 }

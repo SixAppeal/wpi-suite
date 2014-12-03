@@ -13,6 +13,7 @@ import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Stage;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.StageList;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
@@ -29,7 +30,7 @@ public class ColumnView extends JPanel implements IView {
 	private Gateway gateway;
 	
 	// State-related fields
-	private Stage[] stages;
+	private StageList stages;
 	private Task[] tasks;
 	
 	// Components
@@ -61,12 +62,7 @@ public class ColumnView extends JPanel implements IView {
 		gbc.gridy = 0;
 		this.add(this.scrollPane, gbc);
 		
-		this.setState(new Task[0], new Stage[] {
-			new Stage("New"),
-			new Stage("Scheduled"),
-			new Stage("In Progress"),
-			new Stage("Complete")
-		});
+		this.setState(new Task[0], new StageList());
 	}
 	
 	/**
@@ -89,7 +85,8 @@ public class ColumnView extends JPanel implements IView {
 	 * Sets the state of stages within the view
 	 * @param stages The new stages array
 	 */
-	public void setStages(Stage[] stages) {
+	public void setStages(StageList stages) {
+		System.out.println("setState: new Stages are " + stages.toString());
 		this.setState(this.tasks, stages);
 	}
 	
@@ -97,7 +94,7 @@ public class ColumnView extends JPanel implements IView {
 	 * Gets the state of stages within this view
 	 * @return The stages within this view
 	 */
-	public Stage[] getStages() {
+	public StageList getStages() {
 		return this.stages;
 	}
 	
@@ -106,10 +103,10 @@ public class ColumnView extends JPanel implements IView {
 	 * @param tasks The new task array
 	 * @param stages The new stages array
 	 */
-	public void setState(Task[] tasks, Stage[] stages) {
+	public void setState(Task[] tasks, StageList stages) {
 		this.tasks = tasks == null ? new Task[0] : tasks;
-		this.stages = stages == null ? new Stage[0] : stages;
-		this.reflow();
+		this.stages = stages == null ? new StageList() : stages;
+		//this.reflow();
 	}
 	
 	/**
@@ -125,22 +122,24 @@ public class ColumnView extends JPanel implements IView {
 		
 		StageView stageView;
 		int i;
+		//System.out.println("Component count is " + this.container.getComponentCount());
 		for (i = 0; i < this.container.getComponentCount(); i++) {
 			stageView = (StageView) this.container.getComponent(i);
-			if (i >= this.stages.length) {
+			if (i >= this.stages.size()) {
 				this.container.remove(i--);
-			} else if (!stageView.getStage().equals(this.stages[i])) {
-				stageView.setState(this.stages[i],
-						this.getTasksForStage(this.stages[i]));
+			} else if (!stageView.getStage().equals(this.stages.get(i))) {
+				stageView.setState(this.stages.get(i),
+						this.getTasksForStage(this.stages.get(i)));
 			} else {
-				stageView.setTasks(this.getTasksForStage(this.stages[i]));
+				stageView.setTasks(this.getTasksForStage(this.stages.get(i)));
 			}
 		}
-		for (; i < this.stages.length; i++) {
+		for (; i < this.stages.size(); i++) {
+			//System.out.println("Reflowing stage (II) " + this.stages.get(i).toString());
 			gbc.insets.left = i == 0 ? 20 : 0;
 			gbc.gridx = i;
-			stageView = new StageView(this.stages[i],
-					this.getTasksForStage(this.stages[i]));
+			stageView = new StageView(this.stages.get(i),
+					this.getTasksForStage(this.stages.get(i)));
 			stageView.setGateway(this.gateway);
 			this.container.add(stageView, gbc);
 		}

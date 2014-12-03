@@ -1,5 +1,17 @@
+/*******************************************************************************
+ * Copyright (c) 2014 -- WPI Suite
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors: Nathan Hughes
+ ******************************************************************************/
+
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -31,6 +43,7 @@ import net.miginfocom.swing.MigLayout;
 import org.jdesktop.swingx.JXDatePicker;
 
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Stage;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.StageList;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
@@ -128,12 +141,6 @@ public class TaskEditView extends JPanel implements IView {
 		
 		this.members.setVisibleRowCount(4);
 		this.assignedMembers.setVisibleRowCount(4);
-		
-		this.stageInput.addItem(new Stage("New"));
-		this.stageInput.addItem(new Stage("Scheduled"));
-		this.stageInput.addItem(new Stage("In Progress"));
-		this.stageInput.addItem(new Stage("Complete"));
-		this.stageInput.setSelectedItem(this.task.getStage());
 		
 		this.archiveButton.addActionListener(new ActionListener() {
 			@Override
@@ -326,4 +333,10 @@ public class TaskEditView extends JPanel implements IView {
 		this.gateway = gateway;
 		this.commentPanel.setGateway(this.gateway);
 	}
+	
+	public void setStages( StageList sl ) {
+		this.stageInput.removeAllItems();
+		for (Stage s : sl) this.stageInput.addItem(s);
+	}
 }
+

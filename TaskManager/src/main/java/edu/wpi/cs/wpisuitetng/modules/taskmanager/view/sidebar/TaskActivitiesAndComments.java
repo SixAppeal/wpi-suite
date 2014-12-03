@@ -28,6 +28,7 @@ import javax.swing.JTextArea;
 import edu.wpi.cs.wpisuitetng.janeway.config.ConfigManager;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Activity;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Comment;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.StageList;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
@@ -183,6 +184,11 @@ public class TaskActivitiesAndComments extends JPanel implements IView {
 	@Override
 	public void setGateway(Gateway gateway) {
 		this.gateway = gateway;
+	}
+
+	@Override
+	public void setStages(StageList sl) {
+		// no purpose here
 	}
 	
 }

@@ -36,6 +36,7 @@ import javax.swing.event.ListSelectionListener;
 import org.jdesktop.swingx.JXDatePicker;
 
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Stage;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.StageList;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
@@ -589,5 +590,10 @@ public class OldTaskEditView extends JPanel implements IView {
 		
 		
 
+	}
+
+	@Override
+	public void setStages(StageList sl) {
+		// Is this class even supposed to exist?
 	}
 }

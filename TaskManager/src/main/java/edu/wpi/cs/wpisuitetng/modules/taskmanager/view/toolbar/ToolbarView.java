@@ -11,6 +11,7 @@ import javax.swing.border.EtchedBorder;
 
 import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.DefaultToolbarView;
 import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.ToolbarGroupView;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.StageList;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
 
@@ -61,6 +62,12 @@ public class ToolbarView extends DefaultToolbarView implements IView {
 	public void setGateway(Gateway gateway) {
 		this.gateway = gateway;
 		this.addButtons.setGateway(this.gateway);
+	}
+
+
+	@Override
+	public void setStages(StageList sl) {
+		// no purpose here
 	}
 	
 }

@@ -1,13 +1,12 @@
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.Cache;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.LocalCache;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.StageList;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
 
@@ -24,6 +23,7 @@ public class MemberListHandler implements IView {
 	private List<String> unassignedMembersList;
 	private List<String> assignedMembersList;
 	private List<String> allMembersList; // Only updated through localCache
+	@SuppressWarnings("unused")
 	private Gateway gateway;
 
 	public MemberListHandler() {
@@ -256,6 +256,11 @@ public class MemberListHandler implements IView {
 	public void setGateway(Gateway gateway) {
 		this.gateway = gateway;
 
+	}
+
+	@Override
+	public void setStages(StageList sl) {
+		// no purpose here
 	}
 
 }

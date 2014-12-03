@@ -18,6 +18,7 @@ import javax.swing.ScrollPaneConstants;
 
 import net.miginfocom.swing.MigLayout;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Stage;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.StageList;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
@@ -176,6 +177,11 @@ public class TaskCreateView extends JPanel implements IView {
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public void setStages(StageList sl) {
+		// no purpose here
 	}
 
 }

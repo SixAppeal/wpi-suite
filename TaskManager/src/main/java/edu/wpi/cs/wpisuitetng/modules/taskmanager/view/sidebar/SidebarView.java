@@ -24,6 +24,7 @@ import javax.swing.JComponent;
 import javax.swing.JTabbedPane;
 import javax.swing.ScrollPaneConstants;
 
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.StageList;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
@@ -47,21 +48,28 @@ public class SidebarView extends JTabbedPane implements IView {
 	// Components
 	private List<IView> viewList;
 	private SearchBox searchView;
+	private ColumnEditView columnEditView;
 
 	/**
 	 * Constructs a sidebar view
 	 * @throws IOException 
 	 */
+
 	public SidebarView() throws IOException {
 		this.viewList = new ArrayList<IView>();
 		
 		this.searchView = new SearchBox();
 		this.viewList.add(searchView);
 		
+		this.columnEditView = new ColumnEditView();
+		this.viewList.add(columnEditView);
+
 		this.setTabPlacement(JTabbedPane.LEFT);
 		this.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
 		this.addTab(null, new ImageIcon(this.getClass().getResource("icon_search.png")),
 				searchView);
+		this.addTab(null, new ImageIcon(this.getClass().getResource("icon_column_edit.png")),
+				columnEditView);
 	}
 	
 	/**
@@ -152,4 +160,9 @@ public class SidebarView extends JTabbedPane implements IView {
 	public void updateSearchBox(ArrayList<Task> all_tasks) throws IOException {
 		this.searchView.updateIndex(all_tasks);
 	}
+	
+	public void setStages(StageList sl) {
+		for (IView v : this.viewList) v.setStages(sl);
+	}
+
 }

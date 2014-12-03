@@ -1,5 +1,6 @@
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view;
 
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.StageList;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
 
 /**
@@ -41,5 +42,11 @@ public class TestView implements IView {
 	 */
 	public int getNumber() {
 		return this.number;
+	}
+
+	@Override
+	public void setStages(StageList sl) {
+		// TODO Auto-generated method stub
+		
 	}
 }

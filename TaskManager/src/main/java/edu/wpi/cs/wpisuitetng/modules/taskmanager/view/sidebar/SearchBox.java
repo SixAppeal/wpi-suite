@@ -32,6 +32,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
 import net.miginfocom.swing.MigLayout;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.StageList;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.search.Search;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
@@ -206,6 +207,11 @@ public class SearchBox extends JPanel implements IView {
 	@Override
 	public void setGateway(Gateway gateway) {
 		this.gateway = gateway;
+	}
+
+	@Override
+	public void setStages(StageList sl) {
+		// This method has no purpose here.
 	}
 
 }

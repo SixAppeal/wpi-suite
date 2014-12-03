@@ -1,11 +1,17 @@
-/**
- * 
- */
+/*******************************************************************************
+ * Copyright (c) 2014 -- WPI Suite
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors: Nathan Hughes
+ ******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache;
-import java.util.List;
 
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Stage;
 import edu.wpi.cs.wpisuitetng.exceptions.NotImplementedException;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.StageList;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.IPresenter;
 
@@ -17,13 +23,13 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.IPresenter;
  */
 public interface Cache extends IPresenter {
 
-	public void store(String request, Task toStore);
+	public void store(String request, Task taskToStore);
 	
-	public void store(String request, List<Stage> toStore);
+	public void update(String request, Task newTask);
 	
-	public void update(String request, Task newObject);
+	public void store(String request, StageList slToStore);
 	
-	public void update(String request, List<Stage> newObject);
+	public void update(String request, StageList newSL);
 	
 	public Object[] retrieve(String request);
 	
@@ -40,6 +46,8 @@ public interface Cache extends IPresenter {
 	public void addVerified(String request, String data);
 	
 	public void updateVerified(String request, String data);
+
+	public void initStageList();
 
 }
 

@@ -1,9 +1,17 @@
-/**
- * This class allows us to store Stages in a list, and manipulate it as a collection just as in a LinkedList, but at the same time it is a model for the
- * database.
- */
+/*******************************************************************************
+ * Copyright (c) 2014 -- WPI Suite
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors: William Temple
+ ******************************************************************************/
+
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.model;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -19,10 +27,15 @@ import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
  * @author wmtemple
  *
  * This is a wrapper class for the ordered storage of Stages within our module.
+ * 
+ * This class allows us to store Stages in a list, and manipulate it as a collection just as in a LinkedList, but at the
+ * same time it is a model for the database.
  *
  */
-public class StageList extends AbstractModel implements List<Stage>, Queue<Stage>, Collection<Stage> {
+public class StageList extends AbstractModel implements List<Stage>, Queue<Stage> {
 
+	@SuppressWarnings("unused")
+	private int id = 1;
 	private LinkedList<Stage> stageList;
 	
 	/**
@@ -39,6 +52,25 @@ public class StageList extends AbstractModel implements List<Stage>, Queue<Stage
 	public StageList(Collection<Stage> c) {
 		super();
 		this.stageList = new LinkedList<Stage>(c);
+	}
+	
+	/**
+	 * Creates a new StageList, pre-filling it with the contents of the array
+	 * @param arr The array to fill the list
+	 */
+	public StageList(Stage[] st) {
+		super();
+		this.stageList = (LinkedList<Stage>) Arrays.asList(st);
+		
+	}
+	
+	@Override
+	public String toString() {
+		String output = new String("[");
+		for( Stage s : this ) {
+			output += "{" + s.toString() + "}, ";
+		}
+		return output + "]";
 	}
 	
 	public static StageList fromJson(String json) {

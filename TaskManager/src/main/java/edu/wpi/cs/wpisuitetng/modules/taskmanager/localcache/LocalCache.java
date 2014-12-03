@@ -1,6 +1,5 @@
 /*******************************************************************************
- * 
- * Copyright (c) 2013 -- WPI Suite
+ * Copyright (c) 2014 -- WPI Suite
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,6 +8,7 @@
  *
  * Contributors: 
  * Nathan Hughes
+ * William Temple
  ******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache;
@@ -22,8 +22,10 @@ import java.util.Map;
 import com.google.gson.Gson;
 
 import edu.wpi.cs.wpisuitetng.exceptions.NotImplementedException;
+import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Stage;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.StageList;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.IPresenter;
@@ -40,7 +42,7 @@ public class LocalCache implements Cache, IPresenter {
 	List<Task> tasks;
 	List<Task> archives;
 	List<User> members;
-	List<Stage> stages;
+	StageList stages;
 	Gateway gateway;
 	Map<String, List<String>> callbacks;
 
@@ -52,12 +54,12 @@ public class LocalCache implements Cache, IPresenter {
 		tasks = new ArrayList<Task>();
 		archives = new ArrayList<Task>();
 		members = new ArrayList<User>();
-		stages = new ArrayList<Stage>();
+		stages = new StageList();
 		callbacks = new HashMap<String, List<String>>();
 		callbacks.put("task", new ArrayList<String>());
 		callbacks.put("archive", new ArrayList<String>());
 		callbacks.put("member", new ArrayList<String>());
-		callbacks.put("stage", new ArrayList<String>());
+		callbacks.put("stages", new ArrayList<String>());
 	}
 
 	/**
@@ -74,8 +76,8 @@ public class LocalCache implements Cache, IPresenter {
 		if (request.equals("member")) {
 			members = new ArrayList<User>();
 		}
-		if (request.equals("stage")) {
-			stages = new ArrayList<Stage>();
+		if (request.equals("stages")) {
+			stages = new StageList();
 		}
 	}
 
@@ -106,8 +108,8 @@ public class LocalCache implements Cache, IPresenter {
 		if (request.equals("member")) {
 			return members.toArray(new User[0]);
 		}
-		if (request.equals("stage")) {
-			return members.toArray(new Stage[0]);
+		if (request.equals("stages")) {
+			return stages.toArray(new Stage[0]);
 		}
 		return null;
 	}
@@ -128,29 +130,30 @@ public class LocalCache implements Cache, IPresenter {
 	 *      java.lang.Object)
 	 */
 	@Override
-	public void store(String request, Task toStore) {
+	public void store(String request, Task taskToStore) {
 		if (request.equals("task")) {
 			final Request networkRequest = Network.getInstance().makeRequest(
 					"taskmanager/task", HttpMethod.PUT);
 			networkRequest.addObserver(new AddManager(this, request, gateway, callbacks.get("task")));
-			networkRequest.setBody(toStore.toJson());
+			networkRequest.setBody(taskToStore.toJson());
 			networkRequest.send();
 		}
 		if (request.equals("archive")) {
 			final Request networkRequest = Network.getInstance().makeRequest(
 					"taskmanager/task", HttpMethod.PUT);
 			networkRequest.addObserver(new AddManager(this, request, gateway, callbacks.get("task")));
-			networkRequest.setBody(toStore.toJson());
+			networkRequest.setBody(taskToStore.toJson());
 			networkRequest.send();
-		}
-		if (request.equals("stage")) {
-			// TODO Implement this
 		}
 	}
 	
-	public void store(String request, List<Stage> toStore) {
-		if (request.equals("stage")) {
-			// TODO Implement this
+	public void store(String request, StageList slToStore) {
+		if (request.equals("stages")) {
+			final Request networkRequest = Network.getInstance().makeRequest(
+					"taskmanager/stages", HttpMethod.PUT);
+			networkRequest.addObserver(new AddManager(this, request, gateway, callbacks.get("stages")));
+			networkRequest.setBody(slToStore.toJson());
+			networkRequest.send();
 		}
 	}
 
@@ -159,30 +162,35 @@ public class LocalCache implements Cache, IPresenter {
 	 *      java.lang.Object, java.lang.Object)
 	 */
 	@Override
-	public void update(String request, Task newObject) {
+	public void update(String request, Task newTask) {
 		if (request.equals("task")) {
 			final Request networkRequest = Network.getInstance().makeRequest(
 					"taskmanager/task", HttpMethod.POST);
-			networkRequest.setBody(((Task) newObject).toJson());
-			networkRequest.addObserver(new UpdateManager(this, request, gateway, callbacks
-					.get("task")));
+			networkRequest.setBody(newTask.toJson());
+			networkRequest.addObserver(new UpdateManager(this, request, gateway,
+					callbacks.get("task")));
 			networkRequest.send();
 		}
 		if (request.equals("archive")) {
-			newObject.archive();
+			newTask.archive();
 			final Request networkRequest = Network.getInstance().makeRequest(
 					"taskmanager/task", HttpMethod.POST);
-			networkRequest.setBody(((Task) newObject).toJson());
-			networkRequest.addObserver(new UpdateManager(this, request, gateway, callbacks
-					.get("archive")));
+			networkRequest.setBody(newTask.toJson());
+			networkRequest.addObserver(new UpdateManager(this, request, gateway,
+					callbacks.get("archive")));
 			networkRequest.send();
 		}
-		
 	}
-
-	public void update(String request, List<Stage> newObject) {
-		if (request.equals("stage")) {
-			// TODO Implement
+	
+	public void update(String request, StageList newSL) {
+		if (request.equals("stages")) {
+			System.out.println("The StageList is updating to " + newSL.toString());
+			final Request networkRequest = Network.getInstance().makeRequest(
+					"taskmanager/stages", HttpMethod.POST);
+			networkRequest.addObserver(new UpdateManager(this, request, gateway,
+					callbacks.get("stages")));
+			networkRequest.setBody(newSL.toJson());
+			networkRequest.send();
 		}
 	}
 	
@@ -199,8 +207,7 @@ public class LocalCache implements Cache, IPresenter {
 		if (request.equals("archive")) {
 			final Request networkRequest = Network.getInstance().makeRequest(
 					"taskmanager/task", HttpMethod.GET);
-			networkRequest
-					.addObserver(new SyncManager((Cache) this, "archive", callbacks.get("archive"), gateway));
+			networkRequest.addObserver(new SyncManager((Cache) this, "archive", callbacks.get("archive"), gateway));
 			networkRequest.send();
 		}
 		if (request.equals("member")) {
@@ -209,8 +216,11 @@ public class LocalCache implements Cache, IPresenter {
 			networkRequest.addObserver(new SyncManager((Cache) this, "member", callbacks.get("member"), gateway));
 			networkRequest.send();
 		}
-		if (request.equals("stage")) {
-			// TODO Implement this
+		if (request.equals("stages")) {
+			final Request networkRequest = Network.getInstance().makeRequest(
+					"taskmanager/stages", HttpMethod.GET);
+			networkRequest.addObserver(new SyncManager((Cache) this, request, callbacks.get("stages"), gateway));
+			networkRequest.send();
 		}
 	}
 
@@ -228,8 +238,8 @@ public class LocalCache implements Cache, IPresenter {
 			Task t = new Gson().fromJson(updateValue, Task.class);
 			archives.add(t);
 		}
-		if (request.equals("stage")) {
-			// TODO implement this
+		if (request.equals("stages")) {
+			stages = new Gson().fromJson(updateValue, StageList.class);
 		}
 	}
 
@@ -260,8 +270,8 @@ public class LocalCache implements Cache, IPresenter {
 				tasks.add(newValue);
 			}
 		}
-		if (request.equals("stage")) {
-			// TODO implement this
+		if (request.equals("stages")) {
+			stages = new Gson().fromJson(updateValue, StageList.class);
 		}
 
 	}
@@ -294,14 +304,30 @@ public class LocalCache implements Cache, IPresenter {
 			User[] returned = new Gson().fromJson(updateValue, User[].class);
 			members = new ArrayList<User>(Arrays.asList(returned));
 		}
-		if (request.equals("stage")) {
-			// TODO implement this
+		if (request.equals("stages")) {
+			StageList[] returned = new Gson().fromJson(updateValue, StageList[].class);
+			try {
+				stages = returned[0];
+			} catch (ArrayIndexOutOfBoundsException ex) {
+				initStageList();
+				//System.err.println(ex.getMessage());
+			}
 		}
 	}
-
+	
 	@Override
 	public void setGateway(Gateway gateway) {
 		this.gateway = gateway;
+	}
+
+	@Override
+	public void initStageList() {
+		stages = new StageList();
+		stages.add( new Stage("New") );
+		stages.add( new Stage("Scheduled"));
+		stages.add( new Stage("In Progress"));
+		stages.add( new Stage("Completed"));
+		this.store("stages", stages);
 	}
 
 }

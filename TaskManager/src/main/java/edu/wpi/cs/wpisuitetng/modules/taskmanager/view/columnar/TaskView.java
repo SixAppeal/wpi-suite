@@ -10,6 +10,7 @@ import java.awt.event.MouseListener;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.StageList;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
@@ -123,5 +124,10 @@ public class TaskView extends JPanel implements IView {
 	@Override
 	public void setGateway(Gateway gateway) {
 		this.gateway = gateway;
+	}
+
+	@Override
+	public void setStages(StageList sl) {
+		//No purpose here.
 	}
 }

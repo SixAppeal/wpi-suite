@@ -14,6 +14,7 @@ import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Stage;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.StageList;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
@@ -183,5 +184,10 @@ public class StageView extends JPanel implements IView {
 				((IView) c).setGateway(this.gateway);
 			}
 		}
+	}
+
+	@Override
+	public void setStages(StageList sl) {
+		//No purpose here.
 	}
 }
