@@ -56,7 +56,12 @@ public class SearchUserInput implements KeyListener {
 
 		// This is to wipe the results panel when user backspaces all that they typed
 		if (e.getKeyChar() == '\b') {
-			fullString = "";
+			if (searchBox.getText().length() == 0) {
+				fullString = "";	
+			}
+			else {
+				fullString = fullString.substring(0, fullString.length() - 1);
+			}
 			System.out.println("gettext length is " + searchBox.getText().length());
 			try {
 				if (searchBox.getText().length() >= 1) {

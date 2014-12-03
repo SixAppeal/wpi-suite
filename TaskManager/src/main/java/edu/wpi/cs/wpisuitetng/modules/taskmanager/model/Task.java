@@ -57,7 +57,8 @@ public class Task extends AbstractModel {
 	 * @param estimatedEffort number that represents how much effort (units of work)
 	 * @param actualEffort number that represents the actual effort
 	 * @param dueDate when the task is due
-	 * @param activities list of activities (comments that members can put) for the task
+	 * @param activities list of activities for the task
+	 * @param comments lists of comments members put for the task
 	 * @throws IllegalArgumentException
 	 */
 	public Task(String title, String description, Stage stage,
@@ -333,7 +334,7 @@ public class Task extends AbstractModel {
 
 	/**
 	 * 
-	 * @return list of comments on the task
+	 * @return list of activities on the task
 	 */
 	public List<Activity> getActivities() {
 		return activities;
