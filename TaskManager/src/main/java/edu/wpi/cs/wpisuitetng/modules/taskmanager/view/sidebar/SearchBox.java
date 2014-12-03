@@ -90,7 +90,7 @@ public class SearchBox extends JPanel implements IView {
 		this.container.setLayout(new GridBagLayout());
 		this.container.setBackground(SidebarView.SIDEBAR_COLOR);
 		
-		GridBagConstraints gbc = new GridBagConstraints();
+		gbc = new GridBagConstraints();
 		gbc.anchor = GridBagConstraints.PAGE_START;
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.insets = new Insets(20, 20, 20, 20);
@@ -134,7 +134,7 @@ public class SearchBox extends JPanel implements IView {
 										+ "<i>Description:</i><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" 
 										+ t.getDescription() 
 										+"<br></html>");
-			JButton viewButton = new JButton("View");
+			JButton viewButton = new JButton("Open");
 			viewButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					viewTask(t);
@@ -179,7 +179,7 @@ public class SearchBox extends JPanel implements IView {
 	 * @param t Task to view
 	 */
 	public void viewTask(Task t) {
-		this.gateway.toPresenter("TaskPresenter", "viewTask", t);
+		this.gateway.toPresenter("TaskPresenter", "editTask", t);
 	}
 	
 	/**

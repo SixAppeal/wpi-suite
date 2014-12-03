@@ -81,8 +81,8 @@ public class TaskEditView extends JPanel implements IView {
 	/**
 	 * Constructor
 	 */
-	public TaskEditView(Task task) {
-		this.task = task;
+	public TaskEditView(Task iTask) {
+		this.task = iTask;
 		this.container = new JPanel();
 		this.scrollPane = new JScrollPane(this.container);
 		this.commentPanel = new TaskActivitiesAndComments();
@@ -138,7 +138,7 @@ public class TaskEditView extends JPanel implements IView {
 		this.archiveButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				gateway.toPresenter("Localcache", "update", "archive", task);
+				gateway.toPresenter("LocalCache", "update", "archive", task);
 				gateway.toView("SidebarView", "removeEditPanel", that);
 			}
 		});
