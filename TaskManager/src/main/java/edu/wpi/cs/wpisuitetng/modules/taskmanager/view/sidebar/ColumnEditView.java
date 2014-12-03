@@ -189,7 +189,7 @@ public class ColumnEditView extends JPanel implements IView {
 	
 	private void updateTextBox() {
 		boolean valid = !TaskUtil.sanitizeInput(titleEntry.getText()).isEmpty();
-		titleEntry.setBorder(valid ? FormField.BORDER_ERROR : FormField.BORDER_NORMAL);
+		titleEntry.setBorder(valid ? FormField.BORDER_NORMAL : FormField.BORDER_ERROR);
 		addButton.setEnabled(valid);
 	}
 	
