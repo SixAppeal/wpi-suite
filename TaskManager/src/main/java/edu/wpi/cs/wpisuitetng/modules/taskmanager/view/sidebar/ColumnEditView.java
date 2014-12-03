@@ -88,8 +88,13 @@ public class ColumnEditView extends JPanel implements IView {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if( e.getKeyCode() == KeyEvent.VK_DELETE && !stageJList.isSelectionEmpty()) {
-					stages.remove(stageJList.getSelectedIndex());
-					updateJListAndPublish();
+					
+					if( stages.size() > 1 ) {
+						stages.remove(stageJList.getSelectedIndex());
+						updateJListAndPublish();
+					} else {
+						//TODO visual feedback when there is only one stage
+					}
 				}
 			}
 
@@ -128,12 +133,14 @@ public class ColumnEditView extends JPanel implements IView {
 	}
 	
 	public void setStages(StageList newStages) {
-		Stage pSelected = stageJList.getSelectedValue();
-		this.stages.clear();
-		this.stages.addAll(newStages);
-		stageJList.setListData(new Stage[0]);
-		stageJList.setListData(stages.toArray(new Stage[0]));
-		if(pSelected != null && stages.contains(pSelected)) stageJList.setSelectedValue(pSelected, true);
+		if( !newStages.equals(stages)) {
+			Stage pSelected = stageJList.getSelectedValue();
+			this.stages.clear();
+			this.stages.addAll(newStages);
+			stageJList.setListData(new Stage[0]);
+			stageJList.setListData(stages.toArray(new Stage[0]));
+			if(pSelected != null && stages.contains(pSelected)) stageJList.setSelectedValue(pSelected, true);
+		}
 	}
 	
 	private void updateTextBox() {

@@ -64,6 +64,8 @@ public class StageList extends AbstractModel implements List<Stage>, Queue<Stage
 		
 	}
 	
+	public LinkedList<Stage> getLL() { return stageList; }
+	
 	@Override
 	public String toString() {
 		String output = new String("[");
@@ -72,6 +74,13 @@ public class StageList extends AbstractModel implements List<Stage>, Queue<Stage
 		}
 		return output + "]";
 	}
+	
+	public boolean equals(Object o) {
+		if( o instanceof StageList ) {
+			return stageList.equals(((StageList) o).getLL());
+		} else return false;
+	}
+	public int hashCode() { return stageList.hashCode(); };
 	
 	public static StageList fromJson(String json) {
 		return new Gson().fromJson(json, StageList.class);

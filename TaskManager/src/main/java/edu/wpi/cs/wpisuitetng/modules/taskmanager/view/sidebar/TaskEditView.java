@@ -349,13 +349,15 @@ public class TaskEditView extends JPanel implements IView {
 	}
 	
 	public void setStages( StageList sl ) {
-		Object pSelected = stageInput.getSelectedItem();
-		this.stages = sl;
-		stageInput.removeActionListener(stageBoxListener);
-		this.stageInput.removeAllItems();
-		for (Stage s : stages) stageInput.addItem(s);
-		if(pSelected != null && stages.contains(pSelected)) stageInput.setSelectedItem(pSelected);
-		stageInput.addActionListener(stageBoxListener);
+		if(!stages.equals(sl)) {
+			Object pSelected = stageInput.getSelectedItem();
+			this.stages = sl;
+			stageInput.removeActionListener(stageBoxListener);
+			this.stageInput.removeAllItems();
+			for (Stage s : stages) stageInput.addItem(s);
+			if(pSelected != null && stages.contains(pSelected)) stageInput.setSelectedItem(pSelected);
+			stageInput.addActionListener(stageBoxListener);
+		}
 	}
 }
 
