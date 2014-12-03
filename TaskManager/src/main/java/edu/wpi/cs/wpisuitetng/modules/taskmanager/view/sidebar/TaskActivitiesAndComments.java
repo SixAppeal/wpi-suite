@@ -32,14 +32,14 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
 
 /**
+ * A view for Task Details
  * 
  * @author tmeehan
  * @author wmtemple
  * @author krpeffer
  * @author rwang3
  * @author wavanrensselaer
- * 
- * A view for Task Details
+ * @author tmeehan
  *
  */
 public class TaskActivitiesAndComments extends JPanel implements IView {
@@ -68,7 +68,9 @@ public class TaskActivitiesAndComments extends JPanel implements IView {
 	JTextArea taskCommentArea;
 	
 	JButton saveCommentButton; //Saves the comment
-	
+	/**
+	 * Constructor
+	 */
 	public TaskActivitiesAndComments() {
 		Color labelColor = new Color(160, 160, 160);
 		
