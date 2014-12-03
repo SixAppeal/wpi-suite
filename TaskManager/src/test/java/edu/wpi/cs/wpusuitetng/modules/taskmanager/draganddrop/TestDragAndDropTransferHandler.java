@@ -7,7 +7,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors: Will Rensselaer, Thomas Meehan, Will Rensselaer, Alex Shoop, Ryan Orlando, Troy Hughes
+ * Contributors: Will Rensselaer, Thomas Meehan, Alex Shoop, Ryan Orlando, Troy Hughes
  ******************************************************************************/
 
 
