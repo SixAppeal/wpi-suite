@@ -44,7 +44,7 @@ public class SidebarView extends JTabbedPane implements IView {
 	private Gateway gateway;
 
 	private StageList stages;
-	
+	private LocalCache cache;
 	// Components
 	private List<IView> viewList;
 	private SearchBox searchView;
@@ -177,8 +177,12 @@ public class SidebarView extends JTabbedPane implements IView {
 		return null;
 	}
 	
-	public void reflowTasks(LocalCache cache) {
-		Task[] reference = (Task[]) cache.retrieve("task");
+	public void setCache(LocalCache cache) {
+		this.cache = cache;
+	}
+	
+	public void reflowTasks() {
+		Task[] reference = (Task[]) this.cache.retrieve("task");
 		for (int i = 0; i < this.getComponentCount(); i ++) {
 			if (this.getComponent(i) instanceof TaskEditView) {
 				Task taskToFix = ((TaskEditView)this.getComponent(i)).getTask();

@@ -310,7 +310,7 @@ public class TaskEditView extends JPanel implements IView {
 				new FormField("Members", this.membersScrollPane),
 				new FormField("Assigned", this.assignedMembersScrollPane)
 			),
-			new FormField("Stage", this.stageInput),
+			//new FormField("Stage", this.stageInput),
 			new ButtonGroup(
 				this.archiveButton,
 				this.closeButton
@@ -349,26 +349,8 @@ public class TaskEditView extends JPanel implements IView {
 	}
 	
 	public void updateEverything(Task t) {
-		System.out.println("Title: " + t.getTitle());
-		System.out.println("Stage: " + t.getStage().toString());
-		
-		this.titleInput.setText(this.task.getTitle());
-		this.titleLabel.setText(this.task.getTitle());
-		this.descInput.setText(this.task.getDescription());
-		this.dateInput.setDate(this.task.getDueDate());
-		this.commentPanel.updateView(this.task);
-		
-		if (!this.task.getStage().getName().equals("Complete")) {
-			this.actEffortInput.setEnabled(false);
-		}
-		
-		this.estEffortInput.setValue(this.task.getEstimatedEffort());
-		this.actEffortInput.setValue(this.task.getActualEffort());
-		
-		for( Stage s : this.stages )this.stageInput.addItem(s);
-		this.stageInput.setSelectedItem(task.getStage());
-		
-		
+		this.task.setStage(t.getStage());
+		this.stageInput.setSelectedItem(t.getStage());
 	}
 	
 	public void setStages( StageList sl ) {

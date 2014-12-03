@@ -376,7 +376,9 @@ public class Task extends AbstractModel {
 		this.actualEffort = TaskUtil.validateEffort(new Integer(updatedTask.getActualEffort()));
 		this.dueDate = TaskUtil.validateDueDate(new Date(updatedTask.getDueDate().getTime()));
 		this.activities = new LinkedList<Activity>(updatedTask.getActivities());
+		this.comments = new LinkedList<Comment>(updatedTask.getComments());
 		this.archived = updatedTask.archived;
+		this.priority = updatedTask.priority;
 	}
 	
 	/**
