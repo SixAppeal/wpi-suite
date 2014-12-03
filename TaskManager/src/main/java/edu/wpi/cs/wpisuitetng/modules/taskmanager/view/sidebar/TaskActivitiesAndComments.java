@@ -117,7 +117,8 @@ public class TaskActivitiesAndComments extends JPanel implements IView {
 		activitiesgbc.insets.top = 20;
 		activitiesgbc.gridx = 0;
 		activitiesPanel.add(activitiesLabel,activitiesgbc);
-		
+		activitiesgbc.weighty = 1.0;
+		activitiesgbc.weightx = 0.0;
 		activitiesgbc.insets.top = 5;
 		activitiesgbc.gridy = 1;
 		activitiesPanel.add(taskActivitiesList, activitiesgbc);
@@ -128,9 +129,10 @@ public class TaskActivitiesAndComments extends JPanel implements IView {
 		
 		GridBagConstraints commentsgbc = new GridBagConstraints();
 		commentsgbc.anchor = GridBagConstraints.FIRST_LINE_START;
-		commentsgbc.fill = GridBagConstraints.NONE;
+		commentsgbc.fill = GridBagConstraints.HORIZONTAL;
 		commentsgbc.insets.top = 20;
-		commentsgbc.weighty = 1.0;		
+		commentsgbc.weighty = 0.;
+		commentsgbc.weightx = 1.;
 		commentsgbc.insets.top = 20;
 		commentsgbc.gridy = 0;
 		commentsgbc.gridx = 0;
@@ -138,10 +140,13 @@ public class TaskActivitiesAndComments extends JPanel implements IView {
 		
 		commentsgbc.insets.top = 5;
 		commentsgbc.gridy = 1;
+		commentsgbc.weighty = 1.;
+		commentsgbc.weightx = 0.;
 		commentPanel.add(taskCommentList,commentsgbc);
-		
+		commentsgbc.weighty = 0.;
+		commentsgbc.weightx = 1.;
 		commentsgbc.gridy = 2;
-		commentPanel.add(taskCommentArea);
+		commentPanel.add(taskCommentArea, commentsgbc);
 		
 		commentsgbc.gridx = 1;
 		commentPanel.add(saveCommentButton, commentsgbc);

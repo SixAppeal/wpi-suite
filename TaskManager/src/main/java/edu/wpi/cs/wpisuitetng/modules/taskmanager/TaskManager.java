@@ -26,6 +26,7 @@ import edu.wpi.cs.wpisuitetng.janeway.modules.IJanewayModule;
 import edu.wpi.cs.wpisuitetng.janeway.modules.JanewayTabModel;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.Cache;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.LocalCache;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.*;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar.ColumnView;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar.ColumnEditView;
@@ -148,6 +149,7 @@ public class TaskManager implements IJanewayModule {
 				gateway.toPresenter("LocalCache", "sync", "archive");
 				gateway.toPresenter("LocalCache", "sync", "stages");
 				gateway.toView("ColumnView", "reflow");
+				gateway.toView("SidebarView", "reflowTasks", localCache);
 			}
 			
 		}, 0, 2000);

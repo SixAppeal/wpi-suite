@@ -20,6 +20,7 @@ import java.io.IOException;
 import javax.swing.ImageIcon;
 import javax.swing.JTabbedPane;
 
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.LocalCache;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.StageList;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
@@ -167,4 +168,27 @@ public class SidebarView extends JTabbedPane implements IView {
 		for (IView v : this.viewList) v.setStages(this.stages);
 	}
 
+	public Task findTask(Task [] tasks, int id) {
+		for (Task t: tasks) {
+			if (t.getId() == id) {
+				return t;
+			}
+		}
+		return null;
+	}
+	
+	public void reflowTasks(LocalCache cache) {
+		Task[] reference = (Task[]) cache.retrieve("task");
+		for (int i = 0; i < this.getComponentCount(); i ++) {
+			if (this.getComponent(i) instanceof TaskEditView) {
+				Task taskToFix = ((TaskEditView)this.getComponent(i)).getTask();
+				Task updated = findTask(reference, taskToFix.getId());
+				if (updated != null) {
+					((TaskEditView)this.getComponent(i)).updateEverything(updated);
+					System.out.println("Updating this task: " + updated.getTitle());
+				}
+			}
+		}
+	}
+	
 }

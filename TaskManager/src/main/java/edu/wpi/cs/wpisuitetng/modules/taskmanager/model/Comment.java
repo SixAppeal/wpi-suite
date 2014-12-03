@@ -1,5 +1,9 @@
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.model;
 
+import java.io.Serializable;
+
+import com.google.gson.Gson;
+
 /**
  * Class to capture comments made on a task by a user
  * 
@@ -8,7 +12,11 @@ package edu.wpi.cs.wpisuitetng.modules.taskmanager.model;
  *
  */
 
-public class Comment {
+public class Comment implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7751779367913054594L;
 	String user;
 	String comment;
 	
@@ -57,5 +65,10 @@ public class Comment {
 	 */
 	public void setUser(String user){
 		this.user = user;
+	}
+	
+	
+	public String toJson() {
+		return new Gson().toJson(this, Comment.class);
 	}
 }
