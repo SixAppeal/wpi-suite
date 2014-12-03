@@ -2,6 +2,7 @@ package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
@@ -65,7 +66,6 @@ public class TaskEditView extends JPanel implements IView {
 	private JTextArea titleLabel;
 	private JTextArea descInput;
 	private JTextArea descLabel;
-	private JScrollPane descScrollPane;
 	private JXDatePicker dateInput;
 	private JLabel dateLabel;
 	private JSpinner estEffortInput;
@@ -90,7 +90,6 @@ public class TaskEditView extends JPanel implements IView {
 		this.titleLabel = new JTextArea(this.task.getTitle());
 		this.descInput = new JTextArea(this.task.getDescription(), 5, 0);
 		this.descLabel = new JTextArea(this.task.getDescription());
-		this.descScrollPane = new JScrollPane(this.descInput);
 		this.dateInput = new JXDatePicker(this.task.getDueDate());
 		this.dateLabel = new JLabel();
 		this.estEffortInput = new JSpinner(new SpinnerNumberModel(1, null, null, 1));
@@ -106,8 +105,6 @@ public class TaskEditView extends JPanel implements IView {
 		this.archiveButton = new JButton("Archive");
 		this.closeButton = new JButton("Close");
 		TaskEditView that = this;
-		
-		this.container.setOpaque(false);
 		
 		this.titleLabel.setOpaque(false);
 		this.titleLabel.setBorder(BorderFactory.createEmptyBorder());
@@ -185,7 +182,7 @@ public class TaskEditView extends JPanel implements IView {
 		});
 		
 		// Predefine description field to hook up listener
-		FormField descField = new FormField("Description", this.descScrollPane, new FormFieldValidator() {
+		FormField descField = new FormField("Description", this.descInput, new FormFieldValidator() {
 			@Override
 			public boolean validate(JComponent component) {
 				return !descInput.getText().trim().equals("");
@@ -297,12 +294,14 @@ public class TaskEditView extends JPanel implements IView {
 			)
 		);
 		
+		this.container.setBackground(SidebarView.SIDEBAR_COLOR);
 		this.container.setLayout(new MigLayout("fill, ins 20", "[260]"));
 		this.container.add(this.form, "grow");
 
-		this.setBackground(new Color(230, 230, 230));
-		this.setLayout(new BorderLayout());
-		this.add(this.scrollPane, BorderLayout.CENTER);
+		this.scrollPane.setMinimumSize(new Dimension(300, 0));
+		
+		this.setLayout(new MigLayout("fill, ins 0", "[300]"));
+		this.add(this.scrollPane, "grow");
 	}
 	
 	/**

@@ -39,6 +39,8 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
  */
 public class SidebarView extends JTabbedPane implements IView {
 	private static final long serialVersionUID = -9157611802121055998L;
+	
+	public static final Color SIDEBAR_COLOR = new Color(245, 245, 245);
 
 	private Gateway gateway;
 

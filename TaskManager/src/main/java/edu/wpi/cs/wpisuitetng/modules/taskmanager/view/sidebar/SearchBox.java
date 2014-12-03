@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -36,6 +37,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.search.Search;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.Form;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.FormField;
 
 /**
  * The GUI Search Box for the Sidebar
@@ -70,6 +72,10 @@ public class SearchBox extends JPanel implements IView {
 		this.container = new JPanel();
 		this.scrollPane = new JScrollPane(this.container);
 		
+		//this.scrollPane.setOpaque(false);
+		this.scrollPane.setBorder(BorderFactory.createEmptyBorder());
+		this.scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		
 		toSearch = new Search();
 		toSearch.initialize();
 		resultsBox = new JPanel();
@@ -78,17 +84,30 @@ public class SearchBox extends JPanel implements IView {
 		resultsBox.setOpaque(false);
 		
 		searchBox = new JTextField();
+		searchBox.setBorder(FormField.BORDER_NORMAL);
 		searchBox.addKeyListener(new SearchUserInput(this.searchBox, this.toSearch, this));
 
-		this.container.setOpaque(false);
-		this.container.setLayout(new MigLayout("fillx, wrap 1, ins 20", "[260]"));
+		this.container.setLayout(new GridBagLayout());
+		this.container.setBackground(SidebarView.SIDEBAR_COLOR);
 		
-		this.container.add(searchBox, "growx");
-		this.container.add(resultsBox, "grow");
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.anchor = GridBagConstraints.PAGE_START;
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.insets = new Insets(20, 20, 20, 20);
+		gbc.weightx = 1.0;
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		this.container.add(searchBox, gbc);
 		
-		this.setBackground(new Color(230, 230, 230));
-		this.setLayout(new BorderLayout());
-		this.add(this.scrollPane, BorderLayout.CENTER);
+		gbc.insets.top = 0;
+		gbc.weighty = 1.0;
+		gbc.gridy = 1;
+		this.container.add(resultsBox, gbc);
+		
+		this.scrollPane.setMinimumSize(new Dimension(300, 0));
+		
+		this.setLayout(new MigLayout("fill, ins 0", "[300]"));
+		this.add(this.scrollPane, "grow");
 	}
 
 	/**

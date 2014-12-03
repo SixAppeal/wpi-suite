@@ -2,6 +2,7 @@ package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -64,8 +65,6 @@ public class TaskCreateView extends JPanel implements IView {
 		this.createButton = new JButton("Create");
 		this.cancelButton = new JButton("Cancel");
 		TaskCreateView that = this;
-
-		this.container.setOpaque(false);
 
 		this.scrollPane.setBorder(BorderFactory.createEmptyBorder());
 		this.scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -149,12 +148,14 @@ public class TaskCreateView extends JPanel implements IView {
 			)
 		);
 
-		this.container.setBackground(new Color(230, 230, 230));
+		this.container.setBackground(SidebarView.SIDEBAR_COLOR);
 		this.container.setLayout(new MigLayout("fill, ins 20", "[260]"));
 		this.container.add(this.form, "grow");
 
-		this.setLayout(new BorderLayout());
-		this.add(this.scrollPane, BorderLayout.CENTER);
+		this.scrollPane.setMinimumSize(new Dimension(300, 0));
+		
+		this.setLayout(new MigLayout("fill, ins 0", "[300]"));
+		this.add(this.scrollPane, "grow");
 
 	}
 
