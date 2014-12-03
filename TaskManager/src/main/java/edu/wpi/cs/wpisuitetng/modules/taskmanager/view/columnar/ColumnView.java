@@ -124,7 +124,6 @@ public class ColumnView extends JPanel implements IView {
 		int i;
 		System.out.println("Component count is " + this.container.getComponentCount());
 		for (i = 0; i < this.container.getComponentCount(); i++) {
-			System.out.println("Reflowing stage index " + i + " " + this.stages.get(i).toString());
 			stageView = (StageView) this.container.getComponent(i);
 			if (i >= this.stages.size()) {
 				this.container.remove(i--);

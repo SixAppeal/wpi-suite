@@ -71,10 +71,10 @@ public class StagesEntityManager implements EntityManager<StageList> {
 		List<Model> oldSLList = db.retrieve(StageList.class, "id", 1, s.getProject());
 		
 		if(oldSLList.size() < 1 || oldSLList.get(0) == null) {
-			throw new BadRequestException("Task with ID does not exist.");
+			throw new BadRequestException("No StageList exists.");
 		}
 
-		StageList existingSL = (StageList)oldSLList.get(0);		
+		StageList existingSL = (StageList)(oldSLList.get(0));	
 
 		// update the new task
 		existingSL.clear();

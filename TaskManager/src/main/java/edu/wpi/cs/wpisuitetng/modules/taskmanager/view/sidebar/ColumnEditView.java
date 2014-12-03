@@ -145,7 +145,7 @@ public class ColumnEditView extends JPanel implements IView {
 	}
 	
 	private void publishStages() {
-		this.gateway.toPresenter("TaskPresenter", "publishStages", stages);
+		this.gateway.toPresenter("TaskPresenter", "publishChanges", stages);
 	}
 	
 }
