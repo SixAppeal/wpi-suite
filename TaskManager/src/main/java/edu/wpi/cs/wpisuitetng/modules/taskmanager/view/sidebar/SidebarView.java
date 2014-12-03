@@ -16,6 +16,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
  * @author akshoop
  * @author rnorlando
  * @author Thhughes
+ * @author tmeehan
  * 
  */
 public class SidebarView extends JPanel implements IView {
