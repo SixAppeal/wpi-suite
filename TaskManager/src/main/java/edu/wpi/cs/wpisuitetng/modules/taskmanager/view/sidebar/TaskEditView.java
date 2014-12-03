@@ -87,6 +87,7 @@ public class TaskEditView extends JPanel implements IView {
 	private JLabel dateLabel;
 	private JSpinner estEffortInput;
 	private JSpinner actEffortInput;
+	
 	private JList<String> members;
 	private JScrollPane membersScrollPane;
 	private JList<String> assignedMembers;
@@ -110,7 +111,6 @@ public class TaskEditView extends JPanel implements IView {
 		this.task = iTask;
 		this.stages = stages;
 		// Poplulates the member list handler with the assigned members
-		MemberListHandler.getInstance().populateMembers(this.task.getAssignedTo());
 		
 		
 		
@@ -135,6 +135,15 @@ public class TaskEditView extends JPanel implements IView {
 
 		this.assignedMembers = new JList<String>();
 		this.assignedMembersScrollPane = new JScrollPane(this.assignedMembers);
+		
+		
+		System.out.println("Begining to print");
+		System.out.println(this.members);
+		System.out.println(this.assignedMembers);
+		System.out.println("Done to printing");
+		
+		MemberListHandler.getInstance().populateMembers(this.task.getAssignedTo());
+		this.updateMembers();
 		
 		this.stageInput = new JComboBox<Stage>();
 		this.archiveButton = new JButton("Archive");
@@ -418,8 +427,11 @@ public class TaskEditView extends JPanel implements IView {
 	 *  Update Panels is used to redraw the lists once something is changed
 	 */
 	public void updateMembers() {
-		members.setListData(MemberListHandler.getInstance().getUnassigned().toArray(new String[0]));
-		assignedMembers.setListData(MemberListHandler.getInstance().getAssigned().toArray(new String[0]));
+
+		
+		
+		this.members.setListData(MemberListHandler.getInstance().getUnassigned().toArray(new String[0]));
+		this.assignedMembers.setListData(MemberListHandler.getInstance().getAssigned().toArray(new String[0]));
 		this.revalidate();
 		this.repaint();
 	}
@@ -428,6 +440,7 @@ public class TaskEditView extends JPanel implements IView {
 	 * Takes the members that the user has selected and moves them to the list of members assigned to a task
 	 */
 	public void moveMembersToAssigned() {	
+	
 		MemberListHandler.getInstance().assignMember(members.getSelectedValuesList());
 		updateMembers();
 		this.allMembersMouseHandler.clear();
