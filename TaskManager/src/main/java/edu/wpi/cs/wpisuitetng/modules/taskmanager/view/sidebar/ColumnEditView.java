@@ -67,17 +67,26 @@ public class ColumnEditView extends JPanel implements IView {
 				updateTextBox();
 				}});
 		
-		//#RED
-		titleEntry.addActionListener( new ActionListener() {
+		titleEntry.addKeyListener( new KeyListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void keyTyped(KeyEvent e) {
 				updateTextBox();
-			}});
+			}
+			
+			@Override
+			public void keyPressed(KeyEvent e) {}
+			
+			@Override
+			public void keyReleased(KeyEvent e) {}
+		});
 		
 		stageJList.addKeyListener( new KeyListener() {
 
 			@Override
-			public void keyTyped(KeyEvent e) {
+			public void keyTyped(KeyEvent e) {}
+
+			@Override
+			public void keyPressed(KeyEvent e) {
 				if( e.getKeyCode() == KeyEvent.VK_DELETE && !stageJList.isSelectionEmpty()) {
 					stages.remove(stageJList.getSelectedIndex());
 					updateJListAndPublish();
@@ -85,15 +94,12 @@ public class ColumnEditView extends JPanel implements IView {
 			}
 
 			@Override
-			public void keyPressed(KeyEvent e) {}
-
-			@Override
 			public void keyReleased(KeyEvent e) {}
 			
 		});
 		
 		GridBagConstraints gbc = new GridBagConstraints();
-		this.setLayout(new GridBagLayout() );
+		this.setLayout(new GridBagLayout());
 		
 		gbc.gridx = 0;
 		gbc.gridy = 0;
@@ -117,12 +123,14 @@ public class ColumnEditView extends JPanel implements IView {
 		gbc.fill = GridBagConstraints.BOTH;
 		this.add(stageJList, gbc);
 		
+		updateTextBox();
+		
 	}
 	
 	public void setStages(Collection<Stage> newStages) {
 		this.stages.clear();
 		this.stages.addAll(newStages);
-		stageJList.removeAll();
+		stageJList.setListData(new Stage[0]);
 		stageJList.setListData(stages.toArray(new Stage[0]));
 	}
 	

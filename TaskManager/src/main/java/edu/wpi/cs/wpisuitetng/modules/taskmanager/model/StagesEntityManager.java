@@ -60,21 +60,23 @@ public class StagesEntityManager implements EntityManager<StageList> {
 
 	@Override
 	public StageList[] getAll(Session s) throws WPISuiteException {
-		return db.retrieveAll(new StageList()).toArray(new StageList[0]);
+		return db.retrieveAll(new StageList(), s.getProject()).toArray(new StageList[0]);
 	}
 
 	@Override
 	public StageList update(Session s, String content) throws WPISuiteException {
 		StageList updatedSL = StageList.fromJson(content);
 
+		System.out.println("Saving StageList " + updatedSL.toString() );
+		
 		//Gets old task, modifies it, and saves it again
-		List<Model> oldSLList = db.retrieve(StageList.class, "id", 1, s.getProject());
+		List<Model> oldSLList = db.retrieveAll(new StageList(), s.getProject());
 		
 		if(oldSLList.size() < 1 || oldSLList.get(0) == null) {
 			throw new BadRequestException("No StageList exists.");
 		}
 
-		StageList existingSL = (StageList)(oldSLList.get(0));	
+		StageList existingSL = (StageList)(oldSLList.get(0));
 
 		// update the new task
 		existingSL.clear();
@@ -89,7 +91,7 @@ public class StagesEntityManager implements EntityManager<StageList> {
 
 	@Override
 	public void save(Session s, StageList model) throws WPISuiteException {
-		db.save(model);
+		db.save(model, s.getProject());
 	}
 
 	@Override

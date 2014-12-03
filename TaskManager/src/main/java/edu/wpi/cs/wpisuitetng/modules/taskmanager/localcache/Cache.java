@@ -10,8 +10,9 @@
  ******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache;
 
-import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
 import edu.wpi.cs.wpisuitetng.exceptions.NotImplementedException;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.StageList;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.IPresenter;
 
 /**
@@ -22,9 +23,13 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.IPresenter;
  */
 public interface Cache extends IPresenter {
 
-	public void store(String request, AbstractModel toStore);
+	public void store(String request, Task taskToStore);
 	
-	public void update(String request, AbstractModel newObject);
+	public void update(String request, Task newTask);
+	
+	public void store(String request, StageList slToStore);
+	
+	public void update(String request, StageList newSL);
 	
 	public Object[] retrieve(String request);
 	

@@ -528,7 +528,7 @@ public class TaskEditView extends JPanel implements IView {
 	}
 
 	public void updateStages( StageList sl ) {
-		this.stageBox.removeAll();
+		this.stageBox.removeAllItems();
 		for (Stage s : sl) this.stageBox.addItem(s);
 	}
 	

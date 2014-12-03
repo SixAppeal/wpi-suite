@@ -14,6 +14,7 @@ package edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter;
 import java.util.Arrays;
 import java.util.Collection;
 
+import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.Cache;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Stage;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.StageList;
@@ -61,7 +62,7 @@ public class TaskPresenter implements IPresenter{
 	public void updateTasks() {
 		Task[] tasks_from_cache =  (Task[]) cache.retrieve("task");
 		this.gateway.toView("ColumnView", "setTasks", new Object[] {tasks_from_cache});
-		this.gateway.toView("ColumnView", "reflow");
+		//this.gateway.toView("ColumnView", "reflow");
 	}
 
 	public void updateStages() {
@@ -72,7 +73,7 @@ public class TaskPresenter implements IPresenter{
 	}
 	
 	public void publishChanges(StageList sl) {
-		this.gateway.toPresenter("LocalCache", "update", "stages", sl);
+		this.gateway.toPresenter("LocalCache", "update", "stages", (AbstractModel)sl);
 	}
 	
 }

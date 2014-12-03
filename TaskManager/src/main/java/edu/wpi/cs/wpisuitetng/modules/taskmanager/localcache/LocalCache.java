@@ -128,26 +128,29 @@ public class LocalCache implements Cache, IPresenter {
 	 *      java.lang.Object)
 	 */
 	@Override
-	public void store(String request, AbstractModel toStore) {
+	public void store(String request, Task taskToStore) {
 		if (request.equals("task")) {
 			final Request networkRequest = Network.getInstance().makeRequest(
 					"taskmanager/task", HttpMethod.PUT);
 			networkRequest.addObserver(new AddManager(this, request, gateway, callbacks.get("task")));
-			networkRequest.setBody(toStore.toJson());
+			networkRequest.setBody(taskToStore.toJson());
 			networkRequest.send();
 		}
 		if (request.equals("archive")) {
 			final Request networkRequest = Network.getInstance().makeRequest(
 					"taskmanager/task", HttpMethod.PUT);
 			networkRequest.addObserver(new AddManager(this, request, gateway, callbacks.get("task")));
-			networkRequest.setBody(toStore.toJson());
+			networkRequest.setBody(taskToStore.toJson());
 			networkRequest.send();
 		}
+	}
+	
+	public void store(String request, StageList slToStore) {
 		if (request.equals("stages")) {
 			final Request networkRequest = Network.getInstance().makeRequest(
 					"taskmanager/stages", HttpMethod.PUT);
 			networkRequest.addObserver(new AddManager(this, request, gateway, callbacks.get("stages")));
-			networkRequest.setBody(toStore.toJson());
+			networkRequest.setBody(slToStore.toJson());
 			networkRequest.send();
 		}
 	}
@@ -157,33 +160,35 @@ public class LocalCache implements Cache, IPresenter {
 	 *      java.lang.Object, java.lang.Object)
 	 */
 	@Override
-	public void update(String request, AbstractModel newObject) {
+	public void update(String request, Task newTask) {
 		if (request.equals("task")) {
 			final Request networkRequest = Network.getInstance().makeRequest(
 					"taskmanager/task", HttpMethod.POST);
-			networkRequest.setBody(((Task) newObject).toJson());
+			networkRequest.setBody(newTask.toJson());
 			networkRequest.addObserver(new UpdateManager(this, request, gateway,
 					callbacks.get("task")));
 			networkRequest.send();
 		}
 		if (request.equals("archive")) {
-			((Task)newObject).archive();
+			newTask.archive();
 			final Request networkRequest = Network.getInstance().makeRequest(
 					"taskmanager/task", HttpMethod.POST);
-			networkRequest.setBody(((Task) newObject).toJson());
+			networkRequest.setBody(newTask.toJson());
 			networkRequest.addObserver(new UpdateManager(this, request, gateway,
 					callbacks.get("archive")));
 			networkRequest.send();
 		}
+	}
+	
+	public void update(String request, StageList newSL) {
 		if (request.equals("stages")) {
-			if (request.equals("stages")) {
-				final Request networkRequest = Network.getInstance().makeRequest(
-						"taskmanager/stages", HttpMethod.POST);
-				networkRequest.addObserver(new UpdateManager(this, request, gateway,
-						callbacks.get("stages")));
-				networkRequest.setBody(((StageList)newObject).toJson());
-				networkRequest.send();
-			}
+			System.out.println("The StageList is updating to " + newSL.toString());
+			final Request networkRequest = Network.getInstance().makeRequest(
+					"taskmanager/stages", HttpMethod.POST);
+			networkRequest.addObserver(new UpdateManager(this, request, gateway,
+					callbacks.get("stages")));
+			networkRequest.setBody(newSL.toJson());
+			networkRequest.send();
 		}
 	}
 	
@@ -212,7 +217,7 @@ public class LocalCache implements Cache, IPresenter {
 		if (request.equals("stages")) {
 			final Request networkRequest = Network.getInstance().makeRequest(
 					"taskmanager/stages", HttpMethod.GET);
-			networkRequest.addObserver(new SyncManager((Cache) this, "stages", callbacks.get("stages"), gateway));
+			networkRequest.addObserver(new SyncManager((Cache) this, request, callbacks.get("stages"), gateway));
 			networkRequest.send();
 		}
 	}
@@ -303,7 +308,7 @@ public class LocalCache implements Cache, IPresenter {
 				stages = returned[0];
 			} catch (ArrayIndexOutOfBoundsException ex) {
 				initStageList();
-				System.err.println(ex.getMessage());
+				//System.err.println(ex.getMessage());
 			}
 		}
 	}

@@ -121,7 +121,7 @@ public class TaskEntityManager implements EntityManager<Task>{
 	 */
 	@Override
 	public void save(Session s, Task model) throws WPISuiteException {
-		db.save(model);
+		db.save(model, s.getProject());
 	}
 
 	/**

@@ -33,7 +33,7 @@ public class UpdateManager implements RequestObserver {
 	 */
 	@Override
 	public void responseError(IRequest iReq) {
-		System.err.println("Error Refreshing Cache for" + toUpdate);
+		System.err.println("Error Refreshing Cache for " + toUpdate);
 	}
 
 	/**
@@ -41,7 +41,7 @@ public class UpdateManager implements RequestObserver {
 	 */
 	@Override
 	public void fail(IRequest iReq, Exception exception) {
-		System.err.println("Error Refreshing Cache for" + toUpdate);
+		System.err.println("Error Refreshing Cache for " + toUpdate);
 	}
 
 }

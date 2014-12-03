@@ -122,6 +122,7 @@ public class SidebarView extends JPanel implements IView {
 		this.detailView.setGateway(this.gateway);
 		this.editView.setGateway(this.gateway);
 		this.createView.setGateway(this.gateway);
+		this.colEditView.setGateway(this.gateway);
 	}
 	
 	public void updateStages(StageList sl) {
