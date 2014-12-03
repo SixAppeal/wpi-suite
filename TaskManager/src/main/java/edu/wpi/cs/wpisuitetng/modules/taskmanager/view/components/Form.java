@@ -1,3 +1,14 @@
+/*******************************************************************************
+ * Copyright (c) 2014 -- WPI Suite
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors: Will Rensselaer, Thomas Meehan
+ ******************************************************************************/
+
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components;
 
 import java.awt.GridBagConstraints;
@@ -14,6 +25,7 @@ import javax.swing.JPanel;
 /**
  * A panel that handles the layout of form elements.
  * @author wavanrensselaer
+ * @author tmeehan
  */
 public class Form extends FormElement {
 	private static final long serialVersionUID = -395511593512770018L;
@@ -54,6 +66,9 @@ public class Form extends FormElement {
 		return this.fields;
 	}
 	
+	/**
+	 * @see  edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.FormElement.hasValidInput
+	 */
 	@Override
 	public boolean hasValidInput() {
 		for (FormElement field : this.fields) {
@@ -64,6 +79,9 @@ public class Form extends FormElement {
 		return true;
 	}
 	
+	/**
+	 * @see  edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.FormElement.validateInput
+	 */
 	@Override
 	public boolean validateInput() {
 		boolean isValid = true;

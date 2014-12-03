@@ -1,3 +1,16 @@
+
+/*******************************************************************************
+ * Copyright (c) 2014 -- WPI Suite
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors: Will Rensselaer, Thomas Meehan
+ ******************************************************************************/
+
+
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components;
 
 import java.awt.GridLayout;
@@ -7,6 +20,7 @@ import javax.swing.JButton;
 /**
  * A panel that contains a group of buttons
  * @author wavanrensselaer
+ * @author tmeehan
  */
 public class ButtonGroup extends FormElement {
 	private static final long serialVersionUID = -156399870170357184L;
