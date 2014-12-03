@@ -7,7 +7,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors: Nathan Hughes, Alexander Shoop
+ * Contributors: Nathan Hughes, Alexander Shoop, Will Rensselaer, Thomas Meehan, Ryan Orlando, Troy Hughes, Nathan Hughes
  ******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
@@ -31,6 +31,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
  * @author rnorlando
  * @author thhughes
  * @author nhhughes
+ * @author tmeehan
  * 
  */
 public class SidebarView extends JPanel implements IView {
