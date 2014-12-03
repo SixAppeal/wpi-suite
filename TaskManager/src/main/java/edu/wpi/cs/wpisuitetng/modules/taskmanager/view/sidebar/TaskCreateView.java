@@ -47,7 +47,7 @@ public class TaskCreateView extends JPanel implements IView {
 	private JScrollPane scrollPane;
 	private JTextField title;
 	private JTextArea description;
-	private JComboBox<Stage> stage;
+	private JComboBox<Stage> stages;
 	private JButton createButton;
 	private JButton cancelButton;
 	private Form form;
@@ -55,12 +55,12 @@ public class TaskCreateView extends JPanel implements IView {
 	/**
 	 * Constructs a <code>TaskCreateView</code>
 	 */
-	public TaskCreateView() {
+	public TaskCreateView(StageList iStages) {
 		this.container = new JPanel();
 		this.scrollPane = new JScrollPane(this.container);
 		this.title = new JTextField();
 		this.description = new JTextArea(5, 0);
-		this.stage = new JComboBox<Stage>();
+		this.stages = new JComboBox<Stage>();
 		this.createButton = new JButton("Create");
 		this.cancelButton = new JButton("Cancel");
 		TaskCreateView that = this;
@@ -71,11 +71,6 @@ public class TaskCreateView extends JPanel implements IView {
 		this.description.setLineWrap(true);
 		this.description.setWrapStyleWord(true);
 
-		this.stage.addItem(new Stage("New"));
-		this.stage.addItem(new Stage("Scheduled"));
-		this.stage.addItem(new Stage("In Progress"));
-		this.stage.addItem(new Stage("Complete"));
-
 		this.createButton.setEnabled(false);
 		this.createButton.addActionListener(new ActionListener() {
 			@Override
@@ -83,7 +78,7 @@ public class TaskCreateView extends JPanel implements IView {
 				Task task = new Task();
 				task.setTitle(title.getText());
 				task.setDescription(description.getText());
-				task.setStage((Stage) stage.getSelectedItem());
+				task.setStage((Stage) stages.getSelectedItem());
 				gateway.toPresenter("LocalCache", "store", "task", task);
 				gateway.toView("SidebarView", "removeCreatePanel", that);
 			}
@@ -140,7 +135,7 @@ public class TaskCreateView extends JPanel implements IView {
 		this.form = new Form(
 			titleField,
 			descriptionField,
-			new FormField("Stage", stage),
+			new FormField("Stage", stages),
 			new ButtonGroup(
 				this.createButton,
 				this.cancelButton
@@ -171,7 +166,6 @@ public class TaskCreateView extends JPanel implements IView {
 		this.gateway = gateway;
 	}
 
-
 	public boolean isEmpty() {
 		if (this.title.getText().trim().equals("") && this.description.getText().trim().equals("")) {
 			return true;
@@ -181,7 +175,10 @@ public class TaskCreateView extends JPanel implements IView {
 
 	@Override
 	public void setStages(StageList sl) {
-		// no purpose here
+		Object pSelected = stages.getSelectedItem();
+		stages.removeAllItems();
+		for (Stage s : sl) stages.addItem(s);
+		if (pSelected != null && sl.contains(pSelected)) stages.setSelectedItem(pSelected);
 	}
 
 }

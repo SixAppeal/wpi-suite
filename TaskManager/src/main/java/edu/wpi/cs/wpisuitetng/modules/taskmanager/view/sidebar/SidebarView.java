@@ -15,14 +15,10 @@ package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
 import java.util.ArrayList;
 import java.util.List;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.io.IOException;
-import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
-import javax.swing.JComponent;
 import javax.swing.JTabbedPane;
-import javax.swing.ScrollPaneConstants;
 
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.StageList;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
@@ -37,14 +33,17 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
  * @author srojas
  * @author thhughes
  * @author nhhughes
+ * @author tmeehan
  */
 public class SidebarView extends JTabbedPane implements IView {
 	private static final long serialVersionUID = -9157611802121055998L;
-	
+
 	public static final Color SIDEBAR_COLOR = new Color(245, 245, 245);
 
 	private Gateway gateway;
 
+	private StageList stages;
+	
 	// Components
 	private List<IView> viewList;
 	private SearchBox searchView;
@@ -57,6 +56,7 @@ public class SidebarView extends JTabbedPane implements IView {
 
 	public SidebarView() throws IOException {
 		this.viewList = new ArrayList<IView>();
+		this.stages = new StageList();
 		
 		this.searchView = new SearchBox();
 		this.viewList.add(searchView);
@@ -86,7 +86,7 @@ public class SidebarView extends JTabbedPane implements IView {
 			}
 		}
 		
-		TaskCreateView createView = new TaskCreateView();
+		TaskCreateView createView = new TaskCreateView(this.stages);
 		createView.setGateway(this.gateway);
 		this.viewList.add(createView);
 		this.addTab(null, new ImageIcon(this.getClass().getResource("icon_plus.png")),
@@ -97,6 +97,7 @@ public class SidebarView extends JTabbedPane implements IView {
 	/**
 	 * Removes a creation panel from the sidebar
 	 * @param createView The create panel to remove
+	 * Shows the default panel
 	 */
 	public void removeCreatePanel(TaskCreateView createView) {
 		try {
@@ -123,7 +124,7 @@ public class SidebarView extends JTabbedPane implements IView {
 		}
 		
 		
-		TaskEditView editView = new TaskEditView(task);
+		TaskEditView editView = new TaskEditView(task, stages);
 		editView.setGateway(this.gateway);
 		this.viewList.add(editView);
 		this.addTab(null, new ImageIcon(this.getClass().getResource("icon_pencil.png")),
@@ -162,7 +163,8 @@ public class SidebarView extends JTabbedPane implements IView {
 	}
 	
 	public void setStages(StageList sl) {
-		for (IView v : this.viewList) v.setStages(sl);
+		this.stages = sl;
+		for (IView v : this.viewList) v.setStages(this.stages);
 	}
 
 }

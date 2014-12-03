@@ -28,7 +28,6 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
  * @author nhhughes
  * @author akshoop
  */
-
 public class TaskPresenter implements IPresenter{
 
 	Gateway gateway;

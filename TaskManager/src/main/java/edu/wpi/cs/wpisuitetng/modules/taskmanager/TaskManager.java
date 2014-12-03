@@ -1,3 +1,15 @@
+/*******************************************************************************
+ * Copyright (c) 2014 -- WPI Suite
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors: Will Rensselaer, Thomas Meehan, Alex Shoop, Ryan Orlando, Troy Hughes,
+ * Jill Hennessy, Ryan Wang, Santiago Rojas, Dan Seaman, Kyle Peffer, Nathan Hughes, Will Temple
+ ******************************************************************************/
+
 package edu.wpi.cs.wpisuitetng.modules.taskmanager;
 
 import java.io.IOException;
@@ -34,6 +46,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.toolbar.ToolbarView;
  * @author dpseaman
  * @author jrhennessy
  * @author rwang3
+ * @author tmeehan
  * @author wavanrensselaer
  * @author rnorlando
  *
@@ -49,7 +62,6 @@ public class TaskManager implements IJanewayModule {
 	Gateway gateway;
 	JPanel mainPanel;
 	ColumnView columnView;
-	ColumnEditView columnEditView;
 	SidebarView sidebarView;
 	TaskPresenter taskPresenter;
 	Cache localCache;
@@ -63,14 +75,13 @@ public class TaskManager implements IJanewayModule {
 	public TaskManager() throws IOException {
 		name = "Task Manager";
 		tabs = new ArrayList<JanewayTabModel>();
-		
+
 		gateway = new Gateway();
 		mainPanel = new JPanel();
 		columnView = new ColumnView();
 		memberHandler = new MemberListHandler();
 		sidebarView = new SidebarView();
-		columnEditView = new ColumnEditView();
-		
+
 		localCache = new LocalCache();
 		taskPresenter = new TaskPresenter(localCache);
 		

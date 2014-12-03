@@ -43,6 +43,8 @@ public class Form extends FormElement {
 			}
 			gbc.gridy = i;
 			this.add(fields[i], gbc);
+			gbc.weighty = 0.0;
+			gbc.weightx = 1.0;
 		}
 	}
 	

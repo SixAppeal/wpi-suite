@@ -57,16 +57,6 @@ public class TestTask {
 		assertEquals(newTask.getStage(), new Stage("New"));
 
 	}
-	
-	/**
-	 * tests the copy from function. makes sure constructor with no title initializes to "" 
-	 * copies the title from another one and makes sure it changed
-	 */
-	@Test
-	public void testCopyConstructor() {
-		Task newTask = new Task(this.task);
-		assertEquals(newTask.getTitle(), "A New Task");
-	}
 
 	/**
 	 * Placeholder for future tests

@@ -68,6 +68,7 @@ public class TaskEditView extends JPanel implements IView {
 	private Gateway gateway;
 	
 	private Task task;
+	private StageList stages;
 	
 	// Components
 	private JPanel container;
@@ -94,8 +95,9 @@ public class TaskEditView extends JPanel implements IView {
 	/**
 	 * Constructor
 	 */
-	public TaskEditView(Task iTask) {
+	public TaskEditView(Task iTask, StageList stages) {
 		this.task = iTask;
+		this.stages = stages;
 		this.container = new JPanel();
 		this.scrollPane = new JScrollPane(this.container);
 		this.commentPanel = new TaskActivitiesAndComments();
@@ -138,6 +140,8 @@ public class TaskEditView extends JPanel implements IView {
 		
 		this.estEffortInput.setValue(this.task.getEstimatedEffort());
 		this.actEffortInput.setValue(this.task.getActualEffort());
+		
+		for( Stage s : this.stages )this.stageInput.addItem(s);
 		
 		this.members.setVisibleRowCount(4);
 		this.assignedMembers.setVisibleRowCount(4);
@@ -335,8 +339,11 @@ public class TaskEditView extends JPanel implements IView {
 	}
 	
 	public void setStages( StageList sl ) {
+		Object pSelected = stageInput.getSelectedItem();
+		this.stages = sl;
 		this.stageInput.removeAllItems();
 		for (Stage s : sl) this.stageInput.addItem(s);
+		if(pSelected != null && stages.contains(pSelected)) stageInput.setSelectedItem(pSelected);
 	}
 }
 

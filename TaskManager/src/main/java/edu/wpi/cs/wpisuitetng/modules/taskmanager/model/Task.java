@@ -16,9 +16,14 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.util.TaskUtil;
  * @author nhhughes
  * @author srojas
  * @author jrhennessy
+<<<<<<< HEAD
  * @author Thhughes
  * @author krpeffer
  * @author rwang3
+=======
+ * @author Thhughes
+ * @author rnorlando
+>>>>>>> origin/dpseaman-DnD_testing
  */
 public class Task extends AbstractModel {
 
@@ -33,7 +38,7 @@ public class Task extends AbstractModel {
 	private Date dueDate;
 	private List<Activity> activities;
 	private List<Comment> comments;
-	//Requirement associatedRequirement;
+	private Double priority;
 
 	/**
 	 * Default constructor (dummy task for initialization)
@@ -68,23 +73,9 @@ public class Task extends AbstractModel {
 		this.dueDate = TaskUtil.validateDueDate(dueDate);
 		this.activities = activities;
 		this.comments = comments;
+		this.activities = activities;
 		this.archived = false;
-	}
-	
-	/**
-	 * Copy-Constructor
-	 * @param t Task to copy from.
-	 */
-	public Task(Task t) {
-		this.id = t.getId();
-		this.title = new String(t.getTitle());
-		this.description = new String(t.getDescription());
-		this.stage = t.getStage();
-		this.assignedTo = new LinkedList<String>(t.getAssignedTo());
-		this.estimatedEffort = new Integer(t.getEstimatedEffort());
-		this.actualEffort = new Integer(t.getActualEffort());
-		this.dueDate = new Date(t.getDueDate().getTime());
-		this.activities = new LinkedList<Activity>(t.getActivities());
+		this.priority = new Double(0);
 	}
 	
 	/**
@@ -104,38 +95,6 @@ public class Task extends AbstractModel {
 		}
 		return false;
 	}
-	
-	/**
-	 * adds changes to the task's history
-	 */
-	public void addToHistory(Object original, Object newInfo, String field) {
-		if(!newInfo.equals(original))
-		{
-			activities.add(new Activity("The" + field + " was changed to " + newInfo.toString()));
-		}
-	}
-	
-	/**
-	 * checks to see if the assigned members changed
-	 * If so, it adds to the changes to the task history
-	 */
-	public void checkMemberChange(List<String> oldMembers, List<String> newMembers) {
-		if(!oldMembers.equals(newMembers))
-		{
-			for(String mem: oldMembers)
-			{
-				if(!newMembers.contains(mem))
-					this.activities.add(new Activity(mem + " was removed from " + this.getTitle()));
-			}
-			
-			for(String mem: newMembers)
-			{
-				if(!oldMembers.contains(mem))
-					this.activities.add(new Activity(mem + " was added to " + this.getTitle()));
-			}
-		}
-	}
-	
 	
 	/**
 	 * Determines the hashCode of the task to be its ID
@@ -186,6 +145,37 @@ public class Task extends AbstractModel {
 	 */
 	public String getTitle() {
 		return title;
+	}
+	
+	/**
+	 * adds changes to the task's history
+	 */
+	public void addToHistory(Object original, Object newInfo, String field) {
+		if(!newInfo.equals(original))
+		{
+			activities.add(new Activity("The" + field + " was changed to " + newInfo.toString()));
+		}
+	}
+	
+	/**
+	 * checks to see if the assigned members changed
+	 * If so, it adds to the changes to the task history
+	 */
+	public void checkMemberChange(List<String> oldMembers, List<String> newMembers) {
+		if(!oldMembers.equals(newMembers))
+		{
+			for(String mem: oldMembers)
+			{
+				if(!newMembers.contains(mem))
+					this.activities.add(new Activity(mem + " was removed from " + this.getTitle()));
+			}
+			
+			for(String mem: newMembers)
+			{
+				if(!oldMembers.contains(mem))
+					this.activities.add(new Activity(mem + " was added to " + this.getTitle()));
+			}
+		}
 	}
 
 	/**
@@ -318,6 +308,28 @@ public class Task extends AbstractModel {
 		this.addToHistory(this.getDueDate(), dueDate, "Due Date");
 		this.dueDate = TaskUtil.validateDueDate(dueDate);
 	}
+	
+	/**
+	 * 
+	 * @return the prioity value to be listed on screen
+	 */
+	public double getPriority()
+	{
+		return (this.priority).doubleValue();
+	}
+	
+	/**
+	 *  sets the prioity for the task
+	 * @param what the prioirty should be
+	 */
+	public void setActivities(List<Activity> activities) throws IllegalArgumentException  {
+		this.activities = activities;
+	}
+
+	public void setPriority(double d)
+	{
+		this.priority = new Double(d);
+	}
 
 	/**
 	 * 
@@ -325,14 +337,6 @@ public class Task extends AbstractModel {
 	 */
 	public List<Activity> getActivities() {
 		return activities;
-	}
-
-	/**
-	 * 
-	 * @param activities list of comments on the task
-	 */
-	public void setActivities(List<Activity> activities) throws IllegalArgumentException  {
-		this.activities = activities;
 	}
 	
 	/**
