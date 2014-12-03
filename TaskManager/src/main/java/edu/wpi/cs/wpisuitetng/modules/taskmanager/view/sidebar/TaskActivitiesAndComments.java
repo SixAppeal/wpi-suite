@@ -156,6 +156,7 @@ public class TaskActivitiesAndComments extends JPanel implements IView {
 
 		taskActivitiesList.setListData(t.getActivities().toArray(new Activity[0]));
 		taskCommentList.setListData(t.getComments().toArray(new Comment[0]));
+		taskCommentArea.setText("");
 		saveCommentButton.setEnabled(true);
 		this.revalidate();
 	}
