@@ -147,7 +147,11 @@ public class TaskView extends JPanel implements  IView {
 	 * Reflows this view when it's state changes
 	 */
 	public void reflow() {
-		this.titleLabel.setText(this.task.getTitle());
+		String text = this.task.getTitle();
+		if (text.length() > 20) {
+			text = text.substring(0, 20) + "\u2026";
+		}
+		this.titleLabel.setText(text);
 		this.titleLabel.revalidate();
 		this.revalidate();
 	}
