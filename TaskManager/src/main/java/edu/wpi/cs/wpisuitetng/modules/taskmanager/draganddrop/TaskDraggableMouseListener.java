@@ -78,7 +78,7 @@ public class TaskDraggableMouseListener extends DraggableMouseListener{
 	@Override
 	public void mousePressed(MouseEvent e) 
 	{
-		taskAssoc.getGateway().toPresenter("TaskPresenter", "viewTask", taskAssoc.getTask());
+		taskAssoc.getGateway().toPresenter("TaskPresenter", "editTask", taskAssoc.getTask());
 		super.mousePressed(e);
 	}
 }

@@ -134,7 +134,7 @@ public class ColumnView extends JPanel implements IView {
 	 * @param stages The new stages array
 	 */
 	public void setStages(StageList stages) {
-		System.out.println("setState: new Stages are " + stages.toString());
+		//System.out.println("setState: new Stages are " + stages.toString());
 		this.setState(this.tasks, stages);
 	}
 	

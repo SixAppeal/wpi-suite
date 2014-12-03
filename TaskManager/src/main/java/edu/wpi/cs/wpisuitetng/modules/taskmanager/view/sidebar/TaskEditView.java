@@ -92,6 +92,8 @@ public class TaskEditView extends JPanel implements IView {
 	private JButton closeButton;
 	private Form form;
 	
+	private ActionListener stageBoxListener;
+	
 	/**
 	 * Constructor
 	 */
@@ -142,6 +144,7 @@ public class TaskEditView extends JPanel implements IView {
 		this.actEffortInput.setValue(this.task.getActualEffort());
 		
 		for( Stage s : this.stages )this.stageInput.addItem(s);
+		this.stageInput.setSelectedItem(task.getStage());
 		
 		this.members.setVisibleRowCount(4);
 		this.assignedMembers.setVisibleRowCount(4);
@@ -206,6 +209,7 @@ public class TaskEditView extends JPanel implements IView {
 				return "Please enter a description.";
 			}
 		});
+		
 		this.descInput.addKeyListener(new KeyAdapter() {
 			public void keyReleased(KeyEvent e) {
 				if (e.getKeyCode() != 9) { // tab key
@@ -213,6 +217,7 @@ public class TaskEditView extends JPanel implements IView {
 				}
 			}
 		});
+		
 		this.descInput.addFocusListener(new FocusListener() {
 			@Override
 			public void focusGained(FocusEvent e) {
@@ -280,13 +285,18 @@ public class TaskEditView extends JPanel implements IView {
 			}
 		});
 		
-		this.stageInput.addActionListener(new ActionListener() {
+		stageBoxListener = new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				task.setStage((Stage) stageInput.getSelectedItem());
-				saveTask();
+				System.out.println("Fire in the hole!");
+				if( stageInput.getSelectedIndex() > -1) {
+					task.setStage((Stage) stageInput.getSelectedItem());
+					saveTask();
+				}
 			}
-		});
+		};
+		
+		this.stageInput.addActionListener(stageBoxListener);
 		
 		this.form = new Form(
 			titleField,
@@ -341,9 +351,11 @@ public class TaskEditView extends JPanel implements IView {
 	public void setStages( StageList sl ) {
 		Object pSelected = stageInput.getSelectedItem();
 		this.stages = sl;
+		stageInput.removeActionListener(stageBoxListener);
 		this.stageInput.removeAllItems();
-		for (Stage s : sl) this.stageInput.addItem(s);
+		for (Stage s : stages) stageInput.addItem(s);
 		if(pSelected != null && stages.contains(pSelected)) stageInput.setSelectedItem(pSelected);
+		stageInput.addActionListener(stageBoxListener);
 	}
 }
 
