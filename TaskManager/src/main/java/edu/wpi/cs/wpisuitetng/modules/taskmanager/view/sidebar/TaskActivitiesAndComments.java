@@ -11,19 +11,25 @@ package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.BorderFactory;
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
+import javax.swing.ScrollPaneConstants;
 
 import edu.wpi.cs.wpisuitetng.janeway.config.ConfigManager;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Activity;
@@ -56,6 +62,7 @@ public class TaskActivitiesAndComments extends JPanel implements IView {
 	private Task t;
 	
 	JTabbedPane activitiesAndComments;
+	
 
 	/**
 	 * Declare all the JLabels and Panels to be placed in the Tabbed View
@@ -63,13 +70,17 @@ public class TaskActivitiesAndComments extends JPanel implements IView {
 	JComponent activitiesPanel;
 	JComponent activitiesLabel;
 	JList<Activity> taskActivitiesList; //Displays the Task's activity history
+//	JScrollPane activitiesScrollPane;
 	
 	JComponent commentPanel;
 	JComponent commentLabel;
 	JList<Comment> taskCommentList;	//Displays the Task's comment history
+//	JScrollPane commentsScrollPane;
 	JTextArea taskCommentArea;
 	
 	JButton saveCommentButton; //Saves the comment
+	
+	JScrollPane scrollPane;
 	/**
 	 * Constructor
 	 */
@@ -77,19 +88,35 @@ public class TaskActivitiesAndComments extends JPanel implements IView {
 		Color labelColor = new Color(160, 160, 160);
 		
 		activitiesAndComments = new JTabbedPane();
+		this.activitiesAndComments.setBackground(new Color(220, 220, 220));
+		this.activitiesAndComments.setMinimumSize(new Dimension(260, 0));
+		this.activitiesAndComments.setMaximumSize(new Dimension(260, Integer.MAX_VALUE));
+		this.activitiesAndComments.setPreferredSize(new Dimension(260, 400));
+		
+		this.scrollPane = new JScrollPane(activitiesAndComments);		
+		this.scrollPane.setOpaque(false);
+		this.scrollPane.getViewport().setOpaque(false);
+		this.scrollPane.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+		this.scrollPane.setHorizontalScrollBarPolicy(
+				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		
 		activitiesPanel = new JPanel();
-		commentPanel = new JPanel();
-		
 		activitiesLabel = new JLabel("Task History");
 		activitiesLabel.setForeground(labelColor);
 		taskActivitiesList = new JList<Activity>();
+//		activitiesScrollPane = new JScrollPane(taskActivitiesList);
+
 		
+		commentPanel = new JPanel();
 		commentLabel = new JLabel ("Comments");
 		commentLabel.setForeground(labelColor);
 		taskCommentList = new JList<Comment>();
+//		commentsScrollPane = new JScrollPane(taskCommentList);
 		
 		taskCommentArea = new JTextArea();
+		taskCommentArea.setBorder(BorderFactory.createEmptyBorder());
+		taskCommentArea.setLineWrap(true);
+		taskCommentArea.setWrapStyleWord(true);
 		
 		saveCommentButton = new JButton("Save");
 		saveCommentButton.addActionListener( new ActionListener() {
@@ -121,6 +148,7 @@ public class TaskActivitiesAndComments extends JPanel implements IView {
 		activitiesgbc.weightx = 0.0;
 		activitiesgbc.insets.top = 5;
 		activitiesgbc.gridy = 1;
+//		activitiesPanel.add(activitiesScrollPane, activitiesgbc);
 		activitiesPanel.add(taskActivitiesList, activitiesgbc);
 		
 		//comments layout
@@ -142,7 +170,8 @@ public class TaskActivitiesAndComments extends JPanel implements IView {
 		commentsgbc.gridy = 1;
 		commentsgbc.weighty = 1.;
 		commentsgbc.weightx = 0.;
-		commentPanel.add(taskCommentList,commentsgbc);
+//		commentPanel.add(commentsScrollPane,commentsgbc);
+		commentPanel.add(taskCommentList, commentsgbc);
 		commentsgbc.weighty = 0.;
 		commentsgbc.weightx = 1.;
 		commentsgbc.gridy = 2;
@@ -155,7 +184,7 @@ public class TaskActivitiesAndComments extends JPanel implements IView {
 		activitiesAndComments.addTab("Comments", commentPanel);
 		
 		this.setLayout(new BorderLayout());
-		this.add(activitiesAndComments, BorderLayout.CENTER);
+		this.add(scrollPane, BorderLayout.CENTER);
 	}
 	
 	/**
@@ -165,9 +194,13 @@ public class TaskActivitiesAndComments extends JPanel implements IView {
 	public void updateView( Task t ) {
 		
 		this.t = t;
+		MyCellRenderer cellRenderer = new MyCellRenderer(this.activitiesPanel.getWidth());
+		System.out.println("********this.activitiespanel.getwidth = " + this.activitiesPanel.getWidth());
 
 		taskActivitiesList.setListData(t.getActivities().toArray(new Activity[0]));
+		taskActivitiesList.setCellRenderer(cellRenderer);
 		taskCommentList.setListData(t.getComments().toArray(new Comment[0]));
+		taskCommentList.setCellRenderer(cellRenderer);
 		saveCommentButton.setEnabled(true);
 		this.revalidate();
 	}
@@ -194,6 +227,26 @@ public class TaskActivitiesAndComments extends JPanel implements IView {
 	@Override
 	public void setStages(StageList sl) {
 		// no purpose here
+	}
+	
+	class MyCellRenderer extends DefaultListCellRenderer {
+		   public static final String HTML_1 = "<html><body style='width: ";
+		   public static final String HTML_2 = "px'>";
+		   public static final String HTML_3 = "</html>";
+		   private int width;
+
+		   public MyCellRenderer(int width) {
+		      this.width = width;
+		   }
+
+		   @Override
+		   public Component getListCellRendererComponent(JList list, Object value,
+		         int index, boolean isSelected, boolean cellHasFocus) {
+		      String text = HTML_1 + String.valueOf(width) + HTML_2 + value.toString()
+		            + HTML_3;
+		      return super.getListCellRendererComponent(list, text, index, isSelected,
+		            cellHasFocus);
+		   }
 	}
 	
 }

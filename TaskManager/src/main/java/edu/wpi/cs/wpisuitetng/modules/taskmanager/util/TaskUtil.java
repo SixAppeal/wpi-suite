@@ -4,6 +4,7 @@ import java.util.Date;
 
 import com.google.gson.Gson;
 
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Comment;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Stage;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 
@@ -88,6 +89,12 @@ public class TaskUtil {
 	 */
 	public static String sanitizeInput(String input) {
 		return input.trim();
+	}
+	
+	public static Comment validateComment(Comment comment) throws IllegalArgumentException{
+		if (comment.equals("")) throw new IllegalArgumentException("Cannot post blank comment");
+		return comment;
+			
 	}
 
 }
