@@ -74,21 +74,18 @@ public class ThreadSafeLocalCache implements Cache {
 	 */
 	@Override
 	public void store(String request, Task taskToStore) {
-		if (request.equals("task")) {
-			final Request networkRequest = Network.getInstance().makeRequest(
-					"taskmanager/task", HttpMethod.PUT);
-			networkRequest.addObserver(new AddManager(this, request, gateway, callbacks.get("task")));
-			networkRequest.setBody(taskToStore.toJson());
-			networkRequest.send();
+		if (!(request.split(":")[0].equals("task") && request.split(":").length == 2)) {
+			System.out.println("Bad Request!");
+			//TODO get rid of print statement
+			return;
 		}
-		if (request.equals("archive")) {
-			final Request networkRequest = Network.getInstance().makeRequest(
-					"taskmanager/task", HttpMethod.PUT);
-			networkRequest.addObserver(new AddManager(this, request, gateway, callbacks.get("task")));
-			networkRequest.setBody(taskToStore.toJson());
-			networkRequest.send();
-		}	
-	}
+		final Request networkRequest = Network.getInstance().makeRequest(
+				"taskmanager/task", HttpMethod.PUT);
+		networkRequest.addObserver(new AddManager(this, request, gateway, request.split(":")[1]));
+		networkRequest.setBody(taskToStore.toJson());
+		networkRequest.send();
+		this.tasks.add(taskToStore);
+	}	
 
 	/**
 	 * @see edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.ICache#update(java.lang.String,
