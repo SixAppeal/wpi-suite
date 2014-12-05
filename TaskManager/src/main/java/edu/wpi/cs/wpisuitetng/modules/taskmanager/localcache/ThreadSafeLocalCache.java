@@ -12,9 +12,7 @@
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import edu.wpi.cs.wpisuitetng.exceptions.NotImplementedException;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
@@ -49,20 +47,20 @@ public class ThreadSafeLocalCache implements Cache {
 	List<User> members;
 	StageList stages;
 	Gateway gateway;
-	Map<String, List<String>> callbacks;
-	
+
+	/**
+	 * Create a new instance of the cache
+	 */
 	public ThreadSafeLocalCache() {
 		tasks = new ArrayList<Task>();
 		archives = new ArrayList<Task>();
 		members = new ArrayList<User>();
 		stages = new StageList();
-		callbacks = new HashMap<String, List<String>>();
-		callbacks.put("task", new ArrayList<String>());
-		callbacks.put("archive", new ArrayList<String>());
-		callbacks.put("member", new ArrayList<String>());
-		callbacks.put("stages", new ArrayList<String>());
 	}
-	
+
+	/**
+	 * Set the gateway for this cache
+	 */
 	@Override
 	public void setGateway(Gateway gateway) {
 		this.gateway = gateway;
@@ -93,23 +91,13 @@ public class ThreadSafeLocalCache implements Cache {
 	 */
 	@Override
 	public void update(String request, Task newTask) {
-		if (request.equals("task")) {
-			final Request networkRequest = Network.getInstance().makeRequest(
-					"taskmanager/task", HttpMethod.POST);
-			networkRequest.setBody(newTask.toJson());
-			networkRequest.addObserver(new UpdateManager(this, request, gateway,
-					callbacks.get("task")));
-			networkRequest.send();
-		}
-		if (request.equals("archive")) {
-			newTask.archive();
-			final Request networkRequest = Network.getInstance().makeRequest(
-					"taskmanager/task", HttpMethod.POST);
-			networkRequest.setBody(newTask.toJson());
-			networkRequest.addObserver(new UpdateManager(this, request, gateway,
-					callbacks.get("archive")));
-			networkRequest.send();
-		}		
+		//TODO add in updateVerified logic here	and index out of bounds protection
+		final Request networkRequest = Network.getInstance().makeRequest(
+				"taskmanager/task", HttpMethod.POST);
+		networkRequest.setBody(newTask.toJson());
+		networkRequest.addObserver(new UpdateManager(this, request, gateway, request.split(":")[1]));
+		networkRequest.send();
+
 	}
 
 	/**
@@ -118,12 +106,18 @@ public class ThreadSafeLocalCache implements Cache {
 	 */
 	@Override
 	public void store(String request, StageList slToStore) {
+		//TODO add in array out of bounds protection
 		if (request.equals("stages")) {
+			this.stages = slToStore;
 			final Request networkRequest = Network.getInstance().makeRequest(
 					"taskmanager/stages", HttpMethod.PUT);
-			networkRequest.addObserver(new AddManager(this, request, gateway, callbacks.get("stages")));
+			networkRequest.addObserver(new AddManager(this, request, gateway, request.split(":")[1]));
 			networkRequest.setBody(slToStore.toJson());
 			networkRequest.send();
+		}
+		else {
+			System.out.println("Invalid Request!");
+			//TODO clean this up
 		}
 	}
 
@@ -133,12 +127,12 @@ public class ThreadSafeLocalCache implements Cache {
 	 */
 	@Override
 	public void update(String request, StageList newSL) {
+		//TODO add in array out of bounds protection
 		if (request.equals("stages")) {
 			System.out.println("The StageList is updating to " + newSL.toString());
 			final Request networkRequest = Network.getInstance().makeRequest(
 					"taskmanager/stages", HttpMethod.POST);
-			networkRequest.addObserver(new UpdateManager(this, request, gateway,
-					callbacks.get("stages")));
+			networkRequest.addObserver(new UpdateManager(this, request, gateway, request.split(":")[1]));
 			networkRequest.setBody(newSL.toJson());
 			networkRequest.send();
 		}
@@ -166,7 +160,7 @@ public class ThreadSafeLocalCache implements Cache {
 		return null;
 	}
 
-	
+
 	/**
 	 * @throws NotImplementedException
 	 * @see edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.ICache#retreive(java.lang.String,
@@ -198,7 +192,7 @@ public class ThreadSafeLocalCache implements Cache {
 		}
 	}
 
-	
+
 	/**
 	 * @see edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.ICache#subscribe()
 	 */
@@ -235,7 +229,7 @@ public class ThreadSafeLocalCache implements Cache {
 		} catch (NotImplementedException e) {
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	/**
@@ -263,7 +257,7 @@ public class ThreadSafeLocalCache implements Cache {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * Makes inital stage list
 	 */
