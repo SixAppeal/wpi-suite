@@ -9,6 +9,7 @@
  * Contributors: Nathan Hughes
  ******************************************************************************/
 
+
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
 
 import java.awt.Color;
@@ -145,6 +146,7 @@ public class TaskEditView extends JPanel implements IView {
 		MemberListHandler.getInstance().populateMembers(this.task.getAssignedTo());
 		this.updateMembers();
 		
+		
 		this.stageInput = new JComboBox<Stage>();
 		this.archiveButton = new JButton("Archive");
 		this.closeButton = new JButton("Close");
@@ -170,24 +172,31 @@ public class TaskEditView extends JPanel implements IView {
 		
 		for( Stage s : this.stages )this.stageInput.addItem(s);
 		this.stageInput.setSelectedItem(task.getStage());
+	
 		
-		this.members.setVisibleRowCount(4);
-		this.members.setLayoutOrientation(JList.VERTICAL);
-		this.assignedMembers.setVisibleRowCount(4);
-		this.assignedMembers.setLayoutOrientation(JList.VERTICAL);
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		
 		// Member JList Action Listeners
-		this.members.addListSelectionListener(new ListSelectionListener() {
+		members.addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
-				notifyAllMembersMouseHandler();
+//				notifyAllMembersMouseHandler();
 			}
 		});
 		
 		assignedMembers.addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
-				notifyAssignedMembersMouseHandler();
+//				notifyAssignedMembersMouseHandler();
 			}
 		});
 		
@@ -411,13 +420,13 @@ public class TaskEditView extends JPanel implements IView {
 	
 	
 	
-	public void notifyAllMembersMouseHandler() {
-		this.allMembersMouseHandler.just_changed = true;
-	}
-
-	public void notifyAssignedMembersMouseHandler() {
-		this.assignedMembersMouseHandler.just_changed = true;
-	}
+//	public void notifyAllMembersMouseHandler() {
+//		this.allMembersMouseHandler.just_changed = true;
+//	}
+//
+//	public void notifyAssignedMembersMouseHandler() {
+//		this.assignedMembersMouseHandler.just_changed = true;
+//	}
 	
 	/**
 	 * 
@@ -520,11 +529,13 @@ public class TaskEditView extends JPanel implements IView {
 			}
 			return false;
 		}
-		
-		
-		
-		
-
 	}
+
+	
+	
+	
+	
+	
+	
 }
 

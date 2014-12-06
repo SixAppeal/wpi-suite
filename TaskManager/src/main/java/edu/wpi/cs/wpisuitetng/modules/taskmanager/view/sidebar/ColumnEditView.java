@@ -68,14 +68,14 @@ public class ColumnEditView extends JPanel implements IView {
 		this.titleEntry = new JTextField();
 		this.newName = new JTextField();
 		this.nameChange = new JButton("Edit Name");
+		
+		this.titleEntry.setBorder(FormField.BORDER_NORMAL);
+		this.newName.setBorder(FormField.BORDER_NORMAL);
 
 		addButton.addActionListener( new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				stages.add(new Stage(titleEntry.getText()));
-				updateJListAndPublish();
-				titleEntry.setText("");
-				addButton.setEnabled(false);
+				addStage();
 			}});
 
 		titleEntry.addKeyListener( new KeyListener() {
@@ -241,8 +241,6 @@ public class ColumnEditView extends JPanel implements IView {
 	}
 
 	private void updateTextBox() {
-		System.out.print(titleEntry.getText() + " ");
-		System.out.println(!TaskUtil.sanitizeInput(titleEntry.getText()).isEmpty());
 		boolean valid = !TaskUtil.sanitizeInput(titleEntry.getText()).isEmpty();
 		titleEntry.setBorder(valid ? FormField.BORDER_NORMAL : FormField.BORDER_ERROR);
 		addButton.setEnabled(valid);
@@ -276,6 +274,30 @@ public class ColumnEditView extends JPanel implements IView {
 			 
 		}
 
+	}
+	
+	protected void addStage(){
+		boolean nameFlag = false;
+		String newName = new String(titleEntry.getText());
+		newName = TaskUtil.sanitizeInput(newName);
+		for(Stage s: stages){
+			if(s.getName().equals(newName)){
+				nameFlag = true;
+			}
+		}
+		if (nameFlag){
+			//TODO visual feedback when there is the input is invalid
+			// aka cannot name two stages the same thing. 
+			
+		}else{
+			stages.add(new Stage(newName));
+			updateJListAndPublish();
+			titleEntry.setText("");
+			addButton.setEnabled(false);
+		}
+
+		nameFlag = false;
+		
 	}
 	
 	private void updateJListAndPublish() {
