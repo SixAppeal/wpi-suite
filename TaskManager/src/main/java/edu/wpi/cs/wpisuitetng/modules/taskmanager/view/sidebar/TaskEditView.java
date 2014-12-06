@@ -9,6 +9,7 @@
  * Contributors: Nathan Hughes
  ******************************************************************************/
 
+
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
 
 import java.awt.Color;
@@ -145,6 +146,7 @@ public class TaskEditView extends JPanel implements IView {
 		MemberListHandler.getInstance().populateMembers(this.task.getAssignedTo());
 		this.updateMembers();
 		
+		
 		this.stageInput = new JComboBox<Stage>();
 		this.archiveButton = new JButton("Archive");
 		this.closeButton = new JButton("Close");
@@ -170,24 +172,35 @@ public class TaskEditView extends JPanel implements IView {
 		
 		for( Stage s : this.stages )this.stageInput.addItem(s);
 		this.stageInput.setSelectedItem(task.getStage());
+	
 		
-		this.members.setVisibleRowCount(4);
+		this.members.setVisibleRowCount(4);				
 		this.members.setLayoutOrientation(JList.VERTICAL);
-		this.assignedMembers.setVisibleRowCount(4);
+		
+		this.assignedMembers.setVisibleRowCount(4);				
 		this.assignedMembers.setLayoutOrientation(JList.VERTICAL);
 		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		// Member JList Action Listeners
-		this.members.addListSelectionListener(new ListSelectionListener() {
+		members.addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
-				notifyAllMembersMouseHandler();
+//				notifyAllMembersMouseHandler();
 			}
 		});
 		
 		assignedMembers.addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
-				notifyAssignedMembersMouseHandler();
+//				notifyAssignedMembersMouseHandler();
 			}
 		});
 		
@@ -411,13 +424,13 @@ public class TaskEditView extends JPanel implements IView {
 	
 	
 	
-	public void notifyAllMembersMouseHandler() {
-		this.allMembersMouseHandler.just_changed = true;
-	}
-
-	public void notifyAssignedMembersMouseHandler() {
-		this.assignedMembersMouseHandler.just_changed = true;
-	}
+//	public void notifyAllMembersMouseHandler() {
+//		this.allMembersMouseHandler.just_changed = true;
+//	}
+//
+//	public void notifyAssignedMembersMouseHandler() {
+//		this.assignedMembersMouseHandler.just_changed = true;
+//	}
 	
 	/**
 	 * 
@@ -427,9 +440,6 @@ public class TaskEditView extends JPanel implements IView {
 	 *  Update Panels is used to redraw the lists once something is changed
 	 */
 	public void updateMembers() {
-
-		
-		
 		this.members.setListData(MemberListHandler.getInstance().getUnassigned().toArray(new String[0]));
 		this.assignedMembers.setListData(MemberListHandler.getInstance().getAssigned().toArray(new String[0]));
 		this.revalidate();
@@ -440,7 +450,6 @@ public class TaskEditView extends JPanel implements IView {
 	 * Takes the members that the user has selected and moves them to the list of members assigned to a task
 	 */
 	public void moveMembersToAssigned() {	
-	
 		MemberListHandler.getInstance().assignMember(members.getSelectedValuesList());
 		updateMembers();
 		this.allMembersMouseHandler.clear();
@@ -520,11 +529,13 @@ public class TaskEditView extends JPanel implements IView {
 			}
 			return false;
 		}
-		
-		
-		
-		
-
 	}
+
+	
+	
+	
+	
+	
+	
 }
 

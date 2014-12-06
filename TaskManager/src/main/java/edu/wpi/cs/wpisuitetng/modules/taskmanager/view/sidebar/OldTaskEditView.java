@@ -590,15 +590,5 @@ public class OldTaskEditView extends JPanel implements IView {
 			}
 			return false;
 		}
-		
-		
-		
-		
-
-	}
-
-	@Override
-	public void setStages(StageList sl) {
-		// Is this class even supposed to exist?
 	}
 }

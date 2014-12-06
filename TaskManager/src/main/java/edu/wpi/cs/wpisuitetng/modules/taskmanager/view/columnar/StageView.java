@@ -19,9 +19,6 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
@@ -133,39 +130,6 @@ public class StageView extends JPanel implements IView {
 	}
 	
 	/**
-	 * adds a Tasks to the COlumn View
-	 * @param task
-	 */
-	public void addTask(Task task) 
-	{
-		//This seems ineffecnsent
-		
-		Task[] oldTasks = this.getTasks();
-		Task[] tempTaskList = new Task[oldTasks.length +1];
-		for(int i = 0; i< oldTasks.length; i++ )
-		{
-			tempTaskList[i] = oldTasks[i];
-		}
-		tempTaskList[oldTasks.length] = task;
-		
-		this.setTasks(tempTaskList);
-	}
-	
-	/**
-	 * upadate the state of the stage view with the new task array 
-	 * @param list array of tasks for that stage
-	 */
-	public void setAllTasks(ArrayList<TaskView> list)
-	{
-		ArrayList<Task> tempList = new ArrayList<Task> ();
-		for(TaskView view: list)
-		{
-			tempList.add(view.getTask());
-		}
-		this.tasks = tempList.toArray(new Task[0]);
-	}
-	
-	/**
 	 * Sets the state of this view, the name and the tasks within this stage.
 	 * @param tasks The new task array
 	 * @param stage The new stage
@@ -189,11 +153,6 @@ public class StageView extends JPanel implements IView {
 		gbc.weightx = 1.0;
 		gbc.insets = new Insets(0, 10, 10, 10);
 		gbc.gridx = 0;
-
-		this.tasks = this.sortTasks().toArray(new Task[0]);
-		for (Task t : tasks) {
-			System.out.println(t.getTitle() + " : " + t.getPriority());
-		}
 		
 		TaskView taskView;
 		int i;
@@ -216,25 +175,6 @@ public class StageView extends JPanel implements IView {
 		
 		this.scrollPane.revalidate();
 		this.scrollPane.repaint();
-	}
-	
-	/**
-	 * sorts the tasks base on priority
-	 */
-	private List<Task> sortTasks()
-	{
-		ArrayList <Task> tempList = new ArrayList<Task>();
-		for(Task t : tasks)
-		{
-			tempList.add(t);
-		}
-		Collections.sort(tempList, new Comparator<Task>() {
-			@Override
-			public int compare(Task t1, Task t2) {
-				return ((Double)t1.getPriority()).compareTo((Double)t2.getPriority());
-			}
-		});
-		return tempList;
 	}
 	
 	/**
@@ -261,11 +201,6 @@ public class StageView extends JPanel implements IView {
 			}
 		}
 	}
-
-	@Override
-	public void setStages(StageList sl) {
-		//No purpose here. 
-  }
 	
 	/**
 	 * gets the task views
