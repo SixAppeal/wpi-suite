@@ -1,5 +1,6 @@
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
@@ -20,6 +21,14 @@ public class UpdateManager implements RequestObserver {
 		this.callbacks = callbacks;
 	}
 
+	public UpdateManager(Cache localCache, String toUpdate, Gateway gateway, String revocationCallback) {
+		this.localCache = localCache;
+		this.toUpdate = toUpdate;
+		this.gateway = gateway;
+		this.callbacks = new ArrayList<String>();
+		this.callbacks.add(revocationCallback);
+	}
+	
 	@Override
 	public void responseSuccess(IRequest iReq) {
 		localCache.updateVerified(toUpdate, iReq.getBody());
