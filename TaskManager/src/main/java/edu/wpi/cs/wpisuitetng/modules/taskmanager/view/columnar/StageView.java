@@ -201,11 +201,6 @@ public class StageView extends JPanel implements IView {
 			}
 		}
 	}
-
-	@Override
-	public void setStages(StageList sl) {
-		//No purpose here. 
-  }
 	
 	/**
 	 * gets the task views

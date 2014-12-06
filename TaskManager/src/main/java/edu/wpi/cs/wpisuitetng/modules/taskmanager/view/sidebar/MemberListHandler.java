@@ -270,10 +270,4 @@ public class MemberListHandler implements IView {
 		this.gateway = gateway;
 
 	}
-
-	@Override
-	public void setStages(StageList sl) {
-		// no purpose here
-	}
-
 }

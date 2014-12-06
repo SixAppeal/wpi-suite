@@ -213,10 +213,4 @@ public class TaskDetailView extends JPanel implements IView {
 	public void setGateway(Gateway gateway) {
 		this.gateway = gateway;
 	}
-
-	@Override
-	public void setStages(StageList sl) {
-		// no purpose here
-	}
-	
 }
