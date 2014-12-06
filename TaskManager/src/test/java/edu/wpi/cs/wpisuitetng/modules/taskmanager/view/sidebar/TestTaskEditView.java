@@ -1,4 +1,4 @@
-package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar;
+package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
 
 import static org.junit.Assert.*;
 
@@ -9,7 +9,11 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Stage;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.StageList;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar.TaskEditView;
-
+/**
+ * runs test on taskeditview
+ * @author thhughes
+ *
+ */
 public class TestTaskEditView {
 	Task ttask;
 	StageList tsl;

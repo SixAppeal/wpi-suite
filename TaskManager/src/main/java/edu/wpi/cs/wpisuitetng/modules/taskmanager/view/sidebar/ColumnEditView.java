@@ -22,6 +22,7 @@ import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Collection;
+import java.util.LinkedList;
 
 import javax.swing.JButton;
 import javax.swing.JList;
@@ -40,6 +41,8 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Stage;
  * A sidebar view for editing the stages in a project.
  * 
  * @author wmtemple
+ * @author wavanrensselaer
+ * @author thhughes
  *
  */
 public class ColumnEditView extends JPanel implements IView {
@@ -296,7 +299,6 @@ public class ColumnEditView extends JPanel implements IView {
 			addButton.setEnabled(false);
 		}
 
-		nameFlag = false;
 		
 	}
 	
@@ -311,5 +313,38 @@ public class ColumnEditView extends JPanel implements IView {
 	private void publishStages() {
 		this.gateway.toPresenter("TaskPresenter", "publishChanges", stages);
 	}
+	/**
+	 * 
+	 * @return returns the number of stages in the columneditview. 
+	 */
+	public StageList getStages(){
+		return stages;
+	}
+	
+	/**
+	 * 
+	 * @return JTextFieled for the new entry
+	 */
+	public JTextField getTitleEntry(){
+		return this.titleEntry;
+	}
+	
+	/**
+	 * 
+	 * @return JTextField for the new name column
+	 */
+	public JTextField getNewName(){
+		return this.newName;
+	}
+	
+	
+	/**
+	 * 
+	 * @return JList<Stage> that this contains for testing
+	 */
+	public JList<Stage> getStageJList(){
+		return this.stageJList;
+	}
+	
 
 }
