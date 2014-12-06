@@ -12,6 +12,7 @@
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
 
 import java.awt.Component;
+import java.awt.FontMetrics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -25,10 +26,12 @@ import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Stage;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.StageList;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.util.TaskManagerUtil;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.util.TaskUtil;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.FormField;
@@ -38,6 +41,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Stage;
  * A sidebar view for editing the stages in a project.
  * 
  * @author wmtemple
+ * @author srojas
  *
  */
 public class ColumnEditView extends JPanel implements IView {
@@ -70,7 +74,16 @@ public class ColumnEditView extends JPanel implements IView {
 		addButton.addActionListener( new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				stages.add(new Stage(titleEntry.getText()));
+				
+				FontMetrics fm = titleEntry.getFontMetrics(titleEntry.getFont());
+				
+				// if less than the limit returns the same string, if more it returns the reduced string
+				String shortTitle = TaskManagerUtil.reduceString(titleEntry.getText(),245,fm);
+				
+				
+				
+				stages.add(new Stage(shortTitle));
+				
 				updateJListAndPublish();
 				titleEntry.setText("");
 				addButton.setEnabled(false);
