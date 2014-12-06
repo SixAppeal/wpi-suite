@@ -17,6 +17,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Collection;
@@ -61,8 +63,8 @@ public class ColumnEditView extends JPanel implements IView {
 		stages = new StageList();
 		this.stageJList = new JList<Stage>();
 		this.addButton = new JButton("+");
-		this.moveUpBtn = new JButton("▲");
-		this.moveDnBtn = new JButton("▼");
+		this.moveUpBtn = new JButton("Move Up");
+		this.moveDnBtn = new JButton("Move Down");
 		this.titleEntry = new JTextField();
 		this.newName = new JTextField();
 		this.nameChange = new JButton("Edit Name");
@@ -79,15 +81,32 @@ public class ColumnEditView extends JPanel implements IView {
 		titleEntry.addKeyListener( new KeyListener() {
 			@Override
 			public void keyTyped(KeyEvent e) {
+				
+			}
+
+			@Override
+			public void keyPressed(KeyEvent e) {
 				updateTextBox();
 			}
 
 			@Override
-			public void keyPressed(KeyEvent e) {}
+			public void keyReleased(KeyEvent e) {
+				updateTextBox();
+			}
+		});
+		
+		titleEntry.addFocusListener(new FocusListener() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				updateTextBox();
+			}
 
 			@Override
-			public void keyReleased(KeyEvent e) {}
+			public void focusLost(FocusEvent e) {
+				updateTextBox();
+			}
 		});
+		
 
 		stageJList.addKeyListener( new KeyListener() {
 
@@ -131,6 +150,8 @@ public class ColumnEditView extends JPanel implements IView {
 				//add logic
 				changeNameStage();
 			}});
+		
+
 
 
 		GridBagConstraints gbc = new GridBagConstraints();
@@ -220,6 +241,8 @@ public class ColumnEditView extends JPanel implements IView {
 	}
 
 	private void updateTextBox() {
+		System.out.print(titleEntry.getText() + " ");
+		System.out.println(!TaskUtil.sanitizeInput(titleEntry.getText()).isEmpty());
 		boolean valid = !TaskUtil.sanitizeInput(titleEntry.getText()).isEmpty();
 		titleEntry.setBorder(valid ? FormField.BORDER_NORMAL : FormField.BORDER_ERROR);
 		addButton.setEnabled(valid);
