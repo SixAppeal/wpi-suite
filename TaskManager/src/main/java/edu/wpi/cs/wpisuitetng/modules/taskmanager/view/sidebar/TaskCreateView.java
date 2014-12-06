@@ -173,7 +173,6 @@ public class TaskCreateView extends JPanel implements IView {
 		return false;
 	}
 
-	@Override
 	public void setStages(StageList sl) {
 		if( !stages.equals(sl) ) {
 			Object pSelected = stages.getSelectedItem();

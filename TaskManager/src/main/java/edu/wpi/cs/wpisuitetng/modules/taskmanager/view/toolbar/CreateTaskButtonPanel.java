@@ -155,10 +155,4 @@ public class CreateTaskButtonPanel extends ToolbarGroupView implements IView {
 	public void setGateway(Gateway gateway) {
 		this.gateway = gateway;
 	}
-
-
-	@Override
-	public void setStages(StageList sl) {
-		// no purpose here
-	}
 }

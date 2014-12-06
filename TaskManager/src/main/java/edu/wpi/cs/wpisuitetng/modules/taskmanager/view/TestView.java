@@ -43,10 +43,4 @@ public class TestView implements IView {
 	public int getNumber() {
 		return this.number;
 	}
-
-	@Override
-	public void setStages(StageList sl) {
-		// TODO Auto-generated method stub
-		
-	}
 }
