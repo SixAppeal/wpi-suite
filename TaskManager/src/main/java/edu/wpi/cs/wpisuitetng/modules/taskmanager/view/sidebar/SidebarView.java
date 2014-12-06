@@ -165,7 +165,11 @@ public class SidebarView extends JTabbedPane implements IView {
 	
 	public void setStages(StageList sl) {
 		this.stages = sl;
-		for (IView v : this.viewList) v.setStages(this.stages);
+		for (IView v : this.viewList) {
+			if (v instanceof TaskCreateView) {
+				((TaskCreateView) v).setStages(this.stages);
+			}
+		}
 	}
 
 	public Task findTask(Task [] tasks, int id) {

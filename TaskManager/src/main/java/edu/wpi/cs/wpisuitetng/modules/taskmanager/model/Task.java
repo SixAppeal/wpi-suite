@@ -3,6 +3,7 @@ package edu.wpi.cs.wpisuitetng.modules.taskmanager.model;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Comparator;
 
 import com.google.gson.Gson;
 
@@ -23,6 +24,15 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.util.TaskUtil;
  * @author akshoop
  */
 public class Task extends AbstractModel {
+	/**
+	 * Comparator for tasks by priority
+	 */
+	public static final Comparator<Task> PRIORITY_COMPARATOR = new Comparator<Task>() {
+		@Override
+		public int compare(Task task1, Task task2) {
+			return Double.compare(task1.getPriority(), task2.getPriority());
+		}
+	};
 
 	private int id;
 	private boolean archived;

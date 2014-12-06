@@ -28,8 +28,8 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-
 import java.awt.datatransfer.DataFlavor;
 
 import javax.swing.BorderFactory;
@@ -105,7 +105,7 @@ public class ColumnView extends JPanel implements IView {
 	 * adds a Tasks to the COlumn View
 	 * @param task
 	 */
-	public void addTask(Task task) 
+	/*public void addTask(Task task) 
 	{
 		//This seems ineffecnsent
 		
@@ -118,7 +118,7 @@ public class ColumnView extends JPanel implements IView {
 		tempTaskList[oldTasks.length] = task;
 		
 		this.setTasks(tempTaskList);
-	}
+	}*/
 		
 	
 	/**
@@ -208,6 +208,8 @@ public class ColumnView extends JPanel implements IView {
 				tasks.add(this.tasks[i]);
 			}
 		}
+		
+		Collections.sort(tasks, Task.PRIORITY_COMPARATOR);
 		
 		return tasks.toArray(new Task[0]);
 	}

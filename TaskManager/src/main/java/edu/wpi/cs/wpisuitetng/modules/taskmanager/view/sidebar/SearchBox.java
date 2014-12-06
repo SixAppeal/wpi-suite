@@ -208,10 +208,4 @@ public class SearchBox extends JPanel implements IView {
 	public void setGateway(Gateway gateway) {
 		this.gateway = gateway;
 	}
-
-	@Override
-	public void setStages(StageList sl) {
-		// This method has no purpose here.
-	}
-
 }

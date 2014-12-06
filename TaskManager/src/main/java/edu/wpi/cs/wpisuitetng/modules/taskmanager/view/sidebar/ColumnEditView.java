@@ -17,6 +17,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Collection;
@@ -61,33 +63,50 @@ public class ColumnEditView extends JPanel implements IView {
 		stages = new StageList();
 		this.stageJList = new JList<Stage>();
 		this.addButton = new JButton("+");
-		this.moveUpBtn = new JButton("▲");
-		this.moveDnBtn = new JButton("▼");
+		this.moveUpBtn = new JButton("Move Up");
+		this.moveDnBtn = new JButton("Move Down");
 		this.titleEntry = new JTextField();
 		this.newName = new JTextField();
 		this.nameChange = new JButton("Edit Name");
+		
+		this.titleEntry.setBorder(FormField.BORDER_NORMAL);
+		this.newName.setBorder(FormField.BORDER_NORMAL);
 
 		addButton.addActionListener( new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				stages.add(new Stage(titleEntry.getText()));
-				updateJListAndPublish();
-				titleEntry.setText("");
-				addButton.setEnabled(false);
+				addStage();
 			}});
 
 		titleEntry.addKeyListener( new KeyListener() {
 			@Override
 			public void keyTyped(KeyEvent e) {
+				
+			}
+
+			@Override
+			public void keyPressed(KeyEvent e) {
 				updateTextBox();
 			}
 
 			@Override
-			public void keyPressed(KeyEvent e) {}
+			public void keyReleased(KeyEvent e) {
+				updateTextBox();
+			}
+		});
+		
+		titleEntry.addFocusListener(new FocusListener() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				updateTextBox();
+			}
 
 			@Override
-			public void keyReleased(KeyEvent e) {}
+			public void focusLost(FocusEvent e) {
+				updateTextBox();
+			}
 		});
+		
 
 		stageJList.addKeyListener( new KeyListener() {
 
@@ -131,6 +150,8 @@ public class ColumnEditView extends JPanel implements IView {
 				//add logic
 				changeNameStage();
 			}});
+		
+
 
 
 		GridBagConstraints gbc = new GridBagConstraints();
@@ -253,6 +274,30 @@ public class ColumnEditView extends JPanel implements IView {
 			 
 		}
 
+	}
+	
+	protected void addStage(){
+		boolean nameFlag = false;
+		String newName = new String(titleEntry.getText());
+		newName = TaskUtil.sanitizeInput(newName);
+		for(Stage s: stages){
+			if(s.getName().equals(newName)){
+				nameFlag = true;
+			}
+		}
+		if (nameFlag){
+			//TODO visual feedback when there is the input is invalid
+			// aka cannot name two stages the same thing. 
+			
+		}else{
+			stages.add(new Stage(newName));
+			updateJListAndPublish();
+			titleEntry.setText("");
+			addButton.setEnabled(false);
+		}
+
+		nameFlag = false;
+		
 	}
 	
 	private void updateJListAndPublish() {

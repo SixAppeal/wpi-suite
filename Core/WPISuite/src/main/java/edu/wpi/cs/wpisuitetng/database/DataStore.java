@@ -40,7 +40,7 @@ public class DataStore implements Data {
      * The default line is:
      * static String WPI_TNG_DB ="WPISuite_TNG_local";
      */
-    static String WPI_TNG_DB = "WPISuite_TNG_local";
+    static String WPI_TNG_DB = "Team6Iteration3.db";
     static DataStore instance = null;
     static ObjectContainer theDB;
     static ObjectServer server;
