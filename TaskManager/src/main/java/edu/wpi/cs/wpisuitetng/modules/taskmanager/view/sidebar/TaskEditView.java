@@ -440,9 +440,6 @@ public class TaskEditView extends JPanel implements IView {
 	 *  Update Panels is used to redraw the lists once something is changed
 	 */
 	public void updateMembers() {
-
-		
-		
 		this.members.setListData(MemberListHandler.getInstance().getUnassigned().toArray(new String[0]));
 		this.assignedMembers.setListData(MemberListHandler.getInstance().getAssigned().toArray(new String[0]));
 		this.revalidate();
@@ -453,7 +450,6 @@ public class TaskEditView extends JPanel implements IView {
 	 * Takes the members that the user has selected and moves them to the list of members assigned to a task
 	 */
 	public void moveMembersToAssigned() {	
-	
 		MemberListHandler.getInstance().assignMember(members.getSelectedValuesList());
 		updateMembers();
 		this.allMembersMouseHandler.clear();
