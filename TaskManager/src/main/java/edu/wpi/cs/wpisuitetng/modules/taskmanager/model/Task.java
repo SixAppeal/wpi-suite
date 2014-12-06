@@ -16,14 +16,11 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.util.TaskUtil;
  * @author nhhughes
  * @author srojas
  * @author jrhennessy
-<<<<<<< HEAD
  * @author Thhughes
  * @author krpeffer
  * @author rwang3
-=======
- * @author Thhughes
  * @author rnorlando
->>>>>>> origin/dpseaman-DnD_testing
+ * @author akshoop
  */
 public class Task extends AbstractModel {
 
@@ -36,6 +33,7 @@ public class Task extends AbstractModel {
 	private Integer estimatedEffort; 
 	private Integer actualEffort;
 	private Date dueDate;
+	private String requirement;
 	private List<Activity> activities;
 	private List<Comment> comments;
 	private Double priority;
@@ -45,7 +43,7 @@ public class Task extends AbstractModel {
 	 */
 	public Task() {
 		this("A New Task", "A New Task", new Stage("New"), new LinkedList<String>(), 1, 1,
-				new Date(), new LinkedList<Activity>(), new LinkedList<Comment>());
+				new Date(), "Associated requirement", new LinkedList<Activity>(), new LinkedList<Comment>());
 	}
 
 	/**
@@ -63,7 +61,8 @@ public class Task extends AbstractModel {
 	 */
 	public Task(String title, String description, Stage stage,
 			List<String> assignedTo, Integer estimatedEffort,
-			Integer actualEffort, Date dueDate, List<Activity> activities, List<Comment> comments) throws IllegalArgumentException {
+			Integer actualEffort, Date dueDate, 
+			String requirement, List<Activity> activities, List<Comment> comments) throws IllegalArgumentException {
 		super();
 		this.title = TaskUtil.validateTitle(title);
 		this.description = TaskUtil.validateDescription(description);
@@ -72,6 +71,7 @@ public class Task extends AbstractModel {
 		this.estimatedEffort = TaskUtil.validateEffort(estimatedEffort);
 		this.actualEffort = TaskUtil.validateEffort(actualEffort);
 		this.dueDate = TaskUtil.validateDueDate(dueDate);
+		this.requirement = requirement;
 		this.activities = activities;
 		this.comments = comments;
 		this.activities = activities;
@@ -92,11 +92,12 @@ public class Task extends AbstractModel {
 				&& this.description.equals(task.getDescription())
 				&& this.estimatedEffort.equals(task.getEstimatedEffort())
 				&& this.actualEffort.equals(task.getActualEffort())
-				&& this.dueDate.equals(task.getDueDate());
+				&& this.dueDate.equals(task.getDueDate())
+				&& this.requirement.equals(task.getRequirement());
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Determines the hashCode of the task to be its ID
 	 */
@@ -311,8 +312,25 @@ public class Task extends AbstractModel {
 	}
 	
 	/**
+	 * Retrieves the associated requirement of the task
+	 * @return assocReq Associated Requirement of the task
+	 */
+	public String getRequirement() {
+		return requirement;
+	}
+	
+	/**
+	 * Set the associated requirement of the task
+	 * @param aReq Requirement to use for setting
+	 */
+	public void setRequirement(String aReq) {
+		this.addToHistory(this.getRequirement(), requirement, "Associated Requirement");
+		this.requirement = TaskUtil.validateRequirement(aReq);
+	}
+	
+	/**
 	 * 
-	 * @return the prioity value to be listed on screen
+	 * @return the priority value to be listed on screen
 	 */
 	public double getPriority()
 	{
@@ -320,8 +338,8 @@ public class Task extends AbstractModel {
 	}
 	
 	/**
-	 *  sets the prioity for the task
-	 * @param what the prioirty should be
+	 *  sets the priority for the task
+	 * @param what the priority should be
 	 */
 	public void setActivities(List<Activity> activities) throws IllegalArgumentException  {
 		this.activities = activities;

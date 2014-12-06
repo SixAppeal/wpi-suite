@@ -72,6 +72,17 @@ public class TaskUtil {
 	}
 	
 	/**
+	 * Checks an associated requirement against the ruleset for valid associated requirements
+	 * @param input The string input from user
+	 * @return The same input provided that it's valid.
+	 * @throws IllegalArgumentException
+	 */
+	public static String validateRequirement(String input) throws IllegalArgumentException {
+		// No rules
+		return input;
+	}
+	
+	/**
 	 * 
 	 * @param stage
 	 * @return

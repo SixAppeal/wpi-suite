@@ -24,6 +24,9 @@ import com.google.gson.Gson;
 import edu.wpi.cs.wpisuitetng.exceptions.NotImplementedException;
 import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
+import edu.wpi.cs.wpisuitetng.modules.requirementmanager.controller.GetRequirementsController;
+import edu.wpi.cs.wpisuitetng.modules.requirementmanager.controller.GetRequirementsRequestObserver;
+import edu.wpi.cs.wpisuitetng.modules.requirementmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Stage;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.StageList;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
@@ -45,7 +48,7 @@ public class LocalCache implements Cache, IPresenter {
 	StageList stages;
 	Gateway gateway;
 	Map<String, List<String>> callbacks;
-
+	List<Requirement> requirements;
 	/**
 	 * Initializes the local cache with a lookup table and some cache data
 	 * structures
@@ -60,6 +63,7 @@ public class LocalCache implements Cache, IPresenter {
 		callbacks.put("archive", new ArrayList<String>());
 		callbacks.put("member", new ArrayList<String>());
 		callbacks.put("stages", new ArrayList<String>());
+		requirements = new ArrayList<Requirement>();
 	}
 
 	/**
@@ -221,6 +225,11 @@ public class LocalCache implements Cache, IPresenter {
 					"taskmanager/stages", HttpMethod.GET);
 			networkRequest.addObserver(new SyncManager((Cache) this, request, callbacks.get("stages"), gateway));
 			networkRequest.send();
+		}
+		if (request.equals("requirements")) {
+			final Request networkRequest = Network.getInstance().makeRequest(
+					"requirementmanager/requirement", HttpMethod.GET);
+			networkRequest.addObserver(new RequirementObserver(this, request, requirements, gateway));
 		}
 	}
 
