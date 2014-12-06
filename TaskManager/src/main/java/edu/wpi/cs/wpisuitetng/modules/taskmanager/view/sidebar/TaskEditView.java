@@ -174,7 +174,11 @@ public class TaskEditView extends JPanel implements IView {
 		this.stageInput.setSelectedItem(task.getStage());
 	
 		
+		this.members.setVisibleRowCount(4);				
+		this.members.setLayoutOrientation(JList.VERTICAL);
 		
+		this.assignedMembers.setVisibleRowCount(4);				
+		this.assignedMembers.setLayoutOrientation(JList.VERTICAL);
 		
 		
 		
