@@ -43,13 +43,16 @@ public class TestMemberListHandler {
 		testUsernamesUnassigned.addAll(testUsernames);
 		testUsernamesUnassigned.removeAll(testUsernamesAssigned);
 		
+		List<String> tuMembers = MemberListHandler.getInstance().getUnassigned();
+		List<String> taMembers = MemberListHandler.getInstance().getAssigned();
+		List<String> tgMembers = MemberListHandler.getInstance().getGlobal();
+		
+		tuMembers.clear();
+		taMembers.clear();
+		tgMembers.clear();
 		
 		
-
-		// Debug Print's
-//		System.out.println("Setup Unassigned: " +  this.testUsernamesUnassigned);
-//		System.out.println("Setup Assigned:   " +  this.testUsernamesAssigned);
-//		System.out.println("Setup Global:     " +  this.testUsernames);
+		
 	}
 	
 	@Test
@@ -67,35 +70,31 @@ public class TestMemberListHandler {
 		assertEquals(MemberListHandler.getInstance().getNumMembers(), new Integer(0));
 	}
 	
-	@Test
-	public void testGlobalAdder(){
-		MemberListHandler.getInstance().addGlobal("Username1");
-		assertEquals(MemberListHandler.getInstance().getNumMembers(), new Integer(1));
-	}
+
+	
 	
 	@Test
-	public void testGlobalAdder_2(){
-		MemberListHandler.getInstance().addGlobal(testUsernames);
-		// System should not allow douplicates, therefore should be 4 members
-		assertEquals(MemberListHandler.getInstance().getNumMembers(), new Integer(4));
-		assertEquals(MemberListHandler.getInstance().getGlobal(), testUsernames);
+	public void testClearMethod(){
+		List<String> tuMembers = MemberListHandler.getInstance().getUnassigned();
+		List<String> taMembers = MemberListHandler.getInstance().getAssigned();
 		
+		tuMembers.addAll(testUsernamesAssigned);
+		taMembers.addAll(testUsernamesAssigned);
+		
+		assertEquals(MemberListHandler.getInstance().getNumAssigned(), new Integer(2));
+		assertEquals(MemberListHandler.getInstance().getNumUnAssigned(), new Integer(2));
+		
+		MemberListHandler.getInstance().clearMembers();
+
+		assertEquals(MemberListHandler.getInstance().getNumAssigned(), new Integer(0));
+		assertEquals(MemberListHandler.getInstance().getNumUnAssigned(), new Integer(0));
+		assertEquals(MemberListHandler.getInstance().getGlobal(), MemberListHandler.getInstance().getGlobal());
 	}
-	
-//	@Test
-//	public void testClearMethod(){
-//		MemberListHandler handler = new MemberListHandler();
-//		MemberListHandler.getInstance().clearMembers();
-//
-//		assertEquals(MemberListHandler.getInstance().getAssigned(), handler.getAssigned());
-//		assertEquals(MemberListHandler.getInstance().getUnassigned(), handler.getUnassigned());
-//		assertEquals(MemberListHandler.getInstance().getGlobal(), handler.getGlobal());
-//	}
 	
 	@Test
 	public void testPopulate(){
-		
-		MemberListHandler.getInstance().addGlobal(testUsernames);
+		List<String> global = MemberListHandler.getInstance().getGlobal();
+		global.addAll(testUsernames);
 		MemberListHandler.getInstance().populateMembers(testUsernamesAssigned);
 		
 		
@@ -109,25 +108,129 @@ public class TestMemberListHandler {
 	
 	@Test
 	public void testAssignMember(){
-		MemberListHandler.getInstance().addGlobal(testUsernames);
-		
-		MemberListHandler.getInstance().assignMember(this.testUsernamesUnassigned.get(1));
+		List<String> global = MemberListHandler.getInstance().getGlobal();
+		global.addAll(testUsernames);
+		MemberListHandler.getInstance().populateMembers(testUsernamesAssigned);
 		
 		this.testUsernamesAssigned.add(this.testUsernamesUnassigned.get(1));
-		//this.testUsernamesUnassigned.remove(1);
-		System.out.println(MemberListHandler.getInstance().getAssigned());
-		System.out.println(testUsernamesAssigned);
-		
+		MemberListHandler.getInstance().assignMember(this.testUsernamesUnassigned.get(1));
+		this.testUsernamesUnassigned.remove(1);
 		
 		assertEquals(MemberListHandler.getInstance().getAssigned(), this.testUsernamesAssigned);
-
 		assertEquals(MemberListHandler.getInstance().getUnassigned(), this.testUsernamesUnassigned);
 		assertEquals(MemberListHandler.getInstance().getNumAssigned(), new Integer(3));
 		assertEquals(MemberListHandler.getInstance().getNumUnAssigned(), new Integer(1));
-		assertEquals(MemberListHandler.getInstance().getGlobal(), new Integer(4));
-		
-		
+		assertEquals(MemberListHandler.getInstance().getNumMembers(), new Integer(4));
 	}
+	
+	@Test
+	public void testUnAssignMember(){
+		List<String> global = MemberListHandler.getInstance().getGlobal();
+		global.addAll(testUsernames);
+		MemberListHandler.getInstance().populateMembers(testUsernamesAssigned);
+		
+		this.testUsernamesUnassigned.add(this.testUsernamesAssigned.get(1));
+		MemberListHandler.getInstance().unAssignMember(this.testUsernamesAssigned.get(1));
+		this.testUsernamesAssigned.remove(1);
+		
+		
+		assertEquals(MemberListHandler.getInstance().getAssigned(), this.testUsernamesAssigned);
+		assertEquals(MemberListHandler.getInstance().getUnassigned(), this.testUsernamesUnassigned);
+		assertEquals(MemberListHandler.getInstance().getNumAssigned(), new Integer(1));
+		assertEquals(MemberListHandler.getInstance().getNumUnAssigned(), new Integer(3));
+		assertEquals(MemberListHandler.getInstance().getNumMembers(), new Integer(4));
+	}
+	
+	@Test
+	public void testAssignMultipleMember(){
+		List<String> global = MemberListHandler.getInstance().getGlobal();
+		global.addAll(testUsernames);
+		MemberListHandler.getInstance().populateMembers(testUsernamesAssigned);
+		
+		this.testUsernamesAssigned.addAll(this.testUsernamesUnassigned);
+		MemberListHandler.getInstance().assignMember(this.testUsernamesUnassigned);
+		this.testUsernamesUnassigned.clear();
+		
+		assertEquals(MemberListHandler.getInstance().getAssigned(), this.testUsernamesAssigned);
+		assertEquals(MemberListHandler.getInstance().getUnassigned(), this.testUsernamesUnassigned);
+		assertEquals(MemberListHandler.getInstance().getNumAssigned(), new Integer(4));
+		assertEquals(MemberListHandler.getInstance().getNumUnAssigned(), new Integer(0));
+		assertEquals(MemberListHandler.getInstance().getNumMembers(), new Integer(4));
+	}
+	
+	@Test
+	public void testUnAssignMultipleMember(){
+		List<String> global = MemberListHandler.getInstance().getGlobal();
+		global.addAll(testUsernames);
+		MemberListHandler.getInstance().populateMembers(testUsernamesAssigned);
+		
+		this.testUsernamesUnassigned.addAll(this.testUsernamesAssigned);
+		MemberListHandler.getInstance().unAssignMember(this.testUsernamesAssigned);
+		this.testUsernamesAssigned.clear();
+		
+		
+		assertEquals(MemberListHandler.getInstance().getAssigned(), this.testUsernamesAssigned);
+		assertEquals(MemberListHandler.getInstance().getUnassigned(), this.testUsernamesUnassigned);
+		assertEquals(MemberListHandler.getInstance().getNumAssigned(), new Integer(0));
+		assertEquals(MemberListHandler.getInstance().getNumUnAssigned(), new Integer(4));
+		assertEquals(MemberListHandler.getInstance().getNumMembers(), new Integer(4));
+	}
+	
+	@Test (expected = IllegalArgumentException.class)
+	public void testAssignInvalid(){
+		List<String> global = MemberListHandler.getInstance().getGlobal();
+		global.addAll(testUsernames);
+		MemberListHandler.getInstance().populateMembers(testUsernamesAssigned);
+		
+		MemberListHandler.getInstance().assignMember(new String("Troy"));
+
+	}
+	
+	@Test (expected = IllegalArgumentException.class)
+	public void testunAssignInvalid(){
+		List<String> global = MemberListHandler.getInstance().getGlobal();
+		global.addAll(testUsernames);
+		MemberListHandler.getInstance().populateMembers(testUsernamesAssigned);
+		
+		MemberListHandler.getInstance().unAssignMember(new String("Troy"));
+		
+		List<String> badList = new ArrayList<String>();
+		badList.add("Troy");
+		badList.add("Alex");
+		
+		MemberListHandler.getInstance().unAssignMember(badList);
+	}
+	
+	@Test (expected = IllegalArgumentException.class)
+	public void testAssignMultipleInvalid(){
+		List<String> global = MemberListHandler.getInstance().getGlobal();
+		global.addAll(testUsernames);
+		MemberListHandler.getInstance().populateMembers(testUsernamesAssigned);
+		
+		List<String> badList = new ArrayList<String>();
+		badList.add("Troy");
+		badList.add("Alex");
+		
+		MemberListHandler.getInstance().assignMember(badList);
+
+	}
+	
+	@Test (expected = IllegalArgumentException.class)
+	public void testunAssignMultipleInvalid(){
+		List<String> global = MemberListHandler.getInstance().getGlobal();
+		global.addAll(testUsernames);
+		MemberListHandler.getInstance().populateMembers(testUsernamesAssigned);
+		
+		List<String> badList = new ArrayList<String>();
+		badList.add("Troy");
+		badList.add("Alex");
+		
+		MemberListHandler.getInstance().unAssignMember(badList);
+
+	}
+	
+	
+	
 	
 	
 	

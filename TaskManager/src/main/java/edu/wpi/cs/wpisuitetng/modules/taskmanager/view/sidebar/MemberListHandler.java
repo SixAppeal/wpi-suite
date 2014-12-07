@@ -190,26 +190,6 @@ public class MemberListHandler implements IView {
 
 	}
 
-	/**
-	 * Global List Adder -- Should only be used for testing --
-	 * 
-	 * @param toAdd
-	 *            String to add to the global List
-	 */
-	public void addGlobal(String toAdd) {
-		allMembersList.add(toAdd);
-
-	}
-
-	/**
-	 * Global List Adder -- Should only be used for testing --
-	 * 
-	 * @param toAdd
-	 *            List of Strings to add to the global List
-	 */
-	public void addGlobal(List<String> toAdd) {
-		allMembersList.addAll(toAdd);
-	}
 
 	/**
 	 * Gets the list of members assigned to a task

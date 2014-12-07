@@ -79,6 +79,7 @@ public class ColumnEditView extends JPanel implements IView {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				addStage();
+				
 			}});
 
 		titleEntry.addKeyListener( new KeyListener() {
