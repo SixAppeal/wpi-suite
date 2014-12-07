@@ -65,6 +65,7 @@ public class SidebarView extends JTabbedPane implements IView {
 		this.columnEditView = new ColumnEditView();
 		this.viewList.add(columnEditView);
 
+		this.setOpaque(false);
 		this.setTabPlacement(JTabbedPane.LEFT);
 		this.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
 		this.addTab(null, new ImageIcon(this.getClass().getResource("icon_search.png")),

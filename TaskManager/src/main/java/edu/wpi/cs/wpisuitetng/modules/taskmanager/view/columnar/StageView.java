@@ -14,10 +14,12 @@ package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-
+import java.awt.RenderingHints;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
@@ -27,7 +29,6 @@ import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Stage;
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.StageList;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
@@ -73,7 +74,7 @@ public class StageView extends JPanel implements IView {
 		this.scrollPane.setHorizontalScrollBarPolicy(
 				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
-		this.setBackground(new Color(220, 220, 220));
+		this.setBackground(new Color(255, 255, 255));
 		this.setMinimumSize(new Dimension(260, 0));
 		this.setMaximumSize(new Dimension(260, Integer.MAX_VALUE));
 		this.setPreferredSize(new Dimension(260, 400));
@@ -89,7 +90,7 @@ public class StageView extends JPanel implements IView {
 		this.add(this.nameLabel, gbc);
 		
 		gbc.fill = GridBagConstraints.BOTH;
-		gbc.insets = new Insets(0, 0, 0, 0);
+		gbc.insets = new Insets(0, 0, 10, 0);
 		gbc.weighty = 1.0;
 		gbc.gridy = 1;
 		this.add(this.scrollPane, gbc);
@@ -151,7 +152,6 @@ public class StageView extends JPanel implements IView {
 		gbc.anchor = GridBagConstraints.PAGE_START;
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.weightx = 1.0;
-		gbc.insets = new Insets(0, 10, 10, 10);
 		gbc.gridx = 0;
 		
 		TaskView taskView;
@@ -187,6 +187,15 @@ public class StageView extends JPanel implements IView {
 		GridBagConstraints gbc = this.layout.getConstraints(view);
 		gbc.weighty = i == this.tasks.length - 1 ? 1.0 : 0.0;
 		this.layout.setConstraints(view, gbc);
+	}
+	
+	@Override
+	public void paintComponent(Graphics g) {
+		Graphics2D graphics = (Graphics2D) g;
+		graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, 
+				RenderingHints.VALUE_ANTIALIAS_ON);
+		graphics.setColor(getBackground());
+		graphics.fillRoundRect(0, 0, getWidth(), getHeight(), 6, 6);
 	}
 	
 	/**

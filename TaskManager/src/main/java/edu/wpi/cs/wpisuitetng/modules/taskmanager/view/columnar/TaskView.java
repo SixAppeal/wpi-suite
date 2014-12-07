@@ -6,18 +6,23 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors: Will Rensselaer, Alex Shoop, Thomas Meehan, Ryan Orlando
+ * Contributors: Will Van Rensselaer, Alex Shoop, Thomas Meehan, Ryan Orlando
  ******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
+import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -42,7 +47,7 @@ public class TaskView extends JPanel implements  IView {
 	/**
 	 * The cutoff point for the title string in the task
 	 */
-	public static final int MAX_TITLE_LENGTH = 20;
+	public static final int MAX_TITLE_LENGTH = 18;
 
 	/**
 	 * Background color of the TaskView
@@ -61,7 +66,8 @@ public class TaskView extends JPanel implements  IView {
 	
 	// Components
 	private JLabel titleLabel;
-	private int id;
+	private JLabel dateLabel;
+	private JPanel container;
 	
 
 	/**
@@ -70,7 +76,34 @@ public class TaskView extends JPanel implements  IView {
 	 */
 	public TaskView(Task task) {
 		this.titleLabel = new JLabel("", JLabel.LEFT);
+		this.dateLabel = new JLabel("", JLabel.RIGHT);
+		this.container = new JPanel();
+		
+		this.container.setOpaque(false);
+		this.container.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, HOVER_COLOR));
+		this.container.setLayout(new GridBagLayout());
 
+		Font titleFont = this.titleLabel.getFont();
+		this.titleLabel.setFont(titleFont.deriveFont(titleFont.getStyle() & ~Font.BOLD));
+		
+		this.dateLabel.setForeground(new Color(180, 180, 180));
+		Font dateFont = this.dateLabel.getFont();
+		this.dateLabel.setFont(dateFont.deriveFont(dateFont.getStyle() & ~Font.BOLD));
+		
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.insets = new Insets(10, 0, 10, 10);
+		gbc.weightx = 1.0;
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		this.container.add(this.titleLabel, gbc);
+		
+		gbc.fill = GridBagConstraints.NONE;
+		gbc.insets.right = 20;
+		gbc.weightx = 0;
+		gbc.gridx = 1;
+		this.container.add(this.dateLabel, gbc);
+		
 		this.setBackground(TaskView.BACKGROUND_COLOR);
 		this.setLayout(new GridBagLayout());
 		this.addMouseListener(new MouseListener() {
@@ -97,8 +130,6 @@ public class TaskView extends JPanel implements  IView {
 				setBackground(TaskView.BACKGROUND_COLOR);
 			}
 		});
-		
-		this.titleLabel = new JLabel("", JLabel.LEFT);
 
 		this.setBackground(TaskView.BACKGROUND_COLOR);
 		this.setLayout(new GridBagLayout());		
@@ -106,13 +137,13 @@ public class TaskView extends JPanel implements  IView {
 		this.addMouseListener(new TaskDraggableMouseListener(this));
 		this.setTransferHandler(new DragAndDropTransferHandler());
 		
-		GridBagConstraints gbc = new GridBagConstraints();
+		gbc = new GridBagConstraints();
 		gbc.fill = GridBagConstraints.HORIZONTAL;
-		gbc.insets = new Insets(10, 10, 10, 10);
+		gbc.insets = new Insets(0, 20, 0, 0);
 		gbc.weightx = 1.0;
 		gbc.gridx = 0;
 		gbc.gridy = 0;
-		this.add(this.titleLabel, gbc);
+		this.add(this.container, gbc);
 		
 		this.setState(task);
 	}
@@ -148,12 +179,16 @@ public class TaskView extends JPanel implements  IView {
 	 */
 	public void reflow() {
 		String text = this.task.getTitle();
-		if (text.length() > 20) {
-			text = text.substring(0, 20) + "\u2026";
+		if (text.length() > MAX_TITLE_LENGTH) {
+			text = text.substring(0, 20);
 		}
 		this.titleLabel.setText(text);
+		this.dateLabel.setText(new SimpleDateFormat("MM/dd/yy").format(this.task.getDueDate()));
+		
 		this.titleLabel.revalidate();
+		this.dateLabel.revalidate();
 		this.revalidate();
+		this.repaint();
 	}
 	
 	/**

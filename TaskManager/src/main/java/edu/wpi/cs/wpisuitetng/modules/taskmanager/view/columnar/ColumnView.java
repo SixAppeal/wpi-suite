@@ -73,12 +73,16 @@ public class ColumnView extends JPanel implements IView {
 		this.container = new JPanel();
 		this.scrollPane = new JScrollPane(this.container);
 
+		this.container.setOpaque(false);
 		this.container.setLayout(new GridBagLayout());
 
+		this.scrollPane.setOpaque(false);
+		this.scrollPane.getViewport().setOpaque(false);
 		this.scrollPane.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
 		this.scrollPane.setVerticalScrollBarPolicy(
 				ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 		
+		this.setOpaque(false);
 		this.setLayout(new GridBagLayout());
 		
 		GridBagConstraints gbc = new GridBagConstraints();
