@@ -107,6 +107,8 @@ public class TaskEditView extends JPanel implements IView {
 	
 	private ActionListener stageBoxListener;
 	
+	private List<String> stringArray;
+	
 	
 	JListMouseHandler allMembersMouseHandler;
 	JListMouseHandler assignedMembersMouseHandler;
@@ -192,7 +194,11 @@ public class TaskEditView extends JPanel implements IView {
 		System.out.println("requirementTitles is " + requirementTitles);
 		this.requirementsComboBox = new JComboBox<String>();
 		for (String s: this.requirementTitles) this.requirementsComboBox.addItem(s);
-		this.requirementsComboBox.setSelectedItem(task.getRequirement());
+//		stringArray = new ArrayList<String>();
+//		stringArray.add("test1");
+//		stringArray.add("test2");
+//		for (String s : stringArray) this.requirementsComboBox.addItem(s);
+		this.requirementsComboBox.setSelectedItem(task.getRequirement().getName());
 		
 		this.viewRequirement = new JButton("View Requirement");
 		

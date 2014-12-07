@@ -77,7 +77,7 @@ public class TaskUtil {
 	 * @return The same input provided that it's valid.
 	 * @throws IllegalArgumentException
 	 */
-	public static String validateRequirement(String input) throws IllegalArgumentException {
+	public static Integer validateRequirement(Integer input) throws IllegalArgumentException {
 		// No rules
 		return input;
 	}

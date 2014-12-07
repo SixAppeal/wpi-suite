@@ -8,6 +8,8 @@ import java.util.Comparator;
 import com.google.gson.Gson;
 
 import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
+import edu.wpi.cs.wpisuitetng.modules.requirementmanager.models.Requirement;
+import edu.wpi.cs.wpisuitetng.modules.requirementmanager.models.RequirementModel;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.util.TaskUtil;
 
 /**
@@ -43,7 +45,7 @@ public class Task extends AbstractModel {
 	private Integer estimatedEffort; 
 	private Integer actualEffort;
 	private Date dueDate;
-	private String requirement;
+	private Integer reqID;
 	private List<Activity> activities;
 	private List<Comment> comments;
 	private Double priority;
@@ -53,7 +55,7 @@ public class Task extends AbstractModel {
 	 */
 	public Task() {
 		this("A New Task", "A New Task", new Stage("New"), new LinkedList<String>(), 1, 1,
-				new Date(), "Associated requirement", new LinkedList<Activity>(), new LinkedList<Comment>());
+				new Date(), 1, new LinkedList<Activity>(), new LinkedList<Comment>());
 	}
 
 	/**
@@ -72,7 +74,7 @@ public class Task extends AbstractModel {
 	public Task(String title, String description, Stage stage,
 			List<String> assignedTo, Integer estimatedEffort,
 			Integer actualEffort, Date dueDate, 
-			String requirement, List<Activity> activities, List<Comment> comments) throws IllegalArgumentException {
+			Integer reqID, List<Activity> activities, List<Comment> comments) throws IllegalArgumentException {
 		super();
 		this.title = TaskUtil.validateTitle(title);
 		this.description = TaskUtil.validateDescription(description);
@@ -81,7 +83,7 @@ public class Task extends AbstractModel {
 		this.estimatedEffort = TaskUtil.validateEffort(estimatedEffort);
 		this.actualEffort = TaskUtil.validateEffort(actualEffort);
 		this.dueDate = TaskUtil.validateDueDate(dueDate);
-		this.requirement = requirement;
+		this.reqID = reqID;
 		this.activities = activities;
 		this.comments = comments;
 		this.activities = activities;
@@ -103,7 +105,7 @@ public class Task extends AbstractModel {
 				&& this.estimatedEffort.equals(task.getEstimatedEffort())
 				&& this.actualEffort.equals(task.getActualEffort())
 				&& this.dueDate.equals(task.getDueDate())
-				&& this.requirement.equals(task.getRequirement());
+				&& this.reqID.equals(task.getReqID());
 		}
 		return false;
 	}
@@ -322,20 +324,44 @@ public class Task extends AbstractModel {
 	}
 	
 	/**
-	 * Retrieves the associated requirement of the task
+	 * Retrieves the associated requirement of the task from the reqID
+	 * Borrowed from //No Comment's TaskModel.java file
 	 * @return assocReq Associated Requirement of the task
 	 */
-	public String getRequirement() {
-		return requirement;
+	public Requirement getRequirement() {
+		if (reqID == null) {
+			return null;
+		}
+		for (Requirement r : RequirementModel.getInstance().getRequirements()) {
+			if (r.getId() == reqID) {
+				return r;
+			}
+		}
+		return null;
 	}
 	
 	/**
-	 * Set the associated requirement of the task
+	 * Return the requirement ID of the requirement in Task
+	 * @return reqID Requirement ID
+	 */
+	public Integer getReqID() {
+		return reqID;
+	}
+	
+	/**
+	 * Set the associated requirement ID of the task
+	 * Borrowed from //No Comment's TaskModel.java file
 	 * @param aReq Requirement to use for setting
 	 */
-	public void setRequirement(String aReq) {
-		this.addToHistory(this.getRequirement(), requirement, "Associated Requirement");
-		this.requirement = TaskUtil.validateRequirement(aReq);
+	public void setReqID(Integer aReq) {
+		String reqName = "";
+		for (Requirement r : RequirementModel.getInstance().getRequirements()) {
+			if (r.getId() == reqID) {
+				reqName = r.getName();
+			}
+		}
+		this.addToHistory(this.getReqID(), reqName, "Associated Requirement");
+		this.reqID = TaskUtil.validateRequirement(aReq);
 	}
 	
 	/**
