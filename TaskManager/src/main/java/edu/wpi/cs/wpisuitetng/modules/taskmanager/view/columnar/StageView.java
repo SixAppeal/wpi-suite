@@ -73,7 +73,7 @@ public class StageView extends JPanel implements IView {
 		this.scrollPane.setHorizontalScrollBarPolicy(
 				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
-		this.setBackground(new Color(220, 220, 220));
+		this.setBackground(new Color(255, 255, 255));
 		this.setMinimumSize(new Dimension(260, 0));
 		this.setMaximumSize(new Dimension(260, Integer.MAX_VALUE));
 		this.setPreferredSize(new Dimension(260, 400));
@@ -151,7 +151,7 @@ public class StageView extends JPanel implements IView {
 		gbc.anchor = GridBagConstraints.PAGE_START;
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.weightx = 1.0;
-		gbc.insets = new Insets(0, 10, 10, 10);
+		gbc.insets = new Insets(0, 0, 0, 0);
 		gbc.gridx = 0;
 		
 		TaskView taskView;
