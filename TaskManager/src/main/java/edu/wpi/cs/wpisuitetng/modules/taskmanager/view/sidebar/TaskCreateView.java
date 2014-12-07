@@ -117,6 +117,7 @@ public class TaskCreateView extends JPanel implements IView {
 				return !description.getText().trim().equals("");
 			}
 
+			
 			@Override
 			public String getMessage() {
 				return "Please enter a description.";
@@ -166,6 +167,12 @@ public class TaskCreateView extends JPanel implements IView {
 		this.gateway = gateway;
 	}
 
+	
+	/**
+	 * Checks if the title or description are empty
+	 * @return boolean describing if both fields contain stuff
+	 * @return True if both are fields are empty
+	 */
 	public boolean isEmpty() {
 		if (this.title.getText().trim().equals("") && this.description.getText().trim().equals("")) {
 			return true;
@@ -173,13 +180,31 @@ public class TaskCreateView extends JPanel implements IView {
 		return false;
 	}
 
+	
 	public void setStages(StageList sl) {
 		if( !stages.equals(sl) ) {
 			Object pSelected = stages.getSelectedItem();
 			stages.removeAllItems();
 			for (Stage s : sl) stages.addItem(s);
+			
+			
 			if (pSelected != null && sl.contains(pSelected)) stages.setSelectedItem(pSelected);
 		}
 	}
+	
+	/**
+	 * 
+	 * @return JTextField object that is the title of the TaskCreateView
+	 */
+	public JTextField getTitle(){
+		return this.title;
+	}
 
+	/**
+	 * 
+	 * @return JTextArea that is the description of the TaskCreateView
+	 */
+	public JTextArea getDescription(){
+		return this.description;
+	}
 }
