@@ -29,6 +29,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.Cache;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.LocalCache;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.*;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.util.TaskManagerUtil;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar.ColumnView;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar.ColumnEditView;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar.MemberListHandler;
@@ -88,7 +89,7 @@ public class TaskManager implements IJanewayModule {
 		taskPresenter = new TaskPresenter(localCache);
 		sidebarView.setCache((LocalCache)localCache);
 		
-		mainPanel.setBackground(new Color(7, 63, 131));
+		mainPanel.setBackground(TaskManagerUtil.BACKGROUND_COLOR);
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.X_AXIS));
 		mainPanel.add(columnView);
 		mainPanel.add(sidebarView);
