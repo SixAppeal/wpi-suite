@@ -53,6 +53,8 @@ public class MemberListHandler implements IView {
 	 *            This gets and updates the users that are within the system
 	 */
 	public void updateAll(LocalCache localCache) {
+		System.out.println("I made it here!! ");
+		System.out.println(Thread.currentThread().getStackTrace());
 		setGlobal(localCache);
 		updateUnassigned();
 		// this.gateway.toView("SidebarView","doStuff");
@@ -190,26 +192,6 @@ public class MemberListHandler implements IView {
 
 	}
 
-	/**
-	 * Global List Adder -- Should only be used for testing --
-	 * 
-	 * @param toAdd
-	 *            String to add to the global List
-	 */
-	public void addGlobal(String toAdd) {
-		allMembersList.add(toAdd);
-
-	}
-
-	/**
-	 * Global List Adder -- Should only be used for testing --
-	 * 
-	 * @param toAdd
-	 *            List of Strings to add to the global List
-	 */
-	public void addGlobal(List<String> toAdd) {
-		allMembersList.addAll(toAdd);
-	}
 
 	/**
 	 * Gets the list of members assigned to a task
