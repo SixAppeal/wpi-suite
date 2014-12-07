@@ -23,7 +23,11 @@
 
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar;
 
+import java.awt.Color;
 import java.awt.Component;
+import java.awt.GradientPaint;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -243,4 +247,37 @@ public class ColumnView extends JPanel implements IView {
         }
         return dragAndDropPanelDataFlavor;
     }
+	
+	/**
+	 * this override the paint component method to make the background gradiant, and then paint normally.
+	 */
+	@Override
+	protected void paintComponent( Graphics g ) 
+	{
+
+		//make gradient stuff
+
+		//make to color for the gradient
+		Color color1 = getBackground( );
+		Color color2 = color1.darker( );
+
+		int w = getWidth( );
+		int h = getHeight( );
+	 
+		// Paint a gradient from top to bottom
+		GradientPaint gp = new GradientPaint(
+	    	0, 0, color1,
+	    	0, h, color2 );
+
+		Graphics2D g2d = (Graphics2D)g;
+		
+		g2d.setPaint( gp );
+		g2d.fillRect( 0, 0, w, h );
+
+		
+		//normal swing paining with out painting over my stuff
+		setOpaque(false);
+		super.paintComponent( g );
+		setOpaque(true);
+	}
 }
