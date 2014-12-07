@@ -32,6 +32,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.draganddrop.TaskDraggableMouse
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Stage;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.util.TaskManagerUtil;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
 
 /**
@@ -47,7 +48,7 @@ public class TaskView extends JPanel implements  IView {
 	/**
 	 * The cutoff point for the title string in the task
 	 */
-	public static final int MAX_TITLE_LENGTH = 18;
+	public static final int MAX_TITLE_LENGTH = 150;
 
 	/**
 	 * Background color of the TaskView
@@ -178,10 +179,8 @@ public class TaskView extends JPanel implements  IView {
 	 * Reflows this view when it's state changes
 	 */
 	public void reflow() {
-		String text = this.task.getTitle();
-		if (text.length() > MAX_TITLE_LENGTH) {
-			text = text.substring(0, 20);
-		}
+		String text = TaskManagerUtil.reduceString(this.task.getTitle(), MAX_TITLE_LENGTH,
+				this.titleLabel.getFontMetrics(this.titleLabel.getFont()));
 		this.titleLabel.setText(text);
 		this.dateLabel.setText(new SimpleDateFormat("MM/dd/yy").format(this.task.getDueDate()));
 		
