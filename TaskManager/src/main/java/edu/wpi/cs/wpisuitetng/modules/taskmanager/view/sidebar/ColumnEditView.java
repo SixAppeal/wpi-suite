@@ -6,12 +6,14 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors: Nathan Hughes
+ * Contributors: Nathan Hughes, Santiago Rojas
  ******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
 
 import java.awt.Component;
+import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -31,6 +33,7 @@ import javax.swing.JTextField;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Stage;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.StageList;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.util.TaskManagerUtil;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.util.TaskUtil;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.FormField;
@@ -40,6 +43,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Stage;
  * A sidebar view for editing the stages in a project.
  * 
  * @author wmtemple
+ * @author srojas 
  *
  */
 public class ColumnEditView extends JPanel implements IView {
@@ -276,12 +280,21 @@ public class ColumnEditView extends JPanel implements IView {
 
 	}
 	
+	
 	protected void addStage(){
 		boolean nameFlag = false;
-		String newName = new String(titleEntry.getText());
-		newName = TaskUtil.sanitizeInput(newName);
+		String newStageName = new String(titleEntry.getText());
+		newStageName = TaskUtil.sanitizeInput(newStageName);
+		
+		//font needs to be derived to bold first because it is bold in the JPane 
+		Font font = titleEntry.getFont().deriveFont(Font.BOLD);
+		FontMetrics fm = titleEntry.getFontMetrics(font);
+		// if the string is less than the limit of pixels returns the same string, if more it returns the reduced string
+		newStageName = TaskManagerUtil.reduceString(newStageName,245,fm);
+
+		
 		for(Stage s: stages){
-			if(s.getName().equals(newName)){
+			if(s.getName().equals(newStageName)){
 				nameFlag = true;
 			}
 		}
@@ -290,7 +303,7 @@ public class ColumnEditView extends JPanel implements IView {
 			// aka cannot name two stages the same thing. 
 			
 		}else{
-			stages.add(new Stage(newName));
+			stages.add(new Stage(newStageName));
 			updateJListAndPublish();
 			titleEntry.setText("");
 			addButton.setEnabled(false);
