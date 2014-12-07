@@ -1,6 +1,5 @@
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.toolbar;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import org.junit.Before;
@@ -21,7 +20,8 @@ public class TestToolbarView
 	}
 	
 	@Test
-	public void testConstructor() {
+	public void testConstructor() 
+	{
 		assertNotNull(toolbarView);
 		assertNotNull(invisToolbarView);
 		assertNotNull(toolbarView.getaddButton());
