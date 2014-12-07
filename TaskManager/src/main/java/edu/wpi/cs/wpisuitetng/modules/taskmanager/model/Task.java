@@ -98,7 +98,9 @@ public class Task extends AbstractModel {
 				&& this.description.equals(task.getDescription())
 				&& this.estimatedEffort.equals(task.getEstimatedEffort())
 				&& this.actualEffort.equals(task.getActualEffort())
-				&& this.dueDate.equals(task.getDueDate());
+				&& this.dueDate.equals(task.getDueDate())
+				&& this.comments.equals(task.getComments())
+				&& this.activities.equals(task.activities);
 		}
 		return false;
 	}
