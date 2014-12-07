@@ -1,31 +1,47 @@
+/*******************************************************************************
+ * Copyright (c) 2014 -- WPI Suite
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors: 
+ * Alexander Shoop
+ ******************************************************************************/
+
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache;
 
 import java.util.List;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
 import edu.wpi.cs.wpisuitetng.network.RequestObserver;
 import edu.wpi.cs.wpisuitetng.network.models.IRequest;
 
+/**
+ * This class only retrieves the Requirement array from the Requirements manager
+ * 
+ * @author akshoop
+ */
 public class RequirementObserver implements RequestObserver {
 
-	private Cache localCache;
-	private String toUpdate;
-	private List<String> requirements;
 	private Gateway gateway;
 
-	public RequirementObserver(Cache localCache, String toUpdate, List<String> requirements, Gateway gateway) {
-		this.localCache = localCache;
-		this.toUpdate = toUpdate;
-		this.requirements = requirements;
+	public RequirementObserver(Gateway gateway) {
 		this.gateway = gateway;
 	}
 
 	@Override
 	public void responseSuccess(IRequest iReq) {
-		localCache.updateVerified(toUpdate, iReq.getBody());
-		for (String s: requirements) {
-			gateway.toPresenter(s.split(":")[0], s.split(":")[1]);
-		}
+		// Parts of this is borrowed from Requirement Manager's GetRequirementsRequestObserver.java
+
+		// Convert the JSON array of requirements to a Requirement object array
+		Requirement[] requirementsArray = Requirement.fromJsonArray(iReq.getResponse().getBody());
+		
+		System.out.println("requirement observer 1");
+		gateway.toPresenter("SidebarView", "passInRequirements", requirementsArray);
+		System.out.println("requirement observer 2");
 	}
 
 	/**
@@ -33,7 +49,7 @@ public class RequirementObserver implements RequestObserver {
 	 */
 	@Override
 	public void responseError(IRequest iReq) {
-		System.err.println("Error Refreshing Cache for " + toUpdate);
+		// Auto generated
 	}
 
 	/**
@@ -41,6 +57,6 @@ public class RequirementObserver implements RequestObserver {
 	 */
 	@Override
 	public void fail(IRequest iReq, Exception exception) {
-		System.err.println("Error Refreshing Cache for " + toUpdate);
+		// Auto generated
 	}
 }

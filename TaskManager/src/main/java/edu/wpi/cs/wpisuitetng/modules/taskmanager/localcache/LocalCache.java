@@ -228,7 +228,8 @@ public class LocalCache implements Cache, IPresenter {
 		if (request.equals("requirements")) {
 			final Request networkRequest = Network.getInstance().makeRequest(
 					"requirementmanager/requirement", HttpMethod.GET);
-			networkRequest.addObserver(new RequirementObserver(this, request, requirements, gateway));
+			networkRequest.addObserver(new RequirementObserver(gateway));
+			networkRequest.send();
 		}
 	}
 

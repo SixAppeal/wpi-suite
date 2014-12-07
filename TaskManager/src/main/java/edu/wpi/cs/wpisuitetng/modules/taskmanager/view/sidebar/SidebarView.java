@@ -20,6 +20,7 @@ import java.io.IOException;
 import javax.swing.ImageIcon;
 import javax.swing.JTabbedPane;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.LocalCache;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.StageList;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
@@ -45,6 +46,7 @@ public class SidebarView extends JTabbedPane implements IView {
 
 	private StageList stages;
 	private LocalCache cache;
+	private List<String> requirements;
 	// Components
 	private List<IView> viewList;
 	private SearchBox searchView;
@@ -58,6 +60,7 @@ public class SidebarView extends JTabbedPane implements IView {
 	public SidebarView() throws IOException {
 		this.viewList = new ArrayList<IView>();
 		this.stages = new StageList();
+		this.requirements = new ArrayList<String>();
 		
 		this.searchView = new SearchBox();
 		this.viewList.add(searchView);
@@ -131,6 +134,19 @@ public class SidebarView extends JTabbedPane implements IView {
 		this.addTab(null, new ImageIcon(this.getClass().getResource("icon_pencil.png")),
 				editView);
 		this.setSelectedComponent(editView);
+	}
+	
+	/**
+	 * Passes the retrieved requirements array to the Task Edit View
+	 * 
+	 */
+	public void passInRequirements(Requirement[] requirementsArray) {
+		// check if tab exists with the edit pane
+		for (IView view : viewList) {
+			if (view instanceof TaskEditView) {
+				((TaskEditView) view).getRequirements(requirementsArray);
+			}
+		}
 	}
 	
 	/**

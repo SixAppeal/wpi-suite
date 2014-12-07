@@ -24,6 +24,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -47,6 +49,7 @@ import net.miginfocom.swing.MigLayout;
 
 import org.jdesktop.swingx.JXDatePicker;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Stage;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.StageList;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
@@ -74,6 +77,7 @@ public class TaskEditView extends JPanel implements IView {
 	
 	private Task task;
 	private StageList stages;
+	private Requirement[] requirements;
 	
 	// Components
 	private JPanel container;
@@ -94,6 +98,9 @@ public class TaskEditView extends JPanel implements IView {
 	private JList<String> assignedMembers;
 	private JScrollPane assignedMembersScrollPane;
 	private JComboBox<Stage> stageInput;
+	private List<String> requirementTitles;
+	private JButton viewRequirement;
+	private JComboBox<String> requirementsComboBox;
 	private JButton archiveButton;
 	private JButton closeButton;
 	private Form form;
@@ -111,6 +118,7 @@ public class TaskEditView extends JPanel implements IView {
 	public TaskEditView(Task iTask, StageList stages) {
 		this.task = iTask;
 		this.stages = stages;
+		this.requirements = new Requirement[0];
 		// Poplulates the member list handler with the assigned members
 		
 		
@@ -128,6 +136,7 @@ public class TaskEditView extends JPanel implements IView {
 		this.dateLabel = new JLabel();
 		this.estEffortInput = new JSpinner(new SpinnerNumberModel(1, null, null, 1));
 		this.actEffortInput = new JSpinner(new SpinnerNumberModel(1, null, null, 1));
+		this.requirementTitles = new ArrayList<String>();
 
 		this.commentPanel.updateView(this.task);
 		
@@ -136,7 +145,6 @@ public class TaskEditView extends JPanel implements IView {
 
 		this.assignedMembers = new JList<String>();
 		this.assignedMembersScrollPane = new JScrollPane(this.assignedMembers);
-		
 		
 		System.out.println("Begining to print");
 		System.out.println(this.members);
@@ -179,11 +187,14 @@ public class TaskEditView extends JPanel implements IView {
 		
 		this.assignedMembers.setVisibleRowCount(4);				
 		this.assignedMembers.setLayoutOrientation(JList.VERTICAL);
+
+		this.requirementTitles = getRequirementTitles();
+		System.out.println("requirementTitles is " + requirementTitles);
+		this.requirementsComboBox = new JComboBox<String>();
+		for (String s: this.requirementTitles) this.requirementsComboBox.addItem(s);
+		this.requirementsComboBox.setSelectedItem(task.getRequirement());
 		
-		
-		
-		
-		
+		this.viewRequirement = new JButton("View Requirement");
 		
 		
 		
@@ -196,7 +207,7 @@ public class TaskEditView extends JPanel implements IView {
 //				notifyAllMembersMouseHandler();
 			}
 		});
-		
+
 		assignedMembers.addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
@@ -204,6 +215,24 @@ public class TaskEditView extends JPanel implements IView {
 			}
 		});
 		
+		
+		// UI for associated requirement stuff
+		this.requirementsComboBox.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JComboBox<?> cb = (JComboBox<?>) e.getSource();
+				String reqName = (String) cb.getSelectedItem();
+				task.setRequirement(reqName);
+			}
+		});
+		
+		this.viewRequirement.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String reqname = (String) requirementsComboBox.getSelectedItem();
+				// TODO PUT SOMEWAY TO GO TO REQUIREMENTS MANAGER
+			}
+		});
 		
 		
 		this.archiveButton.addActionListener(new ActionListener() {
@@ -367,6 +396,10 @@ public class TaskEditView extends JPanel implements IView {
 				new FormField("Members", this.membersScrollPane),
 				new FormField("Assigned", this.assignedMembersScrollPane)
 			),
+			new FormField("Associated Requirement", this.requirementsComboBox),
+			new ButtonGroup(
+				this.viewRequirement
+			),
 			//new FormField("Stage", this.stageInput),
 			new ButtonGroup(
 				this.archiveButton,
@@ -466,6 +499,26 @@ public class TaskEditView extends JPanel implements IView {
 		this.assignedMembersMouseHandler.clear();
 	}
 	
+	/**
+	 * From a given requirement array, parse through and give back the titles
+	 * @param requirementsArray Passed in list of requirements from Requirements Manager
+	 * @return set this.requirements to requirementsArray
+	 */
+	public Requirement[] getRequirements(Requirement[] requirementsArray) {
+		return this.requirements = requirementsArray;
+	}
+	
+	/**
+	 * Return the titles of the requirements
+	 */
+	public List<String> getRequirementTitles() {
+		for (Requirement r : requirements) {
+			System.out.println("req title is " + r.getName());
+			requirementTitles.add(r.getName());
+		}
+		return requirementTitles;
+	}
+	
 	
 	private class JListMouseHandler implements MouseListener {
 
@@ -530,12 +583,5 @@ public class TaskEditView extends JPanel implements IView {
 			return false;
 		}
 	}
-
-	
-	
-	
-	
-	
-	
 }
 
