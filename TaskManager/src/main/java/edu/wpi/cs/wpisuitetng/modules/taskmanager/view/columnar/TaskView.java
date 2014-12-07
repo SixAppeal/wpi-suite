@@ -6,7 +6,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors: Will Rensselaer, Alex Shoop, Thomas Meehan, Ryan Orlando
+ * Contributors: Will Van Rensselaer, Alex Shoop, Thomas Meehan, Ryan Orlando
  ******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar;
@@ -47,7 +47,7 @@ public class TaskView extends JPanel implements  IView {
 	/**
 	 * The cutoff point for the title string in the task
 	 */
-	public static final int MAX_TITLE_LENGTH = 16;
+	public static final int MAX_TITLE_LENGTH = 18;
 
 	/**
 	 * Background color of the TaskView
@@ -92,14 +92,15 @@ public class TaskView extends JPanel implements  IView {
 		
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.fill = GridBagConstraints.HORIZONTAL;
-		gbc.insets = new Insets(10, 0, 10, 0);
+		gbc.insets = new Insets(10, 0, 10, 10);
 		gbc.weightx = 1.0;
 		gbc.gridx = 0;
 		gbc.gridy = 0;
 		this.container.add(this.titleLabel, gbc);
 		
 		gbc.fill = GridBagConstraints.NONE;
-		gbc.insets.right = 0;
+		gbc.insets.right = 20;
+		gbc.weightx = 0;
 		gbc.gridx = 1;
 		this.container.add(this.dateLabel, gbc);
 		
@@ -182,7 +183,7 @@ public class TaskView extends JPanel implements  IView {
 			text = text.substring(0, 20);
 		}
 		this.titleLabel.setText(text);
-		this.dateLabel.setText(new SimpleDateFormat("MM/dd/yyyy").format(this.task.getDueDate()));
+		this.dateLabel.setText(new SimpleDateFormat("MM/dd/yy").format(this.task.getDueDate()));
 		
 		this.titleLabel.revalidate();
 		this.dateLabel.revalidate();
