@@ -1,9 +1,11 @@
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.model;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -98,4 +100,104 @@ public class TestTask {
 		newTask.setEstimatedEffort(-50);
 		assertEquals(newTask.getEstimatedEffort(), new Integer(1));
 	}
+	
+	@Test
+	public void testArchived(){
+		assertFalse(task.isArchived());
+		
+		task.archive();
+		assertTrue(task.isArchived());
+		
+		task.unarchive();
+		assertFalse(task.isArchived());
+		
+	}
+	
+	@Test
+	public void testComments(){
+		Comment testComment = new Comment("Troy", "Wrote this comment");
+		List<Comment> CommentList = new LinkedList<Comment>();
+		CommentList.add(testComment);
+		
+		task.setComments(CommentList);
+		CommentList.add(new Comment("Troy", "Second Comment"));
+		
+		task.addComment("Troy", "Second Comment");
+		
+		assertEquals(task.getComments(), CommentList);
+		
+		
+	}
+	
+	@Test
+	public void testAssignedTo(){
+		Task task2 = new Task();
+		task2.setId(10);
+		List<String> assignedTo = new ArrayList<String>();
+		assignedTo.add("Troy");
+		assignedTo.add("Paul");
+		task2.setAssignedTo(assignedTo);
+		assertEquals(task2.getAssignedTo(), assignedTo);
+		
+	}
+	
+	@Test
+	public void testUpdateFrom(){
+		Task task2 = new Task();
+		List<String> assignedTo = new ArrayList<String>();
+		assignedTo.add("Troy");
+		assignedTo.add("Paul");
+		task2.setAssignedTo(assignedTo);
+		task.updateFrom(task2);
+		
+
+		assertEquals(task.getAssignedTo(), task2.getAssignedTo());
+		assertEquals(task.getTitle(), task2.getTitle());
+		assertEquals(task.getDescription(), task2.getDescription());
+		assertEquals(task.getEstimatedEffort(), task2.getEstimatedEffort());
+		assertEquals(task.getActualEffort(), task2.getActualEffort());
+		assertEquals(task.getDueDate(), task2.getDueDate());
+		
+	}
+	
+	@Test
+	public void testEqual_true(){
+		Task task2 = new Task();
+		List<String> assignedTo = new ArrayList<String>();
+		assignedTo.add("Troy");
+		assignedTo.add("Paul");
+		task2.setAssignedTo(assignedTo);
+		task2.addComment("Troy", "Second Comment");
+		task.updateFrom(task2);
+		task.setId(1);
+		task2.setId(1);
+		
+		assertTrue(task.equals(task2));
+		
+		
+	}
+	public void testEqual_false(){
+		Task task2 = new Task();
+		List<String> assignedTo = new ArrayList<String>();
+		assignedTo.add("Troy");
+		assignedTo.add("Paul");
+		task2.setAssignedTo(assignedTo);
+		task2.addComment("Troy", "Second Comment");
+		task.updateFrom(task2);
+		task.setId(1);
+		task2.setId(2);
+		
+		assertFalse(task.equals(task2));
+		
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

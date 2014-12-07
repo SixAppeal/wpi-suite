@@ -12,6 +12,7 @@
 
 package edu.wpi.cs.wpisuitetng.modules.taskmanager;
 
+import java.awt.Color;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -87,6 +88,7 @@ public class TaskManager implements IJanewayModule {
 		taskPresenter = new TaskPresenter(localCache);
 		sidebarView.setCache((LocalCache)localCache);
 		
+		mainPanel.setBackground(new Color(7, 63, 131));
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.X_AXIS));
 		mainPanel.add(columnView);
 		mainPanel.add(sidebarView);
