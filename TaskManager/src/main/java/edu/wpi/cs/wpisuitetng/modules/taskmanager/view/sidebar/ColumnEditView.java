@@ -66,7 +66,7 @@ public class ColumnEditView extends JPanel implements IView {
 	private JButton nameChange;
 	private Gateway gateway;
 
-	public ColumnEditView() {
+	public ColumnEditView() { 
 		stages = new StageList();
 		this.stageJList = new JList<Stage>();
 		this.addButton = new JButton("Create Stage");

@@ -78,6 +78,7 @@ public class ThreadSafeLocalCache implements Cache {
 	public void store(String request, Task taskToStore) {
 		if (!(request.split(":")[0].equals("task") && request.split(":").length == 2)) {
 			System.out.println("Bad Request!");
+			System.out.println(request + " Length: " + request.split(":").length);
 			return;
 		}
 		final Request networkRequest = Network.getInstance().makeRequest(
@@ -224,10 +225,8 @@ public class ThreadSafeLocalCache implements Cache {
 	}
 	
 	public void updateStages(String stageVal) {
-		System.out.println("Updated Stages!");
 		StageList[] stages = new Gson().fromJson(stageVal, StageList[].class);
 		this.stages = stages[0];
-		System.out.println(this.stages);
 		this.gateway.toPresenter("TaskPresenter", "setStages");
 		
 	}
