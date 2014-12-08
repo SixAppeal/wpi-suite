@@ -69,7 +69,7 @@ public class TaskManager implements IJanewayModule {
 	ColumnView columnView;
 	SidebarView sidebarView;
 	TaskPresenter taskPresenter;
-	Cache localCache;
+	Cache localCache;  
 	ToolbarView toolbarview = new ToolbarView();
 	MemberListHandler memberHandler;
 	
@@ -139,27 +139,19 @@ public class TaskManager implements IJanewayModule {
 	 */
 	@Override
 	public void finishInit() {
-		
-//		gateway.toPresenter("LocalCache", "sync", "task");
-//		gateway.toPresenter("LocalCache", "sync", "member");
-//		gateway.toPresenter("LocalCache", "sync", "archive");
-//		gateway.toPresenter("LocalCache", "sync", "stages");
-		gateway.toView("ColumnView", "reflow");
-		
+				
 		t.scheduleAtFixedRate(new TimerTask() {
 
 			@Override
 			public void run() {
-//				gateway.toPresenter("LocalCache", "sync", "task");
-//				gateway.toPresenter("LocalCache", "sync", "member");
-//				gateway.toPresenter("LocalCache", "sync", "archive");
-//				gateway.toPresenter("LocalCache", "sync", "stages");
-				gateway.toView("ColumnView", "reflow");
-				gateway.toView("SidebarView", "reflowTasks");
+				gateway.toPresenter("LocalCache", "sync", "tasks");
+				gateway.toPresenter("LocalCache", "sync", "member");
+				gateway.toPresenter("LocalCache", "sync", "stages");
+//				gateway.toView("ColumnView", "reflow");
+//				gateway.toView("SidebarView", "reflowTasks");
 			}
 			
-		}, 0, 2000);
-		//gateway.toPresenter("TaskPresenter", "getMembers");
+		}, 0, 10000);
 	}
 
 	/**

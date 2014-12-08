@@ -12,6 +12,7 @@
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.google.gson.Gson;
@@ -198,8 +199,41 @@ public class ThreadSafeLocalCache implements Cache {
 			throws NotImplementedException {
 		throw new NotImplementedException();
 	}
-
-
+	
+	public void updateTasks(String taskVal) {
+		Task[] tasks = new Gson().fromJson(taskVal, Task[].class);
+		List<Task> unarchived = new ArrayList<Task>();
+		List<Task> archived = new ArrayList<Task>();
+		for (Task toCheck : tasks) {
+			if (toCheck.isArchived()) {
+				archived.add(toCheck);
+			}
+			else {
+				unarchived.add(toCheck);
+			}
+		}
+		this.archives = archived;
+		this.tasks = unarchived;
+		this.gateway.toPresenter("TaskPresenter", "updateTasks");
+		this.gateway.toPresenter("TaskPresenter", "updateSearch");
+	}
+	
+	public void updateMembers(String userVal) {
+		User[] users = new Gson().fromJson(userVal, User[].class);
+		this.members = Arrays.asList(users);
+		this.gateway.toPresenter("TaskPresenter", "notifyMemberHandler");
+	}
+	
+	public void updateStages(String stageVal) {
+		System.out.println("Updated Stages!");
+		StageList[] stages = new Gson().fromJson(stageVal, StageList[].class);
+		this.stages = stages[0];
+		System.out.println(this.stages);
+		this.gateway.toPresenter("TaskPresenter", "setStages");
+		
+	}
+	
+	
 	/**
 	 * @see edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.ICache#clearCache(java.lang.String)
 	 */
@@ -246,20 +280,35 @@ public class ThreadSafeLocalCache implements Cache {
 		}
 	}
 
+	public void printSuccess() {
+		System.out.println("Success");
+	}
+	
 	/**
 	 * @see edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.ICache#sync(java.lang.String)
 	 */
 	@Override
 	public void sync(String request) {
-		
-		
-		try {
-			throw new NotImplementedException();
-		} catch (NotImplementedException e) {
-			e.printStackTrace();
+		if (request.equals("tasks")) {
+			ThreadSafeSyncObserver syncer = new ThreadSafeSyncObserver(this.gateway);
+			final Request networkRequest = Network.getInstance().makeRequest("taskmanager/task", HttpMethod.GET);
+			networkRequest.addObserver(syncer);
+			networkRequest.send();
 		}
-
+		if (request.equals("member")) {
+			ThreadSafeSyncObserver syncer = new ThreadSafeSyncObserver(this.gateway);
+			final Request networkRequest = Network.getInstance().makeRequest("core/user", HttpMethod.GET);
+			networkRequest.addObserver(syncer);
+			networkRequest.send();
+		}
+		if (request.equals("stages")) {
+			ThreadSafeSyncObserver syncer = new ThreadSafeSyncObserver(this.gateway);
+			final Request networkRequest = Network.getInstance().makeRequest("taskmanager/stages", HttpMethod.GET);
+			networkRequest.addObserver(syncer);
+			networkRequest.send();
+		}
 	}
+	
 
 	/**
 	 * @see edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.ICache#addVerified(java.lang.String,

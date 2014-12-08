@@ -5,8 +5,8 @@ import java.util.List;
 
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.Cache;
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.LocalCache;
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.StageList;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.ThreadSafeLocalCache;
+
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
 
@@ -52,7 +52,7 @@ public class MemberListHandler implements IView {
 	 * 
 	 *            This gets and updates the users that are within the system
 	 */
-	public void updateAll(LocalCache localCache) {
+	public void updateAll(ThreadSafeLocalCache localCache) {
 		System.out.println("I made it here!! ");
 		System.out.println(Thread.currentThread().getStackTrace());
 		setGlobal(localCache);
