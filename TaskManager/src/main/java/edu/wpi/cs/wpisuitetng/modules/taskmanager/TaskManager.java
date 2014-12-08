@@ -27,6 +27,7 @@ import edu.wpi.cs.wpisuitetng.janeway.modules.IJanewayModule;
 import edu.wpi.cs.wpisuitetng.janeway.modules.JanewayTabModel;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.Cache;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.LocalCache;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.ThreadSafeLocalCache;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.*;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.util.TaskManagerUtil;
@@ -85,9 +86,9 @@ public class TaskManager implements IJanewayModule {
 		//memberHandler = new MemberListHandler();
 		sidebarView = new SidebarView();
 		
-		localCache = new LocalCache();
+		localCache = new ThreadSafeLocalCache();
 		taskPresenter = new TaskPresenter(localCache);
-		sidebarView.setCache((LocalCache)localCache);
+		sidebarView.setCache((ThreadSafeLocalCache)localCache);
 		
 		mainPanel.setBackground(TaskManagerUtil.BACKGROUND_COLOR);
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.X_AXIS));
@@ -107,10 +108,10 @@ public class TaskManager implements IJanewayModule {
 		gateway.addView("ToolbarView", toolbarview);
 		gateway.addView("MemberListHandler", MemberListHandler.getInstance());
 		
-		localCache.subscribe("task:TaskPresenter:updateTasks");
-		localCache.subscribe("member:TaskPresenter:notifyMemberHandler");
-		localCache.subscribe("task:TaskPresenter:updateSearch");
-		localCache.subscribe("stages:TaskPresenter:setStages");
+//		localCache.subscribe("task:TaskPresenter:updateTasks");
+//		localCache.subscribe("member:TaskPresenter:notifyMemberHandler");
+//		localCache.subscribe("task:TaskPresenter:updateSearch");
+//		localCache.subscribe("stages:TaskPresenter:setStages");
 		
 		t = new Timer();
 
@@ -138,20 +139,20 @@ public class TaskManager implements IJanewayModule {
 	@Override
 	public void finishInit() {
 		
-		gateway.toPresenter("LocalCache", "sync", "task");
-		gateway.toPresenter("LocalCache", "sync", "member");
-		gateway.toPresenter("LocalCache", "sync", "archive");
-		gateway.toPresenter("LocalCache", "sync", "stages");
+//		gateway.toPresenter("LocalCache", "sync", "task");
+//		gateway.toPresenter("LocalCache", "sync", "member");
+//		gateway.toPresenter("LocalCache", "sync", "archive");
+//		gateway.toPresenter("LocalCache", "sync", "stages");
 		gateway.toView("ColumnView", "reflow");
 		
 		t.scheduleAtFixedRate(new TimerTask() {
 
 			@Override
 			public void run() {
-				gateway.toPresenter("LocalCache", "sync", "task");
-				gateway.toPresenter("LocalCache", "sync", "member");
-				gateway.toPresenter("LocalCache", "sync", "archive");
-				gateway.toPresenter("LocalCache", "sync", "stages");
+//				gateway.toPresenter("LocalCache", "sync", "task");
+//				gateway.toPresenter("LocalCache", "sync", "member");
+//				gateway.toPresenter("LocalCache", "sync", "archive");
+//				gateway.toPresenter("LocalCache", "sync", "stages");
 				gateway.toView("ColumnView", "reflow");
 				gateway.toView("SidebarView", "reflowTasks");
 			}

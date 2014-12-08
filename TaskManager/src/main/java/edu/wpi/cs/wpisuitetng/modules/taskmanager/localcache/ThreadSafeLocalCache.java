@@ -14,6 +14,8 @@ package edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gson.Gson;
+
 import edu.wpi.cs.wpisuitetng.exceptions.NotImplementedException;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.StageList;
@@ -74,7 +76,6 @@ public class ThreadSafeLocalCache implements Cache {
 	public void store(String request, Task taskToStore) {
 		if (!(request.split(":")[0].equals("task") && request.split(":").length == 2)) {
 			System.out.println("Bad Request!");
-			//TODO get rid of print statement
 			return;
 		}
 		final Request networkRequest = Network.getInstance().makeRequest(
@@ -86,12 +87,38 @@ public class ThreadSafeLocalCache implements Cache {
 	}	
 
 	/**
+	 * Searches through the list of tasks to remove the task with the specified ID. 
+	 * Necessary because of the way the task equals method is implemented
+	 * 
+	 * @param toRemove Task to get rid of
+	 * @param tasks list of tasks to iterate through
+	 */
+	private void updateHelper(Task toRemove, List<Task> tasks) {
+		for (int i = 0; i < tasks.size(); i++) {
+			if (tasks.get(i).getId() == toRemove.getId()) {
+				tasks.remove(i);
+				break;
+			}
+		}
+	}
+	
+	/**
 	 * @see edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.ICache#update(java.lang.String,
 	 *      java.lang.Object, java.lang.Object)
 	 */
 	@Override
 	public void update(String request, Task newTask) {
-		//TODO add in updateVerified logic here	and index out of bounds protection
+		if (!((request.split(":")[0].equals("task") || request.split(":")[0].equals("archive")) && request.split(":").length == 2)) {
+			System.out.println("Bad Request!");
+			return;
+		}
+		updateHelper(newTask, archives);
+		updateHelper(newTask, tasks);
+		if (newTask.isArchived()) {
+			archives.add(newTask);
+		} else {
+			tasks.add(newTask);
+		}
 		final Request networkRequest = Network.getInstance().makeRequest(
 				"taskmanager/task", HttpMethod.POST);
 		networkRequest.setBody(newTask.toJson());
@@ -224,6 +251,8 @@ public class ThreadSafeLocalCache implements Cache {
 	 */
 	@Override
 	public void sync(String request) {
+		
+		
 		try {
 			throw new NotImplementedException();
 		} catch (NotImplementedException e) {
