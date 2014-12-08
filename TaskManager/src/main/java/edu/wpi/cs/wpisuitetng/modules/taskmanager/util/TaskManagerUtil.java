@@ -14,6 +14,7 @@ import javax.swing.SwingUtilities;
 public class TaskManagerUtil {
 	public static final Color BACKGROUND_COLOR = new Color(7, 63, 131);
 	public static final Color SIDEBAR_COLOR = new Color(245, 245, 245);
+	public static final Color TOOLBAR_COLOR = new Color(255, 255, 255);
 
 	/**
 	 * Shortens the string to fit a number of pixels
