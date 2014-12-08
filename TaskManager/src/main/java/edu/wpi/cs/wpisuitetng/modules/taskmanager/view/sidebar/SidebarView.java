@@ -7,7 +7,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors: Nathan Hughes, Alexander Shoop
+ * Contributors: Nathan Hughes, Alexander Shoop, Will Rensselaer, Thomas Meehan, Ryan Orlando, Troy Hughes, Nathan Hughes
  ******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
@@ -169,8 +169,11 @@ public class SidebarView extends JTabbedPane implements IView {
 		for (IView v : this.viewList) {
 			if (v instanceof TaskCreateView) {
 				((TaskCreateView) v).setStages(this.stages);
+			} else if (v instanceof TaskEditView) {
+				((TaskEditView)v).setStages(sl);
 			}
 		}
+		columnEditView.setStages(this.stages);
 	}
 
 	public Task findTask(Task [] tasks, int id) {
