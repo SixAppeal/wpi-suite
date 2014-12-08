@@ -56,7 +56,7 @@ public class TaskPresenter implements IPresenter{
 	}
 	
 	public void addAllToView( Task[] tasks ) {
-		this.gateway.toView("ColumnView", "setTasks", new Object[] { tasks });
+		this.gateway.toView("ColumnView", "setTasks", new Object[] { tasks }); 
 	}
 	
 	public void notifyMemberHandler() {

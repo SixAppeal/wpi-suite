@@ -19,6 +19,7 @@ import com.google.gson.Gson;
 
 import edu.wpi.cs.wpisuitetng.exceptions.NotImplementedException;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Stage;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.StageList;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
@@ -56,7 +57,7 @@ public class ThreadSafeLocalCache implements Cache {
 	 */
 	public ThreadSafeLocalCache() {
 		tasks = new ArrayList<Task>();
-		archives = new ArrayList<Task>();
+		archives = new ArrayList<Task>(); 
 		members = new ArrayList<User>();
 		stages = new StageList();
 	}
@@ -181,9 +182,7 @@ public class ThreadSafeLocalCache implements Cache {
 			return members.toArray(new User[0]);
 		}
 		if (request.equals("stages")) {
-			StageList[] to_return = new StageList[1];
-			to_return[0] = stages;
-			return to_return;
+			return stages.toArray(new Stage[0]);
 		}
 		return null;
 	}

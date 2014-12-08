@@ -61,7 +61,7 @@ public class LocalCache implements Cache, IPresenter {
 		callbacks.put("stages", new ArrayList<String>());
 	}
 
-	/**
+	/** 
 	 * @see edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.ICache#clearCache(java.lang.String)
 	 */
 	@Override
@@ -110,7 +110,7 @@ public class LocalCache implements Cache, IPresenter {
 		if (request.equals("stages")) {
 			return stages.toArray(new Stage[0]);
 		}
-		return null;
+		return null; 
 	}
 
 	/**
