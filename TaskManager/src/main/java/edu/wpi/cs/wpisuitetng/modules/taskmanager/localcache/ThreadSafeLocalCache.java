@@ -285,7 +285,7 @@ public class ThreadSafeLocalCache implements Cache {
 	public void sync(String request) {
 		if (request.equals("tasks")) {
 			ThreadSafeSyncObserver syncer = new ThreadSafeSyncObserver(this.gateway);
-			final Request networkRequest = Network.getInstance().makeRequest("taskmanager/task", HttpMethod.GET);
+			final Request networkRequest = Network.getInstance().makeRequest("taskmanager/task2", HttpMethod.GET);
 			networkRequest.addObserver(syncer);
 			networkRequest.send();
 		}

@@ -105,6 +105,12 @@ public class TaskEntityManagerLongPoll implements EntityManager<Task>{
 		return Tasks;
 	}
 
+	private Semaphore lock;
+	
+	public void fixLock() {
+		lock.release();
+	}
+	
 	/**
 	 * Retrieves all Tasks from the database
 	 * 
@@ -115,13 +121,17 @@ public class TaskEntityManagerLongPoll implements EntityManager<Task>{
 	public Task[] getAll(Session s) {
 		
 		TaskPollTracker.getInstance().register(s);
-		Semaphore lock = TaskPollTracker.getInstance().getLock();
-		//setup new thread that sleeps for timeout amount
+		
+		//Semaphore lock = TaskPollTracker.getInstance().getLock();
+		lock = new Semaphore(0, true);
+		RequestTimeoutTracker timeout = new RequestTimeoutTracker(this);
+		timeout.start();
 		try {
 			lock.acquire();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+		System.out.println("Got Here!");
 		//delete thread if still active
 		return db.retrieveAll(new Task(), s.getProject()).toArray(new Task[0]);
 	}

@@ -151,7 +151,7 @@ public class TaskManager implements IJanewayModule {
 				gateway.toView("SidebarView", "reflowTasks");
 			}
 			
-		}, 0, 1000);
+		}, 0, 5000);
 	}
 
 	/**
