@@ -65,9 +65,9 @@ public class SearchUserInput implements KeyListener {
 			System.out.println("gettext length is " + searchBox.getText().length());
 			try {
 				if (searchBox.getText().length() >= 1) {
-					System.out.println("length of backspace1 results is: "
-							+ toSearch.searchFor(searchBox.getText() + "*")
-									.size());
+//					System.out.println("length of backspace1 results is: "
+//							+ toSearch.searchFor(searchBox.getText() + "*")
+//									.size());
 					searchPanel.displayResults(toSearch.searchFor(searchBox
 							.getText() + "*"));
 				} else if (searchBox.getText().length() == 0) {
@@ -82,7 +82,7 @@ public class SearchUserInput implements KeyListener {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			} catch (ParseException e1) {
-				System.out.println("Cannot parse " + fullString + "*");
+//				System.out.println("Cannot parse " + fullString + "*");
 				//e1.printStackTrace();
 			}
 			return;
@@ -119,15 +119,15 @@ public class SearchUserInput implements KeyListener {
 
 			// Check if full string contains the quotation mark
 			if (fullString.indexOf("\"") != -1) {
-				System.out.println("length of full quote results is: "
-						+ toSearch.searchFor(fullString).size());
+//				System.out.println("length of full quote results is: "
+//						+ toSearch.searchFor(fullString).size());
 				searchPanel.displayResults(toSearch.searchFor(fullString));
 			} else {
-				System.out.println("full string for wild is " + fullString);
-				System.out.println("string of gettext is "
-						+ searchBox.getText());
-				System.out.println("length of full wild results is: "
-						+ toSearch.searchFor(fullString + "*").size());
+//				System.out.println("full string for wild is " + fullString);
+//				System.out.println("string of gettext is "
+//						+ searchBox.getText());
+//				System.out.println("length of full wild results is: "
+//						+ toSearch.searchFor(fullString + "*").size());
 				searchPanel
 						.displayResults(toSearch.searchFor(fullString + "*"));
 			}
@@ -138,7 +138,7 @@ public class SearchUserInput implements KeyListener {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		} catch (ParseException e1) {
-			System.out.println("Cannot parse " + fullString + "*");
+//			System.out.println("Cannot parse " + fullString + "*");
 			//e1.printStackTrace();
 		}
 	}
