@@ -15,15 +15,19 @@ package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
 import java.util.ArrayList;
 import java.util.List;
 import java.awt.Color;
+import java.awt.Insets;
 import java.io.IOException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JTabbedPane;
+import javax.swing.UIManager;
+import javax.swing.plaf.basic.BasicTabbedPaneUI;
 
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.LocalCache;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.StageList;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.util.TaskManagerUtil;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
 
 /**
@@ -64,6 +68,23 @@ public class SidebarView extends JTabbedPane implements IView {
 		
 		this.columnEditView = new ColumnEditView();
 		this.viewList.add(columnEditView);
+		
+		this.setUI(new BasicTabbedPaneUI() {
+			@Override
+			public void installDefaults() {
+				Color selected = UIManager.getColor("TabbedPane.selected");
+				UIManager.put("TabbedPane.selected", TaskManagerUtil.SIDEBAR_COLOR);
+				
+				super.installDefaults();
+				
+				UIManager.put("TabbedPane.selected", selected);
+				
+				this.contentBorderInsets = new Insets(0, 0, 0, 0);
+				this.highlight = TaskManagerUtil.SIDEBAR_COLOR;
+				this.lightHighlight = TaskManagerUtil.SIDEBAR_COLOR;
+				
+			}
+		});
 
 		this.setOpaque(false);
 		this.setTabPlacement(JTabbedPane.LEFT);
