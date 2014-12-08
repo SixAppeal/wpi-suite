@@ -83,7 +83,7 @@ public class TaskPresenter implements IPresenter{
 	}
 	
 	public void publishChanges(StageList sl) {
-		this.gateway.toPresenter("LocalCache", "update", "stages", sl);
+		this.gateway.toPresenter("LocalCache", "update", "stages:testing", sl);
 	}
 	
 	/**

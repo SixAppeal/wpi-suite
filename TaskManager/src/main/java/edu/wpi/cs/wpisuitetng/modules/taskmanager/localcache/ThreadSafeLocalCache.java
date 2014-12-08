@@ -104,7 +104,7 @@ public class ThreadSafeLocalCache implements Cache {
 			}
 		}
 	}
-	
+
 	/**
 	 * @see edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.ICache#update(java.lang.String,
 	 *      java.lang.Object, java.lang.Object)
@@ -136,19 +136,15 @@ public class ThreadSafeLocalCache implements Cache {
 	 */
 	@Override
 	public void store(String request, StageList slToStore) {
-		//TODO add in array out of bounds protection
-		if (request.equals("stages")) {
-			this.stages = slToStore;
-			final Request networkRequest = Network.getInstance().makeRequest(
-					"taskmanager/stages", HttpMethod.PUT);
-			networkRequest.addObserver(new AddManager(this, request, gateway, request.split(":")[1]));
-			networkRequest.setBody(slToStore.toJson());
-			networkRequest.send();
+		if (!(request.split(":").length == 2 && request.split(":")[0].equals("stages"))) {
+			System.out.println("Bad Request");
 		}
-		else {
-			System.out.println("Invalid Request!");
-			//TODO clean this up
-		}
+		this.stages = slToStore;
+		final Request networkRequest = Network.getInstance().makeRequest(
+				"taskmanager/stages", HttpMethod.PUT);
+		networkRequest.addObserver(new AddManager(this, request, gateway, request.split(":")[1]));
+		networkRequest.setBody(slToStore.toJson());
+		networkRequest.send();
 	}
 
 	/**
@@ -157,15 +153,15 @@ public class ThreadSafeLocalCache implements Cache {
 	 */
 	@Override
 	public void update(String request, StageList newSL) {
-		//TODO add in array out of bounds protection
-		if (request.equals("stages")) {
-			System.out.println("The StageList is updating to " + newSL.toString());
-			final Request networkRequest = Network.getInstance().makeRequest(
-					"taskmanager/stages", HttpMethod.POST);
-			networkRequest.addObserver(new UpdateManager(this, request, gateway, request.split(":")[1]));
-			networkRequest.setBody(newSL.toJson());
-			networkRequest.send();
+		if (!(request.split(":").length == 2 && request.split(":")[0].equals("stages"))) {
+			System.out.println("Bad Request");
 		}
+		System.out.println("The StageList is updating to " + newSL.toString());
+		final Request networkRequest = Network.getInstance().makeRequest(
+				"taskmanager/stages", HttpMethod.POST);
+		networkRequest.addObserver(new UpdateManager(this, request, gateway, request.split(":")[1]));
+		networkRequest.setBody(newSL.toJson());
+		networkRequest.send();
 	}
 
 	/**
@@ -199,7 +195,7 @@ public class ThreadSafeLocalCache implements Cache {
 			throws NotImplementedException {
 		throw new NotImplementedException();
 	}
-	
+
 	public void updateTasks(String taskVal) {
 		Task[] tasks = new Gson().fromJson(taskVal, Task[].class);
 		List<Task> unarchived = new ArrayList<Task>();
@@ -217,21 +213,21 @@ public class ThreadSafeLocalCache implements Cache {
 		this.gateway.toPresenter("TaskPresenter", "updateTasks");
 		this.gateway.toPresenter("TaskPresenter", "updateSearch");
 	}
-	
+
 	public void updateMembers(String userVal) {
 		User[] users = new Gson().fromJson(userVal, User[].class);
 		this.members = Arrays.asList(users);
 		this.gateway.toPresenter("TaskPresenter", "notifyMemberHandler");
 	}
-	
+
 	public void updateStages(String stageVal) {
 		StageList[] stages = new Gson().fromJson(stageVal, StageList[].class);
 		this.stages = stages[0];
 		this.gateway.toPresenter("TaskPresenter", "setStages");
-		
+
 	}
-	
-	
+
+
 	/**
 	 * @see edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.ICache#clearCache(java.lang.String)
 	 */
@@ -281,7 +277,7 @@ public class ThreadSafeLocalCache implements Cache {
 	public void printSuccess() {
 		System.out.println("Success");
 	}
-	
+
 	/**
 	 * @see edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.ICache#sync(java.lang.String)
 	 */
@@ -306,7 +302,7 @@ public class ThreadSafeLocalCache implements Cache {
 			networkRequest.send();
 		}
 	}
-	
+
 
 	/**
 	 * @see edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.ICache#addVerified(java.lang.String,
@@ -340,6 +336,15 @@ public class ThreadSafeLocalCache implements Cache {
 	@Override
 	public void initStageList() {
 		// TODO Write a better implementation of this somewhere
+	}
+
+	public void renameStage(String oldName, String newName) {
+		for (Task t : tasks) {
+			if (t.getStage().toString().equals(oldName)) {
+				t.setStage(new Stage(newName));
+				update("task", t );
+			}
+		}
 	}
 
 }
