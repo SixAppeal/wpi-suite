@@ -94,6 +94,7 @@ public class SidebarView extends JTabbedPane implements IView {
 		this.addTab(null, new ImageIcon(this.getClass().getResource("icon_plus.png")),
 				createView);
 		this.setSelectedComponent(createView);
+		this.setVisible(true);
 	}
 	
 	/**
@@ -132,6 +133,7 @@ public class SidebarView extends JTabbedPane implements IView {
 		this.addTab(null, new ImageIcon(this.getClass().getResource("icon_pencil.png")),
 				editView);
 		this.setSelectedComponent(editView);
+		this.setVisible(true);
 	}
 	
 	/**
@@ -145,6 +147,13 @@ public class SidebarView extends JTabbedPane implements IView {
 		} catch (IndexOutOfBoundsException e) {
 			// Do nothing
 		}
+	}
+	
+	/**
+	 * Toggles the visibility of the sidebar
+	 */
+	public void toggle() {
+		this.setVisible(!this.isVisible());
 	}
 
 	@Override
