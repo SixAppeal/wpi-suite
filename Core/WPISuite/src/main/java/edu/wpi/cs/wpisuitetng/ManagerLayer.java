@@ -37,6 +37,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementmanager.models.RequirementEntit
 import edu.wpi.cs.wpisuitetng.modules.requirementmanager.models.iterations.IterationEntityManager;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.StagesEntityManager;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.TaskEntityManager;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.TaskEntityManagerLongPoll;
 
 
 /**
@@ -79,6 +80,7 @@ public class ManagerLayer {
 		map.put("requirementmanager" + "requirement", new RequirementEntityManager(data));
 		map.put("requirementmanager" + "iteration", new IterationEntityManager(data));
 		map.put("taskmanager" + "task", new TaskEntityManager(data));
+		map.put("taskmanager" + "task2", new TaskEntityManagerLongPoll(data));
 		map.put("taskmanager" + "stages", new StagesEntityManager(data));
 		
 		//add just your module to this list
