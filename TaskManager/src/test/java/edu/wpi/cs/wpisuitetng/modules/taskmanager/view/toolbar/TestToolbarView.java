@@ -14,8 +14,8 @@ public class TestToolbarView
 	@Before
 	public void setup() 
 	{
-		toolbarView = new ToolbarView(true);
-		invisToolbarView = new ToolbarView(false);
+		toolbarView = new ToolbarView();
+		invisToolbarView = new ToolbarView();
 		
 	}
 	
@@ -24,8 +24,6 @@ public class TestToolbarView
 	{
 		assertNotNull(toolbarView);
 		assertNotNull(invisToolbarView);
-		assertNotNull(toolbarView.getaddButton());
-		assertNotNull(invisToolbarView.getaddButton());
 	}
 	
 	

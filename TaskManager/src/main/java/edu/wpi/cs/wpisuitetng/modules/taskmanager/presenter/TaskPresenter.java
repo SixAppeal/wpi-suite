@@ -47,6 +47,10 @@ public class TaskPresenter implements IPresenter{
 		this.gateway.toView("SidebarView", "addCreatePanel");
 	}
 	
+	public void toolbarToggleSidebar() {
+		this.gateway.toView("SidebarView", "toggle");
+	}
+	
 	public void editTask(Task task) {
 		this.gateway.toView("SidebarView", "addEditPanel", task);
 	}

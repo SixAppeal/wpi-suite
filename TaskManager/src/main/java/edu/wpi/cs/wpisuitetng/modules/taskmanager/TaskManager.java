@@ -32,6 +32,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.*;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.util.TaskManagerUtil;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar.ColumnView;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.GradientPanel;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar.ColumnEditView;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar.MemberListHandler;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar.SidebarView;
@@ -69,7 +70,7 @@ public class TaskManager implements IJanewayModule {
 	SidebarView sidebarView;
 	TaskPresenter taskPresenter;
 	Cache localCache;
-	ToolbarView toolbarview = new ToolbarView(true);
+	ToolbarView toolbarview = new ToolbarView();
 	MemberListHandler memberHandler;
 	
 	/**
@@ -81,7 +82,7 @@ public class TaskManager implements IJanewayModule {
 		tabs = new ArrayList<JanewayTabModel>();
 
 		gateway = new Gateway();
-		mainPanel = new JPanel();
+		mainPanel = new GradientPanel();
 		columnView = new ColumnView();
 		//memberHandler = new MemberListHandler();
 		sidebarView = new SidebarView();
