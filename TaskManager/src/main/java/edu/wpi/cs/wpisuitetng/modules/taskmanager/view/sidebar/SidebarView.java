@@ -141,8 +141,11 @@ public class SidebarView extends JTabbedPane implements IView {
 	 * Passes the retrieved requirements array to the Task Edit View
 	 * 
 	 */
-	public void passInRequirements(Requirement[] requirementsArray) {
+	public void passInRequirements(String requirements) {
+		Requirement[] requirementsArray = Requirement.fromJsonArray(requirements);
+		
 		// check if tab exists with the edit pane
+		System.out.println("requirements array is " + requirementsArray);
 		System.out.println("requirements title 1 is " + requirementsArray[0].getName());
 		for (IView view : viewList) {
 			if (view instanceof TaskEditView) {

@@ -18,6 +18,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -36,6 +38,7 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
+import javax.swing.JTabbedPane;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -49,7 +52,10 @@ import net.miginfocom.swing.MigLayout;
 
 import org.jdesktop.swingx.JXDatePicker;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementmanager.RequirementManager;
 import edu.wpi.cs.wpisuitetng.modules.requirementmanager.models.Requirement;
+import edu.wpi.cs.wpisuitetng.modules.requirementmanager.models.RequirementModel;
+import edu.wpi.cs.wpisuitetng.modules.requirementmanager.view.ViewEventController;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Stage;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.StageList;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
@@ -74,11 +80,11 @@ public class TaskEditView extends JPanel implements IView {
 	private static final long serialVersionUID = -8972626054612267276L;
 
 	private Gateway gateway;
-	
+
 	private Task task;
 	private StageList stages;
 	private Requirement[] requirements;
-	
+
 	// Components
 	private JPanel container;
 	private JScrollPane scrollPane;
@@ -92,7 +98,7 @@ public class TaskEditView extends JPanel implements IView {
 	private JLabel dateLabel;
 	private JSpinner estEffortInput;
 	private JSpinner actEffortInput;
-	
+
 	private JList<String> members;
 	private JScrollPane membersScrollPane;
 	private JList<String> assignedMembers;
@@ -104,16 +110,16 @@ public class TaskEditView extends JPanel implements IView {
 	private JButton archiveButton;
 	private JButton closeButton;
 	private Form form;
-	
+
 	private ActionListener stageBoxListener;
-	
+
 	private List<String> stringArray;
-	
-	
+
+
 	JListMouseHandler allMembersMouseHandler;
 	JListMouseHandler assignedMembersMouseHandler;
-	
-	
+
+
 	/**
 	 * Constructor
 	 */
@@ -122,10 +128,10 @@ public class TaskEditView extends JPanel implements IView {
 		this.stages = stages;
 		this.requirements = new Requirement[0];
 		// Poplulates the member list handler with the assigned members
-		
-		
-		
-		
+
+
+
+
 		// UI stuff
 		this.container = new JPanel();
 		this.scrollPane = new JScrollPane(this.container);
@@ -141,27 +147,27 @@ public class TaskEditView extends JPanel implements IView {
 		this.requirementTitles = new ArrayList<String>();
 
 		this.commentPanel.updateView(this.task);
-		
+
 		this.members = new JList<String>();
 		this.membersScrollPane = new JScrollPane(this.members);
 
 		this.assignedMembers = new JList<String>();
 		this.assignedMembersScrollPane = new JScrollPane(this.assignedMembers);
-		
+
 		System.out.println("Begining to print");
 		System.out.println(this.members);
 		System.out.println(this.assignedMembers);
 		System.out.println("Done to printing");
-		
+
 		MemberListHandler.getInstance().populateMembers(this.task.getAssignedTo());
 		this.updateMembers();
-		
-		
+
+
 		this.stageInput = new JComboBox<Stage>();
 		this.archiveButton = new JButton("Archive");
 		this.closeButton = new JButton("Close");
 		TaskEditView that = this;
-		
+
 		this.titleLabel.setOpaque(false);
 		this.titleLabel.setBorder(BorderFactory.createEmptyBorder());
 		this.titleLabel.setLineWrap(true);
@@ -169,78 +175,109 @@ public class TaskEditView extends JPanel implements IView {
 
 		this.scrollPane.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
 		this.scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		
+
 		this.descInput.setLineWrap(true);
 		this.descInput.setWrapStyleWord(true);
-		
+
 		if (!this.task.getStage().getName().equals("Complete")) {
 			this.actEffortInput.setEnabled(false);
 		}
-		
+
 		this.estEffortInput.setValue(this.task.getEstimatedEffort());
 		this.actEffortInput.setValue(this.task.getActualEffort());
-		
+
 		for( Stage s : this.stages )this.stageInput.addItem(s);
 		this.stageInput.setSelectedItem(task.getStage());
-	
-		
+
+
 		this.members.setVisibleRowCount(4);				
 		this.members.setLayoutOrientation(JList.VERTICAL);
-		
+
 		this.assignedMembers.setVisibleRowCount(4);				
 		this.assignedMembers.setLayoutOrientation(JList.VERTICAL);
 
 		this.requirementTitles = getRequirementTitles();
-		System.out.println("requirementTitles is " + requirementTitles);
 		this.requirementsComboBox = new JComboBox<String>();
 		for (String s: this.requirementTitles) this.requirementsComboBox.addItem(s);
-//		stringArray = new ArrayList<String>();
-//		stringArray.add("test1");
-//		stringArray.add("test2");
-//		for (String s : stringArray) this.requirementsComboBox.addItem(s);
-		this.requirementsComboBox.setSelectedItem(task.getRequirement().getName());
-		
+		//		stringArray = new ArrayList<String>();
+		//		stringArray.add("test1");
+		//		stringArray.add("test2");
+		//		for (String s : stringArray) this.requirementsComboBox.addItem(s);
+		if (task.getRequirement() != null) {
+			this.requirementsComboBox.setSelectedItem(task.getRequirement().getName());
+		}
+		else {
+			this.requirementsComboBox.setSelectedIndex(-1);
+		}
+
 		this.viewRequirement = new JButton("View Requirement");
-		
-		
-		
-		
-		
+
+
+
+
+
 		// Member JList Action Listeners
 		members.addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
-//				notifyAllMembersMouseHandler();
+				//				notifyAllMembersMouseHandler();
 			}
 		});
 
 		assignedMembers.addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
-//				notifyAssignedMembersMouseHandler();
+				//				notifyAssignedMembersMouseHandler();
 			}
 		});
-		
-		
+
+
 		// UI for associated requirement stuff
-		this.requirementsComboBox.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				JComboBox<?> cb = (JComboBox<?>) e.getSource();
-				String reqName = (String) cb.getSelectedItem();
-				task.setRequirement(reqName);
-			}
-		});
-		
+//		this.requirementsComboBox.addActionListener(new ActionListener() {
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				System.out.println("action event e command is " + e.getActionCommand());
+//				System.out.println("action event e ID is " + e.getID());
+//				JComboBox<?> cb = (JComboBox<?>) e.getSource();
+//				String reqName = (String) cb.getSelectedItem();
+//				System.out.println("combo box reqname is " + reqName);
+//				for (Requirement r : requirements) {
+//					if (r.getName() == reqName) {
+//						task.setRequirement(r);
+//					}
+//				}
+//				saveTask();
+//			}
+//		});
+
+		// UI for associated requirement stuff
+//		this.requirementsComboBox.addItemListener(new ItemListener() {
+//			@Override
+//			public void itemStateChanged(ItemEvent e) {
+//				System.out.println("item event e statechange is " + e.getStateChange());
+//				if (e.getStateChange() == ItemEvent.) {
+//					System.out.println("do you see me?");
+//				}
+//			}
+//			
+//		});
+
+		// View button for associated requirement
 		this.viewRequirement.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String reqname = (String) requirementsComboBox.getSelectedItem();
-				// TODO PUT SOMEWAY TO GO TO REQUIREMENTS MANAGER
+				String reqName = (String) requirementsComboBox
+						.getSelectedItem();
+				JTabbedPane tabPane = new JTabbedPane();
+				tabPane.setSelectedIndex(tabPane.indexOfTab(RequirementManager
+						.staticGetName()));
+				ViewEventController.getInstance().editRequirement(
+						RequirementModel.getInstance().getRequirementByName(
+								reqName));
 			}
 		});
-		
-		
+
+
 		this.archiveButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -248,14 +285,14 @@ public class TaskEditView extends JPanel implements IView {
 				gateway.toView("SidebarView", "removeEditPanel", that);
 			}
 		});
-		
+
 		this.closeButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				gateway.toView("SidebarView", "removeEditPanel", that);
 			}
 		});
-		
+
 		// Predefine title field hook up listener
 		FormField titleField = new FormField("Title", this.titleInput, new FormFieldValidator() {
 			@Override
@@ -288,20 +325,20 @@ public class TaskEditView extends JPanel implements IView {
 				}
 			}
 		});
-		
+
 		// Predefine description field to hook up listener
 		FormField descField = new FormField("Description", this.descInput, new FormFieldValidator() {
 			@Override
 			public boolean validate(JComponent component) {
 				return !descInput.getText().trim().equals("");
 			}
-			
+
 			@Override
 			public String getMessage() {
 				return "Please enter a description.";
 			}
 		});
-		
+
 		this.descInput.addKeyListener(new KeyAdapter() {
 			public void keyReleased(KeyEvent e) {
 				if (e.getKeyCode() != 9) { // tab key
@@ -309,7 +346,7 @@ public class TaskEditView extends JPanel implements IView {
 				}
 			}
 		});
-		
+
 		this.descInput.addFocusListener(new FocusListener() {
 			@Override
 			public void focusGained(FocusEvent e) {
@@ -323,7 +360,7 @@ public class TaskEditView extends JPanel implements IView {
 				}
 			}
 		});
-		
+
 		this.dateInput.addPropertyChangeListener("date", new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
@@ -331,14 +368,14 @@ public class TaskEditView extends JPanel implements IView {
 				saveTask();
 			}
 		});
-		
+
 		// Predefine effort fields to hook up listeners
 		FormField estEffortField = new FormField("Est. Effort", this.estEffortInput, new FormFieldValidator() {
 			@Override
 			public boolean validate(JComponent component) {
 				return ((Integer) ((JSpinner) component).getValue()).intValue() > 0;
 			}
-			
+
 			@Override
 			public String getMessage() {
 				return "Effort must be greater than zero.";
@@ -354,13 +391,13 @@ public class TaskEditView extends JPanel implements IView {
 				}
 			}
 		});
-		
+
 		FormField actEffortField = new FormField("Act. Effort", this.actEffortInput, new FormFieldValidator() {
 			@Override
 			public boolean validate(JComponent component) {
 				return ((Integer) ((JSpinner) component).getValue()).intValue() >= 0;
 			}
-			
+
 			@Override
 			public String getMessage() {
 				return "Effort must be greater than zero.";
@@ -376,7 +413,7 @@ public class TaskEditView extends JPanel implements IView {
 				}
 			}
 		});
-		
+
 		stageBoxListener = new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -387,43 +424,43 @@ public class TaskEditView extends JPanel implements IView {
 				}
 			}
 		};
-		
+
 		this.stageInput.addActionListener(stageBoxListener);
-		
+
 		this.form = new Form(
-			titleField,
-			descField,
-			new FormField("Due Date", this.dateInput),
-			new HorizontalForm(
-				estEffortField,
-				actEffortField
-			),
-			new HorizontalForm(
-				new FormField("Members", this.membersScrollPane),
-				new FormField("Assigned", this.assignedMembersScrollPane)
-			),
-			new FormField("Associated Requirement", this.requirementsComboBox),
-			new ButtonGroup(
-				this.viewRequirement
-			),
-			//new FormField("Stage", this.stageInput),
-			new ButtonGroup(
-				this.archiveButton,
-				this.closeButton
-			)
-		);
-		
+				titleField,
+				descField,
+				new FormField("Due Date", this.dateInput),
+				new HorizontalForm(
+						estEffortField,
+						actEffortField
+						),
+						new HorizontalForm(
+								new FormField("Members", this.membersScrollPane),
+								new FormField("Assigned", this.assignedMembersScrollPane)
+								),
+								new FormField("Associated Requirement", this.requirementsComboBox),
+								new ButtonGroup(
+										this.viewRequirement
+										),
+										//new FormField("Stage", this.stageInput),
+										new ButtonGroup(
+												this.archiveButton,
+												this.closeButton
+												)
+				);
+
 		this.container.setBackground(SidebarView.SIDEBAR_COLOR);
 		this.container.setLayout(new MigLayout("fill, ins 20", "[260]"));
 		this.container.add(this.form, "grow");
 
 		this.scrollPane.setMinimumSize(new Dimension(300, 0));
-		
+
 		this.setLayout(new MigLayout("fill, ins 0", "[300][300]"));
 		this.add(this.scrollPane, "grow");
 		this.add(this.commentPanel, "grow");
 	}
-	
+
 	/**
 	 * @return the task
 	 */
@@ -437,18 +474,18 @@ public class TaskEditView extends JPanel implements IView {
 	private void saveTask() {
 		this.gateway.toPresenter("LocalCache", "update", "task", this.task);
 	}
-	
+
 	@Override
 	public void setGateway(Gateway gateway) {
 		this.gateway = gateway;
 		this.commentPanel.setGateway(this.gateway);
 	}
-	
+
 	public void updateEverything(Task t) {
 		this.task.setStage(t.getStage());
 		this.stageInput.setSelectedItem(t.getStage());
 	}
-	
+
 	public void setStages( StageList sl ) {
 		if(!stages.equals(sl)) {
 			Object pSelected = stageInput.getSelectedItem();
@@ -460,17 +497,17 @@ public class TaskEditView extends JPanel implements IView {
 			stageInput.addActionListener(stageBoxListener);
 		}
 	}
-	
-	
-	
-//	public void notifyAllMembersMouseHandler() {
-//		this.allMembersMouseHandler.just_changed = true;
-//	}
-//
-//	public void notifyAssignedMembersMouseHandler() {
-//		this.assignedMembersMouseHandler.just_changed = true;
-//	}
-	
+
+
+
+	//	public void notifyAllMembersMouseHandler() {
+	//		this.allMembersMouseHandler.just_changed = true;
+	//	}
+	//
+	//	public void notifyAssignedMembersMouseHandler() {
+	//		this.assignedMembersMouseHandler.just_changed = true;
+	//	}
+
 	/**
 	 * 
 	 * @param assigned
@@ -484,7 +521,7 @@ public class TaskEditView extends JPanel implements IView {
 		this.revalidate();
 		this.repaint();
 	}
-	
+
 	/**
 	 * Takes the members that the user has selected and moves them to the list of members assigned to a task
 	 */
@@ -494,7 +531,7 @@ public class TaskEditView extends JPanel implements IView {
 		this.allMembersMouseHandler.clear();
 		this.assignedMembersMouseHandler.clear();
 	}
-	
+
 	/**
 	 * Take the members that are selected in the Assigned Members list and moves them back to the All Members list
 	 */
@@ -504,35 +541,47 @@ public class TaskEditView extends JPanel implements IView {
 		this.allMembersMouseHandler.clear();
 		this.assignedMembersMouseHandler.clear();
 	}
-	
+
 	/**
 	 * From a given requirement array, parse through and give back the titles
 	 * @param requirementsArray Passed in list of requirements from Requirements Manager
 	 * @return set this.requirements to requirementsArray
 	 */
-	public Requirement[] getRequirements(Requirement[] requirementsArray) {
-		return this.requirements = requirementsArray;
+	public void getRequirements(Requirement[] requirementsArray) {
+		this.requirementsComboBox.removeAllItems();
+		this.requirements = requirementsArray;
+		this.requirementTitles = getRequirementTitles();
+		this.requirementsComboBox.setSelectedIndex(-1);
+		for (String s: this.requirementTitles) this.requirementsComboBox.addItem(s);
+		System.out.println("task getReq,getName, isEmpty is " + task.getRequirement().getName().isEmpty());
+		if (!task.getRequirement().getName().isEmpty()) {
+			this.requirementsComboBox.setSelectedItem(task.getRequirement().getName());
+		}
+		else {
+			this.requirementsComboBox.setSelectedIndex(-1);
+		}
 	}
-	
+
 	/**
 	 * Return the titles of the requirements
 	 */
 	public List<String> getRequirementTitles() {
-		for (Requirement r : requirements) {
+		this.requirementTitles.clear();
+		for (Requirement r : this.requirements) {
 			System.out.println("req title is " + r.getName());
 			requirementTitles.add(r.getName());
 		}
 		return requirementTitles;
 	}
-	
-	
+
+
 	private class JListMouseHandler implements MouseListener {
 
 		JList<String> list;
 		Boolean just_changed;
 		int[] previous_indexes;
 		int keyboard_event_count;
-		
+
 		public JListMouseHandler (JList<String> list) {
 			this.list = list;
 			just_changed = false;
@@ -543,7 +592,7 @@ public class TaskEditView extends JPanel implements IView {
 			int clicked_index = this.list.locationToIndex(e.getPoint());
 			if (this.just_changed) {
 				this.just_changed = false;
-				
+
 				for (int i : previous_indexes) {
 					if (!this.inArray(i, this.list.getSelectedIndices())) {
 						this.list.addSelectionInterval(i, i);
@@ -567,19 +616,19 @@ public class TaskEditView extends JPanel implements IView {
 		public void mouseExited(MouseEvent e) {}
 
 		public void mouseClicked(MouseEvent e) {}
-		
+
 		public void update_selected() {
 			if (this.keyboard_event_count == 0) {
 				this.previous_indexes = this.list.getSelectedIndices();
 				this.keyboard_event_count++;
 			}
 		}
-		
+
 		public void clear() {
 			this.list.clearSelection();
 			this.previous_indexes = this.list.getSelectedIndices();
 		}
-		
+
 		private Boolean inArray(int to_check, int[] array) {
 			for (int i : array) {
 				if (i == to_check) {

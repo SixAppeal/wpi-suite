@@ -4,6 +4,7 @@ import java.util.Date;
 
 import com.google.gson.Gson;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Stage;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 
@@ -73,13 +74,13 @@ public class TaskUtil {
 	
 	/**
 	 * Checks an associated requirement against the ruleset for valid associated requirements
-	 * @param input The string input from user
+	 * @param aReq The string input from user
 	 * @return The same input provided that it's valid.
 	 * @throws IllegalArgumentException
 	 */
-	public static Integer validateRequirement(Integer input) throws IllegalArgumentException {
+	public static Requirement validateRequirement(Requirement aReq) throws IllegalArgumentException {
 		// No rules
-		return input;
+		return aReq;
 	}
 	
 	/**

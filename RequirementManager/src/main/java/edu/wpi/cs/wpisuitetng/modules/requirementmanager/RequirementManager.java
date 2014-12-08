@@ -60,6 +60,13 @@ public class RequirementManager implements IJanewayModule {
 	public String getName() {
 		return "Requirement Manager";
 	}
+	
+	/**
+	 * For purpose of Task Manager
+	 */
+	public static String staticGetName() {
+		return "Requirement Manager";
+	}
 
 	/**
 	 * Returns the tabs that make up the requirement manager.
