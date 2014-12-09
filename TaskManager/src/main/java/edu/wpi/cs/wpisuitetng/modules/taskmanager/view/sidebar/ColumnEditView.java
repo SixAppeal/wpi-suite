@@ -160,6 +160,8 @@ public class ColumnEditView extends JPanel implements IView {
 				changeNameStage();
 			}});
 		
+
+		this.setBackground(TaskManagerUtil.SIDEBAR_COLOR);
 		GridBagConstraints gbc = new GridBagConstraints();
 		this.setLayout(new GridBagLayout());
 
@@ -211,9 +213,6 @@ public class ColumnEditView extends JPanel implements IView {
 		gbc.gridy = 3;
 		gbc.insets = new Insets(10, 0, 20, 20);
 		this.add(moveUpBtn, gbc);
-
-
-
 	}
 
 	protected void moveCurrentTaskUp() {
