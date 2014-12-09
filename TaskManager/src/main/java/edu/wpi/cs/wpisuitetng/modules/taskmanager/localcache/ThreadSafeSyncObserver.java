@@ -22,9 +22,9 @@ public class ThreadSafeSyncObserver implements RequestObserver {
 		if (type.equals("task2")) {
 			System.out.println("Long Pull Request Began!");
 			ThreadSafeSyncObserver syncer = new ThreadSafeSyncObserver(this.gateway);
-			final Request networkRequest = Network.getInstance().makeRequest("taskmanager/task2", HttpMethod.GET);
+			final Request networkRequest = Network.getInstance().makeRequest("Advanced/taskmanager/task2", HttpMethod.GET);
 			networkRequest.addObserver(syncer);
-			networkRequest.setReadTimeout(0);
+			networkRequest.setReadTimeout(50000);
 			networkRequest.send();
 			this.gateway.toPresenter("LocalCache", "updateTasks", iReq.getResponse().getBody());
 			System.out.println("Long Pull Request Completed!");

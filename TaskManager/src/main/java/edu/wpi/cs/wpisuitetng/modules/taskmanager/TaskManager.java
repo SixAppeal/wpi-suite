@@ -37,6 +37,8 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar.ColumnEditView;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar.MemberListHandler;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar.SidebarView;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.toolbar.ToolbarView;
+import edu.wpi.cs.wpisuitetng.network.Network;
+import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
 
 /**
  * @author SixAppeal
@@ -139,7 +141,7 @@ public class TaskManager implements IJanewayModule {
 	 */
 	@Override
 	public void finishInit() {
-		
+		System.out.println(Network.getInstance().makeRequest("task", HttpMethod.GET).getReadTimeout());
 		gateway.toPresenter("LocalCache", "sync", "tasks");
 		
 		t.scheduleAtFixedRate(new TimerTask() {
@@ -152,7 +154,7 @@ public class TaskManager implements IJanewayModule {
 				gateway.toView("SidebarView", "reflowTasks");
 			}
 			
-		}, 0, 5000);
+		}, 0, 250);
 	}
 
 	/**

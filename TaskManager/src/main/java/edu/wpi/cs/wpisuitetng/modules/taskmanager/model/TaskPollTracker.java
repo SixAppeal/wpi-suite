@@ -8,11 +8,11 @@ import java.util.concurrent.Semaphore;
 public class TaskPollTracker {
 
 	private static TaskPollTracker instance;
-	private List<TaskEntityManagerLongPoll> toBeNotified;
+	private List<Thread> toBeNotified;
 	private Semaphore notificationLock;
 	
 	private TaskPollTracker() {
-		toBeNotified = new LinkedList<TaskEntityManagerLongPoll>();
+		toBeNotified = new LinkedList<Thread>();
 		notificationLock = new Semaphore(-1, true);
 	}
 	
@@ -23,7 +23,7 @@ public class TaskPollTracker {
 		return instance;
 	}
 	
-	public void register(TaskEntityManagerLongPoll session) {
+	public void register(Thread session) {
 		toBeNotified.add(session);
 	}
 	
@@ -33,8 +33,8 @@ public class TaskPollTracker {
 	
 	public void update() {
 		System.out.println("Got Here! " + toBeNotified.size());
-		for (TaskEntityManagerLongPoll entityToNotify : toBeNotified) {
-			entityToNotify.lock.release();
+		for (Thread entityToNotify : toBeNotified) {
+			//entityToNotify.interrupt();
 		}
 		toBeNotified.clear();
 	}
