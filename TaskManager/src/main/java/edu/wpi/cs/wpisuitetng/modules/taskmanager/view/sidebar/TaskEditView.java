@@ -13,6 +13,7 @@
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
 
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -107,6 +108,7 @@ public class TaskEditView extends JPanel implements IView {
 	private JComboBox<Stage> stageInput;
 	private List<String> requirementTitles;
 	private JButton viewRequirement;
+	private JButton attachRequirement;
 	private JComboBox<String> requirementsComboBox;
 	private JButton archiveButton;
 	private JButton closeButton;
@@ -211,7 +213,8 @@ public class TaskEditView extends JPanel implements IView {
 			this.requirementsComboBox.setSelectedIndex(-1);
 		}
 
-		this.viewRequirement = new JButton("View Requirement");
+		this.viewRequirement = new JButton("View");
+		this.attachRequirement = new JButton("Associate");
 
 
 
@@ -234,17 +237,35 @@ public class TaskEditView extends JPanel implements IView {
 
 
 		// UI for associated requirement stuff
-		this.requirementsComboBox.addActionListener(new ActionListener() {
+//		this.requirementsComboBox.addActionListener(new ActionListener() {
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				System.out.println("action event e command is " + e.getActionCommand());
+//				System.out.println("action event e ID is " + e.getID());
+//				JComboBox<?> cb = (JComboBox<?>) e.getSource();
+//				String reqName = (String) cb.getSelectedItem();
+//				System.out.println("combo box reqname is " + reqName);
+//				for (Requirement r : requirements) {
+//					if (r.getName() == reqName) {
+//						task.setRequirement(r);
+//					}
+//				}
+//				saveTask();
+//			}
+//		});
+		
+		// Associated a requirement to a task
+		this.attachRequirement.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("action event e command is " + e.getActionCommand());
-				System.out.println("action event e ID is " + e.getID());
-				JComboBox<?> cb = (JComboBox<?>) e.getSource();
+				JComboBox<?> cb = requirementsComboBox;
 				String reqName = (String) cb.getSelectedItem();
-				System.out.println("combo box reqname is " + reqName);
+				System.out.println("reqname is " + reqName);
 				for (Requirement r : requirements) {
-					if (r.getName() == reqName) {
+					System.out.println("requirement rGetName is " + r.getName());
+					if (r.getName().equals(reqName)) {
 						task.setRequirement(r);
+						System.out.println("task req Name is " + task.getRequirement().getName());
 					}
 				}
 				saveTask();
@@ -269,7 +290,16 @@ public class TaskEditView extends JPanel implements IView {
 			public void actionPerformed(ActionEvent e) {
 				String reqName = (String) requirementsComboBox
 						.getSelectedItem();
-				JTabbedPane tabPane = new JTabbedPane();
+				Container c = new TaskEditView(iTask, stages);
+				while (c != null) {
+					if ("Janeway Tab Pane".equals(c.getName())) {
+						break;
+					}
+					c = c.getParent();
+				}
+				System.out.println("c get name is " + c.getName());
+				JTabbedPane tabPane = (JTabbedPane) c;
+				System.out.println("tabPane index of tab req manager is " + tabPane.indexOfTab(RequirementManager.staticGetName()));
 				tabPane.setSelectedIndex(tabPane.indexOfTab(RequirementManager
 						.staticGetName()));
 				ViewEventController.getInstance().editRequirement(
@@ -442,7 +472,8 @@ public class TaskEditView extends JPanel implements IView {
 								),
 								new FormField("Associated Requirement", this.requirementsComboBox),
 								new ButtonGroup(
-										this.viewRequirement
+										this.viewRequirement,
+										this.attachRequirement
 										),
 										//new FormField("Stage", this.stageInput),
 										new ButtonGroup(
@@ -550,24 +581,34 @@ public class TaskEditView extends JPanel implements IView {
 	public void getRequirements(Requirement[] requirementsArray) {
 		this.requirements = requirementsArray;
 		this.requirementTitles = getRequirementTitles();
-		ComboBoxModel model = this.requirementsComboBox.getModel();
+		ComboBoxModel<String> model = this.requirementsComboBox.getModel();
 		int size = model.getSize();
-		
-//		for (String s : this.requirementTitles) {
-//			for (int i = 0; i < size; i++) {
-//				Object element = model.getElementAt(i);
-//				if (element.)
-//			}
-//		}
-		this.requirementsComboBox.removeAllItems();
-		this.requirementsComboBox.setSelectedIndex(-1);
-		for (String s: this.requirementTitles) this.requirementsComboBox.addItem(s);
-		System.out.println("task getReq,getName, isEmpty is " + task.getRequirement().getName().isEmpty());
+		boolean foundRequirement = false;
+		System.out.println("requirementTitles is " + requirementTitles);
+		System.out.println("size is " + size);
+		System.out.println("requirementTitles size is " + requirementTitles.size());
 		if (!task.getRequirement().getName().isEmpty()) {
 			this.requirementsComboBox.setSelectedItem(task.getRequirement().getName());
 		}
-		else {
-			this.requirementsComboBox.setSelectedIndex(-1);
+		if (size < requirementTitles.size()) {
+			for (String s : this.requirementTitles) {
+				foundRequirement = false;
+				for (int i = 0; i < size; i++) {
+					Object element = model.getElementAt(i);
+					if (s == element) {
+						foundRequirement = true;
+					}
+				}
+				if (!foundRequirement) {
+					this.requirementsComboBox.addItem(s);
+				}
+			}	
+			if (!task.getRequirement().getName().isEmpty()) {
+				this.requirementsComboBox.setSelectedItem(task.getRequirement().getName());
+			}
+			else {
+				this.requirementsComboBox.setSelectedIndex(-1);
+			}
 		}
 	}
 

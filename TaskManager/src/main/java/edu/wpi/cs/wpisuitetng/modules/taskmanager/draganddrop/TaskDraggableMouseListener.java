@@ -26,6 +26,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar.TaskView;
 public class TaskDraggableMouseListener extends DraggableMouseListener{
 	
 	private TaskView taskAssoc;
+	private boolean hasMoved;
 	
 	/**
 	 * Constructor
@@ -35,6 +36,7 @@ public class TaskDraggableMouseListener extends DraggableMouseListener{
 	public TaskDraggableMouseListener(TaskView t) {
 		super(t);
 		this.taskAssoc = t;
+		this.hasMoved = false;
 		
 	}
 	
@@ -45,9 +47,10 @@ public class TaskDraggableMouseListener extends DraggableMouseListener{
 	@Override
 	public void mouseClicked(MouseEvent e) 
 	{
-		if (e.getClickCount() == 2) {
-			taskAssoc.getGateway().toPresenter("TaskPresenter", "editTask", taskAssoc.getTask());
-		}	
+//		if (e.getClickCount() == 2) {
+//			taskAssoc.getGateway().toPresenter("TaskPresenter", "editTask", taskAssoc.getTask());
+//		}
+		//taskAssoc.getGateway().toPresenter("TaskPresenter", "editTask", taskAssoc.getTask());
 	}
 
 	/**
@@ -82,7 +85,7 @@ public class TaskDraggableMouseListener extends DraggableMouseListener{
 	@Override
 	public void mousePressed(MouseEvent e) 
 	{
-		//taskAssoc.getGateway().toPresenter("TaskPresenter", "editTask", taskAssoc.getTask());
+		taskAssoc.getGateway().toPresenter("TaskPresenter", "editTask", taskAssoc.getTask());
 		super.mousePressed(e);
 	}
 }
