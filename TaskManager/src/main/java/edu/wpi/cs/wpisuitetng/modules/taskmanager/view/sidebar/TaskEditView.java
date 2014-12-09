@@ -93,6 +93,9 @@ public class TaskEditView extends JPanel implements IView {
 	private JScrollPane membersScrollPane;
 	private JList<String> assignedMembers;
 	private JScrollPane assignedMembersScrollPane;
+	private JButton addMemberButton;
+	private JButton removeMemberButton;
+	
 	private JComboBox<Stage> stageInput;
 	private JButton archiveButton;
 	private JButton closeButton;
@@ -111,8 +114,7 @@ public class TaskEditView extends JPanel implements IView {
 	public TaskEditView(Task iTask, StageList stages) {
 		this.task = iTask;
 		this.stages = stages;
-		// Poplulates the member list handler with the assigned members
-		
+		// Populates the member list handler with the assigned members
 		
 		
 		
@@ -183,9 +185,24 @@ public class TaskEditView extends JPanel implements IView {
 		
 		
 		
+	
+	// Buttons below
 		
+		addMemberButton = new JButton(">>");
+		addMemberButton.setSize(40, 60);
+		addMemberButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				moveMembersToAssigned();
+			}
+		});
 		
-		
+		removeMemberButton = new JButton("<<");
+		removeMemberButton.setSize(40, 60);
+		removeMemberButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				moveMembersToAll();
+			}
+		});
 		
 		
 		
@@ -193,16 +210,19 @@ public class TaskEditView extends JPanel implements IView {
 		members.addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
-//				notifyAllMembersMouseHandler();
+				notifyAllMembersMouseHandler();
 			}
 		});
 		
 		assignedMembers.addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
-//				notifyAssignedMembersMouseHandler();
+				notifyAssignedMembersMouseHandler();
 			}
 		});
+		
+		assignedMembers.setMinimumSize(new Dimension(assignedMembers.getMinimumSize().width, 100));
+		members.setMinimumSize(new Dimension(members.getMinimumSize().width, 100));
 		
 		
 		
@@ -365,8 +385,14 @@ public class TaskEditView extends JPanel implements IView {
 			),
 			new HorizontalForm(
 				new FormField("Members", this.membersScrollPane),
+				new Form(
+					new ButtonGroup(addMemberButton),
+					new ButtonGroup(removeMemberButton)
+				),
 				new FormField("Assigned", this.assignedMembersScrollPane)
 			),
+			
+			
 			//new FormField("Stage", this.stageInput),
 			new ButtonGroup(
 				this.archiveButton,
@@ -424,13 +450,13 @@ public class TaskEditView extends JPanel implements IView {
 	
 	
 	
-//	public void notifyAllMembersMouseHandler() {
-//		this.allMembersMouseHandler.just_changed = true;
-//	}
-//
-//	public void notifyAssignedMembersMouseHandler() {
-//		this.assignedMembersMouseHandler.just_changed = true;
-//	}
+	public void notifyAllMembersMouseHandler() {
+		this.allMembersMouseHandler.just_changed = true;
+	}
+
+	public void notifyAssignedMembersMouseHandler() {
+		this.assignedMembersMouseHandler.just_changed = true;
+	}
 	
 	/**
 	 * 
