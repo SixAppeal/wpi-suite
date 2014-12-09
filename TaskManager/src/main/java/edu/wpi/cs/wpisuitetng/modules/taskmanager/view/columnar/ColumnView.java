@@ -123,6 +123,7 @@ public class ColumnView extends JPanel implements IView {
 	 */
 	public void setStages(StageList stages) {
 		if (!stages.equals(this.stages)) this.setState(this.tasks, stages);
+
 	}
 	
 	/**

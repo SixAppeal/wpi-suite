@@ -26,7 +26,9 @@ import javax.swing.JPanel;
 import edu.wpi.cs.wpisuitetng.janeway.modules.IJanewayModule;
 import edu.wpi.cs.wpisuitetng.janeway.modules.JanewayTabModel;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.Cache;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.InitializeManager;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.LocalCache;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.SyncManager;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.ThreadSafeLocalCache;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.*;
@@ -38,6 +40,8 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar.MemberListHandler
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar.SidebarView;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.toolbar.ToolbarView;
 import edu.wpi.cs.wpisuitetng.network.Network;
+import edu.wpi.cs.wpisuitetng.network.Request;
+
 import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
 
 /**
@@ -141,8 +145,15 @@ public class TaskManager implements IJanewayModule {
 	 */
 	@Override
 	public void finishInit() {
-		System.out.println(Network.getInstance().makeRequest("task", HttpMethod.GET).getReadTimeout());
 		gateway.toPresenter("LocalCache", "sync", "tasks");
+
+		System.out.println("Sending Request");
+		final Request networkRequest = Network.getInstance().makeRequest(
+				"taskmanager/stages", HttpMethod.GET);
+		networkRequest.addObserver(new InitializeManager(localCache));
+		networkRequest.send();
+		
+		
 		
 		t.scheduleAtFixedRate(new TimerTask() {
 
