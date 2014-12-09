@@ -41,6 +41,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
  * @author akshoop
  * @author tmeehan
  * @author rnorlando
+ * @author srojas
  */
 public class TaskView extends JPanel implements  IView {
 	private static final long serialVersionUID = 6255679649898290535L;
