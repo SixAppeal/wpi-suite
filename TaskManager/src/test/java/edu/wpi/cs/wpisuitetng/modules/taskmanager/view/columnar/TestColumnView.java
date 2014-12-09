@@ -40,6 +40,7 @@ public class TestColumnView {
 		assertNotNull(columnView.getTasks());
 		assertNotNull(columnView.getStages());
 		assertArrayEquals(new Task[0], columnView.getTasks());
+		columnView.setStages(stages);
 		assertEquals(stages, columnView.getStages());
 	}
 	
