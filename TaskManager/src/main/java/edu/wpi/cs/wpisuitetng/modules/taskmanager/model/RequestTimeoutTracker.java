@@ -4,6 +4,7 @@ package edu.wpi.cs.wpisuitetng.modules.taskmanager.model;
 public class RequestTimeoutTracker extends Thread {
 
 	private TaskEntityManagerLongPoll entityManager;
+	private Boolean timedOut;
 	
 	public RequestTimeoutTracker() {
 		
@@ -11,21 +12,22 @@ public class RequestTimeoutTracker extends Thread {
 	
 	public RequestTimeoutTracker(TaskEntityManagerLongPoll entityManager) {
 		this.entityManager = entityManager;
+		this.timedOut = false;
 	}
 	
-	
+	public Boolean isDone() {
+		return this.timedOut;
+	}
 	
 	public void run() {
-		System.out.println("doing stuff");
 		try {
 			Thread.sleep(2000);
 		} catch (InterruptedException e) {
 			System.out.println("Good Stuff Happened");
 			e.printStackTrace();
 		}
-		//TaskPollTracker.getInstance().update();
-		System.out.println("finished sleeping");
-		this.entityManager.fixLock();
+		timedOut = true;
+		this.entityManager.lock.release();
 	}
 	
 }

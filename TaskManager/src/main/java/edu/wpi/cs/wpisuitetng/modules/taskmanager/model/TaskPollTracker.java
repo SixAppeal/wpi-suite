@@ -9,11 +9,11 @@ import edu.wpi.cs.wpisuitetng.Session;
 public class TaskPollTracker {
 
 	private static TaskPollTracker instance;
-	private List<Session> toBeNotified;
+	private List<TaskEntityManagerLongPoll> toBeNotified;
 	private Semaphore notificationLock;
 	
 	private TaskPollTracker() {
-		toBeNotified = new LinkedList<Session>();
+		toBeNotified = new LinkedList<TaskEntityManagerLongPoll>();
 		notificationLock = new Semaphore(-1, true);
 	}
 	
@@ -24,7 +24,7 @@ public class TaskPollTracker {
 		return instance;
 	}
 	
-	public void register(Session session) {
+	public void register(TaskEntityManagerLongPoll session) {
 		toBeNotified.add(session);
 	}
 	
@@ -33,7 +33,10 @@ public class TaskPollTracker {
 	}
 	
 	public void update() {
-		notificationLock.release(toBeNotified.size());
+		System.out.println("Got Here! " + toBeNotified.size());
+		for (TaskEntityManagerLongPoll entityToNotify : toBeNotified) {
+			entityToNotify.lock.release();
+		}
 		toBeNotified.clear();
 	}
 	

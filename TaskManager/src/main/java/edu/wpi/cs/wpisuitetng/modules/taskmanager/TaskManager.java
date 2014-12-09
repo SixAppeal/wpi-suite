@@ -139,12 +139,13 @@ public class TaskManager implements IJanewayModule {
 	 */
 	@Override
 	public void finishInit() {
-				
+		
+		gateway.toPresenter("LocalCache", "sync", "tasks");
+		
 		t.scheduleAtFixedRate(new TimerTask() {
 
 			@Override
 			public void run() {
-				gateway.toPresenter("LocalCache", "sync", "tasks");
 				gateway.toPresenter("LocalCache", "sync", "member");
 				gateway.toPresenter("LocalCache", "sync", "stages");
 				gateway.toView("ColumnView", "reflow");

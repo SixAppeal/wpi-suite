@@ -1,7 +1,10 @@
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache;
 
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
+import edu.wpi.cs.wpisuitetng.network.Network;
+import edu.wpi.cs.wpisuitetng.network.Request;
 import edu.wpi.cs.wpisuitetng.network.RequestObserver;
+import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
 import edu.wpi.cs.wpisuitetng.network.models.IRequest;
 
 public class ThreadSafeSyncObserver implements RequestObserver {
@@ -16,7 +19,11 @@ public class ThreadSafeSyncObserver implements RequestObserver {
 	public void responseSuccess(IRequest iReq) {
 		String[] splitUrl = iReq.getUrl().toString().split("/");
 		String type = splitUrl[splitUrl.length - 1];
-		if (type.equals("task")) {
+		if (type.equals("task2")) {
+			ThreadSafeSyncObserver syncer = new ThreadSafeSyncObserver(this.gateway);
+			final Request networkRequest = Network.getInstance().makeRequest("taskmanager/task2", HttpMethod.GET);
+			networkRequest.addObserver(syncer);
+			networkRequest.send();
 			this.gateway.toPresenter("LocalCache", "updateTasks", iReq.getResponse().getBody());
 		}
 		if (type.equals("user")) {
