@@ -37,13 +37,17 @@ public class TaskDraggableMouseListener extends DraggableMouseListener{
 		this.taskAssoc = t;
 		
 	}
+	
+	//TODO @wmtemple, add single click selector
 	/**
 	 * @see  java.awt.event.MouseAdapter.mouseClicked
 	 */
 	@Override
 	public void mouseClicked(MouseEvent e) 
 	{
-		taskAssoc.getGateway().toPresenter("TaskPresenter", "viewTask", taskAssoc.getTask());
+		if (e.getClickCount() == 2) {
+			taskAssoc.getGateway().toPresenter("TaskPresenter", "editTask", taskAssoc.getTask());
+		}	
 	}
 
 	/**
@@ -52,7 +56,7 @@ public class TaskDraggableMouseListener extends DraggableMouseListener{
 	@Override
 	public void mouseReleased(MouseEvent e) 
 	{
-		taskAssoc.getGateway().toPresenter("TaskPresenter", "viewTask", taskAssoc.getTask());
+		//taskAssoc.getGateway().toPresenter("TaskPresenter", "viewTask", taskAssoc.getTask());
 	}
 
 	/**
@@ -78,7 +82,7 @@ public class TaskDraggableMouseListener extends DraggableMouseListener{
 	@Override
 	public void mousePressed(MouseEvent e) 
 	{
-		taskAssoc.getGateway().toPresenter("TaskPresenter", "editTask", taskAssoc.getTask());
+		//taskAssoc.getGateway().toPresenter("TaskPresenter", "editTask", taskAssoc.getTask());
 		super.mousePressed(e);
 	}
 }
