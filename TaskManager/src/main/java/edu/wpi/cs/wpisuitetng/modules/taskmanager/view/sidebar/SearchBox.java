@@ -37,6 +37,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.search.Search;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar.TaskView;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.Form;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.FormField;
 
@@ -128,26 +129,11 @@ public class SearchBox extends JPanel implements IView {
 			gbc.fill = GridBagConstraints.HORIZONTAL;
 			Task t = getTask(r);
 			
-			// The purpose of the html tags is to properly display the results
-			JLabel content = new JLabel("<html><i>Title:</i><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" 
-										+ t.getTitle() 
-										+ "<br>"
-										+ "<i>Description:</i><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" 
-										+ t.getDescription() 
-										+"<br></html>");
-			JButton viewButton = new JButton("Open");
-			viewButton.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					viewTask(t);
-				}
-			});
+			TaskView content = new TaskView(t, true);
+			content.setGateway(this.gateway);
 			gbc.gridy = count;
 			this.resultsBox.add(content, gbc);
-			gbc.gridy = count + 1;
-			gbc.fill = GridBagConstraints.NONE;
-			gbc.anchor = GridBagConstraints.FIRST_LINE_START;
-			this.resultsBox.add(viewButton, gbc);
-			count += 2;
+			count++;
 		}
 		
 		gbc.weighty = 1.0;

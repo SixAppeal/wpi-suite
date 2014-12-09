@@ -26,7 +26,7 @@ public class UpdateManager implements RequestObserver {
 		this.toUpdate = toUpdate;
 		this.gateway = gateway;
 		this.callbacks = new ArrayList<String>();
-		this.callbacks.add(revocationCallback);
+		//this.callbacks.add(revocationCallback);
 	}
 	
 	@Override

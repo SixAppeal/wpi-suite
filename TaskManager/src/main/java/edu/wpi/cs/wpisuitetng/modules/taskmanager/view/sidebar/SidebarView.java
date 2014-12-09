@@ -24,6 +24,7 @@ import javax.swing.UIManager;
 import javax.swing.plaf.basic.BasicTabbedPaneUI;
 
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.LocalCache;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.ThreadSafeLocalCache;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.StageList;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
@@ -48,7 +49,7 @@ public class SidebarView extends JTabbedPane implements IView {
 	private Gateway gateway;
 
 	private StageList stages;
-	private LocalCache cache;
+	private ThreadSafeLocalCache cache;
 	// Components
 	private List<IView> viewList;
 	private SearchBox searchView;
@@ -215,7 +216,7 @@ public class SidebarView extends JTabbedPane implements IView {
 		return null;
 	}
 	
-	public void setCache(LocalCache cache) {
+	public void setCache(ThreadSafeLocalCache cache) {
 		this.cache = cache;
 	}
 	

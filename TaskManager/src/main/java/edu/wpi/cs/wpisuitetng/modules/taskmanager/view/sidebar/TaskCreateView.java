@@ -62,7 +62,7 @@ public class TaskCreateView extends JPanel implements IView {
 		this.description = new JTextArea(5, 0);
 		this.stages = new JComboBox<Stage>();
 		this.createButton = new JButton("Create");
-		this.cancelButton = new JButton("Cancel");
+		this.cancelButton = new JButton("Cancel"); 
 		TaskCreateView that = this;
 
 		this.scrollPane.setBorder(BorderFactory.createEmptyBorder());
@@ -79,7 +79,7 @@ public class TaskCreateView extends JPanel implements IView {
 				task.setTitle(title.getText());
 				task.setDescription(description.getText());
 				task.setStage((Stage) stages.getSelectedItem());
-				gateway.toPresenter("LocalCache", "store", "task", task);
+				gateway.toPresenter("LocalCache", "store", "task:testing", task);
 				gateway.toView("SidebarView", "removeCreatePanel", that);
 			}
 		});
