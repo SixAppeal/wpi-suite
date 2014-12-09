@@ -329,6 +329,11 @@ public class LocalCache implements Cache, IPresenter {
 		this.store("stages", stages);
 	}
 
+	/**
+	 * Renames a stage, changing the names of the stages within the task.
+	 * @param oldName
+	 * @param newName
+	 */
 	public void renameStage(String oldName, String newName) {
 		for (Task t : tasks) {
 			if (t.getStage().toString().equals(oldName)) {

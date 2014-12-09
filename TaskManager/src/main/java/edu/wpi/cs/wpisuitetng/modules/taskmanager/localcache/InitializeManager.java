@@ -12,6 +12,7 @@ public class InitializeManager implements RequestObserver{
 	
 	public InitializeManager(Cache localCache){
 		this.localCache = localCache;
+		
 	}
 
 	@Override
