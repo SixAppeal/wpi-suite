@@ -229,6 +229,7 @@ public class TaskEditView extends JPanel implements IView {
 		this.archiveButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				task.archive();
 				gateway.toPresenter("LocalCache", "update", "archive:testing", task);
 				gateway.toView("SidebarView", "removeEditPanel", that);
 			}
