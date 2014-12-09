@@ -165,9 +165,11 @@ public class TaskEditView extends JPanel implements IView {
 		this.descInput.setLineWrap(true);
 		this.descInput.setWrapStyleWord(true);
 		
-		if (!this.task.getStage().getName().equals("Complete")) {
+		
+		if (this.task.getStage().getName().equals("New")) {
 			this.actEffortInput.setEnabled(false);
 		}
+		
 		
 		this.estEffortInput.setValue(this.task.getEstimatedEffort());
 		this.actEffortInput.setValue(this.task.getActualEffort());

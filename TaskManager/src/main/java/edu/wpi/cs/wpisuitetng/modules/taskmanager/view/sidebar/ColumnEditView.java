@@ -49,6 +49,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Stage;
  * @author wavanrensselaer
  * @author thhughes
  * @author srojas
+ * @author dpseaman
  *
  */
 public class ColumnEditView extends JPanel implements IView {
