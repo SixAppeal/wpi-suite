@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BorderFactory;
+import javax.swing.ComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -233,22 +234,22 @@ public class TaskEditView extends JPanel implements IView {
 
 
 		// UI for associated requirement stuff
-//		this.requirementsComboBox.addActionListener(new ActionListener() {
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				System.out.println("action event e command is " + e.getActionCommand());
-//				System.out.println("action event e ID is " + e.getID());
-//				JComboBox<?> cb = (JComboBox<?>) e.getSource();
-//				String reqName = (String) cb.getSelectedItem();
-//				System.out.println("combo box reqname is " + reqName);
-//				for (Requirement r : requirements) {
-//					if (r.getName() == reqName) {
-//						task.setRequirement(r);
-//					}
-//				}
-//				saveTask();
-//			}
-//		});
+		this.requirementsComboBox.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("action event e command is " + e.getActionCommand());
+				System.out.println("action event e ID is " + e.getID());
+				JComboBox<?> cb = (JComboBox<?>) e.getSource();
+				String reqName = (String) cb.getSelectedItem();
+				System.out.println("combo box reqname is " + reqName);
+				for (Requirement r : requirements) {
+					if (r.getName() == reqName) {
+						task.setRequirement(r);
+					}
+				}
+				saveTask();
+			}
+		});
 
 		// UI for associated requirement stuff
 //		this.requirementsComboBox.addItemListener(new ItemListener() {
@@ -543,14 +544,22 @@ public class TaskEditView extends JPanel implements IView {
 	}
 
 	/**
-	 * From a given requirement array, parse through and give back the titles
+	 * Place the requirement titles into the dropdown menu
 	 * @param requirementsArray Passed in list of requirements from Requirements Manager
-	 * @return set this.requirements to requirementsArray
 	 */
 	public void getRequirements(Requirement[] requirementsArray) {
-		this.requirementsComboBox.removeAllItems();
 		this.requirements = requirementsArray;
 		this.requirementTitles = getRequirementTitles();
+		ComboBoxModel model = this.requirementsComboBox.getModel();
+		int size = model.getSize();
+		
+//		for (String s : this.requirementTitles) {
+//			for (int i = 0; i < size; i++) {
+//				Object element = model.getElementAt(i);
+//				if (element.)
+//			}
+//		}
+		this.requirementsComboBox.removeAllItems();
 		this.requirementsComboBox.setSelectedIndex(-1);
 		for (String s: this.requirementTitles) this.requirementsComboBox.addItem(s);
 		System.out.println("task getReq,getName, isEmpty is " + task.getRequirement().getName().isEmpty());
