@@ -15,6 +15,8 @@ package edu.wpi.cs.wpisuitetng.modules.taskmanager.model;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 
+import com.google.gson.Gson;
+
 import edu.wpi.cs.wpisuitetng.Session;
 import edu.wpi.cs.wpisuitetng.database.Data;
 import edu.wpi.cs.wpisuitetng.exceptions.BadRequestException;
@@ -105,6 +107,9 @@ public class TaskEntityManagerLongPoll implements EntityManager<Task>{
 		return Tasks;
 	}
 
+	public Semaphore lock;
+	
+	
 	/**
 	 * Retrieves all Tasks from the database
 	 * 
@@ -113,16 +118,32 @@ public class TaskEntityManagerLongPoll implements EntityManager<Task>{
 	 */
 	@Override
 	public Task[] getAll(Session s) {
+//		Thread thisSession = Thread.currentThread();
+//		TaskPollTracker.getInstance().register(thisSession);
+//		System.out.println(thisSession);
+//		try {
+//			System.out.println("Taking a nap!");
+//			System.out.flush();
+//			Thread.sleep(7000);
+//			System.out.println("Woke up!");
+//		} catch (InterruptedException e) {
+//			System.out.println("Interrupted Yeah!");
+//			e.printStackTrace();
+//		}
+		//this.sleep(7000);
+		//lock = new Semaphore(0, true);
+//		RequestTimeoutTracker timeout = new RequestTimeoutTracker(this);
+//		System.out.println("Got here also");
+		//timeout.start();
+//		try {
+//			lock.acquire();
+//		} catch (InterruptedException e) {
+//			e.printStackTrace();
+//		}
+//		System.out.println("Got Here!");
+//		if (!timeout.isDone()) {
 		
-		TaskPollTracker.getInstance().register(s);
-		Semaphore lock = TaskPollTracker.getInstance().getLock();
-		//setup new thread that sleeps for timeout amount
-		try {
-			lock.acquire();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		//delete thread if still active
+//		}
 		return db.retrieveAll(new Task(), s.getProject()).toArray(new Task[0]);
 	}
 
@@ -215,7 +236,20 @@ public class TaskEntityManagerLongPoll implements EntityManager<Task>{
 	 */
 	@Override
 	public String advancedGet(Session arg0, String[] arg1) throws NotImplementedException {
-		throw new NotImplementedException();
+		Thread thisSession = Thread.currentThread();
+		TaskPollTracker.getInstance().register(thisSession);
+		System.out.println(thisSession);
+		try {
+			System.out.println("Taking a nap!");
+			System.out.flush();
+			Thread.sleep(7000);
+			System.out.println("Woke up!");
+		} catch (InterruptedException e) {
+			System.out.println("Interrupted Yeah!");
+			e.printStackTrace();
+		}
+		return new Gson().toJson(db.retrieveAll(new Task(), arg0.getProject()).toArray(new Task[0]), Task[].class);
+		//throw new NotImplementedException();
 	}
 
 	/**

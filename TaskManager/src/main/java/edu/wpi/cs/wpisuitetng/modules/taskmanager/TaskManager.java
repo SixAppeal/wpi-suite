@@ -41,6 +41,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar.SidebarView;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.toolbar.ToolbarView;
 import edu.wpi.cs.wpisuitetng.network.Network;
 import edu.wpi.cs.wpisuitetng.network.Request;
+
 import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
 
 /**
@@ -144,6 +145,8 @@ public class TaskManager implements IJanewayModule {
 	 */
 	@Override
 	public void finishInit() {
+		gateway.toPresenter("LocalCache", "sync", "tasks");
+
 		System.out.println("Sending Request");
 		final Request networkRequest = Network.getInstance().makeRequest(
 				"taskmanager/stages", HttpMethod.GET);
@@ -156,14 +159,13 @@ public class TaskManager implements IJanewayModule {
 
 			@Override
 			public void run() {
-				gateway.toPresenter("LocalCache", "sync", "tasks");
 				gateway.toPresenter("LocalCache", "sync", "member");
 				gateway.toPresenter("LocalCache", "sync", "stages");
 				gateway.toView("ColumnView", "reflow");
 				gateway.toView("SidebarView", "reflowTasks");
 			}
 			
-		}, 0, 1000);
+		}, 0, 250);
 	}
 
 	/**

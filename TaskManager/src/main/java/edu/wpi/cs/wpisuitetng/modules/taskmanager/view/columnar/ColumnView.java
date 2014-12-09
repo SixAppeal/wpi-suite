@@ -108,26 +108,6 @@ public class ColumnView extends JPanel implements IView {
 	public void setTasks(Task... tasks) {
 		this.setState(tasks, this.stages);
 	}
-
-	/**
-	 * adds a Tasks to the COlumn View
-	 * @param task
-	 */
-	/*public void addTask(Task task) 
-	{
-		//This seems ineffecnsent
-		
-		Task[] oldTasks = this.getTasks();
-		Task[] tempTaskList = new Task[oldTasks.length +1];
-		for(int i = 0; i< oldTasks.length; i++ )
-		{
-			tempTaskList[i] = oldTasks[i];
-		}
-		tempTaskList[oldTasks.length] = task;
-		
-		this.setTasks(tempTaskList);
-	}*/
-		
 	
 	/**
 	 * Gets the state of tasks within this view
@@ -142,8 +122,8 @@ public class ColumnView extends JPanel implements IView {
 	 * @param stages The new stages array
 	 */
 	public void setStages(StageList stages) {
-		//System.out.println("setState: new Stages are " + stages.toString());
-		if( !stages.equals(this.stages) ) this.setState(this.tasks, stages);
+		if (!stages.equals(this.stages)) this.setState(this.tasks, stages);
+
 	}
 	
 	/**
