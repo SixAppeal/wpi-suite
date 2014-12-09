@@ -12,6 +12,7 @@
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
 
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.GridBagConstraints;
@@ -26,10 +27,13 @@ import java.awt.event.KeyListener;
 import java.util.Collection;
 import java.util.LinkedList;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Stage;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.StageList;
@@ -47,6 +51,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Stage;
  * @author wavanrensselaer
  * @author thhughes
  * @author srojas
+ * @author dpseaman
  *
  */
 public class ColumnEditView extends JPanel implements IView {
@@ -70,8 +75,8 @@ public class ColumnEditView extends JPanel implements IView {
 		stages = new StageList();
 		this.stageJList = new JList<Stage>();
 		this.addButton = new JButton("Create Stage");
-		this.moveUpBtn = new JButton("Move Up");
-		this.moveDnBtn = new JButton("Move Down");
+		this.moveUpBtn = new JButton();
+		this.moveDnBtn = new JButton();
 		this.titleEntry = new JTextField();
 		this.newName = new JTextField();
 		this.nameChange = new JButton("Edit Name");
@@ -79,6 +84,18 @@ public class ColumnEditView extends JPanel implements IView {
 		this.titleEntry.setBorder(FormField.BORDER_NORMAL);
 		this.newName.setBorder(FormField.BORDER_NORMAL);
 		this.stageJList.setBorder(FormField.BORDER_NORMAL);
+		
+		this.moveUpBtn.setIcon(new ImageIcon(this.getClass().getResource("icon_up.png")));
+		this.moveDnBtn.setIcon(new ImageIcon(this.getClass().getResource("icon_down.png")));
+		
+		this.moveUpBtn.setPreferredSize(new Dimension(100, 25));
+		this.moveDnBtn.setPreferredSize(new Dimension(100, 25));
+		
+		// disable stage name editing 
+		if (stageJList.isSelectionEmpty()){
+			this.newName.setEnabled(false);
+			this.nameChange.setEnabled(false);
+		}
 
 		addButton.addActionListener( new ActionListener() {
 			@Override
@@ -138,6 +155,20 @@ public class ColumnEditView extends JPanel implements IView {
 			@Override
 			public void keyReleased(KeyEvent e) {}
 
+		});
+		
+		
+		// turns edit field back on when a stage is selected
+		stageJList.addListSelectionListener(new ListSelectionListener(){
+
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				if (!stageJList.isSelectionEmpty()) {
+					newName.setEnabled(true);
+					nameChange.setEnabled(true);
+				}
+			}
+			
 		});
 
 		moveUpBtn.addActionListener( new ActionListener() {
