@@ -23,7 +23,6 @@ import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
 import javax.swing.plaf.basic.BasicTabbedPaneUI;
 
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.LocalCache;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.ThreadSafeLocalCache;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.StageList;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
@@ -109,7 +108,6 @@ public class SidebarView extends JTabbedPane implements IView {
 				}
 			}
 		}
-		
 		TaskCreateView createView = new TaskCreateView(this.stages);
 		createView.setGateway(this.gateway);
 		this.viewList.add(createView);
@@ -228,7 +226,6 @@ public class SidebarView extends JTabbedPane implements IView {
 				Task updated = findTask(reference, taskToFix.getId());
 				if (updated != null) {
 					((TaskEditView)this.getComponent(i)).updateEverything(updated);
-					System.out.println("Updating this task: " + updated.getTitle());
 				}
 			}
 		}

@@ -43,10 +43,6 @@ public interface Cache extends IPresenter {
 	
 	public void sync(String request);
 	
-	public void addVerified(String request, String data);
-	
-	public void updateVerified(String request, String data);
-
 	public void initStageList();
 
 }
