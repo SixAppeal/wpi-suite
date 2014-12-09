@@ -61,6 +61,11 @@ public class TaskView extends JPanel implements  IView {
 	 */
 	public static final Color HOVER_COLOR = new Color(245, 245, 245);
 	
+	/**
+	 * Background color when selected
+	 */
+	public static final Color SELECTED_COLOR = new Color(190,210,255);
+	
 	private Gateway gateway;
 	
 	// State-related fields
@@ -70,6 +75,8 @@ public class TaskView extends JPanel implements  IView {
 	private JLabel titleLabel;
 	private JLabel dateLabel;
 	private JPanel container;
+
+	private boolean selected;
 	
 	public TaskView(Task task, boolean ForSearch) {
 		this.titleLabel = new JLabel("", JLabel.LEFT);
@@ -86,6 +93,8 @@ public class TaskView extends JPanel implements  IView {
 		this.dateLabel.setForeground(new Color(180, 180, 180));
 		Font dateFont = this.dateLabel.getFont();
 		this.dateLabel.setFont(dateFont.deriveFont(dateFont.getStyle() & ~Font.BOLD));
+		
+		this.selected = false;
 		
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -161,7 +170,9 @@ public class TaskView extends JPanel implements  IView {
 		Font titleFont = this.titleLabel.getFont();
 		this.titleLabel.setFont(titleFont.deriveFont(titleFont.getStyle() & ~Font.BOLD));
 		
-		this.dateLabel.setForeground(new Color(180, 180, 180));
+		boolean urgent = task.getDueDate().after(new Date(System.currentTimeMillis() - 86400000)); //urgent if late
+		
+		this.dateLabel.setForeground(urgent?new Color(180, 180, 180):new Color(255, 102, 0));
 		Font dateFont = this.dateLabel.getFont();
 		this.dateLabel.setFont(dateFont.deriveFont(dateFont.getStyle() & ~Font.BOLD));
 		
@@ -291,5 +302,35 @@ public class TaskView extends JPanel implements  IView {
 	public Gateway getGateway()
 	{
 		return gateway;
+	}
+	
+	/**
+	 * Changes the look of this TaskView to appear deselected.
+	 */
+	public void select() {
+		this.selected = true;
+		this.setBackground(TaskView.SELECTED_COLOR);
+	}
+	
+	/**
+	 * Changes the look of this TaskView to appear selected.
+	 */
+	public void deselect() {
+		this.selected = false;
+		this.setBackground(TaskView.BACKGROUND_COLOR);
+	}
+	
+	/**
+	 * Changes the look of this TaskView to appear unhighlighted
+	 */
+	public void unhighlight() {
+		if ( !selected ) this.setBackground(TaskView.BACKGROUND_COLOR);
+	}
+	
+	/**
+	 * Changes the look of this TaskView to appear highlighted
+	 */
+	public void highlight() {
+		if ( !selected ) this.setBackground(TaskView.HOVER_COLOR);
 	}
 }

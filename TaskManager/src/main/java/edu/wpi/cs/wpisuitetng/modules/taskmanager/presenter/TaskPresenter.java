@@ -13,11 +13,13 @@ package edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.Cache;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Stage;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.StageList;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar.TaskView;
 
 
 /**
@@ -30,12 +32,14 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
  */
 public class TaskPresenter implements IPresenter{
 
-	Gateway gateway;
-	Cache cache;
+	private Gateway gateway;
+	private Cache cache;
+	private LinkedList<TaskView> selectedTasks;
 	
 	public TaskPresenter(Cache cache) {
 		super();
 		this.cache = cache;
+		this.selectedTasks = new LinkedList<TaskView>();
 	}
 	
 	@Override
@@ -106,6 +110,28 @@ public class TaskPresenter implements IPresenter{
 		ArrayList<Task> all_tasks = new ArrayList<Task>(Arrays.asList(t1));
 		all_tasks.addAll(Arrays.asList(t2));
 		return all_tasks;
+	}
+	 
+	/**
+	 * Selects a task view
+	 * @param add if true, add the taskview to the list of selections, if false deselect all other tasks
+	 * @param taskView the task view to select
+	 */
+	public void selectTask( Boolean add, TaskView taskView) {
+		
+		if ( !add ) deselectAllTasks();
+		
+		taskView.select();
+		selectedTasks.add( taskView );
+		
+	}
+	
+	/**
+	 * Deselects all tasks.
+	 */
+	public void deselectAllTasks() {
+		for (TaskView tv : selectedTasks ) tv.deselect();
+		selectedTasks.clear();
 	}
 }
 

@@ -15,6 +15,8 @@ package edu.wpi.cs.wpisuitetng.modules.taskmanager.model;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 
+import com.google.gson.Gson;
+
 import edu.wpi.cs.wpisuitetng.Session;
 import edu.wpi.cs.wpisuitetng.database.Data;
 import edu.wpi.cs.wpisuitetng.exceptions.BadRequestException;
@@ -105,6 +107,9 @@ public class TaskEntityManagerLongPoll implements EntityManager<Task>{
 		return Tasks;
 	}
 
+	public Semaphore lock;
+	
+	
 	/**
 	 * Retrieves all Tasks from the database
 	 * 
@@ -113,16 +118,6 @@ public class TaskEntityManagerLongPoll implements EntityManager<Task>{
 	 */
 	@Override
 	public Task[] getAll(Session s) {
-		
-		TaskPollTracker.getInstance().register(s);
-		Semaphore lock = TaskPollTracker.getInstance().getLock();
-		//setup new thread that sleeps for timeout amount
-		try {
-			lock.acquire();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		//delete thread if still active
 		return db.retrieveAll(new Task(), s.getProject()).toArray(new Task[0]);
 	}
 
@@ -147,10 +142,7 @@ public class TaskEntityManagerLongPoll implements EntityManager<Task>{
 	 * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#deleteEntity(Session, String) */
 	@Override
 	public boolean deleteEntity(Session s, String id) throws WPISuiteException {
-		/*ensureRole(s, Role.ADMIN);
-		return (db.delete(getEntity(s, id)[0]) != null) ? true : false;*/
 		throw new NotImplementedException();
-		//TODO Implement this
 	}
 
 	/**
@@ -214,8 +206,15 @@ public class TaskEntityManagerLongPoll implements EntityManager<Task>{
 	 * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#advancedGet(Session, String[])
 	 */
 	@Override
-	public String advancedGet(Session arg0, String[] arg1) throws NotImplementedException {
-		throw new NotImplementedException();
+	public String advancedGet(Session arg0, String[] arg1) {
+		Thread thisSession = Thread.currentThread();
+		TaskPollTracker.getInstance().register(thisSession);
+		try {
+			Thread.sleep(60000);
+		} catch (InterruptedException e) {
+		}
+		TaskPollTracker.getInstance().remove(thisSession);
+		return new Gson().toJson(db.retrieveAll(new Task(), arg0.getProject()).toArray(new Task[0]), Task[].class);
 	}
 
 	/**
