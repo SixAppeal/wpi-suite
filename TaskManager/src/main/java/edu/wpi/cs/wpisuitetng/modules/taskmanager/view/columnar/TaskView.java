@@ -61,6 +61,11 @@ public class TaskView extends JPanel implements  IView {
 	 */
 	public static final Color HOVER_COLOR = new Color(245, 245, 245);
 	
+	/**
+	 * Background color when selected
+	 */
+	public static final Color SELECTED_COLOR = new Color(190,210,255);
+	
 	private Gateway gateway;
 	
 	// State-related fields
@@ -291,5 +296,19 @@ public class TaskView extends JPanel implements  IView {
 	public Gateway getGateway()
 	{
 		return gateway;
+	}
+	
+	/**
+	 * Changes the look of this TaskView to appear deselected.
+	 */
+	public void select() {
+		this.setBackground(TaskView.SELECTED_COLOR);
+	}
+	
+	/**
+	 * Changes the look of this TaskView to appear selected.
+	 */
+	public void deselect() {
+		this.setBackground(TaskView.BACKGROUND_COLOR);
 	}
 }
