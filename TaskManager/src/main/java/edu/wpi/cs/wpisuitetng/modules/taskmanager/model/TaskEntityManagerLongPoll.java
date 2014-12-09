@@ -118,32 +118,6 @@ public class TaskEntityManagerLongPoll implements EntityManager<Task>{
 	 */
 	@Override
 	public Task[] getAll(Session s) {
-//		Thread thisSession = Thread.currentThread();
-//		TaskPollTracker.getInstance().register(thisSession);
-//		System.out.println(thisSession);
-//		try {
-//			System.out.println("Taking a nap!");
-//			System.out.flush();
-//			Thread.sleep(7000);
-//			System.out.println("Woke up!");
-//		} catch (InterruptedException e) {
-//			System.out.println("Interrupted Yeah!");
-//			e.printStackTrace();
-//		}
-		//this.sleep(7000);
-		//lock = new Semaphore(0, true);
-//		RequestTimeoutTracker timeout = new RequestTimeoutTracker(this);
-//		System.out.println("Got here also");
-		//timeout.start();
-//		try {
-//			lock.acquire();
-//		} catch (InterruptedException e) {
-//			e.printStackTrace();
-//		}
-//		System.out.println("Got Here!");
-//		if (!timeout.isDone()) {
-		
-//		}
 		return db.retrieveAll(new Task(), s.getProject()).toArray(new Task[0]);
 	}
 
@@ -168,10 +142,7 @@ public class TaskEntityManagerLongPoll implements EntityManager<Task>{
 	 * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#deleteEntity(Session, String) */
 	@Override
 	public boolean deleteEntity(Session s, String id) throws WPISuiteException {
-		/*ensureRole(s, Role.ADMIN);
-		return (db.delete(getEntity(s, id)[0]) != null) ? true : false;*/
 		throw new NotImplementedException();
-		//TODO Implement this
 	}
 
 	/**
@@ -235,21 +206,15 @@ public class TaskEntityManagerLongPoll implements EntityManager<Task>{
 	 * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#advancedGet(Session, String[])
 	 */
 	@Override
-	public String advancedGet(Session arg0, String[] arg1) throws NotImplementedException {
+	public String advancedGet(Session arg0, String[] arg1) {
 		Thread thisSession = Thread.currentThread();
 		TaskPollTracker.getInstance().register(thisSession);
-		System.out.println(thisSession);
 		try {
-			System.out.println("Taking a nap!");
-			System.out.flush();
-			Thread.sleep(7000);
-			System.out.println("Woke up!");
+			Thread.sleep(60000);
 		} catch (InterruptedException e) {
-			System.out.println("Interrupted Yeah!");
-			e.printStackTrace();
 		}
+		TaskPollTracker.getInstance().remove(thisSession);
 		return new Gson().toJson(db.retrieveAll(new Task(), arg0.getProject()).toArray(new Task[0]), Task[].class);
-		//throw new NotImplementedException();
 	}
 
 	/**

@@ -23,11 +23,7 @@
 
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar;
 
-import java.awt.Color;
 import java.awt.Component;
-import java.awt.GradientPaint;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -143,7 +139,7 @@ public class ColumnView extends JPanel implements IView {
 	public void setState(Task[] tasks, StageList stages) {
 		this.tasks = tasks == null ? new Task[0] : tasks;
 		this.stages = stages == null ? new StageList() : stages;
-		//this.reflow();
+		this.reflow();
 	}
 	
 	/**
@@ -159,7 +155,6 @@ public class ColumnView extends JPanel implements IView {
 		
 		StageView stageView;
 		int i;
-		//System.out.println("Component count is " + this.container.getComponentCount());
 		for (i = 0; i < this.container.getComponentCount(); i++) {
 			stageView = (StageView) this.container.getComponent(i);
 			if (i >= this.stages.size()) {
@@ -172,7 +167,6 @@ public class ColumnView extends JPanel implements IView {
 			}
 		}
 		for (; i < this.stages.size(); i++) {
-			//System.out.println("Reflowing stage (II) " + this.stages.get(i).toString());
 			gbc.insets.left = i == 0 ? 20 : 0;
 			gbc.gridx = i;
 			stageView = new StageView(this.stages.get(i),

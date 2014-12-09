@@ -188,7 +188,6 @@ public class ManagerLayer {
 	public synchronized String read(String[] args,Cookie[] cook) throws WPISuiteException
 	{		
 		Session s = getSessionFromCookies(cook);
-		System.out.println("Read Request began!" + s.getSessionId());
 		  
 		Model[] m;
 		if(args[2] == null || args[2].equalsIgnoreCase(""))
@@ -218,8 +217,6 @@ public class ManagerLayer {
 			}
 			response = response.concat("]");
 		}
-		System.out.println("Read Request Ended!" + s.getSessionId());
-		
 		
 		return response;
 	}
@@ -236,12 +233,10 @@ public class ManagerLayer {
 	{
 		
 		Session s = getSessionFromCookies(cook);
-		System.out.println("Create Request Began!" + s.getSessionId());
 		
 		
 		Model m;
 		m = (Model) map.get(args[0]+args[1]).makeEntity(s,content);
-		System.out.println("Create Request ended!" + s.getSessionId());
 		
         return m.toJson();
         
@@ -259,12 +254,10 @@ public class ManagerLayer {
 	{
 		
 		Session s = getSessionFromCookies(cook);
-		System.out.println("Read Request began!" + s.getSessionId());
 		
 		
 		Model m;
 		m = (Model) map.get(args[0]+args[1]).update(s, content);
-		System.out.println("Read Request began!" + s.getSessionId());
 		
 		return m.toJson();
 	

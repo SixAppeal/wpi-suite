@@ -27,6 +27,10 @@ public class TaskPollTracker {
 		toBeNotified.add(session);
 	}
 	
+	public void remove(Thread session) {
+		toBeNotified.remove(session);
+	}
+	
 	public Semaphore getLock() {
 		return notificationLock;
 	}
@@ -34,7 +38,7 @@ public class TaskPollTracker {
 	public void update() {
 		System.out.println("Got Here! " + toBeNotified.size());
 		for (Thread entityToNotify : toBeNotified) {
-			//entityToNotify.interrupt();
+			entityToNotify.interrupt();
 		}
 		toBeNotified.clear();
 	}

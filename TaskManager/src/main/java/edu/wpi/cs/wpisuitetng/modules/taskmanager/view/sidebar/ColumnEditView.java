@@ -11,7 +11,6 @@
 
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
 
-import java.awt.Component;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.GridBagConstraints;
@@ -23,8 +22,6 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.Collection;
-import java.util.LinkedList;
 
 import javax.swing.JButton;
 import javax.swing.JList;
@@ -38,7 +35,6 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.util.TaskManagerUtil;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.util.TaskUtil;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.FormField;
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Stage;
 /**
  * 
  * A sidebar view for editing the stages in a project.

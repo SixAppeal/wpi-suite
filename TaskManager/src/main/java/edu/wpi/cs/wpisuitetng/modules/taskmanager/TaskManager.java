@@ -12,12 +12,12 @@
 
 package edu.wpi.cs.wpisuitetng.modules.taskmanager;
 
-import java.awt.Color;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.Semaphore;
 
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -27,21 +27,19 @@ import edu.wpi.cs.wpisuitetng.janeway.modules.IJanewayModule;
 import edu.wpi.cs.wpisuitetng.janeway.modules.JanewayTabModel;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.Cache;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.InitializeManager;
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.LocalCache;
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.SyncManager;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.ThreadSafeLocalCache;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Stage;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.StageList;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.*;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.util.TaskManagerUtil;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar.ColumnView;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.GradientPanel;
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar.ColumnEditView;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar.MemberListHandler;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar.SidebarView;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.toolbar.ToolbarView;
 import edu.wpi.cs.wpisuitetng.network.Network;
 import edu.wpi.cs.wpisuitetng.network.Request;
-
 import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
 
 /**
@@ -114,12 +112,7 @@ public class TaskManager implements IJanewayModule {
 		gateway.addView("ColumnView", columnView);
 		gateway.addView("ToolbarView", toolbarview);
 		gateway.addView("MemberListHandler", MemberListHandler.getInstance());
-		
-//		localCache.subscribe("task:TaskPresenter:updateTasks");
-//		localCache.subscribe("member:TaskPresenter:notifyMemberHandler");
-//		localCache.subscribe("task:TaskPresenter:updateSearch");
-//		localCache.subscribe("stages:TaskPresenter:setStages");
-		
+				
 		t = new Timer();
 
 	}
@@ -145,15 +138,36 @@ public class TaskManager implements IJanewayModule {
 	 */
 	@Override
 	public void finishInit() {
-		gateway.toPresenter("LocalCache", "sync", "tasks");
 
-		System.out.println("Sending Request");
-		final Request networkRequest = Network.getInstance().makeRequest(
-				"taskmanager/stages", HttpMethod.GET);
-		networkRequest.addObserver(new InitializeManager(localCache));
-		networkRequest.send();
-		
-		
+		Semaphore waitingForInit = new Semaphore(-2, true); //semaphore to wait for all pending request to come in
+		final Request networkRequestStages = Network.getInstance().makeRequest(
+				"taskmanager/stages", HttpMethod.GET); //request for stages
+		networkRequestStages.addObserver(new InitializeManager(localCache, waitingForInit));
+		networkRequestStages.send();
+		final Request networkRequestTasks = Network.getInstance().makeRequest(
+				"taskmanager/task", HttpMethod.GET); //request for tasks
+		networkRequestTasks.addObserver(new InitializeManager(localCache, waitingForInit));
+		networkRequestTasks.send();
+		final Request networkRequestMembers = Network.getInstance().makeRequest(
+				"core/user", HttpMethod.GET); //request for members
+		networkRequestMembers.addObserver(new InitializeManager(localCache, waitingForInit));
+		networkRequestMembers.send();
+		try {
+			waitingForInit.acquire();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		//reflow with new information
+		Stage[] toConvert = (Stage[])localCache.retrieve("stages");
+		StageList stageList = new StageList();
+		for (Stage toAdd : toConvert) {
+			stageList.add(toAdd);
+		}
+		gateway.toView("ColumnView", "setState", (Task[])localCache.retrieve("task"), stageList);
+		gateway.toView("SidebarView", "reflowTasks");
+		gateway.toPresenter("TaskPresenter", "setStages");
+		//initial long pull request
+		gateway.toPresenter("LocalCache", "sync", "tasks");
 		
 		t.scheduleAtFixedRate(new TimerTask() {
 
@@ -161,11 +175,11 @@ public class TaskManager implements IJanewayModule {
 			public void run() {
 				gateway.toPresenter("LocalCache", "sync", "member");
 				gateway.toPresenter("LocalCache", "sync", "stages");
-				gateway.toView("ColumnView", "reflow");
-				gateway.toView("SidebarView", "reflowTasks");
+				//gateway.toView("ColumnView", "reflow");
+				//gateway.toView("SidebarView", "reflowTasks");
 			}
 			
-		}, 0, 250);
+		}, 0, 1000);
 	}
 
 	/**
