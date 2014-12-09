@@ -66,7 +66,7 @@ public class TaskDraggableMouseListener extends DraggableMouseListener{
 	@Override
 	public void mouseEntered(MouseEvent e) 
 	{
-		assoc.setBackground(TaskView.HOVER_COLOR);
+		taskAssoc.highlight();
 	}
 
 	/**
@@ -74,7 +74,7 @@ public class TaskDraggableMouseListener extends DraggableMouseListener{
 	 */
 	@Override
 	public void mouseExited(MouseEvent e) {
-		assoc.setBackground(TaskView.BACKGROUND_COLOR);
+		taskAssoc.unhighlight();
 	}
 
 	/**
@@ -83,9 +83,12 @@ public class TaskDraggableMouseListener extends DraggableMouseListener{
 	@Override
 	public void mousePressed(MouseEvent e) 
 	{
-		 if(e.getClickCount()==2){
-			 taskAssoc.getGateway().toPresenter("TaskPresenter", "editTask", taskAssoc.getTask());
-	        }
+		if (e.getClickCount() == 1 ) {
+			taskAssoc.getGateway().toPresenter("TaskPresenter", "selectTask", new Boolean(e.isControlDown()), taskAssoc);
+		} else if (e.getClickCount() == 2) {
+			taskAssoc.getGateway().toPresenter("TaskPresenter", "editTask", taskAssoc.getTask());
+			taskAssoc.getGateway().toPresenter("TaskPresenter", "deselectAllTasks");
+		}
 		super.mousePressed(e);
 	}
 }
