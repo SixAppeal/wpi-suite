@@ -335,7 +335,12 @@ public class ThreadSafeLocalCache implements Cache {
 	 */
 	@Override
 	public void initStageList() {
-		// TODO Write a better implementation of this somewhere
+		stages = new StageList();
+		stages.add( new Stage("New") );
+		stages.add( new Stage("Scheduled"));
+		stages.add( new Stage("In Progress"));
+		stages.add( new Stage("Completed"));
+		this.store("stages:testing", stages);
 	}
 
 	public void renameStage(String oldName, String newName) {
