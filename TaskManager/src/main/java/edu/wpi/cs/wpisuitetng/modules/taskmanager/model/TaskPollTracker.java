@@ -4,7 +4,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 
-import edu.wpi.cs.wpisuitetng.Session;
 
 public class TaskPollTracker {
 

@@ -160,9 +160,6 @@ public class ColumnEditView extends JPanel implements IView {
 				changeNameStage();
 			}});
 		
-
-
-
 		GridBagConstraints gbc = new GridBagConstraints();
 		this.setLayout(new GridBagLayout());
 
