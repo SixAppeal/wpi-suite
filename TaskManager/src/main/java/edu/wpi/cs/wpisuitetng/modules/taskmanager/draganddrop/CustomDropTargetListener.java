@@ -95,22 +95,18 @@ public class CustomDropTargetListener implements DropTargetListener {
 		this.column.setCursor(Cursor.getDefaultCursor());
 		
 		DataFlavor dragAndDropTaskFlavor = null;
-		
 		Object transferableObj = null;
 		Transferable transferable = null;
 		
 		try {
 			dragAndDropTaskFlavor = TransferableTaskString.flavor;
-						
 			transferable = dtde.getTransferable();
 			DropTargetContext c = dtde.getDropTargetContext();
 			
 			if (transferable.isDataFlavorSupported(dragAndDropTaskFlavor)) {
 				transferableObj = dtde.getTransferable().getTransferData(dragAndDropTaskFlavor);
 			}
-			
-			
-		} catch (Exception ex) {}
+		} catch (Exception ex) { }
 		if (transferableObj == null) {
 			return;
 		}
@@ -147,15 +143,13 @@ public class CustomDropTargetListener implements DropTargetListener {
 		inMemoryTaskList.clear();
 		inMemoryTaskList.addAll(orderedTasks);
 		
-		double priority = 1;
-		for(TaskView t : inMemoryTaskList)
-		{
+		int priority = 1;
+		for (TaskView t : inMemoryTaskList) {
 			Task tr = t.getTask(); 
 			tr.setPriority(priority);
 			this.column.getStageView().getGateway().toPresenter("LocalCache", "update", "task:testing", tr);
-			priority+=1.0;
+			priority += 1;
 		}
-		//this.column.getStageView().reflow();
 	}
 	
 
