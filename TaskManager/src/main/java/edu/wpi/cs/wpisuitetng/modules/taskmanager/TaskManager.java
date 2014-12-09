@@ -144,11 +144,13 @@ public class TaskManager implements IJanewayModule {
 	 */
 	@Override
 	public void finishInit() {
-		
+		System.out.println("Sending Request");
 		final Request networkRequest = Network.getInstance().makeRequest(
 				"taskmanager/stages", HttpMethod.GET);
 		networkRequest.addObserver(new InitializeManager(localCache));
 		networkRequest.send();
+		
+		
 		
 		t.scheduleAtFixedRate(new TimerTask() {
 

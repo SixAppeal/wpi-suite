@@ -143,7 +143,7 @@ public class ColumnView extends JPanel implements IView {
 	 */
 	public void setStages(StageList stages) {
 		//System.out.println("setState: new Stages are " + stages.toString());
-		if( ! stages.equals(this.stages) ) this.setState(this.tasks, stages);
+		if( !stages.equals(this.stages) ) this.setState(this.tasks, stages);
 	}
 	
 	/**

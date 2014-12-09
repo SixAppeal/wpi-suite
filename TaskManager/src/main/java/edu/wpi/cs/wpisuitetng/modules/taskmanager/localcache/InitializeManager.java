@@ -19,7 +19,8 @@ public class InitializeManager implements RequestObserver{
 		String updateValue = iReq.getResponse().getBody();
 		StageList[] returned = new Gson().fromJson(updateValue, StageList[].class);
 		
-		if (returned == null){
+		
+		if (returned.length == 0){
 			this.localCache.initStageList();
 		}
 	}

@@ -340,7 +340,7 @@ public class ThreadSafeLocalCache implements Cache {
 		stages.add( new Stage("Scheduled"));
 		stages.add( new Stage("In Progress"));
 		stages.add( new Stage("Completed"));
-		this.store("stages", stages);
+		this.store("stages:testing", stages);
 	}
 
 	public void renameStage(String oldName, String newName) {
