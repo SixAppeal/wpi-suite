@@ -66,6 +66,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.HorizontalForm
  * @author krpeffer
  * @author wavanrensselaer
  * @author srojas
+ * @author dpseaman
  */
 public class TaskEditView extends JPanel implements IView {
 	private static final long serialVersionUID = -8972626054612267276L;
@@ -165,9 +166,11 @@ public class TaskEditView extends JPanel implements IView {
 		this.descInput.setLineWrap(true);
 		this.descInput.setWrapStyleWord(true);
 		
-		if (!this.task.getStage().getName().equals("Complete")) {
+		
+		if (this.task.getStage().getName().equals("New")) {
 			this.actEffortInput.setEnabled(false);
 		}
+		
 		
 		this.estEffortInput.setValue(this.task.getEstimatedEffort());
 		this.actEffortInput.setValue(this.task.getActualEffort());

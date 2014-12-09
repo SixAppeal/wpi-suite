@@ -38,6 +38,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
  * @author srojas
  * @author thhughes
  * @author nhhughes
+ * @author dpseaman
  * @author tmeehan
  */
 public class SidebarView extends JTabbedPane implements IView {
