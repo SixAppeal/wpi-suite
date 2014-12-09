@@ -137,8 +137,8 @@ public class MemberListHandler implements IView {
 		if (!allMembersList.contains(toAdd)) {
 			throw new IllegalArgumentException("Can only add valid members");
 		}
-		unassignedMembersList.remove(toAdd);
 		assignedMembersList.add(toAdd);
+		unassignedMembersList.remove(toAdd);
 
 	}
 
