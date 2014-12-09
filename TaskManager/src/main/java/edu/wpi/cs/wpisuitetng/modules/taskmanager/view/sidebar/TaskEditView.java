@@ -473,7 +473,7 @@ public class TaskEditView extends JPanel implements IView {
 	 * Saves the task currently being edited
 	 */
 	private void saveTask() {
-		this.gateway.toPresenter("LocalCache", "update", "task", this.task);
+		this.gateway.toPresenter("LocalCache", "update", "task:testing", this.task);
 	}
 
 	@Override

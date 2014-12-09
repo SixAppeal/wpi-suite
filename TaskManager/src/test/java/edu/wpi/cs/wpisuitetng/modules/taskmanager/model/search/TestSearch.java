@@ -7,8 +7,9 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors: Nathan Hughes, Alexander Shoop
+ * Contributors: Nathan Hughes, Alexander Shoop, Thomas Meehan
  ******************************************************************************/
+
 
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.model.search;
 
@@ -32,6 +33,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
  * 
  * @author akshoop
  * @author nhhughes
+ * @author tmeehan
  */
 public class TestSearch {
 	List<Task> testList;

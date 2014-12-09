@@ -66,10 +66,10 @@ public class ColumnEditView extends JPanel implements IView {
 	private JButton nameChange;
 	private Gateway gateway;
 
-	public ColumnEditView() {
+	public ColumnEditView() { 
 		stages = new StageList();
 		this.stageJList = new JList<Stage>();
-		this.addButton = new JButton("+");
+		this.addButton = new JButton("Create Stage");
 		this.moveUpBtn = new JButton("Move Up");
 		this.moveDnBtn = new JButton("Move Down");
 		this.titleEntry = new JTextField();
@@ -78,6 +78,7 @@ public class ColumnEditView extends JPanel implements IView {
 		
 		this.titleEntry.setBorder(FormField.BORDER_NORMAL);
 		this.newName.setBorder(FormField.BORDER_NORMAL);
+		this.stageJList.setBorder(FormField.BORDER_NORMAL);
 
 		addButton.addActionListener( new ActionListener() {
 			@Override
@@ -160,8 +161,7 @@ public class ColumnEditView extends JPanel implements IView {
 			}});
 		
 
-
-
+		this.setBackground(TaskManagerUtil.SIDEBAR_COLOR);
 		GridBagConstraints gbc = new GridBagConstraints();
 		this.setLayout(new GridBagLayout());
 
@@ -174,7 +174,6 @@ public class ColumnEditView extends JPanel implements IView {
 
 		gbc.gridx = 1;
 		gbc.weightx = 0;
-		gbc.fill = GridBagConstraints.NONE;
 		gbc.insets = new Insets(20, 0, 0, 20);
 		this.add(addButton, gbc);
 
@@ -186,23 +185,22 @@ public class ColumnEditView extends JPanel implements IView {
 		gbc.insets = new Insets(10, 20, 10, 20);
 		gbc.fill = GridBagConstraints.BOTH;
 		this.add(stageJList, gbc);
-		gbc.gridwidth = 1;
 
+		gbc.gridwidth = 1;
 		gbc.gridx = 0;
 		gbc.gridy = 2;
 		gbc.weightx = 1.0;
-		gbc.weighty = 0.;
-		gbc.insets = new Insets(20, 20, 0, 20);
+		gbc.weighty = 0;
+		gbc.insets = new Insets(0, 20, 0, 10);
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		this.add(newName, gbc);
 
 		gbc.gridx = 1;
 		gbc.gridy = 2;
-		gbc.weightx = 1.0;
-		gbc.insets = new Insets(20, 20, 0, 20);
+		gbc.weightx = 0;
+		gbc.insets = new Insets(0, 0, 0, 20);
 		this.add(nameChange, gbc);
 
-		gbc.gridwidth = 1;
 		gbc.weightx = 1.0;
 		gbc.gridx = 0;
 		gbc.gridy = 3;
@@ -213,11 +211,8 @@ public class ColumnEditView extends JPanel implements IView {
 
 		gbc.gridx = 1;
 		gbc.gridy = 3;
-		gbc.insets = new Insets(10, 10, 20, 20);
+		gbc.insets = new Insets(10, 0, 20, 20);
 		this.add(moveUpBtn, gbc);
-
-
-
 	}
 
 	protected void moveCurrentTaskUp() {

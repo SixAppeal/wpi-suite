@@ -47,12 +47,16 @@ public class TaskPresenter implements IPresenter{
 		this.gateway.toView("SidebarView", "addCreatePanel");
 	}
 	
+	public void toolbarToggleSidebar() {
+		this.gateway.toView("SidebarView", "toggle");
+	}
+	
 	public void editTask(Task task) {
 		this.gateway.toView("SidebarView", "addEditPanel", task);
 	}
 	
 	public void addAllToView( Task[] tasks ) {
-		this.gateway.toView("ColumnView", "setTasks", new Object[] { tasks });
+		this.gateway.toView("ColumnView", "setTasks", new Object[] { tasks }); 
 	}
 	
 	public void notifyMemberHandler() {
@@ -79,7 +83,7 @@ public class TaskPresenter implements IPresenter{
 	}
 	
 	public void publishChanges(StageList sl) {
-		this.gateway.toPresenter("LocalCache", "update", "stages", sl);
+		this.gateway.toPresenter("LocalCache", "update", "stages:testing", sl);
 	}
 	
 	/**

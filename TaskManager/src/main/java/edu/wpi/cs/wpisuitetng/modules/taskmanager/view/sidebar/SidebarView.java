@@ -7,7 +7,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors: Nathan Hughes, Alexander Shoop
+ * Contributors: Nathan Hughes, Alexander Shoop, Will Rensselaer, Thomas Meehan, Ryan Orlando, Troy Hughes, Nathan Hughes
  ******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
@@ -15,16 +15,21 @@ package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
 import java.util.ArrayList;
 import java.util.List;
 import java.awt.Color;
+import java.awt.Insets;
 import java.io.IOException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JTabbedPane;
+import javax.swing.UIManager;
+import javax.swing.plaf.basic.BasicTabbedPaneUI;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.LocalCache;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.ThreadSafeLocalCache;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.StageList;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.util.TaskManagerUtil;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
 
 /**
@@ -45,8 +50,8 @@ public class SidebarView extends JTabbedPane implements IView {
 	private Gateway gateway;
 
 	private StageList stages;
-	private LocalCache cache;
 	private List<String> requirements;
+	private ThreadSafeLocalCache cache;
 	// Components
 	private List<IView> viewList;
 	private SearchBox searchView;
@@ -67,6 +72,23 @@ public class SidebarView extends JTabbedPane implements IView {
 		
 		this.columnEditView = new ColumnEditView();
 		this.viewList.add(columnEditView);
+		
+		this.setUI(new BasicTabbedPaneUI() {
+			@Override
+			public void installDefaults() {
+				Color selected = UIManager.getColor("TabbedPane.selected");
+				UIManager.put("TabbedPane.selected", TaskManagerUtil.SIDEBAR_COLOR);
+				
+				super.installDefaults();
+				
+				UIManager.put("TabbedPane.selected", selected);
+				
+				this.contentBorderInsets = new Insets(0, 0, 0, 0);
+				this.highlight = TaskManagerUtil.SIDEBAR_COLOR;
+				this.lightHighlight = TaskManagerUtil.SIDEBAR_COLOR;
+				
+			}
+		});
 
 		this.setOpaque(false);
 		this.setTabPlacement(JTabbedPane.LEFT);
@@ -97,6 +119,7 @@ public class SidebarView extends JTabbedPane implements IView {
 		this.addTab(null, new ImageIcon(this.getClass().getResource("icon_plus.png")),
 				createView);
 		this.setSelectedComponent(createView);
+		this.setVisible(true);
 	}
 	
 	/**
@@ -135,6 +158,7 @@ public class SidebarView extends JTabbedPane implements IView {
 		this.addTab(null, new ImageIcon(this.getClass().getResource("icon_pencil.png")),
 				editView);
 		this.setSelectedComponent(editView);
+		this.setVisible(true);
 	}
 	
 	/**
@@ -166,6 +190,13 @@ public class SidebarView extends JTabbedPane implements IView {
 			// Do nothing
 		}
 	}
+	
+	/**
+	 * Toggles the visibility of the sidebar
+	 */
+	public void toggle() {
+		this.setVisible(!this.isVisible());
+	}
 
 	@Override
 	public void setGateway(Gateway gateway) {
@@ -189,8 +220,11 @@ public class SidebarView extends JTabbedPane implements IView {
 		for (IView v : this.viewList) {
 			if (v instanceof TaskCreateView) {
 				((TaskCreateView) v).setStages(this.stages);
+			} else if (v instanceof TaskEditView) {
+				((TaskEditView)v).setStages(sl);
 			}
 		}
+		columnEditView.setStages(this.stages);
 	}
 
 	public Task findTask(Task [] tasks, int id) {
@@ -202,7 +236,7 @@ public class SidebarView extends JTabbedPane implements IView {
 		return null;
 	}
 	
-	public void setCache(LocalCache cache) {
+	public void setCache(ThreadSafeLocalCache cache) {
 		this.cache = cache;
 	}
 	

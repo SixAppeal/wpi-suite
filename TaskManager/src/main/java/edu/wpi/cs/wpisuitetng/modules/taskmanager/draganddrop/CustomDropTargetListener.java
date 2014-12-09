@@ -152,7 +152,7 @@ public class CustomDropTargetListener implements DropTargetListener {
 		{
 			Task tr = t.getTask(); 
 			tr.setPriority(priority);
-			this.column.getStageView().getGateway().toPresenter("LocalCache", "update", "task", tr);
+			this.column.getStageView().getGateway().toPresenter("LocalCache", "update", "task:testing", tr);
 			priority+=1.0;
 		}
 		//this.column.getStageView().reflow();
