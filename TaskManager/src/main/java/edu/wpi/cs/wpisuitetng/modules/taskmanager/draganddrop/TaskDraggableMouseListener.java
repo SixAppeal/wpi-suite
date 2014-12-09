@@ -21,6 +21,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar.TaskView;
  *  This is a custom class to watch the mouse actions on a task View
  * @author RnOrlando
  * @author tmeehan
+ * @author srojas
  *
  */
 public class TaskDraggableMouseListener extends DraggableMouseListener{
@@ -43,7 +44,9 @@ public class TaskDraggableMouseListener extends DraggableMouseListener{
 	@Override
 	public void mouseClicked(MouseEvent e) 
 	{
-		taskAssoc.getGateway().toPresenter("TaskPresenter", "viewTask", taskAssoc.getTask());
+		 if(e.getClickCount()==2){
+			 taskAssoc.getGateway().toPresenter("TaskPresenter", "editTask", taskAssoc.getTask());
+	        }
 	}
 
 	/**
@@ -52,7 +55,9 @@ public class TaskDraggableMouseListener extends DraggableMouseListener{
 	@Override
 	public void mouseReleased(MouseEvent e) 
 	{
-		taskAssoc.getGateway().toPresenter("TaskPresenter", "viewTask", taskAssoc.getTask());
+		 if(e.getClickCount()==2){
+			 taskAssoc.getGateway().toPresenter("TaskPresenter", "editTask", taskAssoc.getTask());
+	        }
 	}
 
 	/**
@@ -78,7 +83,9 @@ public class TaskDraggableMouseListener extends DraggableMouseListener{
 	@Override
 	public void mousePressed(MouseEvent e) 
 	{
-		taskAssoc.getGateway().toPresenter("TaskPresenter", "editTask", taskAssoc.getTask());
+		 if(e.getClickCount()==2){
+			 taskAssoc.getGateway().toPresenter("TaskPresenter", "editTask", taskAssoc.getTask());
+	        }
 		super.mousePressed(e);
 	}
 }

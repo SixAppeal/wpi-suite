@@ -152,7 +152,7 @@ public class TaskEditView extends JPanel implements IView {
 		this.stageInput = new JComboBox<Stage>();
 		this.archiveButton = new JButton("Archive");
 		this.closeButton = new JButton("Close");
-		TaskEditView that = this;
+		TaskEditView that = this;			// What the actual fuck... 
 		
 		this.titleLabel.setOpaque(false);
 		this.titleLabel.setBorder(BorderFactory.createEmptyBorder());
@@ -229,7 +229,8 @@ public class TaskEditView extends JPanel implements IView {
 		this.archiveButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				gateway.toPresenter("LocalCache", "update", "archive", task);
+				task.archive();
+				gateway.toPresenter("LocalCache", "update", "archive:testing", task);
 				gateway.toView("SidebarView", "removeEditPanel", that);
 			}
 		});

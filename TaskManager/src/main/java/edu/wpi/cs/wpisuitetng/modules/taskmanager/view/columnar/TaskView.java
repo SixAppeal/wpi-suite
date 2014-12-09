@@ -41,6 +41,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
  * @author akshoop
  * @author tmeehan
  * @author rnorlando
+ * @author srojas
  */
 public class TaskView extends JPanel implements  IView {
 	private static final long serialVersionUID = 6255679649898290535L;
@@ -105,8 +106,12 @@ public class TaskView extends JPanel implements  IView {
 		this.addMouseListener(new MouseListener() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				gateway.toPresenter("TaskPresenter", "editTask", task);
+				 if(e.getClickCount()==2){
+					 gateway.toPresenter("TaskPresenter", "editTask", task);
+			        }
+				
 			}
+			
 
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -179,7 +184,11 @@ public class TaskView extends JPanel implements  IView {
 		this.addMouseListener(new MouseListener() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				//gateway.toPresenter("TaskPresenter", "editTask", task);
+//				 if(e.getClickCount()==2){
+//					 gateway.toPresenter("TaskPresenter", "editTask", task);
+//			        }
+				 gateway.toPresenter("TaskPresenter", "editTask", task);
+				
 			}
 
 			@Override
