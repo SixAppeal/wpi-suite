@@ -66,7 +66,7 @@ public class TaskDraggableMouseListener extends DraggableMouseListener{
 	@Override
 	public void mouseEntered(MouseEvent e) 
 	{
-		assoc.setBackground(TaskView.HOVER_COLOR);
+		taskAssoc.highlight();
 	}
 
 	/**
@@ -74,7 +74,7 @@ public class TaskDraggableMouseListener extends DraggableMouseListener{
 	 */
 	@Override
 	public void mouseExited(MouseEvent e) {
-		assoc.setBackground(TaskView.BACKGROUND_COLOR);
+		taskAssoc.unhighlight();
 	}
 
 	/**

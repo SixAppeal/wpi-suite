@@ -200,8 +200,6 @@ public class SidebarView extends JTabbedPane implements IView {
 		for (IView v : this.viewList) {
 			if (v instanceof TaskCreateView) {
 				((TaskCreateView) v).setStages(this.stages);
-			} else if (v instanceof TaskEditView) {
-				((TaskEditView)v).setStages(sl);
 			}
 		}
 		columnEditView.setStages(this.stages);
