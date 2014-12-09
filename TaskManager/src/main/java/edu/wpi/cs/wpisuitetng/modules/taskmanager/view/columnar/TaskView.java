@@ -32,6 +32,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.draganddrop.TaskDraggableMouse
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Stage;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.util.TaskManagerUtil;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
 
 /**
@@ -47,7 +48,7 @@ public class TaskView extends JPanel implements  IView {
 	/**
 	 * The cutoff point for the title string in the task
 	 */
-	public static final int MAX_TITLE_LENGTH = 18;
+	public static final int MAX_TITLE_LENGTH = 150;
 
 	/**
 	 * Background color of the TaskView
@@ -69,7 +70,76 @@ public class TaskView extends JPanel implements  IView {
 	private JLabel dateLabel;
 	private JPanel container;
 	
+	public TaskView(Task task, boolean ForSearch) {
+		this.titleLabel = new JLabel("", JLabel.LEFT);
+		this.dateLabel = new JLabel("", JLabel.RIGHT);
+		this.container = new JPanel();
+		
+		this.container.setOpaque(false);
+		this.container.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, HOVER_COLOR));
+		this.container.setLayout(new GridBagLayout());
 
+		Font titleFont = this.titleLabel.getFont();
+		this.titleLabel.setFont(titleFont.deriveFont(titleFont.getStyle() & ~Font.BOLD));
+		
+		this.dateLabel.setForeground(new Color(180, 180, 180));
+		Font dateFont = this.dateLabel.getFont();
+		this.dateLabel.setFont(dateFont.deriveFont(dateFont.getStyle() & ~Font.BOLD));
+		
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.insets = new Insets(10, 0, 10, 10);
+		gbc.weightx = 1.0;
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		this.container.add(this.titleLabel, gbc);
+		
+		gbc.fill = GridBagConstraints.NONE;
+		gbc.insets.right = 20;
+		gbc.weightx = 0;
+		gbc.gridx = 1;
+		this.container.add(this.dateLabel, gbc);
+		
+		this.setBackground(TaskView.BACKGROUND_COLOR);
+		this.setLayout(new GridBagLayout());
+		this.addMouseListener(new MouseListener() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				gateway.toPresenter("TaskPresenter", "editTask", task);
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				setBackground(TaskView.HOVER_COLOR);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				setBackground(TaskView.BACKGROUND_COLOR);
+			}
+		});
+
+		this.setBackground(TaskView.BACKGROUND_COLOR);
+		this.setLayout(new GridBagLayout());		
+
+		gbc = new GridBagConstraints();
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.insets = new Insets(0, 20, 0, 0);
+		gbc.weightx = 1.0;
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		this.add(this.container, gbc);
+		
+		this.setState(task);
+	}
 	/**
 	 * Constructs a <code>TaskView</code>
 	 * @param name The name of the task
@@ -178,10 +248,8 @@ public class TaskView extends JPanel implements  IView {
 	 * Reflows this view when it's state changes
 	 */
 	public void reflow() {
-		String text = this.task.getTitle();
-		if (text.length() > MAX_TITLE_LENGTH) {
-			text = text.substring(0, 20);
-		}
+		String text = TaskManagerUtil.reduceString(this.task.getTitle(), MAX_TITLE_LENGTH,
+				this.titleLabel.getFontMetrics(this.titleLabel.getFont()));
 		this.titleLabel.setText(text);
 		this.dateLabel.setText(new SimpleDateFormat("MM/dd/yy").format(this.task.getDueDate()));
 		

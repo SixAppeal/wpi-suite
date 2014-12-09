@@ -12,10 +12,14 @@
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
+import com.google.gson.Gson;
 
 import edu.wpi.cs.wpisuitetng.exceptions.NotImplementedException;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Stage;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.StageList;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
@@ -53,7 +57,7 @@ public class ThreadSafeLocalCache implements Cache {
 	 */
 	public ThreadSafeLocalCache() {
 		tasks = new ArrayList<Task>();
-		archives = new ArrayList<Task>();
+		archives = new ArrayList<Task>(); 
 		members = new ArrayList<User>();
 		stages = new StageList();
 	}
@@ -74,7 +78,7 @@ public class ThreadSafeLocalCache implements Cache {
 	public void store(String request, Task taskToStore) {
 		if (!(request.split(":")[0].equals("task") && request.split(":").length == 2)) {
 			System.out.println("Bad Request!");
-			//TODO get rid of print statement
+			System.out.println(request + " Length: " + request.split(":").length);
 			return;
 		}
 		final Request networkRequest = Network.getInstance().makeRequest(
@@ -86,12 +90,38 @@ public class ThreadSafeLocalCache implements Cache {
 	}	
 
 	/**
+	 * Searches through the list of tasks to remove the task with the specified ID. 
+	 * Necessary because of the way the task equals method is implemented
+	 * 
+	 * @param toRemove Task to get rid of
+	 * @param tasks list of tasks to iterate through
+	 */
+	private void updateHelper(Task toRemove, List<Task> tasks) {
+		for (int i = 0; i < tasks.size(); i++) {
+			if (tasks.get(i).getId() == toRemove.getId()) {
+				tasks.remove(i);
+				break;
+			}
+		}
+	}
+
+	/**
 	 * @see edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.ICache#update(java.lang.String,
 	 *      java.lang.Object, java.lang.Object)
 	 */
 	@Override
 	public void update(String request, Task newTask) {
-		//TODO add in updateVerified logic here	and index out of bounds protection
+		if (!((request.split(":")[0].equals("task") || request.split(":")[0].equals("archive")) && request.split(":").length == 2)) {
+			System.out.println("Bad Request!");
+			return;
+		}
+		updateHelper(newTask, archives);
+		updateHelper(newTask, tasks);
+		if (newTask.isArchived()) {
+			archives.add(newTask);
+		} else {
+			tasks.add(newTask);
+		}
 		final Request networkRequest = Network.getInstance().makeRequest(
 				"taskmanager/task", HttpMethod.POST);
 		networkRequest.setBody(newTask.toJson());
@@ -106,19 +136,15 @@ public class ThreadSafeLocalCache implements Cache {
 	 */
 	@Override
 	public void store(String request, StageList slToStore) {
-		//TODO add in array out of bounds protection
-		if (request.equals("stages")) {
-			this.stages = slToStore;
-			final Request networkRequest = Network.getInstance().makeRequest(
-					"taskmanager/stages", HttpMethod.PUT);
-			networkRequest.addObserver(new AddManager(this, request, gateway, request.split(":")[1]));
-			networkRequest.setBody(slToStore.toJson());
-			networkRequest.send();
+		if (!(request.split(":").length == 2 && request.split(":")[0].equals("stages"))) {
+			System.out.println("Bad Request");
 		}
-		else {
-			System.out.println("Invalid Request!");
-			//TODO clean this up
-		}
+		this.stages = slToStore;
+		final Request networkRequest = Network.getInstance().makeRequest(
+				"taskmanager/stages", HttpMethod.PUT);
+		networkRequest.addObserver(new AddManager(this, request, gateway, request.split(":")[1]));
+		networkRequest.setBody(slToStore.toJson());
+		networkRequest.send();
 	}
 
 	/**
@@ -127,15 +153,15 @@ public class ThreadSafeLocalCache implements Cache {
 	 */
 	@Override
 	public void update(String request, StageList newSL) {
-		//TODO add in array out of bounds protection
-		if (request.equals("stages")) {
-			System.out.println("The StageList is updating to " + newSL.toString());
-			final Request networkRequest = Network.getInstance().makeRequest(
-					"taskmanager/stages", HttpMethod.POST);
-			networkRequest.addObserver(new UpdateManager(this, request, gateway, request.split(":")[1]));
-			networkRequest.setBody(newSL.toJson());
-			networkRequest.send();
+		if (!(request.split(":").length == 2 && request.split(":")[0].equals("stages"))) {
+			System.out.println("Bad Request");
 		}
+		System.out.println("The StageList is updating to " + newSL.toString());
+		final Request networkRequest = Network.getInstance().makeRequest(
+				"taskmanager/stages", HttpMethod.POST);
+		networkRequest.addObserver(new UpdateManager(this, request, gateway, request.split(":")[1]));
+		networkRequest.setBody(newSL.toJson());
+		networkRequest.send();
 	}
 
 	/**
@@ -153,9 +179,7 @@ public class ThreadSafeLocalCache implements Cache {
 			return members.toArray(new User[0]);
 		}
 		if (request.equals("stages")) {
-			StageList[] to_return = new StageList[1];
-			to_return[0] = stages;
-			return to_return;
+			return stages.toArray(new Stage[0]);
 		}
 		return null;
 	}
@@ -170,6 +194,37 @@ public class ThreadSafeLocalCache implements Cache {
 	public Object[] retrieve(String request, String filter)
 			throws NotImplementedException {
 		throw new NotImplementedException();
+	}
+
+	public void updateTasks(String taskVal) {
+		Task[] tasks = new Gson().fromJson(taskVal, Task[].class);
+		List<Task> unarchived = new ArrayList<Task>();
+		List<Task> archived = new ArrayList<Task>();
+		for (Task toCheck : tasks) {
+			if (toCheck.isArchived()) {
+				archived.add(toCheck);
+			}
+			else {
+				unarchived.add(toCheck);
+			}
+		}
+		this.archives = archived;
+		this.tasks = unarchived;
+		this.gateway.toPresenter("TaskPresenter", "updateTasks");
+		this.gateway.toPresenter("TaskPresenter", "updateSearch");
+	}
+
+	public void updateMembers(String userVal) {
+		User[] users = new Gson().fromJson(userVal, User[].class);
+		this.members = Arrays.asList(users);
+		this.gateway.toPresenter("TaskPresenter", "notifyMemberHandler");
+	}
+
+	public void updateStages(String stageVal) {
+		StageList[] stages = new Gson().fromJson(stageVal, StageList[].class);
+		this.stages = stages[0];
+		this.gateway.toPresenter("TaskPresenter", "setStages");
+
 	}
 
 
@@ -219,18 +274,35 @@ public class ThreadSafeLocalCache implements Cache {
 		}
 	}
 
+	public void printSuccess() {
+		System.out.println("Success");
+	}
+
 	/**
 	 * @see edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.ICache#sync(java.lang.String)
 	 */
 	@Override
 	public void sync(String request) {
-		try {
-			throw new NotImplementedException();
-		} catch (NotImplementedException e) {
-			e.printStackTrace();
+		if (request.equals("tasks")) {
+			ThreadSafeSyncObserver syncer = new ThreadSafeSyncObserver(this.gateway);
+			final Request networkRequest = Network.getInstance().makeRequest("taskmanager/task", HttpMethod.GET);
+			networkRequest.addObserver(syncer);
+			networkRequest.send();
 		}
-
+		if (request.equals("member")) {
+			ThreadSafeSyncObserver syncer = new ThreadSafeSyncObserver(this.gateway);
+			final Request networkRequest = Network.getInstance().makeRequest("core/user", HttpMethod.GET);
+			networkRequest.addObserver(syncer);
+			networkRequest.send();
+		}
+		if (request.equals("stages")) {
+			ThreadSafeSyncObserver syncer = new ThreadSafeSyncObserver(this.gateway);
+			final Request networkRequest = Network.getInstance().makeRequest("taskmanager/stages", HttpMethod.GET);
+			networkRequest.addObserver(syncer);
+			networkRequest.send();
+		}
 	}
+
 
 	/**
 	 * @see edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.ICache#addVerified(java.lang.String,
@@ -264,6 +336,15 @@ public class ThreadSafeLocalCache implements Cache {
 	@Override
 	public void initStageList() {
 		// TODO Write a better implementation of this somewhere
+	}
+
+	public void renameStage(String oldName, String newName) {
+		for (Task t : tasks) {
+			if (t.getStage().toString().equals(oldName)) {
+				t.setStage(new Stage(newName));
+				update("task", t );
+			}
+		}
 	}
 
 }

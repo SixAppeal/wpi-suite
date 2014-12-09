@@ -26,8 +26,8 @@ public class AddManager implements RequestObserver {
 		this.localCache = localCache;
 		this.toUpdate = toUpdate;
 		this.callbacks = new ArrayList<String>();
-		this.callbacks.add(RevocationCallback);
-		this.gateway = gateway;
+		//this.callbacks.add(RevocationCallback);
+		this.gateway = gateway; 
 		//TODO 
 	}
 	
