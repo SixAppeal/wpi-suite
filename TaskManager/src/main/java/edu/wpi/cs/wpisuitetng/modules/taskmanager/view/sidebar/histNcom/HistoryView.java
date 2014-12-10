@@ -1,5 +1,6 @@
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar.histNcom;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -23,37 +24,37 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.Form;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.FormField;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar.activitiesandcomments.ActivityLabel;
 
 public class HistoryView extends JPanel implements IView{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2079867404332847272L;
 	private Gateway gateway;
-	private JPanel body;
 	private JPanel container;
 	private JScrollPane scrollpane;
 	private List<JTextArea> historyFields;
-	private GridBagLayout newLayout;
+	private GridBagLayout gbc;
 	
 	
 	public HistoryView(){
-		this.body = new JPanel();
 		this.container = new JPanel();
 		this.scrollpane = new JScrollPane(this.container);
 		
 		this.historyFields = new ArrayList<JTextArea>();
 		
-		newLayout = new GridBagLayout();
-		
-		
-		this.container.setLayout(newLayout);
-		
-		//this.container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
+		gbc = new GridBagLayout();
+		this.container.setLayout(gbc);
 		
 		this.scrollpane.setMinimumSize(new Dimension(300, 0));
 		this.scrollpane.setMaximumSize(new Dimension(300, Integer.MAX_VALUE));
-		this.setLayout(new MigLayout("fill, ins 0", "[300]"));
 		
-		this.add(this.scrollpane, "grow");
-		//this.add(container);
+		//this.setLayout(new MigLayout("fill, ins 20", "[300]"));
+		this.setLayout(new BorderLayout(0,0));
+		
+		this.add(this.scrollpane);
 		
 	}
 	
@@ -62,15 +63,7 @@ public class HistoryView extends JPanel implements IView{
 		historyFields.clear();
 		
 		for(Activity a: activities){
-			JTextArea temp = new JTextArea();
-			temp.setOpaque(false);
-			temp.setText(a.getActivity());
-			temp.setSelectedTextColor(Color.DARK_GRAY);
-			temp.setEditable(false);
-			temp.setLineWrap(true);
-			temp.setWrapStyleWord(true);
-			temp.setText(a.getActivity());
-			temp.setMaximumSize(new Dimension(260, 40));
+			ActivityLabel temp = new ActivityLabel(a.getActivity());		
 			historyFields.add(temp);
 		}
 		reflowHistory();
@@ -84,8 +77,8 @@ public class HistoryView extends JPanel implements IView{
 		
 		gbc.anchor = GridBagConstraints.PAGE_START;
 		gbc.fill = GridBagConstraints.HORIZONTAL;
-		gbc.weightx = 1.0;
-		gbc.insets = new Insets(20,20,0,20);
+		gbc.weightx = 0;
+		gbc.insets = new Insets(0,0,0,0);
 		gbc.gridwidth = 1;
 		gbc.gridx = 0;
 		gbc.gridy = 0;
@@ -99,7 +92,7 @@ public class HistoryView extends JPanel implements IView{
 			}
 			
 			if (i == historyFields.size() - 1) {
-				gbc.weighty = 1.0;
+				//gbc.weighty = 1.0;
 				gbc.insets.bottom = 20;
 			}
 			

@@ -1,32 +1,34 @@
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar.activitiesandcomments;
 
-import javax.swing.JPanel;
 import javax.swing.JTextArea;
-import javax.swing.SpringLayout;
-import javax.swing.JScrollPane;
-import javax.swing.BoxLayout;
-import javax.swing.border.LineBorder;
+
+import java.awt.Dimension;
 import java.awt.SystemColor;
 import java.awt.Color;
+import javax.swing.border.MatteBorder;
 
-public class ActivityLabel extends JPanel {
+public class ActivityLabel extends JTextArea {
 
 	/**
-	 * Create the panel.
+	 * 
 	 */
-	public ActivityLabel() {
-		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+	private static final long serialVersionUID = 7750945195661034198L;
+
+	
+	/**
+	 * Create the label.
+	 */
+	public ActivityLabel(String text) {
 		
-		JScrollPane scrollPane = new JScrollPane();
-		add(scrollPane);
-		
-		JTextArea label = new JTextArea();
-		label.setSelectedTextColor(Color.DARK_GRAY);
-		label.setEditable(false);
-		label.setBorder(new LineBorder(SystemColor.activeCaption, 1, true));
-		label.setLineWrap(true);
-		label.setWrapStyleWord(true);
-		scrollPane.setViewportView(label);
+		this.setText(text);
+		setPreferredSize(new Dimension(300, 40));
+		setCaretColor(SystemColor.activeCaption);
+		setSelectedTextColor(Color.DARK_GRAY);
+		setEditable(false);
+		setBorder(new MatteBorder(0, 0, 3, 0, (Color) SystemColor.activeCaption));
+		setLineWrap(true);
+		setWrapStyleWord(true);
+		//setMaximumSize(new Dimension(280, 40));
 
 	}
 

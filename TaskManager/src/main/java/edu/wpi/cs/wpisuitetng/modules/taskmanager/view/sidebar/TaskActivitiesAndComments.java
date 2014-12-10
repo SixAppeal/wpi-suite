@@ -32,6 +32,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.StageList;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar.histNcom.CommentView;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar.histNcom.HistoryView;
 
 /**
@@ -66,7 +67,7 @@ public class TaskActivitiesAndComments extends JPanel implements IView {
 	JComponent activitiesLabel;
 	JList<Activity> taskActivitiesList; //Displays the Task's activity history
 	
-	JComponent commentPanel;
+	CommentView commentPanel;
 	JComponent commentLabel;
 	JList<Comment> taskCommentList;	//Displays the Task's comment history
 	JTextArea taskCommentArea;
@@ -82,77 +83,50 @@ public class TaskActivitiesAndComments extends JPanel implements IView {
 		
 		//activitiesPanel = new JPanel();
 		activitiesPanel = new HistoryView();
-		commentPanel = new JPanel();
+		commentPanel = new CommentView(t);
 		
-//		activitiesLabel = new JLabel("Task History");
-//		activitiesLabel.setForeground(labelColor);
-//		taskActivitiesList = new JList<Activity>();
 		
-		commentLabel = new JLabel ("Comments");
-		commentLabel.setForeground(labelColor);
-		taskCommentList = new JList<Comment>();
-		
-		taskCommentArea = new JTextArea();
-		
-		saveCommentButton = new JButton("Save");
-		saveCommentButton.addActionListener( new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				addToComments();
-			}
-		});
-		saveCommentButton.setEnabled(true);
-		
-		//history layout
-//		GridBagLayout activitiesLayout = new GridBagLayout();
+//		commentLabel = new JLabel ("Comments");
+//		commentLabel.setForeground(labelColor);
+//		taskCommentList = new JList<Comment>();
 //		
-//		activitiesPanel.setLayout(activitiesLayout);
-//		activitiesPanel.setOpaque(false);
+//		taskCommentArea = new JTextArea();
 //		
-//		GridBagConstraints activitiesgbc = new GridBagConstraints();
-//		activitiesgbc.anchor = GridBagConstraints.PAGE_START;
-//		activitiesgbc.fill = GridBagConstraints.HORIZONTAL;
-//		activitiesgbc.weightx = 1.0;
-//		activitiesgbc.insets = new Insets(20, 20, 0, 20);
-//		activitiesgbc.gridwidth = 2;
-//		activitiesgbc.gridx = 0;
-//		activitiesgbc.gridy = 0;
+//		saveCommentButton = new JButton("Save");
+//		saveCommentButton.addActionListener( new ActionListener() {
+//			public void actionPerformed(ActionEvent e) {
+//				addToComments();
+//			}
+//		});
+//		saveCommentButton.setEnabled(true);
+		
+//		//comments layout
+//		GridBagLayout commentsLayout = new GridBagLayout();
+//		commentPanel.setLayout(commentsLayout);
 //		
-//		activitiesgbc.insets.top = 20;
-//		activitiesgbc.gridx = 0;
-//		activitiesPanel.add(activitiesLabel,activitiesgbc);
-//		activitiesgbc.weighty = 1.0;
-//		activitiesgbc.weightx = 0.0;
-//		activitiesgbc.insets.top = 5;
-//		activitiesgbc.gridy = 1;
-//		activitiesPanel.add(taskActivitiesList, activitiesgbc);
-		
-		//comments layout
-		GridBagLayout commentsLayout = new GridBagLayout();
-		commentPanel.setLayout(commentsLayout);
-		
-		GridBagConstraints commentsgbc = new GridBagConstraints();
-		commentsgbc.anchor = GridBagConstraints.FIRST_LINE_START;
-		commentsgbc.fill = GridBagConstraints.HORIZONTAL;
-		commentsgbc.insets.top = 20;
-		commentsgbc.weighty = 0.;
-		commentsgbc.weightx = 1.;
-		commentsgbc.insets.top = 20;
-		commentsgbc.gridy = 0;
-		commentsgbc.gridx = 0;
-		commentPanel.add(commentLabel,commentsgbc);
-		
-		commentsgbc.insets.top = 5;
-		commentsgbc.gridy = 1;
-		commentsgbc.weighty = 1.;
-		commentsgbc.weightx = 0.;
-		commentPanel.add(taskCommentList,commentsgbc);
-		commentsgbc.weighty = 0.;
-		commentsgbc.weightx = 1.;
-		commentsgbc.gridy = 2;
-		commentPanel.add(taskCommentArea, commentsgbc);
-		
-		commentsgbc.gridx = 1;
-		commentPanel.add(saveCommentButton, commentsgbc);
+//		GridBagConstraints commentsgbc = new GridBagConstraints();
+//		commentsgbc.anchor = GridBagConstraints.FIRST_LINE_START;
+//		commentsgbc.fill = GridBagConstraints.HORIZONTAL;
+//		commentsgbc.insets.top = 20;
+//		commentsgbc.weighty = 0.;
+//		commentsgbc.weightx = 1.;
+//		commentsgbc.insets.top = 20;
+//		commentsgbc.gridy = 0;
+//		commentsgbc.gridx = 0;
+//		commentPanel.add(commentLabel,commentsgbc);
+//		
+//		commentsgbc.insets.top = 5;
+//		commentsgbc.gridy = 1;
+//		commentsgbc.weighty = 1.;
+//		commentsgbc.weightx = 0.;
+//		commentPanel.add(taskCommentList,commentsgbc);
+//		commentsgbc.weighty = 0.;
+//		commentsgbc.weightx = 1.;
+//		commentsgbc.gridy = 2;
+//		commentPanel.add(taskCommentArea, commentsgbc);
+//		
+//		commentsgbc.gridx = 1;
+//		commentPanel.add(saveCommentButton, commentsgbc);
 		
 		activitiesAndComments.addTab("History", activitiesPanel);
 		activitiesAndComments.addTab("Comments", commentPanel);
@@ -171,8 +145,9 @@ public class TaskActivitiesAndComments extends JPanel implements IView {
 
 		//taskActivitiesList.setListData(t.getActivities().toArray(new Activity[0]));
 		activitiesPanel.displayActivities(task);
-		taskCommentList.setListData(task.getComments().toArray(new Comment[0]));
-		saveCommentButton.setEnabled(true);
+		//taskCommentList.setListData(task.getComments().toArray(new Comment[0]));
+		commentPanel.displayActivities(task);
+		//saveCommentButton.setEnabled(true);
 		this.revalidate();
 	}
 	
