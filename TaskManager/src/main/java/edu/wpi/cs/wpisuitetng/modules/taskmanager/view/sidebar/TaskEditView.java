@@ -233,7 +233,8 @@ public class TaskEditView extends JPanel implements IView {
 			}
 		});
 		
-		
+		allMembersMouseHandler = new JListMouseHandler(members);
+		assignedMembersMouseHandler = new JListMouseHandler(assignedMembers);
 		// Member JList Action Listeners
 		members.addListSelectionListener(new ListSelectionListener() {
 			@Override
@@ -542,8 +543,10 @@ public class TaskEditView extends JPanel implements IView {
 	 * Takes the members that the user has selected and moves them to the list of members assigned to a task
 	 */
 	public void moveMembersToAssigned() {	
+		System.out.println("Moving to assigned!");
 		MemberListHandler.getInstance().assignMember(members.getSelectedValuesList());
 		updateMembers();
+		System.out.println(MemberListHandler.getInstance().getAssigned().size());
 		this.task.setAssignedTo(MemberListHandler.getInstance().getAssigned());
 		saveTask();
 		this.allMembersMouseHandler.clear();
@@ -558,6 +561,7 @@ public class TaskEditView extends JPanel implements IView {
 		MemberListHandler.getInstance().unAssignMember(assignedMembers.getSelectedValuesList());
 		updateMembers();
 		this.task.setAssignedTo(MemberListHandler.getInstance().getAssigned());
+		System.out.println(MemberListHandler.getInstance().getAssigned().size());
 		saveTask();
 		this.allMembersMouseHandler.clear();
 		this.assignedMembersMouseHandler.clear();

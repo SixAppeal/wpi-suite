@@ -167,8 +167,6 @@ public class SidebarView extends JTabbedPane implements IView {
 		Requirement[] requirementsArray = Requirement.fromJsonArray(requirements);
 		
 		// check if tab exists with the edit pane
-		System.out.println("requirements array is " + requirementsArray);
-		System.out.println("requirements title 1 is " + requirementsArray[0].getName());
 		for (IView view : viewList) {
 			if (view instanceof TaskEditView) {
 				((TaskEditView) view).getRequirements(requirementsArray);
