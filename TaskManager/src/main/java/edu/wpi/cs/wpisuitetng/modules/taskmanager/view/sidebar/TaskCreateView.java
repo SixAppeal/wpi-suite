@@ -5,6 +5,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -15,6 +17,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
+
+import org.jdesktop.swingx.JXDatePicker;
 
 import net.miginfocom.swing.MigLayout;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Stage;
@@ -48,6 +52,7 @@ public class TaskCreateView extends JPanel implements IView {
 	private JTextField title;
 	private JTextArea description;
 	private JComboBox<Stage> stages;
+	private JXDatePicker dateInput;
 	private JButton createButton;
 	private JButton cancelButton;
 	private Form form;
@@ -62,11 +67,11 @@ public class TaskCreateView extends JPanel implements IView {
 		this.description = new JTextArea(5, 0);
 		this.stages = new JComboBox<Stage>();
 		this.setStages(iStages);
-		
+		this.dateInput = new JXDatePicker();
 		this.createButton = new JButton("Create");
 		this.cancelButton = new JButton("Cancel"); 
 		TaskCreateView that = this;
-
+		Task task = new Task();
 		this.scrollPane.setBorder(BorderFactory.createEmptyBorder());
 		this.scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
@@ -77,8 +82,8 @@ public class TaskCreateView extends JPanel implements IView {
 		this.createButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Task task = new Task();
 				task.setTitle(title.getText());
+				task.setDueDate(dateInput.getDate());
 				task.setDescription(description.getText());
 				task.setStage((Stage) stages.getSelectedItem());
 				gateway.toPresenter("LocalCache", "store", "task:testing", task);
@@ -125,6 +130,13 @@ public class TaskCreateView extends JPanel implements IView {
 				return "Please enter a description.";
 			}
 		});
+	
+		this.dateInput.addPropertyChangeListener("date", new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				task.setDueDate(dateInput.getDate());
+			}
+		});
 
 		this.description.addKeyListener(new KeyAdapter() {
 			public void keyReleased(KeyEvent e) {
@@ -138,6 +150,7 @@ public class TaskCreateView extends JPanel implements IView {
 		this.form = new Form(
 			titleField,
 			descriptionField,
+			new FormField("Due Date", this.dateInput),
 			new FormField("Stage", stages),
 			new ButtonGroup(
 				this.createButton,

@@ -33,6 +33,9 @@ public class ThreadSafeSyncObserver implements RequestObserver {
 		if (type.equals("stages")) {
 			this.gateway.toPresenter("LocalCache", "updateStages", iReq.getResponse().getBody());
 		}
+		if (type.equals("requirement")) {
+			this.gateway.toView("SidebarView", "passInRequirements", iReq.getResponse().getBody());
+		}
 	}
 
 	/**

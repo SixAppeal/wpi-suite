@@ -56,6 +56,7 @@ public class TestTask {
 		assertEquals(newTask.getDueDate(), new Date());
 		assertEquals(newTask.getEstimatedEffort(), new Integer(1));
 		assertEquals(newTask.getId(), 0);
+		assertEquals(newTask.getRequirement(), "Associated requirement");
 		assertEquals(newTask.getStage(), new Stage("New"));
 
 	}

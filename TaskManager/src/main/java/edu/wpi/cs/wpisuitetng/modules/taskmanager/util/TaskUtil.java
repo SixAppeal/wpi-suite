@@ -4,6 +4,7 @@ import java.util.Date;
 
 import com.google.gson.Gson;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Stage;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 
@@ -69,6 +70,17 @@ public class TaskUtil {
 	public static Integer validateEffort(Integer input) throws IllegalArgumentException {
 		if ( input <= 0 ) throw new IllegalArgumentException("Effort values must be greater than zero.");
 		return input;
+	}
+	
+	/**
+	 * Checks an associated requirement against the ruleset for valid associated requirements
+	 * @param aReq The string input from user
+	 * @return The same input provided that it's valid.
+	 * @throws IllegalArgumentException
+	 */
+	public static Requirement validateRequirement(Requirement aReq) throws IllegalArgumentException {
+		// No rules
+		return aReq;
 	}
 	
 	/**
