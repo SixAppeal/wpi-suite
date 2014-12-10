@@ -12,6 +12,9 @@
 
 package edu.wpi.cs.wpisuitetng.modules.taskmanager;
 
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -96,9 +99,20 @@ public class TaskManager implements IJanewayModule {
 		sidebarView.setCache((ThreadSafeLocalCache)localCache);
 		
 		mainPanel.setBackground(TaskManagerUtil.BACKGROUND_COLOR);
-		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.X_AXIS));
-		mainPanel.add(columnView);
-		mainPanel.add(sidebarView);
+		mainPanel.setLayout(new GridBagLayout());
+		
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.fill = GridBagConstraints.BOTH;
+		gbc.insets = new Insets(0, -50, 0, 0);
+		gbc.weighty = 1.0;
+		gbc.gridx = 1;
+		gbc.gridy = 0;
+		mainPanel.add(sidebarView, gbc);
+		
+		gbc.insets.left = 0;
+		gbc.weightx = 1.0;
+		gbc.gridx = 0;
+		mainPanel.add(columnView, gbc);
 		
 		tabs.add(new JanewayTabModel(
 				name,

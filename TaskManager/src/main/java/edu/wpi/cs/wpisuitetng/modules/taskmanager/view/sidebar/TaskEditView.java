@@ -259,7 +259,9 @@ public class TaskEditView extends JPanel implements IView {
 		this.archiveButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				gateway.toPresenter("LocalCache", "update", "archive", task);
+				task.archive();
+				System.out.println("Look at the print right here!" + task.isArchived());
+				gateway.toPresenter("LocalCache", "update", "archive:testing", task);
 				gateway.toView("SidebarView", "removeEditPanel", that);
 			}
 		});
@@ -447,6 +449,10 @@ public class TaskEditView extends JPanel implements IView {
 						),
 						new HorizontalForm(
 								new FormField("Members", this.membersScrollPane),
+								new Form(
+										new ButtonGroup(addMemberButton),
+										new ButtonGroup(removeMemberButton)
+									),
 								new FormField("Assigned", this.assignedMembersScrollPane)
 								),
 								new FormField("Associated Requirement", this.requirementsComboBox),
@@ -460,6 +466,7 @@ public class TaskEditView extends JPanel implements IView {
 												this.closeButton
 												)
 				);
+		
 
 		this.container.setBackground(SidebarView.SIDEBAR_COLOR);
 		this.container.setLayout(new MigLayout("fill, ins 20", "[260]"));
