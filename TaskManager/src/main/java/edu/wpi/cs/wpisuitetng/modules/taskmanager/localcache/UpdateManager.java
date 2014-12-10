@@ -31,7 +31,6 @@ public class UpdateManager implements RequestObserver {
 	
 	@Override
 	public void responseSuccess(IRequest iReq) {
-		localCache.updateVerified(toUpdate, iReq.getBody());
 		for (String s: callbacks) {
 			gateway.toPresenter(s.split(":")[0], s.split(":")[1]);
 		}

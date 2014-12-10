@@ -78,11 +78,10 @@ public class ThreadSafeLocalCache implements Cache {
 	public void store(String request, Task taskToStore) {
 		if (!(request.split(":")[0].equals("task") && request.split(":").length == 2)) {
 			System.out.println("Bad Request!");
-			System.out.println(request + " Length: " + request.split(":").length);
 			return;
 		}
 		final Request networkRequest = Network.getInstance().makeRequest(
-				"taskmanager/task", HttpMethod.PUT);
+				"taskmanager/task2", HttpMethod.PUT);
 		networkRequest.addObserver(new AddManager(this, request, gateway, request.split(":")[1]));
 		networkRequest.setBody(taskToStore.toJson());
 		networkRequest.send();
@@ -123,7 +122,7 @@ public class ThreadSafeLocalCache implements Cache {
 			tasks.add(newTask);
 		}
 		final Request networkRequest = Network.getInstance().makeRequest(
-				"taskmanager/task", HttpMethod.POST);
+				"taskmanager/task2", HttpMethod.POST);
 		networkRequest.setBody(newTask.toJson());
 		networkRequest.addObserver(new UpdateManager(this, request, gateway, request.split(":")[1]));
 		networkRequest.send();
@@ -274,9 +273,6 @@ public class ThreadSafeLocalCache implements Cache {
 		}
 	}
 
-	public void printSuccess() {
-		System.out.println("Success");
-	}
 
 	/**
 	 * @see edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.ICache#sync(java.lang.String)
@@ -285,8 +281,9 @@ public class ThreadSafeLocalCache implements Cache {
 	public void sync(String request) {
 		if (request.equals("tasks")) {
 			ThreadSafeSyncObserver syncer = new ThreadSafeSyncObserver(this.gateway);
-			final Request networkRequest = Network.getInstance().makeRequest("taskmanager/task", HttpMethod.GET);
+			final Request networkRequest = Network.getInstance().makeRequest("Advanced/taskmanager/task2", HttpMethod.GET);
 			networkRequest.addObserver(syncer);
+			networkRequest.setReadTimeout(70000);
 			networkRequest.send();
 		}
 		if (request.equals("member")) {
@@ -309,39 +306,17 @@ public class ThreadSafeLocalCache implements Cache {
 		}
 	}
 
-
-	/**
-	 * @see edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.ICache#addVerified(java.lang.String,
-	 *      java.lang.String)
-	 */
-	@Override
-	public void addVerified(String request, String data) {
-		try {
-			throw new NotImplementedException();
-		} catch (NotImplementedException e) {
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * @see edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.ICache#updateVerified(java.lang.String,
-	 *      java.lang.String, java.lang.Object)
-	 */
-	@Override
-	public void updateVerified(String request, String data) {
-		try {
-			throw new NotImplementedException();
-		} catch (NotImplementedException e) {
-			e.printStackTrace();
-		}
-	}
-
 	/**
 	 * Makes inital stage list
 	 */
 	@Override
 	public void initStageList() {
-		// TODO Write a better implementation of this somewhere
+		stages = new StageList();
+		stages.add( new Stage("New") );
+		stages.add( new Stage("Scheduled"));
+		stages.add( new Stage("In Progress"));
+		stages.add( new Stage("Completed"));
+		this.store("stages:testing", stages);
 	}
 
 	public void renameStage(String oldName, String newName) {

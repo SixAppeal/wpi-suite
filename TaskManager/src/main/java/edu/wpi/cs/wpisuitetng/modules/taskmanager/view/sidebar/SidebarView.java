@@ -24,7 +24,6 @@ import javax.swing.UIManager;
 import javax.swing.plaf.basic.BasicTabbedPaneUI;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementmanager.models.Requirement;
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.LocalCache;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.ThreadSafeLocalCache;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.StageList;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
@@ -40,6 +39,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
  * @author srojas
  * @author thhughes
  * @author nhhughes
+ * @author dpseaman
  * @author tmeehan
  */
 public class SidebarView extends JTabbedPane implements IView {
@@ -112,7 +112,6 @@ public class SidebarView extends JTabbedPane implements IView {
 				}
 			}
 		}
-		
 		TaskCreateView createView = new TaskCreateView(this.stages);
 		createView.setGateway(this.gateway);
 		this.viewList.add(createView);
@@ -219,8 +218,6 @@ public class SidebarView extends JTabbedPane implements IView {
 		for (IView v : this.viewList) {
 			if (v instanceof TaskCreateView) {
 				((TaskCreateView) v).setStages(this.stages);
-			} else if (v instanceof TaskEditView) {
-				((TaskEditView)v).setStages(sl);
 			}
 		}
 		columnEditView.setStages(this.stages);
@@ -247,7 +244,6 @@ public class SidebarView extends JTabbedPane implements IView {
 				Task updated = findTask(reference, taskToFix.getId());
 				if (updated != null) {
 					((TaskEditView)this.getComponent(i)).updateEverything(updated);
-					System.out.println("Updating this task: " + updated.getTitle());
 				}
 			}
 		}

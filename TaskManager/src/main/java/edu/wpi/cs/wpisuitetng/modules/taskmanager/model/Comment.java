@@ -21,6 +21,14 @@ public class Comment implements Serializable {
 	String comment;
 	
 	/**
+	 * Default Constructor for comments
+	 */
+	public Comment(){
+		this.user = "";
+		this.comment = "";
+	}
+	
+	/**
 	 * Constructor for the comment object
 	 * @param user
 	 * @param comment

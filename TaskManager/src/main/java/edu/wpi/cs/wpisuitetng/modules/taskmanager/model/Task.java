@@ -32,7 +32,7 @@ public class Task extends AbstractModel {
 	public static final Comparator<Task> PRIORITY_COMPARATOR = new Comparator<Task>() {
 		@Override
 		public int compare(Task task1, Task task2) {
-			return Double.compare(task1.getPriority(), task2.getPriority());
+			return Integer.compare(task1.getPriority(), task2.getPriority());
 		}
 	};
 
@@ -42,13 +42,13 @@ public class Task extends AbstractModel {
 	private String description;
 	private Stage stage;
 	private List<String> assignedTo;
-	private Integer estimatedEffort; 
-	private Integer actualEffort;
+	private int estimatedEffort; 
+	private int actualEffort;
 	private Date dueDate;
 	private Requirement requirement;
 	private List<Activity> activities;
 	private List<Comment> comments;
-	private Double priority;
+	private int priority;
 
 	/**
 	 * Default constructor (dummy task for initialization)
@@ -89,7 +89,7 @@ public class Task extends AbstractModel {
 		this.comments = comments;
 		this.activities = activities;
 		this.archived = false;
-		this.priority = new Double(0);
+		this.priority = 0;
 	}
 	
 	/**
@@ -103,12 +103,10 @@ public class Task extends AbstractModel {
 			return this.id == task.getId()
 				&& this.title.equals(task.getTitle())
 				&& this.description.equals(task.getDescription())
-				&& this.estimatedEffort.equals(task.getEstimatedEffort())
-				&& this.actualEffort.equals(task.getActualEffort())
-				&& this.dueDate.equals(task.getDueDate())
 				&& this.requirement.equals(task.getRequirement())
-				&& this.comments.equals(task.getComments())
-				&& this.activities.equals(task.activities);
+				&& this.estimatedEffort == task.getEstimatedEffort()
+				&& this.actualEffort == task.getActualEffort()
+				&& this.dueDate.equals(task.getDueDate());
 		}
 		return false;
 	}
@@ -348,9 +346,9 @@ public class Task extends AbstractModel {
 	 * 
 	 * @return the priority value to be listed on screen
 	 */
-	public double getPriority()
+	public int getPriority()
 	{
-		return (this.priority).doubleValue();
+		return this.priority;
 	}
 	
 	/**
@@ -361,9 +359,8 @@ public class Task extends AbstractModel {
 		this.activities = activities;
 	}
 
-	public void setPriority(double d)
-	{
-		this.priority = new Double(d);
+	public void setPriority(int priority) {
+		this.priority = priority;
 	}
 
 	/**

@@ -21,25 +21,26 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar.TaskView;
  *  This is a custom class to watch the mouse actions on a task View
  * @author RnOrlando
  * @author tmeehan
+ * @author srojas
  *
  */
 public class TaskDraggableMouseListener extends DraggableMouseListener{
-	
+
 	private TaskView taskAssoc;
 	private boolean hasMoved;
-	
+
 	/**
 	 * Constructor
 	 * @param t Task view task is listening on
 	 */
-	
+
 	public TaskDraggableMouseListener(TaskView t) {
 		super(t);
 		this.taskAssoc = t;
 		this.hasMoved = false;
-		
+
 	}
-	
+
 	//TODO @wmtemple, add single click selector
 	/**
 	 * @see  java.awt.event.MouseAdapter.mouseClicked
@@ -47,10 +48,9 @@ public class TaskDraggableMouseListener extends DraggableMouseListener{
 	@Override
 	public void mouseClicked(MouseEvent e) 
 	{
-//		if (e.getClickCount() == 2) {
-//			taskAssoc.getGateway().toPresenter("TaskPresenter", "editTask", taskAssoc.getTask());
-//		}
-		//taskAssoc.getGateway().toPresenter("TaskPresenter", "editTask", taskAssoc.getTask());
+		if(e.getClickCount()==2){
+			taskAssoc.getGateway().toPresenter("TaskPresenter", "editTask", taskAssoc.getTask());
+		}
 	}
 
 	/**
@@ -59,7 +59,9 @@ public class TaskDraggableMouseListener extends DraggableMouseListener{
 	@Override
 	public void mouseReleased(MouseEvent e) 
 	{
-		//taskAssoc.getGateway().toPresenter("TaskPresenter", "viewTask", taskAssoc.getTask());
+		if(e.getClickCount()==2){
+			taskAssoc.getGateway().toPresenter("TaskPresenter", "editTask", taskAssoc.getTask());
+		}
 	}
 
 	/**
@@ -68,7 +70,7 @@ public class TaskDraggableMouseListener extends DraggableMouseListener{
 	@Override
 	public void mouseEntered(MouseEvent e) 
 	{
-		assoc.setBackground(TaskView.HOVER_COLOR);
+		taskAssoc.highlight();
 	}
 
 	/**
@@ -76,7 +78,7 @@ public class TaskDraggableMouseListener extends DraggableMouseListener{
 	 */
 	@Override
 	public void mouseExited(MouseEvent e) {
-		assoc.setBackground(TaskView.BACKGROUND_COLOR);
+		taskAssoc.unhighlight();
 	}
 
 	/**
@@ -85,7 +87,12 @@ public class TaskDraggableMouseListener extends DraggableMouseListener{
 	@Override
 	public void mousePressed(MouseEvent e) 
 	{
-		taskAssoc.getGateway().toPresenter("TaskPresenter", "editTask", taskAssoc.getTask());
+		if (e.getClickCount() == 1 ) {
+			taskAssoc.getGateway().toPresenter("TaskPresenter", "selectTask", new Boolean(e.isControlDown()), taskAssoc);
+		} else if (e.getClickCount() == 2) {
+			taskAssoc.getGateway().toPresenter("TaskPresenter", "editTask", taskAssoc.getTask());
+			taskAssoc.getGateway().toPresenter("TaskPresenter", "deselectAllTasks");
+		}
 		super.mousePressed(e);
 	}
 }
