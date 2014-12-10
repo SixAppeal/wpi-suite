@@ -79,11 +79,9 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.HorizontalForm
  * @author krpeffer
  * @author wavanrensselaer
  * @author srojas
-<<<<<<< HEAD
  * @author akshoop
-=======
  * @author dpseaman
->>>>>>> devel
+
  */
 public class TaskEditView extends JPanel implements IView {
 	private static final long serialVersionUID = -8972626054612267276L;
@@ -546,8 +544,11 @@ public class TaskEditView extends JPanel implements IView {
 	public void moveMembersToAssigned() {	
 		MemberListHandler.getInstance().assignMember(members.getSelectedValuesList());
 		updateMembers();
+		this.task.setAssignedTo(MemberListHandler.getInstance().getAssigned());
+		saveTask();
 		this.allMembersMouseHandler.clear();
 		this.assignedMembersMouseHandler.clear();
+		
 	}
 
 	/**
@@ -556,6 +557,8 @@ public class TaskEditView extends JPanel implements IView {
 	public void moveMembersToAll() {
 		MemberListHandler.getInstance().unAssignMember(assignedMembers.getSelectedValuesList());
 		updateMembers();
+		this.task.setAssignedTo(MemberListHandler.getInstance().getAssigned());
+		saveTask();
 		this.allMembersMouseHandler.clear();
 		this.assignedMembersMouseHandler.clear();
 	}

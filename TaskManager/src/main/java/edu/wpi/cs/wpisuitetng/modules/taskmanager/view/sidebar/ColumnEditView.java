@@ -198,7 +198,7 @@ public class ColumnEditView extends JPanel implements IView {
 				
 				if( !stageJList.isSelectionEmpty()) {
 
-					if( stages.size() > 1 ) {
+					if( stages.size() > 1) {
 						stages.remove(stageJList.getSelectedIndex());
 						updateJListAndPublish();
 					} else {
@@ -273,6 +273,7 @@ public class ColumnEditView extends JPanel implements IView {
 		gbc.gridx = 0;
 		gbc.gridy = 4;
 		gbc.weighty = 0.0;
+		gbc.gridwidth = 2;
 		gbc.insets = new Insets(10, 20, 20, 10);
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		this.add(deleteBtn, gbc);
