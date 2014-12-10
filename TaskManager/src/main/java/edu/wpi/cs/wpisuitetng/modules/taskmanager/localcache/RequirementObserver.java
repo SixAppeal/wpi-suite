@@ -37,7 +37,6 @@ public class RequirementObserver implements RequestObserver {
 		String requirements = iReq.getResponse().getBody();
 
 		gateway.toView("SidebarView", "passInRequirements", requirements);
-		System.out.println("requirement observer 2");
 	}
 
 	/**

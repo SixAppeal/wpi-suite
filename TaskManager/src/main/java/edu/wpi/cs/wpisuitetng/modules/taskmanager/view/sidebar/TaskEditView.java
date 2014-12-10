@@ -14,6 +14,8 @@ package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
 
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
@@ -59,6 +61,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Stage;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.StageList;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.util.TaskManagerUtil;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar.ColumnView;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar.StageView;
@@ -560,9 +563,6 @@ public class TaskEditView extends JPanel implements IView {
 		ComboBoxModel<String> model = this.requirementsComboBox.getModel();
 		int size = model.getSize();
 		boolean foundRequirement = false;
-		System.out.println("requirementTitles is " + requirementTitles);
-		System.out.println("size is " + size);
-		System.out.println("requirementTitles size is " + requirementTitles.size());
 		if (!task.getRequirement().getName().isEmpty()) {
 			this.requirementsComboBox.setSelectedItem(task.getRequirement().getName());
 		}
@@ -576,7 +576,9 @@ public class TaskEditView extends JPanel implements IView {
 					}
 				}
 				if (!foundRequirement) {
-					this.requirementsComboBox.addItem(s);
+					FontMetrics fm = this.requirementsComboBox.getFontMetrics(this.requirementsComboBox.getFont());
+					String reducedString = TaskManagerUtil.reduceString(s, 220, fm);
+					this.requirementsComboBox.addItem(reducedString);
 				}
 			}	
 			if (!task.getRequirement().getName().isEmpty()) {
@@ -594,7 +596,6 @@ public class TaskEditView extends JPanel implements IView {
 	public List<String> getRequirementTitles() {
 		this.requirementTitles.clear();
 		for (Requirement r : this.requirements) {
-			System.out.println("req title is " + r.getName());
 			requirementTitles.add(r.getName());
 		}
 		return requirementTitles;
