@@ -30,6 +30,7 @@ import java.awt.Insets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.Semaphore;
 import java.awt.datatransfer.DataFlavor;
 
 import javax.swing.BorderFactory;
@@ -52,7 +53,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
  */
 public class ColumnView extends JPanel implements IView {
 	private static final long serialVersionUID = 7965275386426411767L;
-
+	private Semaphore reflowAccess;
 	private Gateway gateway;
 	
 	// State-related fields
@@ -87,6 +88,8 @@ public class ColumnView extends JPanel implements IView {
 		this.setOpaque(false);
 		this.setLayout(new GridBagLayout());
 		
+		this.reflowAccess = new Semaphore(1, true); 
+		
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.anchor = GridBagConstraints.PAGE_START;
 		gbc.fill = GridBagConstraints.BOTH;
@@ -120,7 +123,11 @@ public class ColumnView extends JPanel implements IView {
 	 * @param stages The new stages array
 	 */
 	public void setStages(StageList stages) {
-		if (!stages.equals(this.stages)) this.setState(this.tasks, stages);
+//		if (this.reflowAccess.tryAcquire()) {
+//			return;
+//		}
+		//if (!stages.equals(this.stages)) 
+		this.setState(this.tasks, stages);
 
 	}
 	
@@ -148,6 +155,12 @@ public class ColumnView extends JPanel implements IView {
 	 * Reflows the view when it's state changes.
 	 */
 	public void reflow() {
+		try {
+			this.reflowAccess.acquire();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.anchor = GridBagConstraints.FIRST_LINE_START;
 		gbc.fill = GridBagConstraints.VERTICAL;
@@ -180,6 +193,13 @@ public class ColumnView extends JPanel implements IView {
 		}
 		
 		this.scrollPane.revalidate();
+		try {
+			this.gateway.toView("SidebarView", "fixTabs");
+		}
+		catch (NullPointerException e) {
+			System.out.println("broken");
+		}
+		this.reflowAccess.release();
 	}
 	
 	/**
