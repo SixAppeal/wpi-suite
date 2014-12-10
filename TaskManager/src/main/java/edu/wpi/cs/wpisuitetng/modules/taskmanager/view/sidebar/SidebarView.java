@@ -204,6 +204,10 @@ public class SidebarView extends JTabbedPane implements IView {
 		}
 	}
 	
+	public void fixTabs() {
+		this.repaint();
+	}
+	
 	/**
 	 * Updates local cache for search box
 	 * @param all_tasks All tasks (archived and unarchived) from local cache

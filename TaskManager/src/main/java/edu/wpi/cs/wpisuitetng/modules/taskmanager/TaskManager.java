@@ -126,7 +126,7 @@ public class TaskManager implements IJanewayModule {
 		gateway.addView("ColumnView", columnView);
 		gateway.addView("ToolbarView", toolbarview);
 		gateway.addView("MemberListHandler", MemberListHandler.getInstance());
-				
+		columnView.setGateway(this.gateway);
 		t = new Timer();
 
 	}

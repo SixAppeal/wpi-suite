@@ -121,7 +121,7 @@ public class Task extends AbstractModel {
 	 * A simple toString
 	 */
 	public String toString() {
-		return "Task[" + this.id + "][" + this.title + "](" + this.stage + ")";
+		return "Task[" + this.id + "][" + this.title + "](" + this.stage + ")[" + this.archived + ")";
 	}
 	
 	/**
