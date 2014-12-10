@@ -59,7 +59,7 @@ public class TaskView extends JPanel implements  IView {
 	/**
 	 * Background color when the mouse is over the TaskView
 	 */
-	public static final Color HOVER_COLOR = new Color(245, 245, 245);
+	public static final Color HOVER_COLOR = new Color(235, 235, 235);
 	
 	/**
 	 * Background color when selected
@@ -90,7 +90,7 @@ public class TaskView extends JPanel implements  IView {
 		Font titleFont = this.titleLabel.getFont();
 		this.titleLabel.setFont(titleFont.deriveFont(titleFont.getStyle() & ~Font.BOLD));
 		
-		this.dateLabel.setForeground(new Color(180, 180, 180));
+		this.dateLabel.setForeground(new Color(160, 160, 160));
 		Font dateFont = this.dateLabel.getFont();
 		this.dateLabel.setFont(dateFont.deriveFont(dateFont.getStyle() & ~Font.BOLD));
 		
