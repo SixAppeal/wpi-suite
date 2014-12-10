@@ -103,16 +103,16 @@ public class TaskManager implements IJanewayModule {
 		
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.fill = GridBagConstraints.BOTH;
-		gbc.insets = new Insets(0, -50, 0, 0);
+		gbc.insets = new Insets(0, 0, 0, 0);
 		gbc.weighty = 1.0;
-		gbc.gridx = 1;
-		gbc.gridy = 0;
-		mainPanel.add(sidebarView, gbc);
-		
-		gbc.insets.left = 0;
 		gbc.weightx = 1.0;
 		gbc.gridx = 0;
+		gbc.gridy = 0;
 		mainPanel.add(columnView, gbc);
+		
+		gbc.weightx = 0;
+		gbc.gridx = 1;
+		mainPanel.add(sidebarView, gbc);
 		
 		tabs.add(new JanewayTabModel(
 				name,
