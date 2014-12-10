@@ -70,6 +70,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.Form;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.FormField;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.FormFieldValidator;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.HorizontalForm;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.MemberButtonGroup;
 
 /**
  * Displays and allows editing of task properties.
@@ -165,11 +166,6 @@ public class TaskEditView extends JPanel implements IView {
 		this.assignedMembers = new JList<String>();
 		this.assignedMembersScrollPane = new JScrollPane(this.assignedMembers);
 
-		System.out.println("Begining to print");
-		System.out.println(this.members);
-		System.out.println(this.assignedMembers);
-		System.out.println("Done to printing");
-
 		MemberListHandler.getInstance().populateMembers(this.task.getAssignedTo());
 		this.updateMembers();
 		
@@ -250,16 +246,18 @@ public class TaskEditView extends JPanel implements IView {
 			}
 		});
 		
-		assignedMembers.setMinimumSize(new Dimension(assignedMembers.getMinimumSize().width, 100));
-		members.setMinimumSize(new Dimension(members.getMinimumSize().width, 100));
-
+		assignedMembersScrollPane.setMinimumSize(new Dimension(assignedMembers.getMinimumSize().width, 150));
+		membersScrollPane.setMinimumSize(new Dimension(members.getMinimumSize().width, 150));
+		assignedMembersScrollPane.setMaximumSize(new Dimension(assignedMembers.getMinimumSize().width, 150));
+		membersScrollPane.setMaximumSize(new Dimension(members.getMinimumSize().width, 150));
+		assignedMembersScrollPane.setPreferredSize(new Dimension(assignedMembers.getMinimumSize().width, 150));
+		membersScrollPane.setPreferredSize(new Dimension(members.getMinimumSize().width, 150));
 		
 		
 		this.archiveButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				task.archive();
-				System.out.println("Look at the print right here!" + task.isArchived());
 				gateway.toPresenter("LocalCache", "update", "archive:testing", task);
 				gateway.toView("SidebarView", "removeEditPanel", that);
 			}
@@ -449,8 +447,9 @@ public class TaskEditView extends JPanel implements IView {
 						new HorizontalForm(
 								new FormField("Members", this.membersScrollPane),
 								new Form(
-										new ButtonGroup(addMemberButton),
-										new ButtonGroup(removeMemberButton)
+//										new ButtonGroup(addMemberButton),
+//										new ButtonGroup(removeMemberButton)
+										new MemberButtonGroup(addMemberButton, removeMemberButton)
 									),
 								new FormField("Assigned", this.assignedMembersScrollPane)
 								),
