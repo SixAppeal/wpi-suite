@@ -23,6 +23,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
 import javax.swing.plaf.basic.BasicTabbedPaneUI;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.ThreadSafeLocalCache;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.StageList;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
@@ -49,6 +50,7 @@ public class SidebarView extends JTabbedPane implements IView {
 	private Gateway gateway;
 
 	private StageList stages;
+	private List<String> requirements;
 	private ThreadSafeLocalCache cache;
 	// Components
 	private List<IView> viewList;
@@ -63,6 +65,7 @@ public class SidebarView extends JTabbedPane implements IView {
 	public SidebarView() throws IOException {
 		this.viewList = new ArrayList<IView>();
 		this.stages = new StageList();
+		this.requirements = new ArrayList<String>();
 		
 		this.searchView = new SearchBox();
 		this.viewList.add(searchView);
@@ -155,6 +158,22 @@ public class SidebarView extends JTabbedPane implements IView {
 				editView);
 		this.setSelectedComponent(editView);
 		this.setVisible(true);
+	}
+	
+	/**
+	 * Passes the retrieved requirements array to the Task Edit View
+	 */
+	public void passInRequirements(String requirements) {
+		Requirement[] requirementsArray = Requirement.fromJsonArray(requirements);
+		
+		// check if tab exists with the edit pane
+		System.out.println("requirements array is " + requirementsArray);
+		System.out.println("requirements title 1 is " + requirementsArray[0].getName());
+		for (IView view : viewList) {
+			if (view instanceof TaskEditView) {
+				((TaskEditView) view).getRequirements(requirementsArray);
+			}
+		}
 	}
 	
 	/**

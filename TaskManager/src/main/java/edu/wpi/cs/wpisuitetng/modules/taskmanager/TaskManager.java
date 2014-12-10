@@ -138,7 +138,6 @@ public class TaskManager implements IJanewayModule {
 	 */
 	@Override
 	public void finishInit() {
-
 		Semaphore waitingForInit = new Semaphore(-2, true); //semaphore to wait for all pending request to come in
 		final Request networkRequestStages = Network.getInstance().makeRequest(
 				"taskmanager/stages", HttpMethod.GET); //request for stages
@@ -168,6 +167,7 @@ public class TaskManager implements IJanewayModule {
 		gateway.toPresenter("TaskPresenter", "setStages");
 		//initial long pull request
 		gateway.toPresenter("LocalCache", "sync", "tasks");
+		gateway.toPresenter("LocalCache", "sync", "requirement");
 		
 		t.scheduleAtFixedRate(new TimerTask() {
 
@@ -175,6 +175,7 @@ public class TaskManager implements IJanewayModule {
 			public void run() {
 				gateway.toPresenter("LocalCache", "sync", "member");
 				gateway.toPresenter("LocalCache", "sync", "stages");
+				gateway.toPresenter("LocalCache", "sync", "requirement");
 				//gateway.toView("ColumnView", "reflow");
 				//gateway.toView("SidebarView", "reflowTasks");
 			}

@@ -298,6 +298,12 @@ public class ThreadSafeLocalCache implements Cache {
 			networkRequest.addObserver(syncer);
 			networkRequest.send();
 		}
+		if (request.equals("requirement")) {
+			ThreadSafeSyncObserver syncer = new ThreadSafeSyncObserver(this.gateway);
+			final Request networkRequest = Network.getInstance().makeRequest("requirementmanager/requirement", HttpMethod.GET);
+			networkRequest.addObserver(syncer);
+			networkRequest.send();
+		}
 	}
 
 	/**

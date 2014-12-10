@@ -8,6 +8,8 @@ import java.util.Comparator;
 import com.google.gson.Gson;
 
 import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
+import edu.wpi.cs.wpisuitetng.modules.requirementmanager.models.Requirement;
+import edu.wpi.cs.wpisuitetng.modules.requirementmanager.models.RequirementModel;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.util.TaskUtil;
 
 /**
@@ -21,6 +23,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.util.TaskUtil;
  * @author krpeffer
  * @author rwang3
  * @author rnorlando
+ * @author akshoop
  */
 public class Task extends AbstractModel {
 	/**
@@ -42,6 +45,7 @@ public class Task extends AbstractModel {
 	private int estimatedEffort; 
 	private int actualEffort;
 	private Date dueDate;
+	private Requirement requirement;
 	private List<Activity> activities;
 	private List<Comment> comments;
 	private int priority;
@@ -51,7 +55,7 @@ public class Task extends AbstractModel {
 	 */
 	public Task() {
 		this("A New Task", "A New Task", new Stage("New"), new LinkedList<String>(), 1, 1,
-				new Date(), new LinkedList<Activity>(), new LinkedList<Comment>());
+				new Date(), new Requirement(), new LinkedList<Activity>(), new LinkedList<Comment>());
 	}
 
 	/**
@@ -63,13 +67,15 @@ public class Task extends AbstractModel {
 	 * @param estimatedEffort number that represents how much effort (units of work)
 	 * @param actualEffort number that represents the actual effort
 	 * @param dueDate when the task is due
+	 * @param requirement The specific requirement for the task
 	 * @param activities list of activities for the task
 	 * @param comments lists of comments members put for the task
 	 * @throws IllegalArgumentException
 	 */
 	public Task(String title, String description, Stage stage,
 			List<String> assignedTo, Integer estimatedEffort,
-			Integer actualEffort, Date dueDate, List<Activity> activities, List<Comment> comments) throws IllegalArgumentException {
+			Integer actualEffort, Date dueDate, 
+			Requirement requirement, List<Activity> activities, List<Comment> comments) throws IllegalArgumentException {
 		super();
 		this.title = TaskUtil.validateTitle(title);
 		this.description = TaskUtil.validateDescription(description);
@@ -78,6 +84,7 @@ public class Task extends AbstractModel {
 		this.estimatedEffort = TaskUtil.validateEffort(estimatedEffort);
 		this.actualEffort = TaskUtil.validateEffort(actualEffort);
 		this.dueDate = TaskUtil.validateDueDate(dueDate);
+		this.requirement = requirement;
 		this.activities = activities;
 		this.comments = comments;
 		this.activities = activities;
@@ -96,13 +103,14 @@ public class Task extends AbstractModel {
 			return this.id == task.getId()
 				&& this.title.equals(task.getTitle())
 				&& this.description.equals(task.getDescription())
+				&& this.requirement.equals(task.getRequirement())
 				&& this.estimatedEffort == task.getEstimatedEffort()
 				&& this.actualEffort == task.getActualEffort()
 				&& this.dueDate.equals(task.getDueDate());
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Determines the hashCode of the task to be its ID
 	 */
@@ -317,6 +325,24 @@ public class Task extends AbstractModel {
 	}
 	
 	/**
+	 * Retrieves the associated requirement of the task
+	 * @return requirement Associated Requirement of the task
+	 */
+	public Requirement getRequirement() {
+		return requirement;
+	}
+	
+	/**
+	 * Set the associated requirement of the task
+	 * @param aReq Requirement to use for setting
+	 */
+	public void setRequirement(Requirement aReq) {
+		String reqName = aReq.getName();
+		this.addToHistory(this.getRequirement(), reqName, "Associated Requirement");
+		this.requirement = TaskUtil.validateRequirement(aReq);
+	}
+	
+	/**
 	 * 
 	 * @return the priority value to be listed on screen
 	 */
@@ -326,8 +352,8 @@ public class Task extends AbstractModel {
 	}
 	
 	/**
-	 *  sets the prioity for the task
-	 * @param what the prioirty should be
+	 *  sets the priority for the task
+	 * @param what the priority should be
 	 */
 	public void setActivities(List<Activity> activities) throws IllegalArgumentException  {
 		this.activities = activities;
