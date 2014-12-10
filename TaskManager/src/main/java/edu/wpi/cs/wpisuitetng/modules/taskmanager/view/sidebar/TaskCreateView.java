@@ -61,6 +61,8 @@ public class TaskCreateView extends JPanel implements IView {
 		this.title = new JTextField();
 		this.description = new JTextArea(5, 0);
 		this.stages = new JComboBox<Stage>();
+		this.setStages(iStages);
+		
 		this.createButton = new JButton("Create");
 		this.cancelButton = new JButton("Cancel"); 
 		TaskCreateView that = this;

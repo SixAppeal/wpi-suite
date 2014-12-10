@@ -33,8 +33,6 @@ public class AddManager implements RequestObserver {
 	
 	@Override
 	public void responseSuccess(IRequest iReq) {
-		System.out.println("Did Stuff!");
-		localCache.addVerified(toUpdate, iReq.getResponse().getBody());
 		for (String s: callbacks) {
 			gateway.toPresenter(s.split(":")[0], s.split(":")[1]);
 		}
