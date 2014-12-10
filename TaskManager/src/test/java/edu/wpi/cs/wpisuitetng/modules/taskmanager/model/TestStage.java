@@ -5,6 +5,11 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+/**
+ * Test cases for the Stage class
+ * @author krpeffer
+ *
+ */
 public class TestStage {
 	
 	Stage stage;

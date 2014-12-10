@@ -5,7 +5,11 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-
+/**
+ * Test cases for the Comment Class
+ * @author krpeffer
+ *
+ */
 public class TestTaskComment {
 	
 	Comment comment;
