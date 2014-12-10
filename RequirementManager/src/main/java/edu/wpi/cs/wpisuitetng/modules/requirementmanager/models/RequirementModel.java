@@ -333,6 +333,24 @@ public class RequirementModel extends AbstractListModel<Requirement> {
         
         return estimate;
     }
+    
+    /**
+     * For purpose of Task Manager
+     * 
+	 * Get the requirement with the given name. Returns null if no requirement
+	 * is found
+	 *
+	 * @param name The name of the requirement
+	 * @return the requirement
+	 */
+	public Requirement getRequirementByName(String name) {
+		for (Requirement req : requirements) {
+			if (req.getName().equals(name)) {
+				return req;
+			}
+		}
+		return null;
+	}
 
     /**
      * Sets the instance of RequirementModel
