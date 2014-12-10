@@ -136,7 +136,8 @@ public class ColumnEditView extends JPanel implements IView {
 		
 
 		stageJList.addKeyListener( new KeyListener() {
-
+// TODO
+// TODO
 			@Override
 			public void keyTyped(KeyEvent e) {}
 
@@ -168,6 +169,9 @@ public class ColumnEditView extends JPanel implements IView {
 					newName.setEnabled(true);
 					nameChange.setEnabled(true);
 					deleteBtn.setEnabled(true);
+				}else{
+					deleteBtn.setEnabled(false);
+					nameChange.setEnabled(false);
 				}
 			}
 		});
@@ -197,7 +201,6 @@ public class ColumnEditView extends JPanel implements IView {
 			public void actionPerformed(ActionEvent e) {
 				
 				if( !stageJList.isSelectionEmpty()) {
-
 					if( stages.size() > 1) {
 						stages.remove(stageJList.getSelectedIndex());
 						updateJListAndPublish();
@@ -205,6 +208,8 @@ public class ColumnEditView extends JPanel implements IView {
 						//TODO visual feedback when there is only one stage
 					}
 				}
+				stageJList.setSelectedIndex(0);
+				stageJList.clearSelection();
 				
 			}});
 		
