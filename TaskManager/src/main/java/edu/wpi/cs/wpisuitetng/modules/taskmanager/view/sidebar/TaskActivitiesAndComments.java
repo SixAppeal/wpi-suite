@@ -62,7 +62,6 @@ public class TaskActivitiesAndComments extends JPanel implements IView {
 	 */
 	HistoryView activitiesPanel;
 	JComponent activitiesLabel;
-	JList<Activity> taskActivitiesList; //Displays the Task's activity history
 	
 	JComponent commentPanel;
 	JComponent commentLabel;
@@ -83,7 +82,6 @@ public class TaskActivitiesAndComments extends JPanel implements IView {
 		
 		activitiesLabel = new JLabel("Task History");
 		activitiesLabel.setForeground(labelColor);
-		taskActivitiesList = new JList<Activity>();
 		
 		commentLabel = new JLabel ("Comments");
 		commentLabel.setForeground(labelColor);
@@ -100,10 +98,7 @@ public class TaskActivitiesAndComments extends JPanel implements IView {
 		saveCommentButton.setEnabled(true);
 		
 		//history layout
-		GridBagLayout activitiesLayout = new GridBagLayout();
-		
-		activitiesPanel.setLayout(activitiesLayout);
-		activitiesPanel.setOpaque(false);
+
 		
 		
 		//comments layout
