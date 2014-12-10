@@ -64,7 +64,7 @@ public class ToolbarView extends GradientPanel implements IView {
 		});
 		
 		this.toggleSidebarButton.setHorizontalAlignment(SwingConstants.CENTER);
-		this.toggleSidebarButton.setIcon(new ImageIcon(this.getClass().getResource("icon_right.png")));
+		//this.toggleSidebarButton.setIcon(new ImageIcon(this.getClass().getResource("icon_right.png")));
 		this.toggleSidebarButton.setFont(font);
 		this.toggleSidebarButton.setBorder(BorderFactory.createCompoundBorder(this.toggleSidebarButton.getBorder(), 
 				BorderFactory.createEmptyBorder(10, 12, 10, 12)));
@@ -74,6 +74,7 @@ public class ToolbarView extends GradientPanel implements IView {
 			public void actionPerformed(ActionEvent e) {
 				gateway.toPresenter("TaskPresenter", "toolbarToggleSidebar");
 				
+				/**
 				if (click == true){
 					toggleSidebarButton.setIcon(new ImageIcon(this.getClass().getResource("icon_left.png")));
 					toggleSidebarButton.revalidate();
@@ -87,6 +88,7 @@ public class ToolbarView extends GradientPanel implements IView {
 					toggleSidebarButton.repaint();
 					click = true;
 				}
+				**/
 			}
 		});
 		

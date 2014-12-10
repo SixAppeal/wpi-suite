@@ -447,6 +447,10 @@ public class TaskEditView extends JPanel implements IView {
 						),
 						new HorizontalForm(
 								new FormField("Members", this.membersScrollPane),
+								new Form(
+										new ButtonGroup(addMemberButton),
+										new ButtonGroup(removeMemberButton)
+									),
 								new FormField("Assigned", this.assignedMembersScrollPane)
 								),
 								new FormField("Associated Requirement", this.requirementsComboBox),
@@ -460,6 +464,7 @@ public class TaskEditView extends JPanel implements IView {
 												this.closeButton
 												)
 				);
+		
 
 		this.container.setBackground(SidebarView.SIDEBAR_COLOR);
 		this.container.setLayout(new MigLayout("fill, ins 20", "[260]"));
