@@ -12,15 +12,12 @@
 
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
 
-import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -63,6 +60,8 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.StageList;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar.ColumnView;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar.StageView;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.ButtonGroup;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.Form;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.FormField;
@@ -77,6 +76,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.HorizontalForm
  * @author krpeffer
  * @author wavanrensselaer
  * @author srojas
+ * @author akshoop
  */
 public class TaskEditView extends JPanel implements IView {
 	private static final long serialVersionUID = -8972626054612267276L;
@@ -118,6 +118,7 @@ public class TaskEditView extends JPanel implements IView {
 
 	private List<String> stringArray;
 
+	private TaskEditView tev;
 
 	JListMouseHandler allMembersMouseHandler;
 	JListMouseHandler assignedMembersMouseHandler;
@@ -130,6 +131,7 @@ public class TaskEditView extends JPanel implements IView {
 		this.task = iTask;
 		this.stages = stages;
 		this.requirements = new Requirement[0];
+		this.tev = this;
 		// Poplulates the member list handler with the assigned members
 
 
@@ -202,16 +204,13 @@ public class TaskEditView extends JPanel implements IView {
 		this.requirementTitles = getRequirementTitles();
 		this.requirementsComboBox = new JComboBox<String>();
 		for (String s: this.requirementTitles) this.requirementsComboBox.addItem(s);
-		//		stringArray = new ArrayList<String>();
-		//		stringArray.add("test1");
-		//		stringArray.add("test2");
-		//		for (String s : stringArray) this.requirementsComboBox.addItem(s);
-		if (task.getRequirement() != null) {
-			this.requirementsComboBox.setSelectedItem(task.getRequirement().getName());
+		this.requirementsComboBox.setSelectedIndex(-1);
+		for (int i = 0; i < this.requirementTitles.size(); i++) {
+			if (this.task.getRequirement().getName() == this.requirementTitles.get(i)) {
+				this.requirementsComboBox.setSelectedIndex(i);
+			}
 		}
-		else {
-			this.requirementsComboBox.setSelectedIndex(-1);
-		}
+		System.out.println("req comboBox get selected item: " + this.requirementsComboBox.getSelectedItem());
 
 		this.viewRequirement = new JButton("View");
 		this.attachRequirement = new JButton("Associate");
@@ -235,71 +234,30 @@ public class TaskEditView extends JPanel implements IView {
 			}
 		});
 
-
-		// UI for associated requirement stuff
-//		this.requirementsComboBox.addActionListener(new ActionListener() {
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				System.out.println("action event e command is " + e.getActionCommand());
-//				System.out.println("action event e ID is " + e.getID());
-//				JComboBox<?> cb = (JComboBox<?>) e.getSource();
-//				String reqName = (String) cb.getSelectedItem();
-//				System.out.println("combo box reqname is " + reqName);
-//				for (Requirement r : requirements) {
-//					if (r.getName() == reqName) {
-//						task.setRequirement(r);
-//					}
-//				}
-//				saveTask();
-//			}
-//		});
-		
 		// Associated a requirement to a task
 		this.attachRequirement.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JComboBox<?> cb = requirementsComboBox;
-				String reqName = (String) cb.getSelectedItem();
-				System.out.println("reqname is " + reqName);
+				String reqName = (String) requirementsComboBox.getSelectedItem();
 				for (Requirement r : requirements) {
-					System.out.println("requirement rGetName is " + r.getName());
 					if (r.getName().equals(reqName)) {
 						task.setRequirement(r);
-						System.out.println("task req Name is " + task.getRequirement().getName());
+						saveTask();
 					}
 				}
-				saveTask();
 			}
 		});
 
-		// UI for associated requirement stuff
-//		this.requirementsComboBox.addItemListener(new ItemListener() {
-//			@Override
-//			public void itemStateChanged(ItemEvent e) {
-//				System.out.println("item event e statechange is " + e.getStateChange());
-//				if (e.getStateChange() == ItemEvent.) {
-//					System.out.println("do you see me?");
-//				}
-//			}
-//			
-//		});
-
 		// View button for associated requirement
+		// Parts of code is borrowed from No Comment's EditTaskController.java
 		this.viewRequirement.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String reqName = (String) requirementsComboBox
 						.getSelectedItem();
-				Container c = new TaskEditView(iTask, stages);
-				while (c != null) {
-					if ("Janeway Tab Pane".equals(c.getName())) {
-						break;
-					}
-					c = c.getParent();
-				}
-				System.out.println("c get name is " + c.getName());
+				Container c = tev;
+				c = c.getParent().getParent().getParent().getParent();
 				JTabbedPane tabPane = (JTabbedPane) c;
-				System.out.println("tabPane index of tab req manager is " + tabPane.indexOfTab(RequirementManager.staticGetName()));
 				tabPane.setSelectedIndex(tabPane.indexOfTab(RequirementManager
 						.staticGetName()));
 				ViewEventController.getInstance().editRequirement(

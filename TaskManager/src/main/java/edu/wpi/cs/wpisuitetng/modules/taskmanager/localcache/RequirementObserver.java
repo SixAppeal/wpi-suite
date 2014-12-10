@@ -34,16 +34,8 @@ public class RequirementObserver implements RequestObserver {
 
 	@Override
 	public void responseSuccess(IRequest iReq) {
-		// Parts of this is borrowed from Requirement Manager's GetRequirementsRequestObserver.java
-
-		// Convert the JSON array of requirements to a Requirement object array
-		//Requirement[] requirementsArray = Requirement.fromJsonArray(iReq.getResponse().getBody());
 		String requirements = iReq.getResponse().getBody();
-		
-//		System.out.println("requirement observer 1");
-//		for (Requirement r : requirementsArray) {
-//			System.out.println("requirement title is " + r.getName());
-//		}
+
 		gateway.toView("SidebarView", "passInRequirements", requirements);
 		System.out.println("requirement observer 2");
 	}

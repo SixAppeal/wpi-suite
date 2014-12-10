@@ -45,7 +45,6 @@ public class Task extends AbstractModel {
 	private Integer estimatedEffort; 
 	private Integer actualEffort;
 	private Date dueDate;
-	//private Integer reqID;
 	private Requirement requirement;
 	private List<Activity> activities;
 	private List<Comment> comments;
@@ -341,11 +340,6 @@ public class Task extends AbstractModel {
 	 */
 	public void setRequirement(Requirement aReq) {
 		String reqName = aReq.getName();
-//		for (Requirement r : RequirementModel.getInstance().getRequirements()) {
-//			if (r.getId() == reqID) {
-//				reqName = r.getName();
-//			}
-//		}
 		this.addToHistory(this.getRequirement(), reqName, "Associated Requirement");
 		this.requirement = TaskUtil.validateRequirement(aReq);
 	}
