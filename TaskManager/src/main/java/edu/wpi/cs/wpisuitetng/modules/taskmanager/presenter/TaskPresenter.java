@@ -42,31 +42,54 @@ public class TaskPresenter implements IPresenter{
 		this.selectedTasks = new LinkedList<TaskView>();
 	}
 	
+	/**
+	 * @see IPresenter.setGateway
+	 */
 	@Override
 	public void setGateway(Gateway gateway) {
 		this.gateway = gateway;
 	}
 	
+	/**
+	 * Tells the SidebarView to show the Create Task Panel
+	 */
 	public void toolbarCreate() {
 		this.gateway.toView("SidebarView", "addCreatePanel");
 	}
 	
+	/**
+	 * Tells the SidebarView to show or hide itself
+	 */
 	public void toolbarToggleSidebar() {
 		this.gateway.toView("SidebarView", "toggle");
 	}
 	
+	/**
+	 * Tells the SidebarView to show the EditTask panel
+	 * @param task
+	 */
 	public void editTask(Task task) {
 		this.gateway.toView("SidebarView", "addEditPanel", task);
 	}
 	
+	/**
+	 * Adds every task in the array to the view
+	 * @param tasks
+	 */
 	public void addAllToView( Task[] tasks ) {
 		this.gateway.toView("ColumnView", "setTasks", new Object[] { tasks }); 
 	}
 	
+	/**
+	 * Tells the MemberListHandler to update
+	 */
 	public void notifyMemberHandler() {
 		this.gateway.toView("MemberListHandler", "updateAll", cache);
 	};
 	
+	/**
+	 * Updates all the tasks in the ColumnView
+	 */
 	public void updateTasks() {
 		Task[] tasks_from_cache =  (Task[]) cache.retrieve("task");
 		this.gateway.toView("ColumnView", "setTasks", new Object[] {tasks_from_cache});
@@ -79,13 +102,20 @@ public class TaskPresenter implements IPresenter{
 		this.gateway.toView("SidebarView", "showSearchBox");
 		//this.gateway.toView("ColumnView", "reflow");
 	}
-
+	
+	/**
+	 * places the stages in the column and their names in the Stage panel in the Sidebar
+	 */
 	public void setStages() {
 		StageList newStages = new StageList( Arrays.asList((Stage[]) cache.retrieve("stages")) );
 		this.gateway.toView("ColumnView", "setStages", newStages);
 		this.gateway.toView("SidebarView", "setStages", newStages);
 	}
 	
+	/**
+	 * updates the cache with everything new
+	 * @param sl
+	 */
 	public void publishChanges(StageList sl) {
 		this.gateway.toPresenter("LocalCache", "update", "stages:testing", sl);
 	}
