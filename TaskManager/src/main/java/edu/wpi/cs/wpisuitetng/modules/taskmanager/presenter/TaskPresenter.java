@@ -1,12 +1,25 @@
+/*******************************************************************************
+ * Copyright (c) 2014 -- WPI Suite
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors: Nathan Hughes
+ ******************************************************************************/
+
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter;
 
-import java.util.List;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
 
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.Cache;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Stage;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.StageList;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.TaskModel;
-import edu.wpi.cs.wpisuitetng.network.Request;
-import edu.wpi.cs.wpisuitetng.network.Network;
-import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar.TaskView;
 
 
 /**
@@ -14,103 +27,111 @@ import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
  *
  * @author wavanrensselaer
  * @author dpseaman
+ * @author nhhughes
+ * @author akshoop
  */
-
 public class TaskPresenter implements IPresenter{
 
-	Gateway gateway;
-	Task[] tasks;
-	TaskModel tm;
+	private Gateway gateway;
+	private Cache cache;
+	private LinkedList<TaskView> selectedTasks;
 	
-	/**
-	 * @see IPresenter.setGateway
-	 */
+	public TaskPresenter(Cache cache) {
+		super();
+		this.cache = cache;
+		this.selectedTasks = new LinkedList<TaskView>();
+	}
+	
 	@Override
 	public void setGateway(Gateway gateway) {
 		this.gateway = gateway;
 	}
 	
-	/**
-	 * Tells the SidebarView to show the form for creating a task
-	 */
 	public void toolbarCreate() {
-		this.gateway.toView("SidebarView", "showCreatePanel");
+		this.gateway.toView("SidebarView", "addCreatePanel");
 	}
 	
-	/**
-	 * Creates a new task in the database 
-	 * @param task Task to create
-	 */
-	public void createTask(Task task) {
-		
-		if( tm == null ) tm = new TaskModel();
-		
-		task.setId(tm.getNextID());
-		
-		final Request request = Network.getInstance().makeRequest("taskmanager/task", HttpMethod.PUT);
-		request.setBody(task.toJson());
-		request.send();
-		this.gateway.toView("ColumnView", "addTask", task);
+	public void toolbarToggleSidebar() {
+		this.gateway.toView("SidebarView", "toggle");
 	}
 	
-	/**
-	 * Shows the details of a specific task
-	 * @param task Task to view
-	 */
-	public void viewTask(Task task) {
-		this.gateway.toView("SidebarView", "showDetailPanel", task);
-	}
-	
-	/**
-	 * Updates a task in the database
-	 * @param task Task to update
-	 */
-	public void updateTask(Task task) {
-		final Request request = Network.getInstance().makeRequest("taskmanager/task", HttpMethod.POST);
-		request.setBody(task.toJson());
-		request.send();
-		this.gateway.toView("ColumnView", "removeTask", task);
-		this.gateway.toView("ColumnView", "addTask", task);
-	}
-	
-	/**
-	 * Opens a task for editing
-	 * @param task Task to edit
-	 */
 	public void editTask(Task task) {
-		this.gateway.toView("SidebarView", "showEditPanel", task);
+		this.gateway.toView("SidebarView", "addEditPanel", task);
+	}
+	
+	public void addAllToView( Task[] tasks ) {
+		this.gateway.toView("ColumnView", "setTasks", new Object[] { tasks }); 
+	}
+	
+	public void notifyMemberHandler() {
+		this.gateway.toView("MemberListHandler", "updateAll", cache);
+	};
+	
+	public void updateTasks() {
+		Task[] tasks_from_cache =  (Task[]) cache.retrieve("task");
+		this.gateway.toView("ColumnView", "setTasks", new Object[] {tasks_from_cache});
+	}
+
+	/**
+	 * Tells the SidebarView to show the search box
+	 */
+	public void showSearch() {
+		this.gateway.toView("SidebarView", "showSearchBox");
+		//this.gateway.toView("ColumnView", "reflow");
+	}
+
+	public void setStages() {
+		StageList newStages = new StageList( Arrays.asList((Stage[]) cache.retrieve("stages")) );
+		this.gateway.toView("ColumnView", "setStages", newStages);
+		this.gateway.toView("SidebarView", "setStages", newStages);
+	}
+	
+	public void publishChanges(StageList sl) {
+		this.gateway.toPresenter("LocalCache", "update", "stages:testing", sl);
 	}
 	
 	/**
-	 * Retrieves all tasks from the database and caches the results and sends them to the task view
-	 * @return 
+	 * Updates local cache for search engine to search through.
 	 */
-	public void getAllTasks() {
-		System.out.println("Got Here!");
-		final Request request = Network.getInstance().makeRequest("taskmanager/task", HttpMethod.GET);
-		System.out.println("Got Here Too!");
-		request.addObserver(new GetTasksObserver(this));
-		request.send();
+	public void updateSearch() {
+		Task[] tasks_from_cache = (Task[]) cache.retrieve("task");
+		Task[] archived_tasks = (Task[]) cache.retrieve("archive");
+		ArrayList<Task> all_tasks = concat(tasks_from_cache, archived_tasks);
+		this.gateway.toView("SidebarView", "updateSearchBox", all_tasks);
 	}
 	
 	/**
-	 * Retrieves one task from the database
-	 * @param id ID of the task to retrieve
+	 * Concatenates two task index arrays.
+	 * @param t1 First task array
+	 * @param t2 Second task array
+	 * @return all_tasks All tasks in a list<task>
 	 */
-	public void getTask(int id){
-		if (tasks == null){
-			final Request request = Network.getInstance().makeRequest("taskmanager/task", HttpMethod.GET);
-			request.addObserver(new GetTasksObserver(this, id));
-			request.send();
-		} else {
-			for (int i = 0; i < tasks.length; i++) {
-				if (tasks[i].getId() == id){
-					gateway.toView("DetailView", "taskInfo", tasks[i]);
-					return;
-				}
-			}
-			System.err.println("TaskPresenter: Error getting task " + id);
-		}
+	public ArrayList<Task> concat(Task[] t1, Task[] t2) {
+		ArrayList<Task> all_tasks = new ArrayList<Task>(Arrays.asList(t1));
+		all_tasks.addAll(Arrays.asList(t2));
+		return all_tasks;
+	}
+	 
+	/**
+	 * Selects a task view
+	 * @param add if true, add the taskview to the list of selections, if false deselect all other tasks
+	 * @param taskView the task view to select
+	 */
+	public void selectTask( Boolean add, TaskView taskView) {
+		
+		if ( !add ) deselectAllTasks();
+		
+		taskView.select();
+		selectedTasks.add( taskView );
+		
+	}
+	
+	/**
+	 * Deselects all tasks.
+	 */
+	public void deselectAllTasks() {
+		for (TaskView tv : selectedTasks ) tv.deselect();
+		selectedTasks.clear();
 	}
 }
 

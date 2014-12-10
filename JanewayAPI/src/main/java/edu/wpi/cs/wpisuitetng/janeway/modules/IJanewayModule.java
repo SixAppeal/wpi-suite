@@ -30,5 +30,15 @@ public interface IJanewayModule {
 	 * @return The list of tab models associated with this module.
 	 */
 	public List<JanewayTabModel> getTabs();
+
+	/**
+	 * This method is invoked on each module after login.
+	 */
+	public void finishInit();
+	
+	/**
+	 * This method is invoked on each module once the root JanewayFrame is closed.
+	 */
+	public void cleanup();
 	
 }

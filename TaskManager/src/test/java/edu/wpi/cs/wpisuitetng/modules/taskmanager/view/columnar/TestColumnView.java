@@ -5,41 +5,61 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Stage;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.StageList;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar.MultiColumnView;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar.ColumnView;
 
 /**
- * Tests for the multi-column view
+ * Tests for the ColumnView class
  * @author wavanrensselaer
  */
 public class TestColumnView {
-	MultiColumnView multiColumnView;
+	ColumnView columnView;
+	StageList stages;
+	Task[] tasks;
 	
-	/**
-	 * Initialize a <code>MultiColumnView</code> for testing
-	 */
 	@Before
 	public void setup() {
-		multiColumnView = new MultiColumnView();
+		columnView = new ColumnView();
+		stages = new StageList();
+		stages.add(new Stage("New"));
+		stages.add(new Stage("Scheduled"));
+		stages.add(new Stage("In Progress"));
+		stages.add(new Stage("Complete"));
+		
+		tasks = new Task[] {
+			new Task(),
+			new Task(),
+			new Task()
+		};
 	}
-	
-	/**
-	 * Tests the constructor of MultiColumnView
-	 */
+
 	@Test
 	public void testConstructor() {
-		assertNotNull(multiColumnView.columns);
-		assertNotNull(multiColumnView.container);
-		assertNotNull(multiColumnView.multiColumnPanel);
-		assertNotNull(multiColumnView.scrollPane);
+		assertNotNull(columnView.getTasks());
+		assertNotNull(columnView.getStages());
+		assertArrayEquals(new Task[0], columnView.getTasks());
+		columnView.setStages(stages);
+		assertEquals(stages, columnView.getStages());
 	}
 	
-	public void testRemoveTask() {
-		Task t = new Task();
-		multiColumnView.addTask(t);
-		assertEquals(multiColumnView.columns.get(0).getTaskCount(), 1);
-		t.setTitle("Testing");
-		multiColumnView.removeTask(t);
-		assertEquals(multiColumnView.columns.get(0).getTaskCount(), 0);
+	@Test
+	public void testSetTasks() {
+		columnView.setTasks(tasks);
+		assertArrayEquals(tasks, columnView.getTasks());
+	}
+	
+	@Test
+	public void testSetStages() {
+		columnView.setStages(stages);
+		assertEquals(stages, columnView.getStages());
+	}
+	
+	@Test
+	public void testSetState() {
+		columnView.setState(tasks, stages);
+		assertArrayEquals(tasks, columnView.getTasks());
+		assertEquals(stages, columnView.getStages());
 	}
 }

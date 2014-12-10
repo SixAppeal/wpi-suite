@@ -35,7 +35,9 @@ import edu.wpi.cs.wpisuitetng.modules.defecttracker.entitymanagers.DefectManager
 import edu.wpi.cs.wpisuitetng.modules.postboard.model.PostBoardEntityManager;
 import edu.wpi.cs.wpisuitetng.modules.requirementmanager.models.RequirementEntityManager;
 import edu.wpi.cs.wpisuitetng.modules.requirementmanager.models.iterations.IterationEntityManager;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.StagesEntityManager;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.TaskEntityManager;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.TaskEntityManagerLongPoll;
 
 
 /**
@@ -77,7 +79,9 @@ public class ManagerLayer {
 		map.put("postboardpostboardmessage", new PostBoardEntityManager(data));
 		map.put("requirementmanager" + "requirement", new RequirementEntityManager(data));
 		map.put("requirementmanager" + "iteration", new IterationEntityManager(data));
-		map.put("taskmanager" +"task", new TaskEntityManager(data));
+		map.put("taskmanager" + "task", new TaskEntityManager(data));
+		map.put("taskmanager" + "task2", new TaskEntityManagerLongPoll(data));
+		map.put("taskmanager" + "stages", new StagesEntityManager(data));
 		
 		//add just your module to this list
 		String[] fullModuleList = {"core","defecttracker","postboard","requirementmanager", "taskmanager"};
@@ -184,10 +188,11 @@ public class ManagerLayer {
 	public synchronized String read(String[] args,Cookie[] cook) throws WPISuiteException
 	{		
 		Session s = getSessionFromCookies(cook);
-		   
+		  
 		Model[] m;
 		if(args[2] == null || args[2].equalsIgnoreCase(""))
 		{
+			
 			m = map.get(args[0]+args[1]).getAll(s);
 		}
 		else
@@ -226,12 +231,15 @@ public class ManagerLayer {
 	 */
 	public synchronized String create(String[] args, String content,Cookie[] cook) throws WPISuiteException
 	{
+		
 		Session s = getSessionFromCookies(cook);
-
+		
+		
 		Model m;
 		m = (Model) map.get(args[0]+args[1]).makeEntity(s,content);
-        
+		
         return m.toJson();
+        
 	}
 	
 	/**update
@@ -244,8 +252,10 @@ public class ManagerLayer {
 	 */
 	public synchronized String update(String[] args, String content,Cookie[] cook) throws WPISuiteException
 	{
+		
 		Session s = getSessionFromCookies(cook);
-
+		
+		
 		Model m;
 		m = (Model) map.get(args[0]+args[1]).update(s, content);
 		

@@ -1,99 +1,233 @@
+/*******************************************************************************
+ * 
+ * Copyright (c) 2014 -- WPI Suite
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors: Nathan Hughes, Alexander Shoop, Will Rensselaer, Thomas Meehan, Ryan Orlando, Troy Hughes, Nathan Hughes
+ ******************************************************************************/
+
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.awt.Color;
-import java.awt.Dimension;
+import java.awt.Insets;
+import java.io.IOException;
 
-import javax.swing.BoxLayout;
-import javax.swing.JPanel;
+import javax.swing.ImageIcon;
+import javax.swing.JTabbedPane;
+import javax.swing.UIManager;
+import javax.swing.plaf.basic.BasicTabbedPaneUI;
 
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.ThreadSafeLocalCache;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.StageList;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.util.TaskManagerUtil;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
 
 /**
  * The sidebar that will be the container for task creation, editing, and reading
  * @author wavanrensselaer
+ * @author akshoop
+ * @author rnorlando
+ * @author srojas
+ * @author thhughes
+ * @author nhhughes
+ * @author dpseaman
+ * @author tmeehan
  */
-public class SidebarView extends JPanel implements IView {
+public class SidebarView extends JTabbedPane implements IView {
 	private static final long serialVersionUID = -9157611802121055998L;
 
-	Gateway gateway;
-	
-	private JPanel container;
-	private JPanel curView;
-	private TaskDetailView detailView;
-	private TaskEditView editView;
-	private TaskCreateView createView;
-	
+	public static final Color SIDEBAR_COLOR = new Color(245, 245, 245);
+
+	private Gateway gateway;
+
+	private StageList stages;
+	private ThreadSafeLocalCache cache;
+	// Components
+	private List<IView> viewList;
+	private SearchBox searchView;
+	private ColumnEditView columnEditView;
+
 	/**
 	 * Constructs a sidebar view
+	 * @throws IOException 
 	 */
-	public SidebarView() {
-		this.container = new JPanel();
-		this.detailView = new TaskDetailView();
-		this.createView = new TaskCreateView();
-		this.editView = new TaskEditView();
+
+	public SidebarView() throws IOException {
+		this.viewList = new ArrayList<IView>();
+		this.stages = new StageList();
 		
-		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		this.searchView = new SearchBox();
+		this.viewList.add(searchView);
 		
-		this.container.setLayout(new BoxLayout(this.container, BoxLayout.X_AXIS));
-		this.container.setBackground(new Color(250, 250, 250));
-		this.container.setMinimumSize(new Dimension(360, 0));
-		this.container.setPreferredSize(new Dimension(360, 500));
-		this.container.setMaximumSize(new Dimension(360, Integer.MAX_VALUE));
+		this.columnEditView = new ColumnEditView();
+		this.viewList.add(columnEditView);
 		
-		this.curView = this.createView;
-		this.editView.setVisible(false);
-		this.detailView.setVisible(false);
-		
-		this.container.add(this.createView);
-		this.container.add(this.editView);
-		this.container.add(this.detailView);
-		this.add(container);
+		this.setUI(new BasicTabbedPaneUI() {
+			@Override
+			public void installDefaults() {
+				Color selected = UIManager.getColor("TabbedPane.selected");
+				UIManager.put("TabbedPane.selected", TaskManagerUtil.SIDEBAR_COLOR);
+				
+				super.installDefaults();
+				
+				UIManager.put("TabbedPane.selected", selected);
+				
+				this.contentBorderInsets = new Insets(0, 0, 0, 0);
+				this.highlight = TaskManagerUtil.SIDEBAR_COLOR;
+				this.lightHighlight = TaskManagerUtil.SIDEBAR_COLOR;
+				
+			}
+		});
+
+		this.setOpaque(false);
+		this.setTabPlacement(JTabbedPane.LEFT);
+		this.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
+		this.addTab(null, new ImageIcon(this.getClass().getResource("icon_search.png")),
+				searchView);
+		this.addTab(null, new ImageIcon(this.getClass().getResource("icon_column_edit.png")),
+				columnEditView);
 	}
 	
 	/**
-	 * Shows the creation panel 
+	 * Adds a creation panel to the sidebar
 	 */
-	public void showCreatePanel() {
-		this.curView.setVisible(false);
-		this.curView = this.createView;
-		this.curView.setVisible(true);
+	public void addCreatePanel() {
+		// if there is a tab with the edit pane 
+		for (IView view : viewList) {
+			if (view instanceof TaskCreateView) {
+				if (((TaskCreateView) view).isEmpty()) {
+					this.setSelectedComponent((TaskCreateView)view);
+					return;
+				}
+			}
+		}
+		TaskCreateView createView = new TaskCreateView(this.stages);
+		createView.setGateway(this.gateway);
+		this.viewList.add(createView);
+		this.addTab(null, new ImageIcon(this.getClass().getResource("icon_plus.png")),
+				createView);
+		this.setSelectedComponent(createView);
+		this.setVisible(true);
 	}
 	
 	/**
-	 * Shows the edit panel
+	 * Removes a creation panel from the sidebar
+	 * @param createView The create panel to remove
+	 * Shows the default panel
+	 */
+	public void removeCreatePanel(TaskCreateView createView) {
+		try {
+			this.removeTabAt(this.indexOfComponent(createView));
+			this.viewList.remove(createView);
+		} catch (IndexOutOfBoundsException e) {
+		}
+	}
+
+	/**
+	 * Adds an edit panel to the sidebar
 	 * @param task The task to edit
 	 */
-	public void showEditPanel(Task task) {
-		this.editView.updateView(task);
-		this.curView.setVisible(false);
-		this.curView = this.editView;
-		this.curView.setVisible(true);
+	public void addEditPanel(Task task) {
+		
+		//if there is a tab with the edit pane 
+		for (IView view : viewList) {
+			if (view instanceof TaskEditView) {
+				if (task.equals(((TaskEditView) view).getTask())) {
+					setSelectedComponent((TaskEditView)view);
+					return;
+				}
+			}
+		}
+		
+		
+		TaskEditView editView = new TaskEditView(task, stages);
+		editView.setGateway(this.gateway);
+		this.viewList.add(editView);
+		this.addTab(null, new ImageIcon(this.getClass().getResource("icon_pencil.png")),
+				editView);
+		this.setSelectedComponent(editView);
+		this.setVisible(true);
 	}
 	
 	/**
-	 * Shows the detail panel
-	 * @param task The task to display
+	 * Removes an edit view from the sidebar
+	 * @param editView The edit view to remove
 	 */
-	public void showDetailPanel(Task task) {
-		System.out.println("showDetailPanel");
-		this.curView.setVisible(false);
-		this.curView = this.detailView;
-		this.detailView.updateView(task);
-		this.curView.setVisible(true);
-		this.detailView.revalidate();
+	public void removeEditPanel(TaskEditView editView) {
+		try {
+			this.removeTabAt(this.indexOfComponent(editView));
+			this.viewList.remove(editView);
+		} catch (IndexOutOfBoundsException e) {
+			// Do nothing
+		}
 	}
 	
 	/**
-	 * @see IView.setGateway
+	 * Toggles the visibility of the sidebar
 	 */
+	public void toggle() {
+		this.setVisible(!this.isVisible());
+	}
+
 	@Override
 	public void setGateway(Gateway gateway) {
 		this.gateway = gateway;
-		this.detailView.setGateway(this.gateway);
-		this.editView.setGateway(this.gateway);
-		this.createView.setGateway(this.gateway);
+		for (IView view : this.viewList) {
+			view.setGateway(this.gateway);
+		}
+	}
+	
+	/**
+	 * Updates local cache for search box
+	 * @param all_tasks All tasks (archived and unarchived) from local cache
+	 * @throws IOException 
+	 */
+	public void updateSearchBox(ArrayList<Task> all_tasks) throws IOException {
+		this.searchView.updateIndex(all_tasks);
+	}
+	
+	public void setStages(StageList sl) {
+		this.stages = sl;
+		for (IView v : this.viewList) {
+			if (v instanceof TaskCreateView) {
+				((TaskCreateView) v).setStages(this.stages);
+			}
+		}
+		columnEditView.setStages(this.stages);
 	}
 
+	public Task findTask(Task [] tasks, int id) {
+		for (Task t: tasks) {
+			if (t.getId() == id) {
+				return t;
+			}
+		}
+		return null;
+	}
+	
+	public void setCache(ThreadSafeLocalCache cache) {
+		this.cache = cache;
+	}
+	
+	public void reflowTasks() {
+		Task[] reference = (Task[]) this.cache.retrieve("task");
+		for (int i = 0; i < this.getComponentCount(); i ++) {
+			if (this.getComponent(i) instanceof TaskEditView) {
+				Task taskToFix = ((TaskEditView)this.getComponent(i)).getTask();
+				Task updated = findTask(reference, taskToFix.getId());
+				if (updated != null) {
+					((TaskEditView)this.getComponent(i)).updateEverything(updated);
+				}
+			}
+		}
+	}
+	
 }

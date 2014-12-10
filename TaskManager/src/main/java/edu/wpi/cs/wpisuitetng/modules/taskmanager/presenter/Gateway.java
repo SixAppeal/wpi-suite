@@ -1,7 +1,10 @@
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter;
 
 import java.util.HashMap;
+import java.io.Serializable;
 import java.lang.reflect.Method;
+
+import javax.swing.JPanel;
 
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
 
@@ -12,8 +15,15 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
  * 
  * @author wavanrensselaer
  * @author dpseaman
+ * @author rnorlando
  */
-public class Gateway {
+public class Gateway implements Serializable {
+	
+	private static final long serialVersionUID = 984917443434525486L;
+	
+	/**
+	 * 
+	 */
 	HashMap<String, IPresenter> presenters;
 	HashMap<String, IView> views;
 	
@@ -70,7 +80,9 @@ public class Gateway {
 				}
 				System.err.print(classes[i].getName());
 			}
-			System.err.println("): " + e.getClass().getName());
+			System.err.print("): " + e.getClass().getName() + ":");
+			System.err.println(e.getMessage());
+			e.printStackTrace();
 		}
 	}
 	

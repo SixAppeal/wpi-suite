@@ -83,4 +83,16 @@ public class PostBoard implements IJanewayModule {
     public List<JanewayTabModel> getTabs() {
         return tabs;
     }
+
+	@Override
+	public void finishInit() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void cleanup() {
+		// TODO Auto-generated method stub
+		
+	}
 }

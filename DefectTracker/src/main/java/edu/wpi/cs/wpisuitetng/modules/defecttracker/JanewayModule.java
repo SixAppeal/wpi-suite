@@ -107,4 +107,16 @@ public class JanewayModule implements IJanewayModule {
             }));
         }
     }
+
+	@Override
+	public void finishInit() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void cleanup() {
+		// TODO Auto-generated method stub
+		
+	}
 }
