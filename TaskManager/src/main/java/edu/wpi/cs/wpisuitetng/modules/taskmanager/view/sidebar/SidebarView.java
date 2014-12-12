@@ -236,6 +236,11 @@ public class SidebarView extends JTabbedPane implements IView {
 	}
 	
 	
+	/**
+	 * Updates all of the tasks in each of the TaskEditViews
+	 * 
+	 * @param tasks
+	 */
 	public void updateEditViews(Task[] tasks){
 		List<Task> taskList = Arrays.asList(tasks);
 
@@ -256,7 +261,14 @@ public class SidebarView extends JTabbedPane implements IView {
 	
 	
 	
+	/**
+	 * Goes through and re adds all of the tasks to the TaskEditViews
+	 */
 	
+	/*
+	 * This method causes an infinite loop and crashes the server everytime I run it... Not sure what's up here. 
+	 * 
+	 */
 	public void reflowTasks() {
 		Task[] reference = (Task[]) this.cache.retrieve("task");
 		for (int i = 0; i < this.getComponentCount(); i ++) {

@@ -38,6 +38,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
  * @author wavanrensselaer
  * @author rnorlando
  * @author tmeehan
+ * @author thhughes
  */
 public class StageView extends JPanel implements IView {
 	private static final long serialVersionUID = 2174190454852340046L;

@@ -82,6 +82,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.MemberButtonGr
  * @author srojas
  * @author akshoop
  * @author dpseaman
+ * @author thhughes
 
  */
 public class TaskEditView extends JPanel implements IView {
