@@ -565,6 +565,19 @@ public class TaskEditView extends JPanel implements IView {
 		this.allMembersMouseHandler.clear();
 		this.assignedMembersMouseHandler.clear();
 	}
+	
+	
+	/**
+	 * This takes in a task and updates the task linked to this panel. This is used in the scenario where a task 
+	 * is mutated outside of the task edit view. Most likely only by Drag and Drop - possible to be changed by 
+	 * other implementations. 
+	 * 
+	 * @param updatedTask is the task that is set to the new task in the edit view. 
+	 */
+	public void updateEVTask(Task updatedTask){
+		this.task = updatedTask;
+		
+	}
 
 	/**
 	 * Place the requirement titles into the dropdown menu

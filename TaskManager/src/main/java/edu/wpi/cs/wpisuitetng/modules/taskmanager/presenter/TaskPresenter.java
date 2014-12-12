@@ -93,6 +93,7 @@ public class TaskPresenter implements IPresenter{
 	public void updateTasks() {
 		Task[] tasks_from_cache =  (Task[]) cache.retrieve("task");
 		this.gateway.toView("ColumnView", "setTasks", new Object[] {tasks_from_cache});
+		this.gateway.toView("SidebarView", "updateEditViews",  new Object[] {tasks_from_cache});
 	}
 
 	/**

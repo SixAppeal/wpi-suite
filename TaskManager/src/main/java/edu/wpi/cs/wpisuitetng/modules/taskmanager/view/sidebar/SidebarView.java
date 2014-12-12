@@ -13,6 +13,7 @@
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.awt.Color;
 import java.awt.Insets;
@@ -233,6 +234,28 @@ public class SidebarView extends JTabbedPane implements IView {
 	public void setCache(ThreadSafeLocalCache cache) {
 		this.cache = cache;
 	}
+	
+	
+	public void updateEditViews(Task[] tasks){
+		List<Task> taskList = Arrays.asList(tasks);
+
+		for (IView view : viewList) {
+			if (view instanceof TaskEditView) {
+				for(Task aTask: taskList){
+					if (((TaskEditView) view).getTask().getId() == aTask.getId()) {
+						((TaskEditView) view).updateEVTask(aTask);
+						break;
+					}		
+				}
+				}
+			}
+		}
+		
+	
+	
+	
+	
+	
 	
 	public void reflowTasks() {
 		Task[] reference = (Task[]) this.cache.retrieve("task");
