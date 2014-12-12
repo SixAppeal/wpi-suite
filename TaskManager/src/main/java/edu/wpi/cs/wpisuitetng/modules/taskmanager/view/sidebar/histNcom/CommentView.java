@@ -64,6 +64,7 @@ public class CommentView extends HistoryView{
 			 public void keyPressed(KeyEvent keyEvent) {}
 			 public void keyReleased(KeyEvent keyEvent) {
 				 if( keyEvent.getKeyCode() == KeyEvent.VK_ENTER && commentEntry.getText() != "")	{
+					 keyEvent.consume();
 					 addToComments();
 				 }
 			 }
