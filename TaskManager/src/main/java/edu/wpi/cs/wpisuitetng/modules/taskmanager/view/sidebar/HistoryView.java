@@ -93,9 +93,8 @@ public class HistoryView extends JPanel implements IView{
 		
 		gbc.anchor = GridBagConstraints.PAGE_START;
 		gbc.fill = GridBagConstraints.HORIZONTAL;
-		gbc.weightx = 0;
+		gbc.weightx = 1;
 		gbc.insets = new Insets(0,0,0,0);
-		gbc.gridwidth = 1;
 		gbc.gridx = 0;
 		gbc.gridy = 0;
 		
