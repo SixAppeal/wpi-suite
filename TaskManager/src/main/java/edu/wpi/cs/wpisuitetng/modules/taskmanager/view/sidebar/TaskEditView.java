@@ -544,6 +544,7 @@ public class TaskEditView extends JPanel implements IView {
 	public void moveMembersToAssigned() {	
 		MemberListHandler.getInstance().assignMember(members.getSelectedValuesList());
 		updateMembers();
+		
 		this.allMembersMouseHandler.clear();
 		this.assignedMembersMouseHandler.clear();
 	}
