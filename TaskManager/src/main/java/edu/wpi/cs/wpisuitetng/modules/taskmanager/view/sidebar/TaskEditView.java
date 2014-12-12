@@ -79,11 +79,8 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.HorizontalForm
  * @author krpeffer
  * @author wavanrensselaer
  * @author srojas
-<<<<<<< HEAD
  * @author akshoop
-=======
  * @author dpseaman
->>>>>>> devel
  */
 public class TaskEditView extends JPanel implements IView {
 	private static final long serialVersionUID = -8972626054612267276L;
