@@ -248,4 +248,12 @@ public class TaskCreateView extends JPanel implements IView {
 	public JTextArea getDescription(){
 		return this.description;
 	}
+	
+	/**
+	 *  sets the focus on a text field
+	 */
+	public void fixFocus(){
+		this.title.requestFocusInWindow();
+	}
 }
+
