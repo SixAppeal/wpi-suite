@@ -18,6 +18,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -69,7 +72,7 @@ public class TaskActivitiesAndComments extends JPanel implements IView {
 	
 	JComponent commentPanel;
 	JComponent commentLabel;
-	JList<Comment> taskCommentList;	//Displays the Task's comment history
+	JList<String> taskCommentList;	//Displays the Task's comment history
 	JTextArea taskCommentArea;
 	
 	JButton saveCommentButton; //Saves the comment
@@ -89,7 +92,7 @@ public class TaskActivitiesAndComments extends JPanel implements IView {
 		
 		commentLabel = new JLabel ("Comments");
 		commentLabel.setForeground(labelColor);
-		taskCommentList = new JList<Comment>();
+		taskCommentList = new JList<String>();
 		
 		taskCommentArea = new JTextArea();
 		taskCommentArea.setLineWrap(true);
@@ -207,10 +210,25 @@ public class TaskActivitiesAndComments extends JPanel implements IView {
 
 //		taskActivitiesList.setListData(t.getActivities().toArray(new Activity[0]));
 		activitiesPanel.displayActivities(t);
-		taskCommentList.setListData(t.getComments().toArray(new Comment[0]));
+		
+		displayComments(t.getComments());
+		//taskCommentList.setListData(t.getComments().toArray(new Comment[0]));
 		//saveCommentButton.setEnabled(true);
 		this.revalidate();
 	}
+	
+	public void displayComments(List<Comment> comments){
+		List<String> displayableComments = new LinkedList<String>(); 
+		
+		for (Comment c: comments){
+			displayableComments.add(c.viewableComment());
+		}
+		
+		taskCommentList.setListData(displayableComments.toArray(new String[0]));
+		
+	}
+	
+	
 	
 	/**
 	 * adds the comment in the text area to the list of comments in the task
