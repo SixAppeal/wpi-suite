@@ -372,7 +372,7 @@ public class TaskEditView extends JPanel implements IView {
 		FormField actEffortField = new FormField("Act. Effort", this.actEffortInput, new FormFieldValidator() {
 			@Override
 			public boolean validate(JComponent component) {
-				return ((Integer) ((JSpinner) component).getValue()).intValue() >= 0;
+				return ((Integer) ((JSpinner) component).getValue()).intValue() > 0;
 			}
 
 			@Override
