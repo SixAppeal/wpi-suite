@@ -111,7 +111,7 @@ public class CustomDropTargetListener implements DropTargetListener {
 		try {
 			dragAndDropTaskFlavor = TransferableTaskString.flavor;
 			transferable = dtde.getTransferable();
-			DropTargetContext c = dtde.getDropTargetContext();
+			//DropTargetContext c = dtde.getDropTargetContext();
 			
 			if (transferable.isDataFlavorSupported(dragAndDropTaskFlavor)) {
 				transferableObj = dtde.getTransferable().getTransferData(dragAndDropTaskFlavor);

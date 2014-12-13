@@ -18,7 +18,6 @@ import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
 
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar.TaskView;
 
 /**
  * 
