@@ -24,7 +24,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.Form;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.FormField;
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar.activitiesAndComments.ActivityLabel;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar.histNcom.ActivityLabel;
 
 
 public class HistoryView extends JPanel implements IView{
@@ -93,7 +93,8 @@ public class HistoryView extends JPanel implements IView{
 		
 		gbc.anchor = GridBagConstraints.PAGE_START;
 		gbc.fill = GridBagConstraints.HORIZONTAL;
-		gbc.weightx = 1;
+		gbc.weightx = 0;
+		gbc.weighty = 0;
 		gbc.insets = new Insets(0,0,0,0);
 		gbc.gridx = 0;
 		gbc.gridy = 0;
@@ -107,10 +108,9 @@ public class HistoryView extends JPanel implements IView{
 			}
 			
 			if (i == historyFields.size() - 1) {
-				//gbc.weighty = 1.0;
 				gbc.insets.bottom = 20;
 			}
-			
+			gbc.insets = new Insets(0,0,0,0);
 			this.container.add(j, gbc);
 			
 			i++;
