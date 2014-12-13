@@ -10,7 +10,6 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import net.miginfocom.swing.MigLayout;
 
 /**
  * A custom tabbed pane that actually looks good
@@ -25,7 +24,9 @@ public class SixyTabbedPane extends JPanel {
 	
 	private JPanel tabPanel;
 	private JPanel container;
+	@SuppressWarnings("unused")
 	private ArrayList<Tab> tabs;
+	@SuppressWarnings("unused")
 	private ArrayList<JComponent> components;
 	
 	/**
@@ -50,14 +51,22 @@ public class SixyTabbedPane extends JPanel {
 	 * @author wavanrensselaer
 	 */
 	private class Tab extends JPanel {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 4686177872267720650L;
+		@SuppressWarnings("unused")
 		private Icon icon;
+		@SuppressWarnings("unused")
 		private JLabel iconLabel;
+		@SuppressWarnings("unused")
 		private boolean isActive;
 		
 		/**
 		 * Constructs a Tab
 		 * @param icon The tab's icon
 		 */
+		@SuppressWarnings("unused")
 		public Tab(Icon icon) {
 			this.icon = icon;
 			this.iconLabel = new JLabel(icon);

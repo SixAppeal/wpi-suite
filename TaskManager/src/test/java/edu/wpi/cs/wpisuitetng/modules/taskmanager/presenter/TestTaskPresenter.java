@@ -1,6 +1,5 @@
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter;
 
-import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;

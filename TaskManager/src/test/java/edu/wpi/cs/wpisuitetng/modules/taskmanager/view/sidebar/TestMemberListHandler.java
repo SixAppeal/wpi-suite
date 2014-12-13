@@ -5,12 +5,9 @@ import static org.junit.Assert.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JTextField;
-
 import org.junit.Before;
 import org.junit.Test;
 
-import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar.MemberListHandler;
 
 
@@ -30,6 +27,7 @@ public class TestMemberListHandler {
 	
 	@Before
 	public void setup(){
+		@SuppressWarnings("unused")
 		MemberListHandler testHandler = MemberListHandler.getInstance();
 		
 		testUsernames.add("Username1");

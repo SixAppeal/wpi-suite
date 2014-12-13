@@ -14,7 +14,6 @@ package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
 
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -63,8 +62,6 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.util.TaskManagerUtil;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar.ColumnView;
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar.StageView;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.ButtonGroup;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.Form;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.FormField;
@@ -102,8 +99,10 @@ public class TaskEditView extends JPanel implements IView {
 	private JTextField titleInput;
 	private JTextArea titleLabel;
 	private JTextArea descInput;
+	@SuppressWarnings("unused")
 	private JTextArea descLabel;
 	private JXDatePicker dateInput;
+	@SuppressWarnings("unused")
 	private JLabel dateLabel;
 	private JSpinner estEffortInput;
 	private JSpinner actEffortInput;
@@ -126,6 +125,7 @@ public class TaskEditView extends JPanel implements IView {
 
 	private ActionListener stageBoxListener;
 
+	@SuppressWarnings("unused")
 	private List<String> stringArray;
 
 	private TaskEditView tev;
@@ -671,6 +671,7 @@ public class TaskEditView extends JPanel implements IView {
 
 		public void mouseClicked(MouseEvent e) {}
 
+		@SuppressWarnings("unused")
 		public void update_selected() {
 			if (this.keyboard_event_count == 0) {
 				this.previous_indexes = this.list.getSelectedIndices();

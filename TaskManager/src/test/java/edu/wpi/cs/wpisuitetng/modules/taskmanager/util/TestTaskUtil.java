@@ -2,6 +2,7 @@ package edu.wpi.cs.wpisuitetng.modules.taskmanager.util;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
+
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.util.TaskUtil;;
 
 /**
@@ -104,6 +105,7 @@ public class TestTaskUtil {
 	@Test(expected=IllegalArgumentException.class)
 	public void testvalidateTitle_invalidTitle()throws IllegalArgumentException
 	{
+		@SuppressWarnings("unused")
 		String test = new String();
 		test = TaskUtil.validateTitle(" ");
 		
@@ -130,6 +132,7 @@ public class TestTaskUtil {
 	@Test(expected=IllegalArgumentException.class)
 	public void testvalidateDescription_invalidDesription()throws IllegalArgumentException
 	{
+		@SuppressWarnings("unused")
 		String test = new String();
 		test = TaskUtil.validateDescription(" ");
 		

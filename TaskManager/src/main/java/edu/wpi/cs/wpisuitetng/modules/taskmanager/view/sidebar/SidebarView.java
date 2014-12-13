@@ -51,6 +51,7 @@ public class SidebarView extends JTabbedPane implements IView {
 	private Gateway gateway;
 
 	private StageList stages;
+	@SuppressWarnings("unused")
 	private List<String> requirements;
 	private ThreadSafeLocalCache cache;
 	// Components

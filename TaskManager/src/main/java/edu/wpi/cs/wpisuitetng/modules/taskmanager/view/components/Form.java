@@ -2,14 +2,7 @@ package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.Insets;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import javax.swing.JComponent;
-import javax.swing.JPanel;
 
 /**
  * A panel that handles the layout of form elements.

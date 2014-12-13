@@ -13,7 +13,6 @@
 
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.model.search;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -23,7 +22,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.lucene.queryparser.classic.ParseException;
-import org.junit.Before;
 import org.junit.Test;
 
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
@@ -110,6 +108,7 @@ public class TestSearch {
 		
 		someSearch.createIndex(testList);
 		
+		@SuppressWarnings("unused")
 		List<Integer> result = someSearch.searchFor("sometitle");
 		
 		result = someSearch.searchFor("akshoop");
@@ -149,6 +148,7 @@ public class TestSearch {
 		
 		someSearch.updateIndex(testList);
 		
+		@SuppressWarnings("unused")
 		List<Integer> result = someSearch.searchFor("title");
 		
 		result = someSearch.searchFor("description");
