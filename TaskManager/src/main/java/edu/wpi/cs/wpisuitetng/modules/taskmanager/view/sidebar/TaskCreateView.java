@@ -39,6 +39,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.FormFieldValid
  * @author akshoop
  * @author rnorlando
  * @author srojas
+ * @author dpseaman
  */
 
 public class TaskCreateView extends JPanel implements IView {
@@ -130,13 +131,37 @@ public class TaskCreateView extends JPanel implements IView {
 				return "Please enter a description.";
 			}
 		});
-	
+		
+		FormField dateInputForm = new FormField("Due Date", this.dateInput, new FormFieldValidator() {
+			@Override
+			public boolean validate(JComponent component) {
+				return !(dateInput.getDate() == null);
+			}
+
+			
+			@Override
+			public String getMessage() {
+				return "Please select a due date.";
+			}
+		});
+		
+		this.dateInput.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (dateInput != null) { 
+					dateInputForm.validateInput();
+				}
+				validateForm();
+			}
+		});
+		
+		
 		this.dateInput.addPropertyChangeListener("date", new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
 				task.setDueDate(dateInput.getDate());
 			}
 		});
+		
 
 		this.description.addKeyListener(new KeyAdapter() {
 			public void keyReleased(KeyEvent e) {
@@ -150,7 +175,8 @@ public class TaskCreateView extends JPanel implements IView {
 		this.form = new Form(
 			titleField,
 			descriptionField,
-			new FormField("Due Date", this.dateInput),
+			dateInputForm,
+			// new FormField("Due Date", this.dateInput),
 			new FormField("Stage", stages),
 			new ButtonGroup(
 				this.createButton,
