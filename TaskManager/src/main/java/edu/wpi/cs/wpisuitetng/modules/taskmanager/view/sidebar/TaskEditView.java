@@ -125,8 +125,6 @@ public class TaskEditView extends JPanel implements IView {
 
 	private ActionListener stageBoxListener;
 
-	private List<String> stringArray;
-
 	private TaskEditView tev;
 
 	JListMouseHandler allMembersMouseHandler;
@@ -157,6 +155,7 @@ public class TaskEditView extends JPanel implements IView {
 		this.estEffortInput = new JSpinner(new SpinnerNumberModel(1, null, null, 1));
 		this.actEffortInput = new JSpinner(new SpinnerNumberModel(1, null, null, 1));
 		this.requirementTitles = new ArrayList<String>();
+//		this.requirementTitles.add("");
 
 		this.commentPanel.updateView(this.task);
 
@@ -201,12 +200,15 @@ public class TaskEditView extends JPanel implements IView {
 		this.requirementTitles = getRequirementTitles();
 		this.requirementsComboBox = new JComboBox<String>();
 		for (String s: this.requirementTitles) this.requirementsComboBox.addItem(s);
-		this.requirementsComboBox.setSelectedIndex(-1);
-		for (int i = 0; i < this.requirementTitles.size(); i++) {
-			if (this.task.getRequirement().getName() == this.requirementTitles.get(i)) {
-				this.requirementsComboBox.setSelectedIndex(i);
-			}
-		}
+//		this.requirementsComboBox.setSelectedIndex(-1);
+//		System.out.println("task getreq name is " + this.task.getRequirement().getName());
+//		System.out.println("do i get req titles? this is " + this.requirementTitles);
+//		System.out.println("requirement titles get 0 is " + this.requirementTitles.get(0));
+//		for (int i = 0; i < this.requirementTitles.size(); i++) {
+//			if (this.task.getRequirement().getName() == this.requirementTitles.get(i)) {
+//				this.requirementsComboBox.setSelectedIndex(i);
+//			}
+//		}
 
 		this.viewRequirement = new JButton("View");
 		this.attachRequirement = new JButton("Associate");
@@ -573,6 +575,7 @@ public class TaskEditView extends JPanel implements IView {
 	public void getRequirements(Requirement[] requirementsArray) {
 		this.requirements = requirementsArray;
 		this.requirementTitles = getRequirementTitles();
+		System.out.println("do i get here shoop");
 		ComboBoxModel<String> model = this.requirementsComboBox.getModel();
 		int size = model.getSize();
 		boolean foundRequirement = false;
@@ -607,9 +610,12 @@ public class TaskEditView extends JPanel implements IView {
 	 * Return the titles of the requirements
 	 */
 	public List<String> getRequirementTitles() {
-		this.requirementTitles.clear();
-		for (Requirement r : this.requirements) {
-			requirementTitles.add(r.getName());
+		if (this.requirementTitles.isEmpty()) {
+			this.requirementTitles.clear();
+			for (Requirement r : this.requirements) {
+				System.out.println("jill2");
+				requirementTitles.add(r.getName());
+			}	
 		}
 		return requirementTitles;
 	}

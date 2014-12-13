@@ -162,6 +162,7 @@ public class SidebarView extends JTabbedPane implements IView {
 	
 	/**
 	 * Passes the retrieved requirements array to the Task Edit View
+	 * @param requirements String of all requirements retrieved
 	 */
 	public void passInRequirements(String requirements) {
 		Requirement[] requirementsArray = Requirement.fromJsonArray(requirements);
