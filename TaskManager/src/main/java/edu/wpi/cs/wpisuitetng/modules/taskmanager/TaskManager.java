@@ -25,6 +25,7 @@ import java.util.concurrent.Semaphore;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
+import javax.swing.UIManager;
 
 import edu.wpi.cs.wpisuitetng.janeway.modules.IJanewayModule;
 import edu.wpi.cs.wpisuitetng.janeway.modules.JanewayTabModel;
@@ -88,6 +89,8 @@ public class TaskManager implements IJanewayModule {
 	public TaskManager() throws IOException {
 		name = "Task Manager";
 		tabs = new ArrayList<JanewayTabModel>();
+		
+		UIManager.put("JXDatePicker.arrowIcon", new ImageIcon(this.getClass().getResource("icon_calendar.png")));
 
 		gateway = new Gateway();
 		mainPanel = new GradientPanel();
