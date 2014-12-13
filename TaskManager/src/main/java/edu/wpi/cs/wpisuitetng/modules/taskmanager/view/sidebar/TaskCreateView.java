@@ -136,6 +136,13 @@ public class TaskCreateView extends JPanel implements IView {
 			public void propertyChange(PropertyChangeEvent evt) {
 				task.setDueDate(dateInput.getDate());
 			}
+			
+			@Override
+			public boolean validate(JComponent component) {
+				return !dateInput.getDate().toString().trim().equals("");
+			}
+			
+			
 		});
 
 		this.description.addKeyListener(new KeyAdapter() {
@@ -189,7 +196,8 @@ public class TaskCreateView extends JPanel implements IView {
 	 * @return True if both are fields are empty
 	 */
 	public boolean isEmpty() {
-		if (this.title.getText().trim().equals("") && this.description.getText().trim().equals("")) {
+		if (this.title.getText().trim().equals("") && this.description.getText().trim().equals("") 
+				&& this.dateInput.getDate().toString().trim().equals("")) {
 			return true;
 		}
 		return false;
