@@ -121,6 +121,8 @@ public class SidebarView extends JTabbedPane implements IView {
 				createView);
 		this.setSelectedComponent(createView);
 		this.setVisible(true);
+		
+		createView.fixFocus();
 	}
 	
 	/**
