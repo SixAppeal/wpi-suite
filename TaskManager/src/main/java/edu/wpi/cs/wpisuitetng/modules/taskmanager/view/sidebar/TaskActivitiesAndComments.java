@@ -16,6 +16,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -24,6 +26,8 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import edu.wpi.cs.wpisuitetng.janeway.config.ConfigManager;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Activity;
@@ -88,14 +92,71 @@ public class TaskActivitiesAndComments extends JPanel implements IView {
 		taskCommentList = new JList<Comment>();
 		
 		taskCommentArea = new JTextArea();
+		taskCommentArea.setLineWrap(true);
+		taskCommentArea.setWrapStyleWord(true);
+		taskCommentArea.addKeyListener(new KeyListener(){
+			@Override
+		    public void keyPressed(KeyEvent e){
+		        if(e.getKeyCode() == KeyEvent.VK_ENTER){
+		        	e.consume();
+		        	if(taskCommentArea.getText().trim().equals("")){
+		        		taskCommentArea.setText("");
+		        	}
+		        	else{
+		        		addToComments();
+		        	}
+		        	
+		        }
+
+		        
+		    }
+
+		    @Override
+		    public void keyTyped(KeyEvent e) {
+		    }
+
+		    @Override
+		    public void keyReleased(KeyEvent e) {
+		    }
+		});
+		taskCommentArea.getDocument().addDocumentListener(new DocumentListener(){
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+			    if(taskCommentArea.getText().trim().equals("")){
+			    	 saveCommentButton.setEnabled(false);
+			    }
+			    else {
+			    	saveCommentButton.setEnabled(true);
+			    }
+			  }
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				if(taskCommentArea.getText().trim().equals("")){
+			    	 saveCommentButton.setEnabled(false);
+			    }
+			    else {
+			    	saveCommentButton.setEnabled(true);
+			    }
+			  }
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				if(taskCommentArea.getText().trim().equals("")){
+			    	 saveCommentButton.setEnabled(false);
+			    }
+			    else {
+			    	saveCommentButton.setEnabled(true);
+			    }
+			  }
+		});
 		
 		saveCommentButton = new JButton("Save");
+		saveCommentButton.setEnabled(false);
 		saveCommentButton.addActionListener( new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				addToComments();
 			}
 		});
-		saveCommentButton.setEnabled(true);
+		
 		
 		//history layout
 
@@ -147,7 +208,7 @@ public class TaskActivitiesAndComments extends JPanel implements IView {
 //		taskActivitiesList.setListData(t.getActivities().toArray(new Activity[0]));
 		activitiesPanel.displayActivities(t);
 		taskCommentList.setListData(t.getComments().toArray(new Comment[0]));
-		saveCommentButton.setEnabled(true);
+		//saveCommentButton.setEnabled(true);
 		this.revalidate();
 	}
 	
@@ -159,6 +220,7 @@ public class TaskActivitiesAndComments extends JPanel implements IView {
 		t.addComment(ConfigManager.getConfig().getUserName(), taskCommentArea.getText());
 		updateView(t);
 		taskCommentArea.setText("");
+		saveCommentButton.setEnabled(false);
 	}
 	
 	/**
