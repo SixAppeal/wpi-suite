@@ -28,6 +28,7 @@ import javax.swing.JPanel;
 
 import edu.wpi.cs.wpisuitetng.janeway.modules.IJanewayModule;
 import edu.wpi.cs.wpisuitetng.janeway.modules.JanewayTabModel;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.draganddrop.CustomDropTargetListener;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.Cache;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.InitializeManager;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.ThreadSafeLocalCache;
@@ -126,7 +127,10 @@ public class TaskManager implements IJanewayModule {
 		gateway.addView("ColumnView", columnView);
 		gateway.addView("ToolbarView", toolbarview);
 		gateway.addView("MemberListHandler", MemberListHandler.getInstance());
-				
+		
+		CustomDropTargetListener.setGateway(gateway);
+		
+		
 		t = new Timer();
 
 	}
