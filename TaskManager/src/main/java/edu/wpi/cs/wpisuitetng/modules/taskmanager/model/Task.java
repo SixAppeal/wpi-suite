@@ -103,7 +103,7 @@ public class Task extends AbstractModel {
 			return this.id == task.getId()
 				&& this.title.equals(task.getTitle())
 				&& this.description.equals(task.getDescription())
-				&& this.requirement.equals(task.getRequirement())
+				&& this.requirement == task.getRequirement()
 				&& this.estimatedEffort == task.getEstimatedEffort()
 				&& this.actualEffort == task.getActualEffort()
 				&& this.dueDate.equals(task.getDueDate());

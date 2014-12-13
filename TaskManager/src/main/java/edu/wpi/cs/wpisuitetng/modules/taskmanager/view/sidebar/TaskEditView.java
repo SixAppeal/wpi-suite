@@ -198,6 +198,11 @@ public class TaskEditView extends JPanel implements IView {
 		this.assignedMembers.setLayoutOrientation(JList.VERTICAL);
 
 		this.requirementsComboBox = new JComboBox<String>();
+		setTaskRequirementBox();
+//		FontMetrics fm = this.requirementsComboBox.getFontMetrics(this.requirementsComboBox.getFont());
+//		String smallerString = TaskManagerUtil.reduceString(this.task.getRequirement().getName(), 220, fm);
+//		System.out.println("smallerstring is " + smallerString);
+//		this.requirementsComboBox.getModel().setSelectedItem(smallerString);
 //		for (String s: this.requirementTitles) this.requirementsComboBox.addItem(s);
 //		this.requirementsComboBox.setSelectedIndex(-1);
 //		System.out.println("task getreq name is " + this.task.getRequirement().getName());
@@ -412,6 +417,7 @@ public class TaskEditView extends JPanel implements IView {
 					if (r.getName().equals(reqName)) {
 						task.setRequirement(r);
 						saveTask();
+						System.out.println("button task getreq getname is " + task.getRequirement().getName());
 					}
 				}
 			}
@@ -585,43 +591,34 @@ public class TaskEditView extends JPanel implements IView {
 	 * @param requirementsArray Passed in list of requirements from Requirements Manager
 	 */
 	public void getRequirements(Requirement[] requirementsArray) {
-		System.out.println("combo box has stuff? " + this.requirementsComboBox.getItemCount());
+		FontMetrics fm = this.requirementsComboBox.getFontMetrics(this.requirementsComboBox.getFont());
 		this.requirements = requirementsArray;
 		this.requirementTitles = getRequirementTitles();
-		ComboBoxModel<String> model = this.requirementsComboBox.getModel();
-		int size = model.getSize();
+		int size = this.requirementsComboBox.getItemCount();
+		System.out.println("int size is " + size);
 		boolean foundRequirement = false;
-		if (!task.getRequirement().getName().isEmpty()) {
-			System.out.println("task getreq getname is NOT empty");
-			System.out.println("task getreq getname: " + this.task.getRequirement().getName());
-//			this.requirementsComboBox.setSelectedItem(task.getRequirement().getName());
-			for (int i = 0; i < this.requirementTitles.size(); i++) {
-				System.out.println("this reqTitles i is " + this.requirementTitles.get(i));
-				if (this.task.getRequirement().getName().equals(this.requirementTitles.get(i))) {
-					System.out.println("req comboBox current index1 is: " + this.requirementsComboBox.getSelectedIndex());
-					//this.requirementsComboBox.setSelectedIndex(i);
-					this.requirementsComboBox.setSelectedItem(this.task.getRequirement().getName());
-					System.out.println("req comboBox current index2 is: " + this.requirementsComboBox.getSelectedIndex());
-				}
-			}
-		}
-		if (size < requirementTitles.size()) {
+		if (size < this.requirementTitles.size()) {
 			for (String s : this.requirementTitles) {
 				foundRequirement = false;
 				for (int i = 0; i < size; i++) {
-					Object element = model.getElementAt(i);
-					if (s == element) {
+					Object element = this.requirementsComboBox.getItemAt(i);
+					if (s.equals(element)) {
 						foundRequirement = true;
 					}
 				}
 				if (!foundRequirement) {
-					FontMetrics fm = this.requirementsComboBox.getFontMetrics(this.requirementsComboBox.getFont());
 					String reducedString = TaskManagerUtil.reduceString(s, 220, fm);
 					this.requirementsComboBox.addItem(reducedString);
 				}
 			}	
-			if (!task.getRequirement().getName().isEmpty()) {
-				this.requirementsComboBox.setSelectedItem(task.getRequirement().getName());
+			if (!this.task.getRequirement().getName().isEmpty()) {
+				setTaskRequirementBox();
+//				System.out.println("first task getreq getname is NOT empty");
+//				System.out.println("first task getreq getname: " + this.task.getRequirement().getName());
+//				String selectedString = TaskManagerUtil.reduceString(this.task.getRequirement().getName(), 220, fm);
+//				System.out.println("selected string is " + selectedString);
+//				this.requirementsComboBox.getModel().setSelectedItem(selectedString);
+//				this.requirementsComboBox.setSelectedItem(this.task.getRequirement().getName());
 			}
 			else {
 				this.requirementsComboBox.setSelectedIndex(-1);
@@ -641,6 +638,24 @@ public class TaskEditView extends JPanel implements IView {
 			}	
 		}
 		return requirementTitles;
+	}
+	
+	/**
+	 * Sets requirement dropdown menu based on the requirement of specified task
+	 * Code is partially borrowed from What? We Thought This Was Bio's NewTaskTab.java file
+	 */
+	public void setTaskRequirementBox() {
+		// Set the requirement box
+		for (int i = 0; i < this.requirementsComboBox.getItemCount(); i++) {
+			FontMetrics fm = this.requirementsComboBox.getFontMetrics(this.requirementsComboBox.getFont());
+			String req = this.requirementsComboBox.getItemAt(i);
+			System.out.println("req is " + req);
+			String reducedTaskReq = TaskManagerUtil.reduceString(this.task.getRequirement().getName(), 220, fm);
+			System.out.println("reducedTaskReq is " + reducedTaskReq);
+			if (reducedTaskReq.equals(req)) {
+				this.requirementsComboBox.setSelectedItem(req);
+			}
+		}
 	}
 
 
