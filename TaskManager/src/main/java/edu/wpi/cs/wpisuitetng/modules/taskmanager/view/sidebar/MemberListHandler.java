@@ -53,11 +53,8 @@ public class MemberListHandler implements IView {
 	 *            This gets and updates the users that are within the system
 	 */
 	public void updateAll(ThreadSafeLocalCache localCache) {
-//		System.out.println("I made it here!! ");
-//		System.out.println(Thread.currentThread().getStackTrace());
 		setGlobal(localCache);
 		updateUnassigned();
-		// this.gateway.toView("SidebarView","doStuff");
 	}
 
 	/**

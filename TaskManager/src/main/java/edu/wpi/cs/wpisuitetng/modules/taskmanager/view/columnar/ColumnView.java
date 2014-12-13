@@ -62,6 +62,7 @@ public class ColumnView extends JPanel implements IView {
 	// Components
 	private JPanel container;
 	private JScrollPane scrollPane;
+	private GridBagLayout layout;
 	
 	private static DataFlavor dragAndDropPanelDataFlavor = null;
 	
@@ -72,9 +73,10 @@ public class ColumnView extends JPanel implements IView {
 	public ColumnView() {
 		this.container = new JPanel();
 		this.scrollPane = new JScrollPane(this.container);
+		this.layout = new GridBagLayout();
 
 		this.container.setOpaque(false);
-		this.container.setLayout(new GridBagLayout());
+		this.container.setLayout(this.layout);
 
 		this.scrollPane.setOpaque(false);
 		this.scrollPane.getViewport().setOpaque(false);
@@ -165,6 +167,7 @@ public class ColumnView extends JPanel implements IView {
 			} else {
 				stageView.setTasks(this.getTasksForStage(this.stages.get(i)));
 			}
+			this.updateConstraints(stageView, i);
 		}
 		for (; i < this.stages.size(); i++) {
 			gbc.insets.left = i == 0 ? 20 : 0;
@@ -173,9 +176,29 @@ public class ColumnView extends JPanel implements IView {
 					this.getTasksForStage(this.stages.get(i)));
 			stageView.setGateway(this.gateway);
 			this.container.add(stageView, gbc);
+			this.updateConstraints(stageView, i);
 		}
 		
 		this.scrollPane.revalidate();
+		this.scrollPane.repaint();
+	}
+	
+	/**
+	 * Updates the constraints on a component in the container.
+	 * This is a helper method to reflow.
+	 * @param view The component to update
+	 * @param i The index of this component
+	 */
+	private void updateConstraints(StageView view, int i) {
+		GridBagConstraints gbc = this.layout.getConstraints(view);
+		if (i == this.stages.size() - 1) {
+			gbc.weightx = 1.0;
+			gbc.insets.right = 70;
+		} else {
+			gbc.weightx = 0;
+			gbc.insets.right = 20;
+		}
+		this.layout.setConstraints(view, gbc);
 	}
 
 	/**

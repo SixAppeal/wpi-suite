@@ -49,6 +49,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.FormField;
  * @author thhughes
  * @author srojas
  * @author dpseaman
+ * @author tmeehan
  *
  */
 public class ColumnEditView extends JPanel implements IView {
@@ -66,6 +67,7 @@ public class ColumnEditView extends JPanel implements IView {
 	private JButton moveUpBtn;
 	private JButton moveDnBtn;
 	private JButton nameChange;
+	private JButton deleteBtn;
 	private Gateway gateway;
 
 	public ColumnEditView() { 
@@ -77,6 +79,7 @@ public class ColumnEditView extends JPanel implements IView {
 		this.titleEntry = new JTextField();
 		this.newName = new JTextField();
 		this.nameChange = new JButton("Edit Name");
+		this.deleteBtn = new JButton("Delete Stage");
 		
 		this.titleEntry.setBorder(FormField.BORDER_NORMAL);
 		this.newName.setBorder(FormField.BORDER_NORMAL);
@@ -88,10 +91,11 @@ public class ColumnEditView extends JPanel implements IView {
 		this.moveUpBtn.setPreferredSize(new Dimension(100, 25));
 		this.moveDnBtn.setPreferredSize(new Dimension(100, 25));
 		
-		// disable stage name editing 
+		// disable stage name editing and delete when there's no stage selected
 		if (stageJList.isSelectionEmpty()){
 			this.newName.setEnabled(false);
 			this.nameChange.setEnabled(false);
+			this.deleteBtn.setEnabled(false);
 		}
 
 		addButton.addActionListener( new ActionListener() {
@@ -132,7 +136,8 @@ public class ColumnEditView extends JPanel implements IView {
 		
 
 		stageJList.addKeyListener( new KeyListener() {
-
+// TODO
+// TODO
 			@Override
 			public void keyTyped(KeyEvent e) {}
 
@@ -155,7 +160,7 @@ public class ColumnEditView extends JPanel implements IView {
 		});
 		
 		
-		// turns edit field back on when a stage is selected
+		// turns edit field and delete back on when a stage is selected
 		stageJList.addListSelectionListener(new ListSelectionListener(){
 
 			@Override
@@ -163,9 +168,12 @@ public class ColumnEditView extends JPanel implements IView {
 				if (!stageJList.isSelectionEmpty()) {
 					newName.setEnabled(true);
 					nameChange.setEnabled(true);
+					deleteBtn.setEnabled(true);
+				}else{
+					deleteBtn.setEnabled(false);
+					nameChange.setEnabled(false);
 				}
 			}
-			
 		});
 
 		moveUpBtn.addActionListener( new ActionListener() {
@@ -188,11 +196,35 @@ public class ColumnEditView extends JPanel implements IView {
 				changeNameStage();
 			}});
 		
+		deleteBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				if( !stageJList.isSelectionEmpty()) {
+					if( stages.size() > 1) {
+						stages.remove(stageJList.getSelectedIndex());
+						updateJListAndPublish();
+					} else {
+						//TODO visual feedback when there is only one stage
+					}
+				}
+				stageJList.setSelectedIndex(0);
+				stageJList.clearSelection();
+				
+			}});
+		
 
 		this.setBackground(TaskManagerUtil.SIDEBAR_COLOR);
 		GridBagConstraints gbc = new GridBagConstraints();
 		this.setLayout(new GridBagLayout());
+		
+		//The formatting here could use some work
+		
+		//It would help a ton if anyone knew which dimensions each number
+			//in the insets object acutally corresponded to
 
+		//top left bottom right
+		
 		gbc.gridx = 0;
 		gbc.gridy = 0;
 		gbc.weightx = 1.0;
@@ -233,14 +265,23 @@ public class ColumnEditView extends JPanel implements IView {
 		gbc.gridx = 0;
 		gbc.gridy = 3;
 		gbc.weighty = 0.0;
-		gbc.insets = new Insets(10, 20, 20, 10);
+		gbc.insets = new Insets(10, 20, 0, 10);
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		this.add(moveDnBtn, gbc);
 
 		gbc.gridx = 1;
 		gbc.gridy = 3;
-		gbc.insets = new Insets(10, 0, 20, 20);
+		gbc.insets = new Insets(10, 0, 0, 20);
 		this.add(moveUpBtn, gbc);
+		
+		gbc.weightx = 1.0;
+		gbc.gridx = 0;
+		gbc.gridy = 4;
+		gbc.weighty = 0.0;
+		gbc.gridwidth = 2;
+		gbc.insets = new Insets(10, 20, 20, 10);
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		this.add(deleteBtn, gbc);
 	}
 
 	protected void moveCurrentTaskUp() {

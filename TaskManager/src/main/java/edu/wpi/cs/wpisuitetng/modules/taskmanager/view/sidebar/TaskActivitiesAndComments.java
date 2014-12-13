@@ -60,9 +60,8 @@ public class TaskActivitiesAndComments extends JPanel implements IView {
 	/**
 	 * Declare all the JLabels and Panels to be placed in the Tabbed View
 	 */
-	JComponent activitiesPanel;
+	HistoryView activitiesPanel;
 	JComponent activitiesLabel;
-	JList<Activity> taskActivitiesList; //Displays the Task's activity history
 	
 	JComponent commentPanel;
 	JComponent commentLabel;
@@ -78,12 +77,11 @@ public class TaskActivitiesAndComments extends JPanel implements IView {
 		
 		activitiesAndComments = new JTabbedPane();
 		
-		activitiesPanel = new JPanel();
+		activitiesPanel = new HistoryView();
 		commentPanel = new JPanel();
 		
 		activitiesLabel = new JLabel("Task History");
 		activitiesLabel.setForeground(labelColor);
-		taskActivitiesList = new JList<Activity>();
 		
 		commentLabel = new JLabel ("Comments");
 		commentLabel.setForeground(labelColor);
@@ -100,28 +98,8 @@ public class TaskActivitiesAndComments extends JPanel implements IView {
 		saveCommentButton.setEnabled(true);
 		
 		//history layout
-		GridBagLayout activitiesLayout = new GridBagLayout();
+
 		
-		activitiesPanel.setLayout(activitiesLayout);
-		activitiesPanel.setOpaque(false);
-		
-		GridBagConstraints activitiesgbc = new GridBagConstraints();
-		activitiesgbc.anchor = GridBagConstraints.PAGE_START;
-		activitiesgbc.fill = GridBagConstraints.HORIZONTAL;
-		activitiesgbc.weightx = 1.0;
-		activitiesgbc.insets = new Insets(20, 20, 0, 20);
-		activitiesgbc.gridwidth = 2;
-		activitiesgbc.gridx = 0;
-		activitiesgbc.gridy = 0;
-		
-		activitiesgbc.insets.top = 20;
-		activitiesgbc.gridx = 0;
-		activitiesPanel.add(activitiesLabel,activitiesgbc);
-		activitiesgbc.weighty = 1.0;
-		activitiesgbc.weightx = 0.0;
-		activitiesgbc.insets.top = 5;
-		activitiesgbc.gridy = 1;
-		activitiesPanel.add(taskActivitiesList, activitiesgbc);
 		
 		//comments layout
 		GridBagLayout commentsLayout = new GridBagLayout();
@@ -166,7 +144,8 @@ public class TaskActivitiesAndComments extends JPanel implements IView {
 		
 		this.t = t;
 
-		taskActivitiesList.setListData(t.getActivities().toArray(new Activity[0]));
+//		taskActivitiesList.setListData(t.getActivities().toArray(new Activity[0]));
+		activitiesPanel.displayActivities(t);
 		taskCommentList.setListData(t.getComments().toArray(new Comment[0]));
 		saveCommentButton.setEnabled(true);
 		this.revalidate();
