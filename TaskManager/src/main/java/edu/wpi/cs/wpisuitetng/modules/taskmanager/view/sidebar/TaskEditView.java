@@ -155,7 +155,6 @@ public class TaskEditView extends JPanel implements IView {
 		this.estEffortInput = new JSpinner(new SpinnerNumberModel(1, null, null, 1));
 		this.actEffortInput = new JSpinner(new SpinnerNumberModel(1, null, null, 1));
 		this.requirementTitles = new ArrayList<String>();
-//		this.requirementTitles.add("");
 
 		this.commentPanel.updateView(this.task);
 
@@ -197,9 +196,8 @@ public class TaskEditView extends JPanel implements IView {
 		this.assignedMembers.setVisibleRowCount(4);				
 		this.assignedMembers.setLayoutOrientation(JList.VERTICAL);
 
-		this.requirementTitles = getRequirementTitles();
 		this.requirementsComboBox = new JComboBox<String>();
-		for (String s: this.requirementTitles) this.requirementsComboBox.addItem(s);
+//		for (String s: this.requirementTitles) this.requirementsComboBox.addItem(s);
 //		this.requirementsComboBox.setSelectedIndex(-1);
 //		System.out.println("task getreq name is " + this.task.getRequirement().getName());
 //		System.out.println("do i get req titles? this is " + this.requirementTitles);
@@ -573,14 +571,25 @@ public class TaskEditView extends JPanel implements IView {
 	 * @param requirementsArray Passed in list of requirements from Requirements Manager
 	 */
 	public void getRequirements(Requirement[] requirementsArray) {
+		System.out.println("combo box has stuff? " + this.requirementsComboBox.getItemCount());
 		this.requirements = requirementsArray;
 		this.requirementTitles = getRequirementTitles();
-		System.out.println("do i get here shoop");
 		ComboBoxModel<String> model = this.requirementsComboBox.getModel();
 		int size = model.getSize();
 		boolean foundRequirement = false;
 		if (!task.getRequirement().getName().isEmpty()) {
-			this.requirementsComboBox.setSelectedItem(task.getRequirement().getName());
+			System.out.println("task getreq getname is NOT empty");
+			System.out.println("task getreq getname: " + this.task.getRequirement().getName());
+//			this.requirementsComboBox.setSelectedItem(task.getRequirement().getName());
+			for (int i = 0; i < this.requirementTitles.size(); i++) {
+				System.out.println("this reqTitles i is " + this.requirementTitles.get(i));
+				if (this.task.getRequirement().getName().equals(this.requirementTitles.get(i))) {
+					System.out.println("req comboBox current index1 is: " + this.requirementsComboBox.getSelectedIndex());
+					//this.requirementsComboBox.setSelectedIndex(i);
+					this.requirementsComboBox.setSelectedItem(this.task.getRequirement().getName());
+					System.out.println("req comboBox current index2 is: " + this.requirementsComboBox.getSelectedIndex());
+				}
+			}
 		}
 		if (size < requirementTitles.size()) {
 			for (String s : this.requirementTitles) {
