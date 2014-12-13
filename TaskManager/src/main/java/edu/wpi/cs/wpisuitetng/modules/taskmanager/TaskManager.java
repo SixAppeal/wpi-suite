@@ -25,9 +25,11 @@ import java.util.concurrent.Semaphore;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
+import javax.swing.UIManager;
 
 import edu.wpi.cs.wpisuitetng.janeway.modules.IJanewayModule;
 import edu.wpi.cs.wpisuitetng.janeway.modules.JanewayTabModel;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.draganddrop.CustomDropTargetListener;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.Cache;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.InitializeManager;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.ThreadSafeLocalCache;
@@ -87,6 +89,8 @@ public class TaskManager implements IJanewayModule {
 	public TaskManager() throws IOException {
 		name = "Task Manager";
 		tabs = new ArrayList<JanewayTabModel>();
+		
+		UIManager.put("JXDatePicker.arrowIcon", new ImageIcon(this.getClass().getResource("icon_calendar.png")));
 
 		gateway = new Gateway();
 		mainPanel = new GradientPanel();
@@ -126,7 +130,10 @@ public class TaskManager implements IJanewayModule {
 		gateway.addView("ColumnView", columnView);
 		gateway.addView("ToolbarView", toolbarview);
 		gateway.addView("MemberListHandler", MemberListHandler.getInstance());
-				
+		
+		CustomDropTargetListener.setGateway(gateway);
+		
+		
 		t = new Timer();
 
 	}
