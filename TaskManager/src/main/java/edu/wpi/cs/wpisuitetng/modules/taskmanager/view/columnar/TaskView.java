@@ -269,6 +269,8 @@ public class TaskView extends JPanel implements  IView {
 		String text = TaskManagerUtil.reduceString(this.task.getTitle(), MAX_TITLE_LENGTH,
 				this.titleLabel.getFontMetrics(this.titleLabel.getFont()));
 		this.titleLabel.setText(text);
+		boolean urgent = task.getDueDate().after(new Date(System.currentTimeMillis() - 86400000)); //urgent if late
+		this.dateLabel.setForeground(urgent?new Color(180, 180, 180):new Color(255, 102, 0));
 		this.dateLabel.setText(new SimpleDateFormat("MM/dd/yy").format(this.task.getDueDate()));
 		
 		this.titleLabel.revalidate();
