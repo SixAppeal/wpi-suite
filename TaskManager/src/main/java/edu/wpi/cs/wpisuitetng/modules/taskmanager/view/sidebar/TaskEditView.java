@@ -138,7 +138,8 @@ public class TaskEditView extends JPanel implements IView {
 	 * Constructor
 	 */
 	public TaskEditView(Task iTask, StageList stages) {
-		this.task = iTask;
+		this.task = new Task();
+		this.task.updateFrom(iTask);
 		this.stages = stages;
 		this.requirements = new Requirement[0];
 		this.tev = this;
@@ -395,7 +396,6 @@ public class TaskEditView extends JPanel implements IView {
 		stageBoxListener = new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Fire in the hole!");
 				if( stageInput.getSelectedIndex() > -1) {
 					task.setStage((Stage) stageInput.getSelectedItem());
 					saveTask();
@@ -544,11 +544,9 @@ public class TaskEditView extends JPanel implements IView {
 	 * Takes the members that the user has selected and moves them to the list of members assigned to a task
 	 */
 	public void moveMembersToAssigned() {	
-		System.out.println("Moving to assigned!");
 		MemberListHandler.getInstance().assignMember(members.getSelectedValuesList());
 		updateMembers();
 
-		System.out.println(MemberListHandler.getInstance().getAssigned().size());
 		this.task.setAssignedTo(MemberListHandler.getInstance().getAssigned());
 		saveTask();
 
@@ -564,7 +562,6 @@ public class TaskEditView extends JPanel implements IView {
 		MemberListHandler.getInstance().unAssignMember(assignedMembers.getSelectedValuesList());
 		updateMembers();
 		this.task.setAssignedTo(MemberListHandler.getInstance().getAssigned());
-		System.out.println(MemberListHandler.getInstance().getAssigned().size());
 		saveTask();
 		this.allMembersMouseHandler.clear();
 		this.assignedMembersMouseHandler.clear();
@@ -579,8 +576,7 @@ public class TaskEditView extends JPanel implements IView {
 	 * @param updatedTask is the task that is set to the new task in the edit view. 
 	 */
 	public void updateEVTask(Task updatedTask){
-		this.task = updatedTask;
-		
+		this.task.updateFrom(updatedTask);
 	}
 
 	/**

@@ -202,8 +202,7 @@ public class TaskEntityManagerLongPoll implements EntityManager<Task>{
 		if(!db.save(existingTask, session.getProject())) {
 			throw new WPISuiteException();
 		}
-		TaskPollTracker.getInstance().update(updatedTask);
-		System.out.println("Task updated in update in Entity Manager");
+		TaskPollTracker.getInstance().update(existingTask);
 		return existingTask;
 	}
 

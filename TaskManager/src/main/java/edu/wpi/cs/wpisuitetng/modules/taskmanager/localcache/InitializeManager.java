@@ -21,7 +21,6 @@ public class InitializeManager implements RequestObserver{
 	@Override
 	public void responseSuccess(IRequest iReq) {
 		String[] splitPath = iReq.getUrl().getPath().split("/");
-		System.out.println(iReq.getUrl().getPath());
 		if (splitPath[splitPath.length-1].equals("stages")) {
 			String updateValue = iReq.getResponse().getBody();
 			StageList[] returned = new Gson().fromJson(updateValue, StageList[].class);

@@ -157,12 +157,6 @@ public class StageView extends JPanel implements IView {
 		
 		TaskView taskView;
 		int i;
-		System.out.println("Updating Stage View using these Tasks:");
-		int count = 0;
-		for (Task t: this.tasks) {
-			System.out.println(count + ") " + t);
-			count++;
-		}
 		
 		for (i = 0; i < this.container.getComponentCount(); i++) {
 			taskView = (TaskView) this.container.getComponent(i);
