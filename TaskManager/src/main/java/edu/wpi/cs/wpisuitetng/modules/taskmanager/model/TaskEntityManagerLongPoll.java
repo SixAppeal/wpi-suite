@@ -6,8 +6,15 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors: Nathan Hughes
+ * Contributors: Nathan Hughes, Troy Hughes, Santiago Rojas
  ******************************************************************************/
+
+
+/**
+ * @author nhhughes
+ * @author srojas
+ * @author thhughes
+ */
 
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.model;
 
@@ -25,7 +32,6 @@ import edu.wpi.cs.wpisuitetng.exceptions.NotImplementedException;
 import edu.wpi.cs.wpisuitetng.exceptions.WPISuiteException;
 import edu.wpi.cs.wpisuitetng.modules.EntityManager;
 import edu.wpi.cs.wpisuitetng.modules.Model;
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.util.TaskUtil;
 
 /**
@@ -77,7 +83,10 @@ public class TaskEntityManagerLongPoll implements EntityManager<Task>{
 		if(!db.save(newTask, s.getProject())) {
 			throw new WPISuiteException();
 		}
-		TaskPollTracker.getInstance().update();
+		Task passNewTask = new Task();
+		passNewTask.updateFrom(newTask);
+		TaskPollTracker.getInstance().update(passNewTask);
+		System.out.println("task updated in makeEntity! ");
 		return newTask;
 	}
 
@@ -179,7 +188,8 @@ public class TaskEntityManagerLongPoll implements EntityManager<Task>{
 	@Override
 	public Task update(Session session, String content) throws WPISuiteException {
 		Task updatedTask = TaskUtil.fromJson(content);
-
+//		System.out.println("Task to be updated: " + updatedTask);
+//		System.out.flush();
 		//Gets old task, modifies it, and saves it again
 		List<Model> oldTasks = db.retrieve(Task.class, "id", updatedTask.getId(), session.getProject());
 		if(oldTasks.size() < 1 || oldTasks.get(0) == null) {
@@ -194,7 +204,7 @@ public class TaskEntityManagerLongPoll implements EntityManager<Task>{
 		if(!db.save(existingTask, session.getProject())) {
 			throw new WPISuiteException();
 		}
-		TaskPollTracker.getInstance().update();
+		TaskPollTracker.getInstance().update(existingTask);
 		return existingTask;
 	}
 
@@ -209,12 +219,24 @@ public class TaskEntityManagerLongPoll implements EntityManager<Task>{
 	public String advancedGet(Session arg0, String[] arg1) {
 		Thread thisSession = Thread.currentThread();
 		TaskPollTracker.getInstance().register(thisSession);
+		System.out.println("Thread has been registered! " + thisSession );
+		System.out.flush();
 		try {
 			Thread.sleep(60000);
 		} catch (InterruptedException e) {
 		}
-		TaskPollTracker.getInstance().remove(thisSession);
-		return new Gson().toJson(db.retrieveAll(new Task(), arg0.getProject()).toArray(new Task[0]), Task[].class);
+		try {
+			TaskPollTracker.getInstance().getLock().acquire();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+//		TaskPollTracker.getInstance().remove(thisSession);
+//		System.out.println("Thread has been removed! " + thisSession );
+//		System.out.flush();
+//		return new Gson().toJson(db.retrieveAll(new Task(), arg0.getProject()).toArray(new Task[0]), Task[].class);
+		Task taskArr[] = new Task[1];
+		taskArr[0] = TaskPollTracker.getInstance().getTask();
+		return new Gson().toJson(taskArr);
 	}
 
 	/**

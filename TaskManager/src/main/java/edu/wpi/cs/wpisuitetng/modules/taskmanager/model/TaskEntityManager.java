@@ -21,9 +21,8 @@ import edu.wpi.cs.wpisuitetng.exceptions.NotImplementedException;
 import edu.wpi.cs.wpisuitetng.exceptions.WPISuiteException;
 import edu.wpi.cs.wpisuitetng.modules.EntityManager;
 import edu.wpi.cs.wpisuitetng.modules.Model;
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.util.TaskUtil;
 
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.util.TaskUtil;
 /**
  * Entity Manager for the Task Model.  This is responsible for storing and retrieving all data requests
  * from the client (i.e. Janeway). WPI Suite, when it receives a request, finds this entity manager and calls

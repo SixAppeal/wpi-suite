@@ -9,6 +9,7 @@ import com.google.gson.Gson;
  * 
  * @author krpeffer
  * @author rwang3
+ * @author thhughes
  *
  */
 
@@ -52,6 +53,22 @@ public class Comment implements Serializable {
 	 */
 	public String getUser(){
 		return this.user;
+	}
+	
+	/**
+	 * Checks to see if two comments are equal. 
+	 */
+	@Override 
+	public boolean equals(Object other){
+		if (this==other) {
+			return true;
+		}
+		boolean result = false;
+		if(other instanceof Comment){
+			Comment that = (Comment) other;
+			result = this.getUser().equals(that.getUser()) && this.getComment().equals(that.getComment());
+		}
+		return result;
 	}
 	
 	/**

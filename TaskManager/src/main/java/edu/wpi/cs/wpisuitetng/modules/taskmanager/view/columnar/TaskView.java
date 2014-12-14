@@ -16,6 +16,7 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.dnd.DropTarget;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.text.SimpleDateFormat;
@@ -25,6 +26,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.draganddrop.CustomDropTargetListener;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.draganddrop.DragAndDropTransferHandler;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.draganddrop.TaskDraggableMouseListener;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Stage;
@@ -65,6 +67,7 @@ public class TaskView extends JPanel implements  IView {
 	public static final Color SELECTED_COLOR = new Color(190,210,255);
 	
 	private Gateway gateway;
+	private StageView parentContainer;
 	
 	// State-related fields
 	private Task task;
@@ -269,6 +272,8 @@ public class TaskView extends JPanel implements  IView {
 		String text = TaskManagerUtil.reduceString(this.task.getTitle(), MAX_TITLE_LENGTH,
 				this.titleLabel.getFontMetrics(this.titleLabel.getFont()));
 		this.titleLabel.setText(text);
+		boolean urgent = task.getDueDate().after(new Date(System.currentTimeMillis() - 86400000)); //urgent if late
+		this.dateLabel.setForeground(urgent?new Color(180, 180, 180):new Color(255, 102, 0));
 		this.dateLabel.setText(new SimpleDateFormat("MM/dd/yy").format(this.task.getDueDate()));
 		
 		this.titleLabel.revalidate();
@@ -330,5 +335,14 @@ public class TaskView extends JPanel implements  IView {
 	 */
 	public void highlight() {
 		if ( !selected ) this.setBackground(TaskView.HOVER_COLOR);
+	}
+	
+	public void setParentContainer(StageView view)
+	{
+		this.parentContainer = view;
+		setTransferHandler(new DragAndDropTransferHandler());
+		setDropTarget(new DropTarget(TaskView.this,
+				new CustomDropTargetListener(new StageDragDropPanel (this, view))));
+		//this.container = new StageDragDropPanel(this, view);
 	}
 }

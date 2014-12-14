@@ -8,7 +8,6 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar.MemberListHandler;
 
 
 public class TestMemberListHandler {
@@ -180,7 +179,7 @@ public class TestMemberListHandler {
 		global.addAll(testUsernames);
 		MemberListHandler.getInstance().populateMembers(testUsernamesAssigned);
 		
-		MemberListHandler.getInstance().assignMember(new String("Troy"));
+		MemberListHandler.getInstance().assignMember("Troy");
 
 	}
 	
@@ -190,7 +189,7 @@ public class TestMemberListHandler {
 		global.addAll(testUsernames);
 		MemberListHandler.getInstance().populateMembers(testUsernamesAssigned);
 		
-		MemberListHandler.getInstance().unAssignMember(new String("Troy"));
+		MemberListHandler.getInstance().unAssignMember("Troy");
 		
 		List<String> badList = new ArrayList<String>();
 		badList.add("Troy");

@@ -3,7 +3,6 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.util.TaskUtil;;
 
 /**
  * Tests all the methods in TaskUtil
@@ -20,7 +19,7 @@ public class TestTaskUtil {
 	 */
 	@Test 
 	public void testSanitizeInput_leading(){
-		String test1 = new String("     input");
+		String test1 = "     input";
 		test1 = TaskUtil.sanitizeInput(test1);
 		assertEquals(test1, "input");
 	}
@@ -31,7 +30,7 @@ public class TestTaskUtil {
 	 */
 	@Test 
 	public void testSanitizeInput_trailing(){
-		String test2 = new String("input     ");
+		String test2 = "input     ";
 		test2 = TaskUtil.sanitizeInput(test2);
 		assertEquals(test2, "input");
 	}
@@ -42,42 +41,42 @@ public class TestTaskUtil {
 	 */
 	@Test 
 	public void testSanitizeInput_both(){
-		String test3 = new String("      input     ");
+		String test3 = "      input     ";
 		test3 = TaskUtil.sanitizeInput(test3);
 		assertEquals(test3, "input");
 	}
 	
 	@Test 
 	public void testSanitizeInput_tab(){
-		String test3 = new String("\t input     ");
+		String test3 = "\t input     ";
 		test3 = TaskUtil.sanitizeInput(test3);
 		assertEquals(test3, "input");
 	}
 	
 	@Test 
 	public void testSanitizeInput_newLine(){
-		String test3 = new String("\n input     ");
+		String test3 = "\n input     ";
 		test3 = TaskUtil.sanitizeInput(test3);
 		assertEquals(test3, "input");
 	}
 	
 	@Test 
 	public void testSanitizeInput_return(){
-		String test3 = new String("\r input     ");
+		String test3 = "\r input     ";
 		test3 = TaskUtil.sanitizeInput(test3);
 		assertEquals(test3, "input");
 	}
 	
 	@Test 
 	public void testSanitizeInput_break(){
-		String test3 = new String("\b  input     ");
+		String test3 = "\b  input     ";
 		test3 = TaskUtil.sanitizeInput(test3);
 		assertEquals(test3, "input");
 	}
 	
 	@Test 
 	public void testSanitizeInput_front(){
-		String test3 = new String("\f  input     ");
+		String test3 = "\f  input     ";
 		test3 = TaskUtil.sanitizeInput(test3);
 		assertEquals(test3, "input");
 	}

@@ -4,6 +4,9 @@ package edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter;
 import org.junit.Before;
 import org.junit.Test;
 
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.Cache;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.ThreadSafeLocalCache;
+
 /**
  * Tests for the TaskPresenter class
  * 
@@ -14,6 +17,7 @@ public class TestTaskPresenter {
 
 	Gateway gateway;
 	TaskPresenter presenter;
+	Cache localCache;
 	
 	/**
 	 * Create gateway and presenter objects for testing
@@ -21,7 +25,8 @@ public class TestTaskPresenter {
 	@Before
 	public void setup() {
 		gateway = new Gateway();
-		
+		localCache = new ThreadSafeLocalCache();
+		presenter = new TaskPresenter(localCache);
 		gateway.addPresenter("TaskPresenter", presenter);
 		
 	}

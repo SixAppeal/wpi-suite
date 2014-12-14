@@ -7,6 +7,7 @@ package edu.wpi.cs.wpisuitetng.modules.taskmanager.model;
  * @author srojas
  * @author jrhennessy
  * @author krpeffer
+ * @author thhughes
  * 
  */
 public class Activity {
@@ -17,7 +18,7 @@ public class Activity {
 	}
 	
 	/**
-	 *  Constructor for an activity
+	 * Constructor for an activity
 	 * @param member member that made the comment
 	 * @param comment comment that the member made
 	 */
@@ -43,4 +44,22 @@ public class Activity {
 	public String toString(){
 		return this.activity;
 	}
+	
+	
+	/**
+	 * Checks to see if two activities are equal
+	 */
+	public boolean equals(Object other){
+		if (this==other) {
+			return true;
+		}
+		boolean result = false;
+		if(other instanceof Activity){
+			Activity that = (Activity) other;
+			result = this.getActivity().equals(that.getActivity());
+		}
+		return result;
+	}
+	
+	
 }

@@ -6,7 +6,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors: Nathan Hughes
+ * Contributors: Nathan Hughes, Troy Hughes
  ******************************************************************************/
 
 
@@ -35,6 +35,7 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
@@ -80,7 +81,6 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.MemberButtonGr
  * @author akshoop
  * @author dpseaman
  * @author thhughes
-
  */
 public class TaskEditView extends JPanel implements IView {
 	private static final long serialVersionUID = -8972626054612267276L;
@@ -138,7 +138,8 @@ public class TaskEditView extends JPanel implements IView {
 	 * Constructor
 	 */
 	public TaskEditView(Task iTask, StageList stages) {
-		this.task = iTask;
+		this.task = new Task();
+		this.task.updateFrom(iTask);
 		this.stages = stages;
 		this.requirements = new Requirement[0];
 		this.tev = this;
@@ -204,7 +205,7 @@ public class TaskEditView extends JPanel implements IView {
 		for (String s: this.requirementTitles) this.requirementsComboBox.addItem(s);
 		this.requirementsComboBox.setSelectedIndex(-1);
 		for (int i = 0; i < this.requirementTitles.size(); i++) {
-			if (this.task.getRequirement().getName() == this.requirementTitles.get(i)) {
+			if (this.task.getRequirement().getName().equals(this.requirementTitles.get(i))) {
 				this.requirementsComboBox.setSelectedIndex(i);
 			}
 		}
@@ -395,7 +396,6 @@ public class TaskEditView extends JPanel implements IView {
 		stageBoxListener = new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Fire in the hole!");
 				if( stageInput.getSelectedIndex() > -1) {
 					task.setStage((Stage) stageInput.getSelectedItem());
 					saveTask();
@@ -490,6 +490,7 @@ public class TaskEditView extends JPanel implements IView {
 	 * Saves the task currently being edited
 	 */
 	private void saveTask() {
+		System.out.println("Troy Look Here ---> " + this.task.getId());
 		this.gateway.toPresenter("LocalCache", "update", "task:testing", this.task);
 	}
 
@@ -544,11 +545,9 @@ public class TaskEditView extends JPanel implements IView {
 	 * Takes the members that the user has selected and moves them to the list of members assigned to a task
 	 */
 	public void moveMembersToAssigned() {	
-		System.out.println("Moving to assigned!");
 		MemberListHandler.getInstance().assignMember(members.getSelectedValuesList());
 		updateMembers();
 
-		System.out.println(MemberListHandler.getInstance().getAssigned().size());
 		this.task.setAssignedTo(MemberListHandler.getInstance().getAssigned());
 		saveTask();
 
@@ -564,7 +563,6 @@ public class TaskEditView extends JPanel implements IView {
 		MemberListHandler.getInstance().unAssignMember(assignedMembers.getSelectedValuesList());
 		updateMembers();
 		this.task.setAssignedTo(MemberListHandler.getInstance().getAssigned());
-		System.out.println(MemberListHandler.getInstance().getAssigned().size());
 		saveTask();
 		this.allMembersMouseHandler.clear();
 		this.assignedMembersMouseHandler.clear();
@@ -579,8 +577,8 @@ public class TaskEditView extends JPanel implements IView {
 	 * @param updatedTask is the task that is set to the new task in the edit view. 
 	 */
 	public void updateEVTask(Task updatedTask){
+		//this.task.updateFrom(updatedTask);
 		this.task = updatedTask;
-		
 	}
 
 	/**
@@ -630,7 +628,6 @@ public class TaskEditView extends JPanel implements IView {
 		}
 		return requirementTitles;
 	}
-
 
 	private class JListMouseHandler implements MouseListener {
 

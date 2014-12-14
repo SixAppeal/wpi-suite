@@ -4,7 +4,6 @@ package edu.wpi.cs.wpisuitetng.modules.taskmanager;
 import org.junit.Before;
 import org.junit.Test;
 
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.TaskManager;
 
 /**
  * 

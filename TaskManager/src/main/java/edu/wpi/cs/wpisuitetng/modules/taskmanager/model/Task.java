@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2014 -- WPI Suite
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors: Troy Hughes
+ ******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.model;
 
 import java.util.Date;
@@ -97,17 +107,41 @@ public class Task extends AbstractModel {
 	 */
 	@Override
 	public boolean equals(Object o) {
+		if (this==o) {
+			return true;
+		}
+		
 		if (o instanceof Task) {
 			Task task = (Task) o;
-			return this.id == task.getId()
-				&& this.title.equals(task.getTitle())
-				&& this.description.equals(task.getDescription())
-				&& this.requirement.equals(task.getRequirement())
-				&& this.estimatedEffort == task.getEstimatedEffort()
-				&& this.actualEffort == task.getActualEffort()
-				&& this.dueDate.equals(task.getDueDate());
+			return this.id == task.getId();
 		}
 		return false;
+	}
+	
+	/**
+	 * hasChanged checks the ID's of two tasks, if they are the same it checks if the task has changed. 
+	 * This returns true iff the tasks has changed
+	 * 
+	 * @param task to be compared
+	 * @return	True if two tasks with the same ID's but different other fields have been compared. 
+	 * 			False if the tasks have different ID's 
+	 * 			False if the tasks has not changed 
+	 */
+	public boolean hasChanged(Task task){
+		if(this.equals(task)){
+			// Set's comparison to be true if anything is not the same between the two tasks
+			boolean comparison = this.title.equals(task.getTitle())
+					&& this.description.equals(task.getDescription())
+					&& this.estimatedEffort == task.getEstimatedEffort()
+					&& this.actualEffort == task.getActualEffort()
+					&& this.dueDate.equals(task.getDueDate())
+					&& this.equalComments(task)
+					&& this.equalActivities(task);
+				
+			return !comparison;		// Return the opposite of this to say true when the task has been changed
+		}
+		return false; 
+		
 	}
 
 	/**
@@ -399,6 +433,7 @@ public class Task extends AbstractModel {
 	 * @throws IllegalArgumentException
 	 */
 	public void updateFrom(Task updatedTask) throws IllegalArgumentException {
+		this.id = updatedTask.id;
 		this.title = new String(TaskUtil.validateTitle(updatedTask.getTitle()));
 		this.description = new String(TaskUtil.validateDescription(updatedTask.getDescription()));
 		this.stage = TaskUtil.validateStage(updatedTask.getStage());
@@ -434,5 +469,40 @@ public class Task extends AbstractModel {
 	public void addComment(String user, String comment){
 		this.comments.add(new Comment(user, comment));
 		this.activities.add(new Activity(user + " made a comment!"));
+	}
+	
+	
+	/**
+	 * Checks all the comments within a task and checks if they are equal to another task's comments
+	 * 
+	 * @param task to compare
+	 * @return True iff the tasks have the same comments
+	 */
+	public boolean equalComments(Task task){
+		for (Comment c: task.getComments()){
+			for(Comment com: this.getComments()){
+				if(!com.equals(c)){
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+	
+	/**
+	 * Checks all the activities within a task and checks if they are equal to another task's activites
+	 * 
+	 * @param task to compare
+	 * @return True iff the tasks have the same comments
+	 */
+	public boolean equalActivities(Task task){
+		for (Activity a: task.getActivities()){
+			for(Activity act: this.getActivities()){
+				if(!act.equals(a)){
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 }
