@@ -610,16 +610,17 @@ public class TaskEditView extends JPanel implements IView {
 		boolean foundRequirement = false;
 		if (size < this.requirementTitles.size()) {
 			for (String s : this.requirementTitles) {
+				s = TaskManagerUtil.reduceString(s, 220, fm);
 				foundRequirement = false;
 				for (int i = 0; i < size; i++) {
-					Object element = this.requirementsComboBox.getItemAt(i);
+					String element = this.requirementsComboBox.getItemAt(i);
 					if (s.equals(element)) {
 						foundRequirement = true;
 					}
 				}
 				if (!foundRequirement) {
-					String reducedString = TaskManagerUtil.reduceString(s, 220, fm);
-					this.requirementsComboBox.addItem(reducedString);
+//					String reducedString = TaskManagerUtil.reduceString(s, 220, fm);
+					this.requirementsComboBox.addItem(s);
 				}
 			}	
 			System.out.println("midway check task getreq getname: " + this.task.getRequirement().getName());
@@ -668,6 +669,7 @@ public class TaskEditView extends JPanel implements IView {
 			if (reducedTaskReq.equals(req)) {
 				System.out.println("WE SET THE CURRENT ITEM");
 				this.requirementsComboBox.setSelectedItem(req);
+				return;
 			}
 		}
 	}
