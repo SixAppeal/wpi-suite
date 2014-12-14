@@ -46,6 +46,11 @@ public class StageDragDropPanel extends JPanel {
 				new CustomDropTargetListener(StageDragDropPanel.this)));
 	}
 	
+	/**
+	 * Cosntuctor for a Task View Drag Drop Location
+	 * @param taskView
+	 * @param stageView
+	 */
 	public StageDragDropPanel(TaskView taskView, StageView stageView)
 	{
 		// Not sure waht to do if I want it for a task view
@@ -59,6 +64,10 @@ public class StageDragDropPanel extends JPanel {
 		
 	}
 	
+	/**
+	 * Gets the Y off set for the draging drop
+	 * @return y corrdiate off set
+	 */
 	public int getYOffSet()
 	{
 		if(taskView ==  null)

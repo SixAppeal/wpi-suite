@@ -137,7 +137,6 @@ public class CustomDropTargetListener implements DropTargetListener {
 		
 		
 		final int dropYLoc = dtde.getLocation().y + column.getYOffSet();
-		System.out.println(dropYLoc + " THis is the location");
 		Map<Integer, TaskView> yLocMapForTasks = new HashMap<Integer, TaskView>();
 		
 		yLocMapForTasks.put(dropYLoc, droppedTask);
@@ -145,18 +144,8 @@ public class CustomDropTargetListener implements DropTargetListener {
 			
 			
 			int y = nextPanel.getY();
-			System.out.println(nextPanel.getTask().getTitle());
-			System.out.println(y);
 			if (nextPanel.getTaskID() != (droppedTask.getTaskID())) {
 				yLocMapForTasks.put(y, nextPanel);
-			}
-			else
-			{
-				System.out.println("equals");
-				System.out.println("Equls");
-				System.out.println("equals");
-				System.out.println("Equls");
-				System.out.println(nextPanel.getTask().getTitle());
 			}
 		}
 		
