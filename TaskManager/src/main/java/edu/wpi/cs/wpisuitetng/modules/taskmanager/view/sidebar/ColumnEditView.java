@@ -444,6 +444,9 @@ public class ColumnEditView extends JPanel implements IView {
 			if(s.getName().equals(newStageName)){
 				nameFlag = true;
 			}
+			if(s.getName().equals(new String(""))){
+				stages.remove(s);
+			}
 		}
 		if (nameFlag){
 			//TODO visual feedback when there is the input is invalid
