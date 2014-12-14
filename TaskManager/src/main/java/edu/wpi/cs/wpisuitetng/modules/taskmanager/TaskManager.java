@@ -193,9 +193,9 @@ public class TaskManager implements IJanewayModule {
 
 			@Override
 			public void run() {
-//				gateway.toPresenter("LocalCache", "sync", "member");
-//				gateway.toPresenter("LocalCache", "sync", "stages");
-//				gateway.toPresenter("LocalCache", "sync", "requirement");
+				gateway.toPresenter("LocalCache", "sync", "member");
+				gateway.toPresenter("LocalCache", "sync", "stages");
+				gateway.toPresenter("LocalCache", "sync", "requirement");
 				//gateway.toView("ColumnView", "reflow");
 				//gateway.toView("SidebarView", "reflowTasks");
 			}
