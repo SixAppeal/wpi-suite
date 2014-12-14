@@ -115,7 +115,8 @@ public class CustomDropTargetListener implements DropTargetListener {
 			if (transferable.isDataFlavorSupported(dragAndDropTaskFlavor)) {
 				transferableObj = dtde.getTransferable().getTransferData(dragAndDropTaskFlavor);
 			}
-		} catch (Exception ex) { }
+		} 
+		catch (Exception ex) { }
 		if (transferableObj == null) {
 			return;
 		}
@@ -124,21 +125,41 @@ public class CustomDropTargetListener implements DropTargetListener {
 		dropTask.setStage(this.column.getStageView().getStage());
 		TaskView droppedTask =  new TaskView(dropTask); 
 		
-		gateway.toPresenter("LocalCache", "update", "task:testing", dropTask);
+		if(dropTask.equals(null))
+		{
+			gateway.toPresenter("LocalCache", "update", "task:testing", dropTask);
+		}
+		else
+		{
+			
+		}
 		
 		
 		
-		final int dropYLoc = dtde.getLocation().y;
-		
+		final int dropYLoc = dtde.getLocation().y + column.getYOffSet();
+		System.out.println(dropYLoc + " THis is the location");
 		Map<Integer, TaskView> yLocMapForTasks = new HashMap<Integer, TaskView>();
+		
 		yLocMapForTasks.put(dropYLoc, droppedTask);
 		for (TaskView nextPanel : column.getStageView().getTaskViews()) {
 			
+			
 			int y = nextPanel.getY();
+			System.out.println(nextPanel.getTask().getTitle());
+			System.out.println(y);
 			if (nextPanel.getTaskID() != (droppedTask.getTaskID())) {
 				yLocMapForTasks.put(y, nextPanel);
 			}
+			else
+			{
+				System.out.println("equals");
+				System.out.println("Equls");
+				System.out.println("equals");
+				System.out.println("Equls");
+				System.out.println(nextPanel.getTask().getTitle());
+			}
 		}
+		
 		
 		
 		List<Integer> sortableYValues = new ArrayList<Integer>();
@@ -155,7 +176,8 @@ public class CustomDropTargetListener implements DropTargetListener {
 		inMemoryTaskList.addAll(orderedTasks);
 		
 		int priority = 1;
-		for (TaskView t : inMemoryTaskList) {
+		for (TaskView t : inMemoryTaskList) 
+		{
 			Task tr = t.getTask(); 
 			tr.setPriority(priority);
 			this.column.getStageView().getGateway().toPresenter("LocalCache", "update", "task:testing", tr);
