@@ -196,19 +196,69 @@ public class ThreadSafeLocalCache implements Cache {
 	}
 
 	public void updateTasks(String taskVal) {
-		Task[] tasks = new Gson().fromJson(taskVal, Task[].class);
-		List<Task> unarchived = new ArrayList<Task>();
-		List<Task> archived = new ArrayList<Task>();
-		for (Task toCheck : tasks) {
-			if (toCheck.isArchived()) {
-				archived.add(toCheck);
+		Task[] updatedTasks = new Gson().fromJson(taskVal, Task[].class);
+		//		List<Task> unarchived = new ArrayList<Task>();
+		//		List<Task> archived = new ArrayList<Task>();
+		int i = 0;
+		int j = 0;
+		int z = 0;
+		
+		for (Task task : updatedTasks){
+
+			boolean done = false;
+			//check if task is in tasks and update if it is
+			for (Task toCheck : this.tasks){
+				if(toCheck.getId() == updatedTasks[z].getId()){
+					this.tasks.set(i, updatedTasks[z]);
+					if (updatedTasks[z].isArchived()){
+						this.tasks.remove(i);
+						this.archives.add(updatedTasks[z]);
+					} 
+					done = true;
+				}
+				i++;
 			}
-			else {
-				unarchived.add(toCheck);
+			//if not done, task is not in unarchived list -> look in archives
+			if (!done){
+				for (Task toCheck : this.archives){
+					if(toCheck.getId() == updatedTasks[z].getId()){
+						archives.set(j, updatedTasks[z]);
+						if (!(updatedTasks[z].isArchived())){
+							this.archives.remove(i);
+							this.tasks.add(updatedTasks[z]);
+						}
+						done = true;
+					}
+					j++;
+				}
 			}
-		}
-		this.archives = archived;
-		this.tasks = unarchived;
+			//if not done, task does not exist in the list -> add it 
+
+			if (!done){
+				if(updatedTasks[z].isArchived()){
+					this.archives.add(updatedTasks[z]);
+				}
+				else {
+					this.tasks.add(updatedTasks[z]);
+				}
+				done = true;
+			}
+			z++;
+
+
+		}//major for
+
+		//		for (Task toCheck : tasks) {
+		//			if (toCheck.isArchived()) {
+		//				archived.add(toCheck);
+		//			}
+		//			else {
+		//				unarchived.add(toCheck);
+		//			}
+		//			}
+		//		this.archives = archived;
+		//		this.tasks = unarchived;
+
 		this.gateway.toPresenter("TaskPresenter", "updateTasks");
 		this.gateway.toPresenter("TaskPresenter", "updateSearch");
 	}
