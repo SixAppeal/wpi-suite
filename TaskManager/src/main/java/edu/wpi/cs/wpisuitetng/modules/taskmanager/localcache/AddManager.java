@@ -9,13 +9,13 @@ import edu.wpi.cs.wpisuitetng.network.models.IRequest;
 
 public class AddManager implements RequestObserver {
 
-	private Cache localCache;
+	//private Cache localCache;
 	private String toUpdate;
 	private Gateway gateway;
 	private List<String> callbacks;
 	
 	public AddManager(Cache localCache, String toUpdate, Gateway gateway, List<String> callbacks) {
-		this.localCache = localCache;
+		//this.localCache = localCache;
 		this.toUpdate = toUpdate;
 		this.callbacks = callbacks;
 		this.gateway = gateway;
@@ -23,7 +23,7 @@ public class AddManager implements RequestObserver {
 	}
 
 	public AddManager(Cache localCache, String toUpdate, Gateway gateway, String RevocationCallback) {
-		this.localCache = localCache;
+		//this.localCache = localCache;
 		this.toUpdate = toUpdate;
 		this.callbacks = new ArrayList<String>();
 		//this.callbacks.add(RevocationCallback);

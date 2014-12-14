@@ -380,6 +380,19 @@ public class ThreadSafeLocalCache implements Cache {
 			}
 		}
 	}
-
+	
+	/**
+	 * Archives all the tasks belonging to a stage. This should be called
+	 * before deleting a stage.
+	 * @param stage The stage with tasks to archive
+	 */
+	public void archiveTasksForStage(Stage stage) {
+		for (Task task : this.tasks) {
+			if (task.getStage().equals(stage)) {
+				task.archive();
+				update("archive:testing", task);
+			}
+		}
+	}
 }
 

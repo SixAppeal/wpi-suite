@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.io.Serializable;
 import java.lang.reflect.Method;
 
-import javax.swing.JPanel;
 
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
 

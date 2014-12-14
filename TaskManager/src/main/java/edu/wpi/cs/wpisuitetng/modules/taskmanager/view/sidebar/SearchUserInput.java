@@ -76,14 +76,11 @@ public class SearchUserInput implements KeyListener {
 					searchPanel.repaint();
 				}
 			} catch (SearchException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			} catch (ParseException e1) {
-//				System.out.println("Cannot parse " + fullString + "*");
-				//e1.printStackTrace();
+				e1.printStackTrace();
 			}
 			return;
 		}
@@ -132,14 +129,11 @@ public class SearchUserInput implements KeyListener {
 						.displayResults(toSearch.searchFor(fullString + "*"));
 			}
 		} catch (SearchException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		} catch (ParseException e1) {
-//			System.out.println("Cannot parse " + fullString + "*");
-			//e1.printStackTrace();
+			e1.printStackTrace();
 		}
 	}
 

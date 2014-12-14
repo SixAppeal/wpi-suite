@@ -5,7 +5,6 @@ package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.Insets;
 
 import javax.swing.JButton;

@@ -1,6 +1,5 @@
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter;
 
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
 
 /**
  * This class exists for the sole purpose of testing the Gateway.

@@ -49,6 +49,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
  * @author akshoop
  * @author rnorlando
  * @author tmeehan
+ * @author thhughes
  */
 public class ColumnView extends JPanel implements IView {
 	private static final long serialVersionUID = 7965275386426411767L;
@@ -244,4 +245,36 @@ public class ColumnView extends JPanel implements IView {
         }
         return dragAndDropPanelDataFlavor;
     }
+	
+	
+	
+	
+	public void scrollToPlace(Stage viewStage){
+		int location = 0;
+		int division = 0;
+		
+		if(this.stages.contains(viewStage)){
+			for(int i = 0; i < stages.size(); i++){
+				if(stages.get(i).equals(viewStage)){
+					location = i; 
+					break;
+				}
+			}
+			if(this.scrollPane.getHorizontalScrollBar().getVisibleAmount() != this.scrollPane.getHorizontalScrollBar().getMaximum()){
+				division = this.scrollPane.getHorizontalScrollBar().getMaximum();
+				division = (division/stages.size())*location;
+				
+				this.scrollPane.getHorizontalScrollBar().setValue(division);
+			
+			}
+		}
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 }

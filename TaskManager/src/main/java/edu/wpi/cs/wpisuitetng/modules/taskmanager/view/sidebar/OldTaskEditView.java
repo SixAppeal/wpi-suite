@@ -36,7 +36,6 @@ import javax.swing.event.ListSelectionListener;
 import org.jdesktop.swingx.JXDatePicker;
 
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Stage;
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.StageList;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
@@ -570,6 +569,7 @@ public class OldTaskEditView extends JPanel implements IView {
 
 		public void mouseClicked(MouseEvent e) {}
 		
+		@SuppressWarnings("unused")
 		public void update_selected() {
 			if (this.keyboard_event_count == 0) {
 				this.previous_indexes = this.list.getSelectedIndices();

@@ -7,7 +7,6 @@ import org.junit.Test;
 
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Stage;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar.StageView;
 
 /**
  * Runs tests on the StageView class

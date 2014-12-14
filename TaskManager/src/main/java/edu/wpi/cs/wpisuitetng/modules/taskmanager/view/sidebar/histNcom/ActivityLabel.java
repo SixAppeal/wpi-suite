@@ -1,4 +1,4 @@
-package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar.activitiesAndComments;
+package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar.histNcom;
 
 import javax.swing.JTextArea;
 
@@ -25,7 +25,7 @@ public class ActivityLabel extends JTextArea {
 		setCaretColor(SystemColor.activeCaption);
 		setSelectedTextColor(Color.DARK_GRAY);
 		setEditable(false);
-		setBorder(new MatteBorder(0, 0, 3, 0, (Color) SystemColor.activeCaption));
+		setBorder(new MatteBorder(0, 0, 1, 0, SystemColor.activeCaption));
 		setLineWrap(true);
 		setWrapStyleWord(true);
 		//setMaximumSize(new Dimension(280, 40));

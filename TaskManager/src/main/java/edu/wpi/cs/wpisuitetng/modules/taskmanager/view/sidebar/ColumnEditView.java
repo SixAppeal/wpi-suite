@@ -12,7 +12,6 @@
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
 
 import java.awt.Dimension;
-
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.GridBagConstraints;
@@ -24,6 +23,8 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -134,10 +135,35 @@ public class ColumnEditView extends JPanel implements IView {
 			}
 		});
 		
+		titleEntry.addKeyListener(new KeyListener(){
+
+			@Override
+			public void keyTyped(KeyEvent e) {
+				// For some reason doesn't work for the below methods to add stuffs... Not sure. 
+			    
+			}
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+			    if (e.getKeyCode() == KeyEvent.VK_ENTER ){
+			    	System.out.println("Fuck Swing!");
+			    	addStage();
+			    }
+			}
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+			    if (e.getKeyCode() == KeyEvent.VK_ENTER ){
+			    	System.out.println("Yea fuck Swing!");
+			    	addStage();
+			    }
+			}
+			
+
+		});
+		
 
 		stageJList.addKeyListener( new KeyListener() {
-// TODO
-// TODO
 			@Override
 			public void keyTyped(KeyEvent e) {}
 
@@ -175,6 +201,15 @@ public class ColumnEditView extends JPanel implements IView {
 				}
 			}
 		});
+		
+		stageJList.addMouseListener(new MouseAdapter(){
+		    @Override
+		    public void mouseClicked(MouseEvent e){
+		        if(e.getClickCount()==2){
+		            scrollMain();
+		        }
+		    }
+		});
 
 		moveUpBtn.addActionListener( new ActionListener() {
 			@Override
@@ -202,8 +237,9 @@ public class ColumnEditView extends JPanel implements IView {
 				
 				if( !stageJList.isSelectionEmpty()) {
 					if( stages.size() > 1) {
-						stages.remove(stageJList.getSelectedIndex());
+						Stage stage = stages.remove(stageJList.getSelectedIndex());
 						updateJListAndPublish();
+						gateway.toPresenter("LocalCache", "archiveTasksForStage", stage);
 					} else {
 						//TODO visual feedback when there is only one stage
 					}
@@ -212,6 +248,7 @@ public class ColumnEditView extends JPanel implements IView {
 				stageJList.clearSelection();
 				
 			}});
+		
 		
 
 		this.setBackground(TaskManagerUtil.SIDEBAR_COLOR);
@@ -391,6 +428,13 @@ public class ColumnEditView extends JPanel implements IView {
 	private void publishStages() {
 		this.gateway.toPresenter("TaskPresenter", "publishChanges", stages);
 	}
+	
+	
+	private void scrollMain(){
+		this.gateway.toView("ColumnView", "scrollToPlace", this.stageJList.getSelectedValue());
+	}
+	
+	
 	/**
 	 * 
 	 * @return returns the number of stages in the columneditview. 

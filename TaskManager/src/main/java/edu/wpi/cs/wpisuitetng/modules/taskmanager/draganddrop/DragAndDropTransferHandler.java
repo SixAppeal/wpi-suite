@@ -68,15 +68,16 @@ public class DragAndDropTransferHandler extends TransferHandler implements DragS
 		}
 		return TransferHandler.NONE;
 	}
-	/**
-	 * @see  javax.swing.TransferHandler.exportAsDrag
-	 */
-	@Override 
-	public void exportAsDrag(JComponent c, InputEvent e, int action) {
-		// turn off server updates
-		
-		super.exportAsDrag(c, e, action);	
-	}
+	
+//	/**
+//	 * @see  javax.swing.TransferHandler.exportAsDrag
+//	 */
+//	@Override 
+//	public void exportAsDrag(JComponent c, InputEvent e, int action) {
+//		// turn off server updates
+//		
+//		super.exportAsDrag(c, e, action);	
+//	}
 	
 	/**
 	 * @see  javax.swing.TransferHandler.exportDone

@@ -18,7 +18,6 @@ import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
 
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar.TaskView;
 
 /**
  * 
@@ -122,10 +121,13 @@ public class TransferableTaskString implements Transferable  {
 	@Override
 	public boolean equals(Object obj)
 	{
-		if(obj.getClass().equals(this.getClass()))
-		{
+		if (this==obj) {
+			return true;
+		}
+		if (!(obj instanceof TransferableTaskString)) {
 			return false;
 		}
+		
 		TransferableTaskString testing = (TransferableTaskString)obj;
 		if(!testing.getJsonTaskValue().equals(this.getJsonTaskValue()))
 		{
@@ -134,4 +136,10 @@ public class TransferableTaskString implements Transferable  {
 		return true;
 	}
 
+	/**
+	 * Determines the hashCode of the task to be its ID
+	 */
+	@Override
+	public int hashCode() { return jsonTaskValue.hashCode(); }
+	
 }

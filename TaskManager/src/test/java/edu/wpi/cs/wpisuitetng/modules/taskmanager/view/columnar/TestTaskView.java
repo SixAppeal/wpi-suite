@@ -6,7 +6,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar.TaskView;
 
 /**
  * Runs tests on the TaskView class

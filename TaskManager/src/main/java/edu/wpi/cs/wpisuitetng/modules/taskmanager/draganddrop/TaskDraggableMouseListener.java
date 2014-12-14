@@ -6,7 +6,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors: Ryan Orlando, Thomas Meehan
+ * Contributors: Ryan Orlando, Thomas Meehan, Troy Hughes
  ******************************************************************************/
 
 
@@ -27,7 +27,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar.TaskView;
 public class TaskDraggableMouseListener extends DraggableMouseListener{
 
 	private TaskView taskAssoc;
-	private boolean hasMoved;
+	//private boolean hasMoved;
 
 	/**
 	 * Constructor
@@ -37,7 +37,7 @@ public class TaskDraggableMouseListener extends DraggableMouseListener{
 	public TaskDraggableMouseListener(TaskView t) {
 		super(t);
 		this.taskAssoc = t;
-		this.hasMoved = false;
+		//this.hasMoved = false;
 
 	}
 

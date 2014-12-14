@@ -13,6 +13,7 @@
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.awt.Color;
 import java.awt.Insets;
@@ -50,6 +51,7 @@ public class SidebarView extends JTabbedPane implements IView {
 	private Gateway gateway;
 
 	private StageList stages;
+	@SuppressWarnings("unused")
 	private List<String> requirements;
 	private ThreadSafeLocalCache cache;
 	// Components
@@ -103,6 +105,8 @@ public class SidebarView extends JTabbedPane implements IView {
 	 * Adds a creation panel to the sidebar
 	 */
 	public void addCreatePanel() {
+		this.setVisible(true);
+		
 		// if there is a tab with the edit pane 
 		for (IView view : viewList) {
 			if (view instanceof TaskCreateView) {
@@ -118,7 +122,7 @@ public class SidebarView extends JTabbedPane implements IView {
 		this.addTab(null, new ImageIcon(this.getClass().getResource("icon_plus.png")),
 				createView);
 		this.setSelectedComponent(createView);
-		this.setVisible(true);
+		createView.fixFocus();
 	}
 	
 	/**
@@ -131,6 +135,7 @@ public class SidebarView extends JTabbedPane implements IView {
 			this.removeTabAt(this.indexOfComponent(createView));
 			this.viewList.remove(createView);
 		} catch (IndexOutOfBoundsException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -139,6 +144,7 @@ public class SidebarView extends JTabbedPane implements IView {
 	 * @param task The task to edit
 	 */
 	public void addEditPanel(Task task) {
+		this.setVisible(true);
 		
 		//if there is a tab with the edit pane 
 		for (IView view : viewList) {
@@ -157,7 +163,6 @@ public class SidebarView extends JTabbedPane implements IView {
 		this.addTab(null, new ImageIcon(this.getClass().getResource("icon_pencil.png")),
 				editView);
 		this.setSelectedComponent(editView);
-		this.setVisible(true);
 	}
 	
 	/**
@@ -183,7 +188,7 @@ public class SidebarView extends JTabbedPane implements IView {
 			this.removeTabAt(this.indexOfComponent(editView));
 			this.viewList.remove(editView);
 		} catch (IndexOutOfBoundsException e) {
-			// Do nothing
+			e.printStackTrace();
 		}
 	}
 	
@@ -234,6 +239,40 @@ public class SidebarView extends JTabbedPane implements IView {
 		this.cache = cache;
 	}
 	
+	
+	/**
+	 * Updates all of the tasks in each of the TaskEditViews
+	 * 
+	 * @param tasks
+	 */
+	public void updateEditViews(Task[] tasks){
+		List<Task> taskList = Arrays.asList(tasks);
+
+		for (IView view : viewList) {
+			if (view instanceof TaskEditView) {
+				for(Task aTask: taskList){
+					if (((TaskEditView) view).getTask().getId() == aTask.getId()) {
+						((TaskEditView) view).updateEVTask(aTask);
+						break;
+					}		
+				}
+				}
+			}
+		}
+		
+	
+	
+	
+	
+	
+	/**
+	 * Goes through and re adds all of the tasks to the TaskEditViews
+	 */
+	
+	/*
+	 * This method causes an infinite loop and crashes the server everytime I run it... Not sure what's up here. 
+	 * 
+	 */
 	public void reflowTasks() {
 		Task[] reference = (Task[]) this.cache.retrieve("task");
 		for (int i = 0; i < this.getComponentCount(); i ++) {

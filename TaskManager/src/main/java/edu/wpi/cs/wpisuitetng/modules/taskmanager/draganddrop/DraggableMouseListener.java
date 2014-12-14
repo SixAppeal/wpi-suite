@@ -45,7 +45,7 @@ public class DraggableMouseListener extends MouseAdapter
 	@Override
 	public void mousePressed(MouseEvent e) 
 	{
-		JComponent c = (JComponent) assoc;
+		JComponent c = assoc;
 		TransferHandler handler = c.getTransferHandler();
 		handler.exportAsDrag(c, e, TransferHandler.COPY);
 	}

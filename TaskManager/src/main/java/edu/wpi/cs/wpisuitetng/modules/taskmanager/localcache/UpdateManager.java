@@ -9,20 +9,20 @@ import edu.wpi.cs.wpisuitetng.network.models.IRequest;
 
 public class UpdateManager implements RequestObserver {
 
-	private Cache localCache;
+	//private Cache localCache;
 	private String toUpdate;
 	private Gateway gateway;
 	private List<String> callbacks;
 	
 	public UpdateManager(Cache localCache, String toUpdate, Gateway gateway, List<String> callbacks) {
-		this.localCache = localCache;
+		//this.localCache = localCache;
 		this.toUpdate = toUpdate;
 		this.gateway = gateway;
 		this.callbacks = callbacks;
 	}
 
 	public UpdateManager(Cache localCache, String toUpdate, Gateway gateway, String revocationCallback) {
-		this.localCache = localCache;
+		//this.localCache = localCache;
 		this.toUpdate = toUpdate;
 		this.gateway = gateway;
 		this.callbacks = new ArrayList<String>();

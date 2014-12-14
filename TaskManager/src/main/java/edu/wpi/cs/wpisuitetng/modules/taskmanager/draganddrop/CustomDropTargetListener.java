@@ -15,11 +15,12 @@ package edu.wpi.cs.wpisuitetng.modules.taskmanager.draganddrop;
 import java.awt.Cursor;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
-import java.awt.dnd.DropTargetContext;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;
 import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -27,9 +28,9 @@ import java.util.List;
 import java.util.Map;
 
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
 
 import com.google.gson.Gson;
-
 
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar.StageDragDropPanel;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar.TaskView;
@@ -47,6 +48,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar.TaskView;
 public class CustomDropTargetListener implements DropTargetListener {
 	
 	private final StageDragDropPanel column;
+	private static Gateway gateway;
 	
 	private static final Cursor droppableCursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR),
 			notDroppableCursor = Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR);
@@ -57,6 +59,15 @@ public class CustomDropTargetListener implements DropTargetListener {
 		this.column = sheet;
 	}
 
+	/**
+	 * Set's the gateway on the drop listener. 
+	 * 
+	 * @param gateway
+	 */
+	public static void setGateway(Gateway PassedGateway){
+		gateway = PassedGateway;
+	}
+	
 	/**
 	 * @see  java.awt.dnd.DropTargetListener.dragEnter
 	 */
@@ -98,15 +109,19 @@ public class CustomDropTargetListener implements DropTargetListener {
 		Object transferableObj = null;
 		Transferable transferable = null;
 		
-		try {
-			dragAndDropTaskFlavor = TransferableTaskString.flavor;
-			transferable = dtde.getTransferable();
-			DropTargetContext c = dtde.getDropTargetContext();
-			
-			if (transferable.isDataFlavorSupported(dragAndDropTaskFlavor)) {
+		dragAndDropTaskFlavor = TransferableTaskString.flavor;
+		transferable = dtde.getTransferable();
+		//DropTargetContext c = dtde.getDropTargetContext();
+		
+		if (transferable.isDataFlavorSupported(dragAndDropTaskFlavor)) {
+			try {
 				transferableObj = dtde.getTransferable().getTransferData(dragAndDropTaskFlavor);
+			} catch (UnsupportedFlavorException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
-		} catch (Exception ex) { }
+		}
 		if (transferableObj == null) {
 			return;
 		}
@@ -114,6 +129,8 @@ public class CustomDropTargetListener implements DropTargetListener {
 		Task dropTask = (new Gson()).fromJson(droppedTaskInfo.getJsonTaskValue(), Task.class);
 		dropTask.setStage(this.column.getStageView().getStage());
 		TaskView droppedTask =  new TaskView(dropTask); 
+		
+		gateway.toPresenter("LocalCache", "update", "task:testing", dropTask);
 		
 		
 		

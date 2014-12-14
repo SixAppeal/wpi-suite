@@ -14,7 +14,6 @@ package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
 
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -36,6 +35,7 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
@@ -63,8 +63,6 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.util.TaskManagerUtil;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar.ColumnView;
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar.StageView;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.ButtonGroup;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.Form;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.FormField;
@@ -82,7 +80,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.MemberButtonGr
  * @author srojas
  * @author akshoop
  * @author dpseaman
-
+ * @author thhughes
  */
 public class TaskEditView extends JPanel implements IView {
 	private static final long serialVersionUID = -8972626054612267276L;
@@ -101,8 +99,10 @@ public class TaskEditView extends JPanel implements IView {
 	private JTextField titleInput;
 	private JTextArea titleLabel;
 	private JTextArea descInput;
+	@SuppressWarnings("unused")
 	private JTextArea descLabel;
 	private JXDatePicker dateInput;
+	@SuppressWarnings("unused")
 	private JLabel dateLabel;
 	private JSpinner estEffortInput;
 	private JSpinner actEffortInput;
@@ -125,6 +125,7 @@ public class TaskEditView extends JPanel implements IView {
 
 	private ActionListener stageBoxListener;
 
+	@SuppressWarnings("unused")
 	private List<String> stringArray;
 
 	private TaskEditView tev;
@@ -203,7 +204,7 @@ public class TaskEditView extends JPanel implements IView {
 		for (String s: this.requirementTitles) this.requirementsComboBox.addItem(s);
 		this.requirementsComboBox.setSelectedIndex(-1);
 		for (int i = 0; i < this.requirementTitles.size(); i++) {
-			if (this.task.getRequirement().getName() == this.requirementTitles.get(i)) {
+			if (this.task.getRequirement().getName().equals(this.requirementTitles.get(i))) {
 				this.requirementsComboBox.setSelectedIndex(i);
 			}
 		}
@@ -372,7 +373,7 @@ public class TaskEditView extends JPanel implements IView {
 		FormField actEffortField = new FormField("Act. Effort", this.actEffortInput, new FormFieldValidator() {
 			@Override
 			public boolean validate(JComponent component) {
-				return ((Integer) ((JSpinner) component).getValue()).intValue() >= 0;
+				return ((Integer) ((JSpinner) component).getValue()).intValue() > 0;
 			}
 
 			@Override
@@ -475,6 +476,7 @@ public class TaskEditView extends JPanel implements IView {
 		this.setLayout(new MigLayout("fill, ins 0", "[300][300]"));
 		this.add(this.scrollPane, "grow");
 		this.add(this.commentPanel, "grow");
+		
 	}
 
 	/**
@@ -545,9 +547,11 @@ public class TaskEditView extends JPanel implements IView {
 		System.out.println("Moving to assigned!");
 		MemberListHandler.getInstance().assignMember(members.getSelectedValuesList());
 		updateMembers();
+
 		System.out.println(MemberListHandler.getInstance().getAssigned().size());
 		this.task.setAssignedTo(MemberListHandler.getInstance().getAssigned());
 		saveTask();
+
 		this.allMembersMouseHandler.clear();
 		this.assignedMembersMouseHandler.clear();
 		
@@ -564,6 +568,19 @@ public class TaskEditView extends JPanel implements IView {
 		saveTask();
 		this.allMembersMouseHandler.clear();
 		this.assignedMembersMouseHandler.clear();
+	}
+	
+	
+	/**
+	 * This takes in a task and updates the task linked to this panel. This is used in the scenario where a task 
+	 * is mutated outside of the task edit view. Most likely only by Drag and Drop - possible to be changed by 
+	 * other implementations. 
+	 * 
+	 * @param updatedTask is the task that is set to the new task in the edit view. 
+	 */
+	public void updateEVTask(Task updatedTask){
+		this.task = updatedTask;
+		
 	}
 
 	/**
@@ -614,7 +631,6 @@ public class TaskEditView extends JPanel implements IView {
 		return requirementTitles;
 	}
 
-
 	private class JListMouseHandler implements MouseListener {
 
 		JList<String> list;
@@ -657,6 +673,7 @@ public class TaskEditView extends JPanel implements IView {
 
 		public void mouseClicked(MouseEvent e) {}
 
+		@SuppressWarnings("unused")
 		public void update_selected() {
 			if (this.keyboard_event_count == 0) {
 				this.previous_indexes = this.list.getSelectedIndices();
