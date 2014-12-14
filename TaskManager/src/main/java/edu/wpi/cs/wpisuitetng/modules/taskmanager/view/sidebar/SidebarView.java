@@ -58,6 +58,7 @@ public class SidebarView extends JTabbedPane implements IView {
 	private List<IView> viewList;
 	private SearchBox searchView;
 	private ColumnEditView columnEditView;
+	private StatisticsView statisticsView;
 
 	/**
 	 * Constructs a sidebar view
@@ -74,6 +75,9 @@ public class SidebarView extends JTabbedPane implements IView {
 		
 		this.columnEditView = new ColumnEditView();
 		this.viewList.add(columnEditView);
+		
+		this.statisticsView = new StatisticsView();
+		this.viewList.add(statisticsView);
 		
 		this.setUI(new BasicTabbedPaneUI() {
 			@Override
@@ -99,6 +103,8 @@ public class SidebarView extends JTabbedPane implements IView {
 				searchView);
 		this.addTab(null, new ImageIcon(this.getClass().getResource("icon_column_edit.png")),
 				columnEditView);
+		this.addTab(null,  new ImageIcon(this.getClass().getResource("icon_stats.png")), 
+				statisticsView);
 	}
 	
 	/**
