@@ -9,7 +9,6 @@ import com.google.gson.Gson;
 
 import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementmanager.models.Requirement;
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.draganddrop.TransferableTaskString;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.util.TaskUtil;
 
 /**
@@ -104,13 +103,13 @@ public class Task extends AbstractModel {
 		
 		if (o instanceof Task) {
 			Task task = (Task) o;
-			return this.id == task.getId()
+			boolean comparison =  this.id == task.getId()
 				&& this.title.equals(task.getTitle())
 				&& this.description.equals(task.getDescription())
-				&& this.requirement.equals(task.getRequirement())
 				&& this.estimatedEffort == task.getEstimatedEffort()
 				&& this.actualEffort == task.getActualEffort()
 				&& this.dueDate.equals(task.getDueDate());
+			return comparison;
 		}
 		return false;
 	}

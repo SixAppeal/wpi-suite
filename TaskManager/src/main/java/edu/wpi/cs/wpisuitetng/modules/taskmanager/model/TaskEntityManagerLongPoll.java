@@ -9,6 +9,12 @@
  * Contributors: Nathan Hughes
  ******************************************************************************/
 
+
+/**
+ * @author nhhughes
+ * @author srojas
+ */
+
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.model;
 
 
@@ -76,7 +82,10 @@ public class TaskEntityManagerLongPoll implements EntityManager<Task>{
 		if(!db.save(newTask, s.getProject())) {
 			throw new WPISuiteException();
 		}
-		TaskPollTracker.getInstance().update();
+		Task passNewTask = new Task();
+		passNewTask.updateFrom(newTask);
+		TaskPollTracker.getInstance().update(passNewTask);
+		System.out.println("task updated in makeEntity! ");
 		return newTask;
 	}
 
@@ -193,7 +202,8 @@ public class TaskEntityManagerLongPoll implements EntityManager<Task>{
 		if(!db.save(existingTask, session.getProject())) {
 			throw new WPISuiteException();
 		}
-		TaskPollTracker.getInstance().update();
+		TaskPollTracker.getInstance().update(updatedTask);
+		System.out.println("Task updated in update in Entity Manager");
 		return existingTask;
 	}
 
@@ -208,14 +218,24 @@ public class TaskEntityManagerLongPoll implements EntityManager<Task>{
 	public String advancedGet(Session arg0, String[] arg1) {
 		Thread thisSession = Thread.currentThread();
 		TaskPollTracker.getInstance().register(thisSession);
-			try {
-				Thread.sleep(60000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		
-		TaskPollTracker.getInstance().remove(thisSession);
-		return new Gson().toJson(db.retrieveAll(new Task(), arg0.getProject()).toArray(new Task[0]), Task[].class);
+		System.out.println("Thread has been registered! " + thisSession );
+		System.out.flush();
+		try {
+			Thread.sleep(60000);
+		} catch (InterruptedException e) {
+		}
+		try {
+			TaskPollTracker.getInstance().getLock().acquire();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+//		TaskPollTracker.getInstance().remove(thisSession);
+//		System.out.println("Thread has been removed! " + thisSession );
+//		System.out.flush();
+//		return new Gson().toJson(db.retrieveAll(new Task(), arg0.getProject()).toArray(new Task[0]), Task[].class);
+		Task taskArr[] = new Task[1];
+		taskArr[0] = TaskPollTracker.getInstance().getTask();
+		return new Gson().toJson(taskArr);
 	}
 
 	/**

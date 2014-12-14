@@ -187,15 +187,15 @@ public class TaskManager implements IJanewayModule {
 		gateway.toPresenter("TaskPresenter", "setStages");
 		//initial long pull request
 		gateway.toPresenter("LocalCache", "sync", "tasks");
-		gateway.toPresenter("LocalCache", "sync", "requirement");
+//		gateway.toPresenter("LocalCache", "sync", "requirement");
 		
 		t.scheduleAtFixedRate(new TimerTask() {
 
 			@Override
 			public void run() {
-				gateway.toPresenter("LocalCache", "sync", "member");
-				gateway.toPresenter("LocalCache", "sync", "stages");
-				gateway.toPresenter("LocalCache", "sync", "requirement");
+//				gateway.toPresenter("LocalCache", "sync", "member");
+//				gateway.toPresenter("LocalCache", "sync", "stages");
+//				gateway.toPresenter("LocalCache", "sync", "requirement");
 				//gateway.toView("ColumnView", "reflow");
 				//gateway.toView("SidebarView", "reflowTasks");
 			}

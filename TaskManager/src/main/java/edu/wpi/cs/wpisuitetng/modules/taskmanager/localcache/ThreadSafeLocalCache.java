@@ -195,16 +195,69 @@ public class ThreadSafeLocalCache implements Cache {
 		throw new NotImplementedException();
 	}
 
+	
+	/**
+	 * Takes in updates generated from a long pull request and updates the cache
+	 * @param taskVal all the updates that have occured since the last sync
+	 */
 	public void updateTasks(String taskVal) {
-		Task[] tasks = new Gson().fromJson(taskVal, Task[].class);
+		Task[] updatedTasks = new Gson().fromJson(taskVal, Task[].class);
+		List<Task> updatedTaskList = Arrays.asList(updatedTasks);
 		List<Task> unarchived = new ArrayList<Task>();
 		List<Task> archived = new ArrayList<Task>();
-		for (Task toCheck : tasks) {
-			if (toCheck.isArchived()) {
-				archived.add(toCheck);
+		List<Task> used = new ArrayList<Task>();
+		for (Task oldTask : this.tasks) {
+			boolean changed = false;
+			Task taskToInsert = oldTask; 
+			for (Task newTask : updatedTaskList) {
+				if (newTask.getId() == oldTask.getId()) {
+					if (newTask.isArchived()) {
+						taskToInsert = null;
+					}
+					else {
+						changed = true;
+						taskToInsert = newTask;
+					}
+					break;
+				}
 			}
-			else {
-				unarchived.add(toCheck);
+			if (taskToInsert != null) {
+				unarchived.add(taskToInsert);
+				if (changed) {
+					used.add(taskToInsert);
+				}
+			}
+		}
+		for (Task oldTask : this.archives) {
+			boolean changed = false;
+			Task taskToInsert = oldTask; 
+			for (Task newTask : updatedTasks) {
+				if (newTask.getId() == oldTask.getId()) {
+					if (newTask.isArchived()) {
+						taskToInsert = null;
+					}
+					else {
+						taskToInsert = newTask;
+						changed = true;
+					}
+					break;
+				}
+			}
+			if (taskToInsert != null) {
+				archived.add(taskToInsert);
+				if (changed) {
+					used.add(taskToInsert);
+				}
+			}
+		}
+		for (Task newTask : updatedTaskList) {
+			if (!used.contains(newTask)) {
+				if (newTask.isArchived()) {
+					archived.add(newTask);
+				}
+				else {
+					unarchived.add(newTask);
+				}
 			}
 		}
 		this.archives = archived;
