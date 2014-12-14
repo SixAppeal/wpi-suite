@@ -98,6 +98,12 @@ public class ColumnEditView extends JPanel implements IView {
 			this.nameChange.setEnabled(false);
 			this.deleteBtn.setEnabled(false);
 		}
+		else if(!stageJList.isSelectionEmpty()){
+			if(newName.getText().isEmpty())
+				this.nameChange.setEnabled(false);
+			if(titleEntry.getText().isEmpty())
+				this.addButton.setEnabled(false);
+		}
 
 		addButton.addActionListener( new ActionListener() {
 			@Override
@@ -160,6 +166,35 @@ public class ColumnEditView extends JPanel implements IView {
 			}
 			
 
+		});
+		
+		newName.addKeyListener( new KeyListener() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+				
+			}
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+				updateEditBox();
+			}
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+				updateEditBox();
+			}
+		});
+		
+		newName.addFocusListener(new FocusListener() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				updateEditBox();
+			}
+
+			@Override
+			public void focusLost(FocusEvent e) {
+				updateEditBox();
+			}
 		});
 		
 
@@ -354,6 +389,12 @@ public class ColumnEditView extends JPanel implements IView {
 		titleEntry.setBorder(valid ? FormField.BORDER_NORMAL : FormField.BORDER_ERROR);
 		addButton.setEnabled(valid);
 	}
+	
+	private void updateEditBox() {
+		boolean valid = !TaskUtil.sanitizeInput(newName.getText()).isEmpty();
+		titleEntry.setBorder(valid ? FormField.BORDER_NORMAL : FormField.BORDER_ERROR);
+		nameChange.setEnabled(valid);
+	}
 
 
 	@Override
@@ -366,7 +407,7 @@ public class ColumnEditView extends JPanel implements IView {
 		boolean valid = !TaskUtil.sanitizeInput(newName.getText()).isEmpty();
 		if (valid){
 			
-//			int index = stageJList.getSelectedIndex();	
+			//int index = stageJList.getSelectedIndex();	
 			//Stage stage = stageJList.getSelectedValue();
 			Stage stage;
 			
@@ -380,6 +421,7 @@ public class ColumnEditView extends JPanel implements IView {
 			stages.add(stageJList.getSelectedIndex(), stage);
 			updateJListAndPublish();
 			newName.setText("");
+			nameChange.setEnabled(false);
 			 
 		}
 
