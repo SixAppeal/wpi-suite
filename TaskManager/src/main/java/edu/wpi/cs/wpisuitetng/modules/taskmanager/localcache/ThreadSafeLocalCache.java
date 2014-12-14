@@ -155,7 +155,7 @@ public class ThreadSafeLocalCache implements Cache {
 		if (!(request.split(":").length == 2 && request.split(":")[0].equals("stages"))) {
 			System.out.println("Bad Request");
 		}
-		System.out.println("The StageList is updating to " + newSL.toString());
+		
 		final Request networkRequest = Network.getInstance().makeRequest(
 				"taskmanager/stages", HttpMethod.POST);
 		networkRequest.addObserver(new UpdateManager(this, request, gateway, request.split(":")[1]));
@@ -202,6 +202,7 @@ public class ThreadSafeLocalCache implements Cache {
 	 */
 	public void updateTasks(String taskVal) {
 		Task[] updatedTasks = new Gson().fromJson(taskVal, Task[].class);
+		
 		List<Task> updatedTaskList = Arrays.asList(updatedTasks);
 		List<Task> unarchived = new ArrayList<Task>();
 		List<Task> archived = new ArrayList<Task>();

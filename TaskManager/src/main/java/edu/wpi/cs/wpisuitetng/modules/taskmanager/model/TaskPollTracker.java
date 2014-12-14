@@ -24,7 +24,7 @@ public class TaskPollTracker {
 	private TaskPollTracker() {
 		toBeNotified = new LinkedList<Thread>();
 		notificationLock = new Semaphore(0, true);
-		task = new Task();
+		this.task = new Task();
 	}
 	
 	public static TaskPollTracker getInstance() {
@@ -46,10 +46,11 @@ public class TaskPollTracker {
 		return notificationLock;
 	}
 	public Task getTask(){
-		return task;
+		return this.task;
 	}
 	
 	public void update(Task task) {
+		this.task = task;
 		System.out.println("Got Here! " + toBeNotified.size());
 		System.out.flush();
 		for (Thread entityToNotify : toBeNotified) {
