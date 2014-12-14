@@ -22,7 +22,6 @@ import java.util.Queue;
 import com.google.gson.Gson;
 
 import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.draganddrop.TransferableTaskString;
 
 /**
  * @author wmtemple
@@ -80,7 +79,7 @@ public class StageList extends AbstractModel implements List<Stage>, Queue<Stage
 		if (this==o) {
 			return true;
 		}
-		if (!(o instanceof TransferableTaskString)) {
+		if (!(o instanceof StageList)) {
 			return false;
 		}
 		

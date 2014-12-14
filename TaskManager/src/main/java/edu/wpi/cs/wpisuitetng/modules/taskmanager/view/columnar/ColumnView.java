@@ -142,6 +142,12 @@ public class ColumnView extends JPanel implements IView {
 	public void setState(Task[] tasks, StageList stages) {
 		this.tasks = tasks == null ? new Task[0] : tasks;
 		this.stages = stages == null ? new StageList() : stages;
+		System.out.println("Updating Column View using these Tasks:");
+		int count = 0;
+		for (Task t: this.tasks) {
+			System.out.println(count + ") " + t);
+			count++;
+		}
 		this.reflow();
 	}
 	
@@ -210,6 +216,7 @@ public class ColumnView extends JPanel implements IView {
 	private Task[] getTasksForStage(Stage stage) {
 		List<Task> tasks = new ArrayList<Task>();
 		for (int i = 0; i < this.tasks.length; i++) {
+			System.out.println(this.tasks[i].getStage() + ", " + stage + ", " + this.tasks[i].getStage().equals(stage));
 			if (this.tasks[i].getStage().equals(stage)) {
 				tasks.add(this.tasks[i]);
 			}

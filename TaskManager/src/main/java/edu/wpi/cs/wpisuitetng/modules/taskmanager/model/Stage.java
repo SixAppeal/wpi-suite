@@ -1,6 +1,5 @@
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.model;
 
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.draganddrop.TransferableTaskString;
 
 /**
  * Basic stage model
@@ -51,7 +50,7 @@ public class Stage {
 		if (this==o) {
 			return true;
 		}
-		if (!(o instanceof TransferableTaskString)) {
+		if (!(o instanceof Stage)) {
 			return false;
 		}
 		
