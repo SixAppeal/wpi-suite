@@ -237,8 +237,9 @@ public class ColumnEditView extends JPanel implements IView {
 				
 				if( !stageJList.isSelectionEmpty()) {
 					if( stages.size() > 1) {
-						stages.remove(stageJList.getSelectedIndex());
+						Stage stage = stages.remove(stageJList.getSelectedIndex());
 						updateJListAndPublish();
+						gateway.toPresenter("LocalCache", "archiveTasksForStage", stage);
 					} else {
 						//TODO visual feedback when there is only one stage
 					}

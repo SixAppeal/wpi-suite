@@ -35,6 +35,7 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
@@ -80,7 +81,6 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.MemberButtonGr
  * @author akshoop
  * @author dpseaman
  * @author thhughes
-
  */
 public class TaskEditView extends JPanel implements IView {
 	private static final long serialVersionUID = -8972626054612267276L;
@@ -630,7 +630,6 @@ public class TaskEditView extends JPanel implements IView {
 		}
 		return requirementTitles;
 	}
-
 
 	private class JListMouseHandler implements MouseListener {
 
