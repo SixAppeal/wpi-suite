@@ -1,9 +1,12 @@
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.model;
 
+import java.awt.Color;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Comparator;
+import java.util.Map;
 
 import com.google.gson.Gson;
 
@@ -35,11 +38,36 @@ public class Task extends AbstractModel {
 			return Integer.compare(task1.getPriority(), task2.getPriority());
 		}
 	};
+	
+	/**
+	 * Color categories
+	 */
+	public static final int CATEGORY_NONE = 0;
+	public static final int CATEGORY_GREEN = 1;
+	public static final int CATEGORY_YELLOW = 2;
+	public static final int CATEGORY_RED = 3;
+	public static final int CATEGORY_BLUE = 4;
+	
+	/**
+	 * A map of categories to colors
+	 */
+	public static final Map<Integer, Color> COLORS = new HashMap<Integer, Color>() {
+		private static final long serialVersionUID = 297561479547563732L;
+
+		{
+			put(CATEGORY_NONE, new Color(255, 255, 255, 0));
+			put(CATEGORY_GREEN, Color.GREEN);
+			put(CATEGORY_YELLOW, Color.YELLOW);
+			put(CATEGORY_RED, Color.RED);
+			put(CATEGORY_BLUE, Color.BLUE);
+		}
+	};
 
 	private int id;
 	private boolean archived;
 	private String title;
 	private String description;
+	private int category;
 	private Stage stage;
 	private List<String> assignedTo;
 	private int estimatedEffort; 
@@ -54,7 +82,7 @@ public class Task extends AbstractModel {
 	 * Default constructor (dummy task for initialization)
 	 */
 	public Task() {
-		this("A New Task", "A New Task", new Stage("New"), new LinkedList<String>(), 1, 1,
+		this("A New Task", "A New Task", CATEGORY_NONE, new Stage("New"), new LinkedList<String>(), 1, 1,
 				new Date(), new Requirement(), new LinkedList<Activity>(), new LinkedList<Comment>());
 	}
 
@@ -72,7 +100,7 @@ public class Task extends AbstractModel {
 	 * @param comments lists of comments members put for the task
 	 * @throws IllegalArgumentException
 	 */
-	public Task(String title, String description, Stage stage,
+	public Task(String title, String description, int category, Stage stage,
 			List<String> assignedTo, Integer estimatedEffort,
 			Integer actualEffort, Date dueDate, 
 			Requirement requirement, List<Activity> activities, List<Comment> comments) throws IllegalArgumentException {
@@ -80,6 +108,7 @@ public class Task extends AbstractModel {
 		this.title = TaskUtil.validateTitle(title);
 		this.description = TaskUtil.validateDescription(description);
 		this.stage = TaskUtil.validateStage(stage);
+		this.category = category;
 		this.assignedTo = assignedTo;
 		this.estimatedEffort = TaskUtil.validateEffort(estimatedEffort);
 		this.actualEffort = TaskUtil.validateEffort(actualEffort);
@@ -164,6 +193,24 @@ public class Task extends AbstractModel {
 	 */
 	public String getTitle() {
 		return title;
+	}
+	
+	/**
+	 * Sets the category of the task. Should be one of:
+	 * Task.CATEGORY_NONE, Task.CATEGORY_GREEN, Task.CATEGORY_YELLOW,
+	 * Task.CATEGORY_RED, Task.CATEGORY_BLUE
+	 * @param category A category
+	 */
+	public void setCategory(int category) {
+		this.category = category;
+	}
+	
+	/**
+	 * Gets the category of the task
+	 * @return The task's category
+	 */
+	public int getCategory() {
+		return category;
 	}
 	
 	/**
