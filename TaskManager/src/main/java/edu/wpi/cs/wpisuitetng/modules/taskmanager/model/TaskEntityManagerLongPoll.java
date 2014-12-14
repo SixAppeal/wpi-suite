@@ -6,13 +6,14 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors: Nathan Hughes
+ * Contributors: Nathan Hughes, Troy Hughes, Santiago Rojas
  ******************************************************************************/
 
 
 /**
  * @author nhhughes
  * @author srojas
+ * @author thhughes
  */
 
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.model;
@@ -187,7 +188,8 @@ public class TaskEntityManagerLongPoll implements EntityManager<Task>{
 	@Override
 	public Task update(Session session, String content) throws WPISuiteException {
 		Task updatedTask = TaskUtil.fromJson(content);
-
+//		System.out.println("Task to be updated: " + updatedTask);
+//		System.out.flush();
 		//Gets old task, modifies it, and saves it again
 		List<Model> oldTasks = db.retrieve(Task.class, "id", updatedTask.getId(), session.getProject());
 		if(oldTasks.size() < 1 || oldTasks.get(0) == null) {

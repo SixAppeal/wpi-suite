@@ -6,7 +6,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors: Nathan Hughes
+ * Contributors: Nathan Hughes, Troy Hughes
  ******************************************************************************/
 
 
@@ -490,6 +490,7 @@ public class TaskEditView extends JPanel implements IView {
 	 * Saves the task currently being edited
 	 */
 	private void saveTask() {
+		System.out.println("Troy Look Here ---> " + this.task.getId());
 		this.gateway.toPresenter("LocalCache", "update", "task:testing", this.task);
 	}
 
@@ -576,7 +577,8 @@ public class TaskEditView extends JPanel implements IView {
 	 * @param updatedTask is the task that is set to the new task in the edit view. 
 	 */
 	public void updateEVTask(Task updatedTask){
-		this.task.updateFrom(updatedTask);
+		//this.task.updateFrom(updatedTask);
+		this.task = updatedTask;
 	}
 
 	/**

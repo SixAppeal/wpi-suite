@@ -6,7 +6,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors: Nathan Hughes
+ * Contributors: Nathan Hughes, Troy Hughes
  ******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache;
@@ -42,6 +42,7 @@ import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
  *  	bad request (i.e. bug)
  *  	 
  * @author nhhughes
+ * @author thhughes
  *
  */
 public class ThreadSafeLocalCache implements Cache {
@@ -202,7 +203,12 @@ public class ThreadSafeLocalCache implements Cache {
 	 */
 	public void updateTasks(String taskVal) {
 		Task[] updatedTasks = new Gson().fromJson(taskVal, Task[].class);
-		
+		System.out.println("Tasks to update:");
+		int count = 0;
+		for (Task t : updatedTasks) {
+			System.out.println(count + ") " + t);
+			count++;
+		}
 		List<Task> updatedTaskList = Arrays.asList(updatedTasks);
 		List<Task> unarchived = new ArrayList<Task>();
 		List<Task> archived = new ArrayList<Task>();
