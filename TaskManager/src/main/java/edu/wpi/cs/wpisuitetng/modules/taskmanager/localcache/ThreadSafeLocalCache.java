@@ -195,70 +195,73 @@ public class ThreadSafeLocalCache implements Cache {
 		throw new NotImplementedException();
 	}
 
+	
+	/**
+	 * Takes in updates generated from a long pull request and updates the cache
+	 * @param taskVal all the updates that have occured since the last sync
+	 */
 	public void updateTasks(String taskVal) {
 		Task[] updatedTasks = new Gson().fromJson(taskVal, Task[].class);
-		//		List<Task> unarchived = new ArrayList<Task>();
-		//		List<Task> archived = new ArrayList<Task>();
-		int i = 0;
-		int j = 0;
-		int z = 0;
-		
-		for (Task task : updatedTasks){
-
-			boolean done = false;
-			//check if task is in tasks and update if it is
-			for (Task toCheck : this.tasks){
-				if(toCheck.getId() == updatedTasks[z].getId()){
-					this.tasks.set(i, updatedTasks[z]);
-					if (updatedTasks[z].isArchived()){
-						this.tasks.remove(i);
-						this.archives.add(updatedTasks[z]);
-					} 
-					done = true;
-				}
-				i++;
-			}
-			//if not done, task is not in unarchived list -> look in archives
-			if (!done){
-				for (Task toCheck : this.archives){
-					if(toCheck.getId() == updatedTasks[z].getId()){
-						archives.set(j, updatedTasks[z]);
-						if (!(updatedTasks[z].isArchived())){
-							this.archives.remove(i);
-							this.tasks.add(updatedTasks[z]);
-						}
-						done = true;
+		List<Task> updatedTaskList = Arrays.asList(updatedTasks);
+		List<Task> unarchived = new ArrayList<Task>();
+		List<Task> archived = new ArrayList<Task>();
+		List<Task> used = new ArrayList<Task>();
+		for (Task oldTask : this.tasks) {
+			boolean changed = false;
+			Task taskToInsert = oldTask; 
+			for (Task newTask : updatedTaskList) {
+				if (newTask.getId() == oldTask.getId()) {
+					if (newTask.isArchived()) {
+						taskToInsert = null;
 					}
-					j++;
+					else {
+						changed = true;
+						taskToInsert = newTask;
+					}
+					break;
 				}
 			}
-			//if not done, task does not exist in the list -> add it 
-
-			if (!done){
-				if(updatedTasks[z].isArchived()){
-					this.archives.add(updatedTasks[z]);
+			if (taskToInsert != null) {
+				unarchived.add(taskToInsert);
+				if (changed) {
+					used.add(taskToInsert);
+				}
+			}
+		}
+		for (Task oldTask : this.archives) {
+			boolean changed = false;
+			Task taskToInsert = oldTask; 
+			for (Task newTask : updatedTasks) {
+				if (newTask.getId() == oldTask.getId()) {
+					if (newTask.isArchived()) {
+						taskToInsert = null;
+					}
+					else {
+						taskToInsert = newTask;
+						changed = true;
+					}
+					break;
+				}
+			}
+			if (taskToInsert != null) {
+				archived.add(taskToInsert);
+				if (changed) {
+					used.add(taskToInsert);
+				}
+			}
+		}
+		for (Task newTask : updatedTaskList) {
+			if (!used.contains(newTask)) {
+				if (newTask.isArchived()) {
+					archived.add(newTask);
 				}
 				else {
-					this.tasks.add(updatedTasks[z]);
+					unarchived.add(newTask);
 				}
-				done = true;
 			}
-			z++;
-
-
-		}//major for
-
-		//		for (Task toCheck : tasks) {
-		//			if (toCheck.isArchived()) {
-		//				archived.add(toCheck);
-		//			}
-		//			else {
-		//				unarchived.add(toCheck);
-		//			}
-		//			}
-		//		this.archives = archived;
-		//		this.tasks = unarchived;
-
+		}
+		this.archives = archived;
+		this.tasks = unarchived;
 		this.gateway.toPresenter("TaskPresenter", "updateTasks");
 		this.gateway.toPresenter("TaskPresenter", "updateSearch");
 	}

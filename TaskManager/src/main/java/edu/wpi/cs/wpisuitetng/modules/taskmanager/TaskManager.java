@@ -170,7 +170,6 @@ public class TaskManager implements IJanewayModule {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		System.out.print("we in da house");
 		//reflow with new information
 		Stage[] toConvert = (Stage[])localCache.retrieve("stages");
 		StageList stageList = new StageList();
