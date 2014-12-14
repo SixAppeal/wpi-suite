@@ -105,6 +105,8 @@ public class SidebarView extends JTabbedPane implements IView {
 	 * Adds a creation panel to the sidebar
 	 */
 	public void addCreatePanel() {
+		this.setVisible(true);
+		
 		// if there is a tab with the edit pane 
 		for (IView view : viewList) {
 			if (view instanceof TaskCreateView) {
@@ -120,8 +122,6 @@ public class SidebarView extends JTabbedPane implements IView {
 		this.addTab(null, new ImageIcon(this.getClass().getResource("icon_plus.png")),
 				createView);
 		this.setSelectedComponent(createView);
-		this.setVisible(true);
-		
 		createView.fixFocus();
 	}
 	
@@ -144,6 +144,7 @@ public class SidebarView extends JTabbedPane implements IView {
 	 * @param task The task to edit
 	 */
 	public void addEditPanel(Task task) {
+		this.setVisible(true);
 		
 		//if there is a tab with the edit pane 
 		for (IView view : viewList) {
@@ -162,7 +163,6 @@ public class SidebarView extends JTabbedPane implements IView {
 		this.addTab(null, new ImageIcon(this.getClass().getResource("icon_pencil.png")),
 				editView);
 		this.setSelectedComponent(editView);
-		this.setVisible(true);
 	}
 	
 	/**
