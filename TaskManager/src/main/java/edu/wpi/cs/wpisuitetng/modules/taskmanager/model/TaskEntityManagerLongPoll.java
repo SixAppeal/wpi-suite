@@ -25,7 +25,6 @@ import edu.wpi.cs.wpisuitetng.exceptions.NotImplementedException;
 import edu.wpi.cs.wpisuitetng.exceptions.WPISuiteException;
 import edu.wpi.cs.wpisuitetng.modules.EntityManager;
 import edu.wpi.cs.wpisuitetng.modules.Model;
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.util.TaskUtil;
 
 /**
@@ -209,10 +208,12 @@ public class TaskEntityManagerLongPoll implements EntityManager<Task>{
 	public String advancedGet(Session arg0, String[] arg1) {
 		Thread thisSession = Thread.currentThread();
 		TaskPollTracker.getInstance().register(thisSession);
-		try {
-			Thread.sleep(60000);
-		} catch (InterruptedException e) {
-		}
+			try {
+				Thread.sleep(60000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		
 		TaskPollTracker.getInstance().remove(thisSession);
 		return new Gson().toJson(db.retrieveAll(new Task(), arg0.getProject()).toArray(new Task[0]), Task[].class);
 	}

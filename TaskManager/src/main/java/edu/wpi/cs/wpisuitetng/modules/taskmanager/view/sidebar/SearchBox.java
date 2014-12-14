@@ -100,7 +100,6 @@ public class SearchBox extends JPanel implements IView {
 		this.container.add(resultsBox, gbc);
 		
 		this.scrollPane.setMinimumSize(new Dimension(300, 0));
-		
 		this.setLayout(new MigLayout("fill, ins 0", "[300]"));
 		this.add(this.scrollPane, "grow");
 	}

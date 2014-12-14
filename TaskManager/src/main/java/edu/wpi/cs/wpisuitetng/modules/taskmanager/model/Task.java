@@ -9,6 +9,7 @@ import com.google.gson.Gson;
 
 import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementmanager.models.Requirement;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.draganddrop.TransferableTaskString;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.util.TaskUtil;
 
 /**
@@ -97,6 +98,10 @@ public class Task extends AbstractModel {
 	 */
 	@Override
 	public boolean equals(Object o) {
+		if (this==o) {
+			return true;
+		}
+		
 		if (o instanceof Task) {
 			Task task = (Task) o;
 			return this.id == task.getId()

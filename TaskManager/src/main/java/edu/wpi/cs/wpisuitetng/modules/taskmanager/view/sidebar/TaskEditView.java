@@ -204,7 +204,7 @@ public class TaskEditView extends JPanel implements IView {
 		for (String s: this.requirementTitles) this.requirementsComboBox.addItem(s);
 		this.requirementsComboBox.setSelectedIndex(-1);
 		for (int i = 0; i < this.requirementTitles.size(); i++) {
-			if (this.task.getRequirement().getName() == this.requirementTitles.get(i)) {
+			if (this.task.getRequirement().getName().equals(this.requirementTitles.get(i))) {
 				this.requirementsComboBox.setSelectedIndex(i);
 			}
 		}

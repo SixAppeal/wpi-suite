@@ -22,6 +22,7 @@ import java.util.Queue;
 import com.google.gson.Gson;
 
 import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.draganddrop.TransferableTaskString;
 
 /**
  * @author wmtemple
@@ -68,7 +69,7 @@ public class StageList extends AbstractModel implements List<Stage>, Queue<Stage
 	
 	@Override
 	public String toString() {
-		String output = new String("[");
+		String output = "[";
 		for( Stage s : this ) {
 			output += "{" + s.toString() + "}, ";
 		}
@@ -76,6 +77,13 @@ public class StageList extends AbstractModel implements List<Stage>, Queue<Stage
 	}
 	
 	public boolean equals(Object o) {
+		if (this==o) {
+			return true;
+		}
+		if (!(o instanceof TransferableTaskString)) {
+			return false;
+		}
+		
 		if( o instanceof StageList ) {
 			return stageList.equals(((StageList) o).getLL());
 		} else return false;

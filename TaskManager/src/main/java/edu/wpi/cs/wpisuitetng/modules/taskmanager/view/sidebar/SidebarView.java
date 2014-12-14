@@ -135,6 +135,7 @@ public class SidebarView extends JTabbedPane implements IView {
 			this.removeTabAt(this.indexOfComponent(createView));
 			this.viewList.remove(createView);
 		} catch (IndexOutOfBoundsException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -187,7 +188,7 @@ public class SidebarView extends JTabbedPane implements IView {
 			this.removeTabAt(this.indexOfComponent(editView));
 			this.viewList.remove(editView);
 		} catch (IndexOutOfBoundsException e) {
-			// Do nothing
+			e.printStackTrace();
 		}
 	}
 	

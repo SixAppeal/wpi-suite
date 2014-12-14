@@ -15,10 +15,12 @@ package edu.wpi.cs.wpisuitetng.modules.taskmanager.draganddrop;
 import java.awt.Cursor;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;
 import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -107,15 +109,19 @@ public class CustomDropTargetListener implements DropTargetListener {
 		Object transferableObj = null;
 		Transferable transferable = null;
 		
-		try {
-			dragAndDropTaskFlavor = TransferableTaskString.flavor;
-			transferable = dtde.getTransferable();
-			//DropTargetContext c = dtde.getDropTargetContext();
-			
-			if (transferable.isDataFlavorSupported(dragAndDropTaskFlavor)) {
+		dragAndDropTaskFlavor = TransferableTaskString.flavor;
+		transferable = dtde.getTransferable();
+		//DropTargetContext c = dtde.getDropTargetContext();
+		
+		if (transferable.isDataFlavorSupported(dragAndDropTaskFlavor)) {
+			try {
 				transferableObj = dtde.getTransferable().getTransferData(dragAndDropTaskFlavor);
+			} catch (UnsupportedFlavorException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
-		} catch (Exception ex) { }
+		}
 		if (transferableObj == null) {
 			return;
 		}
