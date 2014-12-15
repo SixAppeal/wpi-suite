@@ -23,7 +23,7 @@ public class TabbedPaneView extends JTabbedPane implements IView{
 	}
 	
 	/**
-	 * adds the specified panes to the J
+	 * adds the specified panes to the JTabbedPane
 	 * @param panes
 	 */
 	public void addToPanes(JComponent... panes){
