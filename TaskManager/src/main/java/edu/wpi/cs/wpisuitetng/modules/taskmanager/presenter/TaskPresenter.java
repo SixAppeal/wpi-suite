@@ -84,7 +84,8 @@ public class TaskPresenter implements IPresenter{
 	 */
 	public void notifyMemberHandler() {
 		this.gateway.toView("MemberListHandler", "updateAll", cache);
-	};
+//		this.gateway.toView("StatisticsView", "updateAll", cache);        THIS IS MAKING ERRORS HAPPEN
+	}
 	
 	/**
 	 * Updates all the tasks in the ColumnView
