@@ -93,16 +93,15 @@ public class ColumnEditView extends JPanel implements IView {
 		this.moveDnBtn.setPreferredSize(new Dimension(100, 25));
 		
 		// disable stage name editing and delete when there's no stage selected
-		if (stageJList.isSelectionEmpty()){
-			this.newName.setEnabled(false);
+		this.addButton.setEnabled(false);
+		this.newName.setEnabled(false);
+		this.nameChange.setEnabled(false);
+		this.deleteBtn.setEnabled(false);
+		
+		if(!stageJList.isSelectionEmpty()) {
 			this.nameChange.setEnabled(false);
-			this.deleteBtn.setEnabled(false);
-		}
-		else if(!stageJList.isSelectionEmpty()){
-			if(newName.getText().isEmpty())
-				this.nameChange.setEnabled(false);
-			if(titleEntry.getText().isEmpty())
-				this.addButton.setEnabled(false);
+			this.deleteBtn.setEnabled(true);
+			this.newName.setEnabled(true);
 		}
 
 		addButton.addActionListener( new ActionListener() {
@@ -228,7 +227,6 @@ public class ColumnEditView extends JPanel implements IView {
 			public void valueChanged(ListSelectionEvent e) {
 				if (!stageJList.isSelectionEmpty()) {
 					newName.setEnabled(true);
-					nameChange.setEnabled(true);
 					deleteBtn.setEnabled(true);
 				}else{
 					deleteBtn.setEnabled(false);
@@ -459,7 +457,6 @@ public class ColumnEditView extends JPanel implements IView {
 			addButton.setEnabled(false);
 		}
 
-		
 	}
 	
 	private void updateJListAndPublish() {
