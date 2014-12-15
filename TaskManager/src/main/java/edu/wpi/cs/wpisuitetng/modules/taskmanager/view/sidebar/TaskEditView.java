@@ -57,6 +57,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementmanager.RequirementManager;
 import edu.wpi.cs.wpisuitetng.modules.requirementmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementmanager.models.RequirementModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementmanager.view.ViewEventController;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.ThreadSafeLocalCache;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Stage;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.StageList;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
@@ -124,9 +125,6 @@ public class TaskEditView extends JPanel implements IView {
 	private Form form;
 
 	private ActionListener stageBoxListener;
-
-	@SuppressWarnings("unused")
-	private List<String> stringArray;
 
 	private TaskEditView tev;
 
@@ -200,15 +198,7 @@ public class TaskEditView extends JPanel implements IView {
 		this.assignedMembers.setVisibleRowCount(4);				
 		this.assignedMembers.setLayoutOrientation(JList.VERTICAL);
 
-		this.requirementTitles = getRequirementTitles();
 		this.requirementsComboBox = new JComboBox<String>();
-		for (String s: this.requirementTitles) this.requirementsComboBox.addItem(s);
-		this.requirementsComboBox.setSelectedIndex(-1);
-		for (int i = 0; i < this.requirementTitles.size(); i++) {
-			if (this.task.getRequirement().getName().equals(this.requirementTitles.get(i))) {
-				this.requirementsComboBox.setSelectedIndex(i);
-			}
-		}
 
 		this.viewRequirement = new JButton("View");
 		this.attachRequirement = new JButton("Associate");
@@ -412,6 +402,7 @@ public class TaskEditView extends JPanel implements IView {
 					if (r.getName().equals(reqName)) {
 						task.setRequirement(r);
 						saveTask();
+//						System.out.println("button task getreq getname is " + task.getRequirement().getName());
 					}
 				}
 			}
@@ -498,6 +489,7 @@ public class TaskEditView extends JPanel implements IView {
 	public void setGateway(Gateway gateway) {
 		this.gateway = gateway;
 		this.commentPanel.setGateway(this.gateway);
+//		gateway.toPresenter("LocalCache", "sync", "requirement");
 	}
 
 	public void updateEverything(Task t) {
@@ -586,31 +578,32 @@ public class TaskEditView extends JPanel implements IView {
 	 * @param requirementsArray Passed in list of requirements from Requirements Manager
 	 */
 	public void getRequirements(Requirement[] requirementsArray) {
+		FontMetrics fm = this.requirementsComboBox.getFontMetrics(this.requirementsComboBox.getFont());
 		this.requirements = requirementsArray;
 		this.requirementTitles = getRequirementTitles();
-		ComboBoxModel<String> model = this.requirementsComboBox.getModel();
-		int size = model.getSize();
+		int size = this.requirementsComboBox.getItemCount();
+//		System.out.println("int size is " + size);
 		boolean foundRequirement = false;
-		if (!task.getRequirement().getName().isEmpty()) {
-			this.requirementsComboBox.setSelectedItem(task.getRequirement().getName());
-		}
-		if (size < requirementTitles.size()) {
+		if (size < this.requirementTitles.size()) {
+			this.requirementsComboBox.removeAll();
 			for (String s : this.requirementTitles) {
+				s = TaskManagerUtil.reduceString(s, 210, fm);
 				foundRequirement = false;
 				for (int i = 0; i < size; i++) {
-					Object element = model.getElementAt(i);
-					if (s == element) {
+					String element = this.requirementsComboBox.getItemAt(i);
+					if (s.equals(element)) {
 						foundRequirement = true;
 					}
 				}
 				if (!foundRequirement) {
-					FontMetrics fm = this.requirementsComboBox.getFontMetrics(this.requirementsComboBox.getFont());
-					String reducedString = TaskManagerUtil.reduceString(s, 220, fm);
-					this.requirementsComboBox.addItem(reducedString);
+					this.requirementsComboBox.addItem(s);
 				}
 			}	
-			if (!task.getRequirement().getName().isEmpty()) {
-				this.requirementsComboBox.setSelectedItem(task.getRequirement().getName());
+//			System.out.println("midway check task getreq getname: " + this.task.getRequirement().getName());
+			if (!this.task.getRequirement().getName().isEmpty()) {
+//				System.out.println("first task getreq getname is NOT empty");
+//				System.out.println("first task getreq getname: " + this.task.getRequirement().getName());
+				setTaskRequirementBox();
 			}
 			else {
 				this.requirementsComboBox.setSelectedIndex(-1);
@@ -622,11 +615,40 @@ public class TaskEditView extends JPanel implements IView {
 	 * Return the titles of the requirements
 	 */
 	public List<String> getRequirementTitles() {
-		this.requirementTitles.clear();
-		for (Requirement r : this.requirements) {
-			requirementTitles.add(r.getName());
+		if (this.requirementTitles.isEmpty()) {
+			for (Requirement r : this.requirements) {
+				requirementTitles.add(r.getName());
+			}	
 		}
 		return requirementTitles;
+	}
+	
+	/**
+	 * Sets requirement dropdown menu based on the requirement of specified task
+	 * Code is partially borrowed from What? We Thought This Was Bio's NewTaskTab.java file
+	 */
+	public void setTaskRequirementBox() {
+		// Set the requirement box
+		for (int i = 0; i < this.requirementsComboBox.getItemCount(); i++) {
+			String req = this.requirementsComboBox.getItemAt(i);
+			System.out.println("req is " + req);
+			String reducedTaskReq = shorterReqTitle(this.task.getRequirement());
+			System.out.println("reducedTaskReq is " + reducedTaskReq);
+			if (reducedTaskReq.equals(req)) {
+				System.out.println("WE SET THE CURRENT ITEM");
+				this.requirementsComboBox.setSelectedItem(req);
+				return;
+			}
+		}
+	}
+	
+	/**
+	 * Shortens requirement title for use in dropdown menu
+	 */
+	public String shorterReqTitle(Requirement aReq) {
+		FontMetrics fm = this.requirementsComboBox.getFontMetrics((this.requirementsComboBox.getFont()));
+		String shortenedTitle = TaskManagerUtil.reduceString(aReq.getName(), 210, fm);
+		return shortenedTitle;
 	}
 
 	private class JListMouseHandler implements MouseListener {

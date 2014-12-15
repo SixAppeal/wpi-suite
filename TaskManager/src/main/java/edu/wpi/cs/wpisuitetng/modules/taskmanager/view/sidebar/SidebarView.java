@@ -16,12 +16,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Insets;
 import java.io.IOException;
 
 import javax.swing.ImageIcon;
+import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.plaf.basic.BasicTabbedPaneUI;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementmanager.models.Requirement;
@@ -105,6 +109,51 @@ public class SidebarView extends JTabbedPane implements IView {
 				columnEditView);
 		this.addTab(null,  new ImageIcon(this.getClass().getResource("icon_stats.png")), 
 				statisticsView);
+		
+		
+		//This stuff is for make ing it not strech out more then it needs to
+		this.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e)
+			{
+				UpdateCompates();
+			}
+		});
+		
+	}
+	
+	/**
+	 * Uncompates the current file
+	 * and Compates all other files
+	 */
+	public void UpdateCompates()
+	{
+		int currentIndex = this.getSelectedIndex();
+		int numberOfTabs = this.getTabCount();
+		for(int i = 0; i < numberOfTabs; i++)
+		{
+			Component component = this.getComponentAt(i);
+			if(!(component instanceof EmptyComponentHolder))
+			{
+				EmptyComponentHolder holder = new EmptyComponentHolder(component);
+			
+				this.setComponentAt(i, holder);
+			}
+			
+			
+		}
+		
+		//int currentIndex = this.getSelectedIndex();
+		Component selected = this.getComponentAt(currentIndex);
+		try
+		{
+			this.setComponentAt(currentIndex, ((EmptyComponentHolder) selected).contents);
+		}
+		catch(Exception e)
+		{
+			System.out.println("Fuck, you Swing");
+		}
+		
 	}
 	
 	/**
@@ -157,6 +206,7 @@ public class SidebarView extends JTabbedPane implements IView {
 			if (view instanceof TaskEditView) {
 				if (task.equals(((TaskEditView) view).getTask())) {
 					setSelectedComponent((TaskEditView)view);
+					((TaskEditView) view).getRequirements((Requirement[])cache.retrieve("requirements"));
 					return;
 				}
 			}
@@ -165,6 +215,7 @@ public class SidebarView extends JTabbedPane implements IView {
 		
 		TaskEditView editView = new TaskEditView(task, stages);
 		editView.setGateway(this.gateway);
+		editView.getRequirements((Requirement[])cache.retrieve("requirements"));
 		this.viewList.add(editView);
 		this.addTab(null, new ImageIcon(this.getClass().getResource("icon_pencil.png")),
 				editView);
@@ -173,6 +224,7 @@ public class SidebarView extends JTabbedPane implements IView {
 	
 	/**
 	 * Passes the retrieved requirements array to the Task Edit View
+	 * @param requirements String of all requirements retrieved
 	 */
 	public void passInRequirements(String requirements) {
 		Requirement[] requirementsArray = Requirement.fromJsonArray(requirements);
