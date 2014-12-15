@@ -31,6 +31,7 @@ public class StageDragDropPanel extends JPanel {
 	
 	private static final long serialVersionUID = 6924509690789899864L;
 	private StageView view;
+	private TaskView taskView = null;
 	
 /**
  * Constructor
@@ -44,6 +45,38 @@ public class StageDragDropPanel extends JPanel {
 		setDropTarget(new DropTarget(StageDragDropPanel.this,
 				new CustomDropTargetListener(StageDragDropPanel.this)));
 	}
+	
+	/**
+	 * Cosntuctor for a Task View Drag Drop Location
+	 * @param taskView
+	 * @param stageView
+	 */
+	public StageDragDropPanel(TaskView taskView, StageView stageView)
+	{
+		// Not sure waht to do if I want it for a task view
+		super();
+		this.view = stageView;
+		this.taskView = taskView;
+		
+		setTransferHandler(new DragAndDropTransferHandler());
+		setDropTarget(new DropTarget(StageDragDropPanel.this,
+				new CustomDropTargetListener(StageDragDropPanel.this)));
+		
+	}
+	
+	/**
+	 * Gets the Y off set for the draging drop
+	 * @return y corrdiate off set
+	 */
+	public int getYOffSet()
+	{
+		if(taskView ==  null)
+		{
+			return 0;
+		}
+		return taskView.getLocation().y - taskView.getHeight()/2;
+	}
+	
 	
 	/**
 	 * getter

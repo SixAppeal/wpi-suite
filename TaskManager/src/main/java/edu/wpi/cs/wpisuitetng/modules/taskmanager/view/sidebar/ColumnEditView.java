@@ -79,7 +79,7 @@ public class ColumnEditView extends JPanel implements IView {
 		this.moveDnBtn = new JButton();
 		this.titleEntry = new JTextField();
 		this.newName = new JTextField();
-		this.nameChange = new JButton("Edit Name");
+		this.nameChange = new JButton("Rename Stage");
 		this.deleteBtn = new JButton("Delete Stage");
 		
 		this.titleEntry.setBorder(FormField.BORDER_NORMAL);
@@ -93,10 +93,15 @@ public class ColumnEditView extends JPanel implements IView {
 		this.moveDnBtn.setPreferredSize(new Dimension(100, 25));
 		
 		// disable stage name editing and delete when there's no stage selected
-		if (stageJList.isSelectionEmpty()){
-			this.newName.setEnabled(false);
+		this.addButton.setEnabled(false);
+		this.newName.setEnabled(false);
+		this.nameChange.setEnabled(false);
+		this.deleteBtn.setEnabled(false);
+		
+		if(!stageJList.isSelectionEmpty()) {
 			this.nameChange.setEnabled(false);
-			this.deleteBtn.setEnabled(false);
+			this.deleteBtn.setEnabled(true);
+			this.newName.setEnabled(true);
 		}
 
 		addButton.addActionListener( new ActionListener() {
@@ -154,12 +159,41 @@ public class ColumnEditView extends JPanel implements IView {
 			@Override
 			public void keyReleased(KeyEvent e) {
 			    if (e.getKeyCode() == KeyEvent.VK_ENTER ){
-			    	System.out.println("Yea fuck Swing!");
+			    	System.out.println("Yeah fuck Swing!");
 			    	addStage();
 			    }
 			}
 			
 
+		});
+		
+		newName.addKeyListener( new KeyListener() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+				
+			}
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+				updateEditBox();
+			}
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+				updateEditBox();
+			}
+		});
+		
+		newName.addFocusListener(new FocusListener() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				updateEditBox();
+			}
+
+			@Override
+			public void focusLost(FocusEvent e) {
+				updateEditBox();
+			}
 		});
 		
 
@@ -193,7 +227,6 @@ public class ColumnEditView extends JPanel implements IView {
 			public void valueChanged(ListSelectionEvent e) {
 				if (!stageJList.isSelectionEmpty()) {
 					newName.setEnabled(true);
-					nameChange.setEnabled(true);
 					deleteBtn.setEnabled(true);
 				}else{
 					deleteBtn.setEnabled(false);
@@ -254,11 +287,6 @@ public class ColumnEditView extends JPanel implements IView {
 		this.setBackground(TaskManagerUtil.SIDEBAR_COLOR);
 		GridBagConstraints gbc = new GridBagConstraints();
 		this.setLayout(new GridBagLayout());
-		
-		//The formatting here could use some work
-		
-		//It would help a ton if anyone knew which dimensions each number
-			//in the insets object acutally corresponded to
 
 		//top left bottom right
 		
@@ -319,6 +347,8 @@ public class ColumnEditView extends JPanel implements IView {
 		gbc.insets = new Insets(10, 20, 20, 20);
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		this.add(deleteBtn, gbc);
+		
+		this.setMinimumSize(new Dimension(300, 0));
 	}
 
 	protected void moveCurrentTaskUp() {
@@ -354,6 +384,12 @@ public class ColumnEditView extends JPanel implements IView {
 		titleEntry.setBorder(valid ? FormField.BORDER_NORMAL : FormField.BORDER_ERROR);
 		addButton.setEnabled(valid);
 	}
+	
+	private void updateEditBox() {
+		boolean valid = !TaskUtil.sanitizeInput(newName.getText()).isEmpty();
+		titleEntry.setBorder(valid ? FormField.BORDER_NORMAL : FormField.BORDER_ERROR);
+		nameChange.setEnabled(valid);
+	}
 
 
 	@Override
@@ -366,7 +402,7 @@ public class ColumnEditView extends JPanel implements IView {
 		boolean valid = !TaskUtil.sanitizeInput(newName.getText()).isEmpty();
 		if (valid){
 			
-//			int index = stageJList.getSelectedIndex();	
+			//int index = stageJList.getSelectedIndex();	
 			//Stage stage = stageJList.getSelectedValue();
 			Stage stage;
 			
@@ -380,6 +416,7 @@ public class ColumnEditView extends JPanel implements IView {
 			stages.add(stageJList.getSelectedIndex(), stage);
 			updateJListAndPublish();
 			newName.setText("");
+			nameChange.setEnabled(false);
 			 
 		}
 
@@ -402,6 +439,9 @@ public class ColumnEditView extends JPanel implements IView {
 			if(s.getName().equals(newStageName)){
 				nameFlag = true;
 			}
+			if(s.getName().equals(new String(""))){
+				stages.remove(s);
+			}
 		}
 		if (nameFlag){
 			//TODO visual feedback when there is the input is invalid
@@ -414,7 +454,6 @@ public class ColumnEditView extends JPanel implements IView {
 			addButton.setEnabled(false);
 		}
 
-		
 	}
 	
 	private void updateJListAndPublish() {

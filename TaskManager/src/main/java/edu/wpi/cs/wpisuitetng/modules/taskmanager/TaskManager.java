@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors: Will Rensselaer, Thomas Meehan, Alex Shoop, Ryan Orlando, Troy Hughes,
- * Jill Hennessy, Ryan Wang, Santiago Rojas, Dan Seaman, Kyle Peffer, Nathan Hughes, Will Temple
+ * Jill Hennessy, Ray Wang, Santiago Rojas, Dan Seaman, Kyle Peffer, Nathan Hughes, Will Temple
  ******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.taskmanager;
@@ -187,7 +187,7 @@ public class TaskManager implements IJanewayModule {
 		gateway.toPresenter("TaskPresenter", "setStages");
 		//initial long pull request
 		gateway.toPresenter("LocalCache", "sync", "tasks");
-		gateway.toPresenter("LocalCache", "sync", "requirement");
+//		gateway.toPresenter("LocalCache", "sync", "requirement");
 		
 		t.scheduleAtFixedRate(new TimerTask() {
 
@@ -196,8 +196,6 @@ public class TaskManager implements IJanewayModule {
 				gateway.toPresenter("LocalCache", "sync", "member");
 				gateway.toPresenter("LocalCache", "sync", "stages");
 				gateway.toPresenter("LocalCache", "sync", "requirement");
-				//gateway.toView("ColumnView", "reflow");
-				//gateway.toView("SidebarView", "reflowTasks");
 			}
 			
 		}, 0, 1000);

@@ -6,7 +6,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors: Nathan Hughes
+ * Contributors: Nathan Hughes, Troy Hughes
  ******************************************************************************/
 
 
@@ -29,13 +29,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BorderFactory;
-import javax.swing.ComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JList;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
@@ -64,6 +62,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.util.TaskManagerUtil;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.ButtonGroup;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.ColorComboBox;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.Form;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.FormField;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.FormFieldValidator;
@@ -119,14 +118,12 @@ public class TaskEditView extends JPanel implements IView {
 	private JButton viewRequirement;
 	private JButton attachRequirement;
 	private JComboBox<String> requirementsComboBox;
+	private ColorComboBox category;
 	private JButton archiveButton;
 	private JButton closeButton;
 	private Form form;
 
 	private ActionListener stageBoxListener;
-
-	@SuppressWarnings("unused")
-	private List<String> stringArray;
 
 	private TaskEditView tev;
 
@@ -138,10 +135,12 @@ public class TaskEditView extends JPanel implements IView {
 	 * Constructor
 	 */
 	public TaskEditView(Task iTask, StageList stages) {
-		this.task = iTask;
+		this.task = new Task();
+		this.task.updateFrom(iTask);
 		this.stages = stages;
 		this.requirements = new Requirement[0];
 		this.tev = this;
+		TaskEditView that = this; 
 		// Populates the member list handler with the assigned members
 		
 		
@@ -158,6 +157,9 @@ public class TaskEditView extends JPanel implements IView {
 		this.estEffortInput = new JSpinner(new SpinnerNumberModel(1, null, null, 1));
 		this.actEffortInput = new JSpinner(new SpinnerNumberModel(1, null, null, 1));
 		this.requirementTitles = new ArrayList<String>();
+		
+		this.category = new ColorComboBox();
+		this.category.setSelectedItem(this.task.getCategory());
 
 		this.commentPanel.updateView(this.task);
 
@@ -173,7 +175,6 @@ public class TaskEditView extends JPanel implements IView {
 		this.stageInput = new JComboBox<Stage>();
 		this.archiveButton = new JButton("Archive");
 		this.closeButton = new JButton("Close");
-		TaskEditView that = this;			// What the actual fuck... 
 		
 		this.titleLabel.setOpaque(false);
 		this.titleLabel.setBorder(BorderFactory.createEmptyBorder());
@@ -199,15 +200,7 @@ public class TaskEditView extends JPanel implements IView {
 		this.assignedMembers.setVisibleRowCount(4);				
 		this.assignedMembers.setLayoutOrientation(JList.VERTICAL);
 
-		this.requirementTitles = getRequirementTitles();
 		this.requirementsComboBox = new JComboBox<String>();
-		for (String s: this.requirementTitles) this.requirementsComboBox.addItem(s);
-		this.requirementsComboBox.setSelectedIndex(-1);
-		for (int i = 0; i < this.requirementTitles.size(); i++) {
-			if (this.task.getRequirement().getName().equals(this.requirementTitles.get(i))) {
-				this.requirementsComboBox.setSelectedIndex(i);
-			}
-		}
 
 		this.viewRequirement = new JButton("View");
 		this.attachRequirement = new JButton("Associate");
@@ -392,10 +385,17 @@ public class TaskEditView extends JPanel implements IView {
 			}
 		});
 		
+		category.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				task.setCategory((Integer) category.getSelectedItem());
+				saveTask();
+			}
+		});
+		
 		stageBoxListener = new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Fire in the hole!");
 				if( stageInput.getSelectedIndex() > -1) {
 					task.setStage((Stage) stageInput.getSelectedItem());
 					saveTask();
@@ -412,6 +412,7 @@ public class TaskEditView extends JPanel implements IView {
 					if (r.getName().equals(reqName)) {
 						task.setRequirement(r);
 						saveTask();
+//						System.out.println("button task getreq getname is " + task.getRequirement().getName());
 					}
 				}
 			}
@@ -438,35 +439,32 @@ public class TaskEditView extends JPanel implements IView {
 		this.stageInput.addActionListener(stageBoxListener);
 
 		this.form = new Form(
-				titleField,
-				descField,
-				new FormField("Due Date", this.dateInput),
-				new HorizontalForm(
-						estEffortField,
-						actEffortField
-						),
-						new HorizontalForm(
-								new FormField("Members", this.membersScrollPane),
-								new Form(
-//										new ButtonGroup(addMemberButton),
-//										new ButtonGroup(removeMemberButton)
-										new MemberButtonGroup(addMemberButton, removeMemberButton)
-									),
-								new FormField("Assigned", this.assignedMembersScrollPane)
-								),
-								new FormField("Associated Requirement", this.requirementsComboBox),
-								new ButtonGroup(
-										this.viewRequirement,
-										this.attachRequirement
-										),
-										//new FormField("Stage", this.stageInput),
-										new ButtonGroup(
-												this.archiveButton,
-												this.closeButton
-												)
-				);
+			titleField,
+			descField,
+			new FormField("Due Date", this.dateInput),
+			new HorizontalForm(
+				estEffortField,
+				actEffortField
+			),
+			new HorizontalForm(
+				new FormField("Members", this.membersScrollPane),
+				new Form(
+					new MemberButtonGroup(addMemberButton, removeMemberButton)
+				),
+				new FormField("Assigned", this.assignedMembersScrollPane)
+			),
+			new FormField("Category", this.category),
+			new FormField("Associated Requirement", this.requirementsComboBox),
+			new ButtonGroup(
+				this.viewRequirement,
+				this.attachRequirement
+			),
+			new ButtonGroup(
+				this.archiveButton,
+				this.closeButton
+			)
+		);
 		
-
 		this.container.setBackground(SidebarView.SIDEBAR_COLOR);
 		this.container.setLayout(new MigLayout("fill, ins 20", "[260]"));
 		this.container.add(this.form, "grow");
@@ -497,6 +495,7 @@ public class TaskEditView extends JPanel implements IView {
 	public void setGateway(Gateway gateway) {
 		this.gateway = gateway;
 		this.commentPanel.setGateway(this.gateway);
+//		gateway.toPresenter("LocalCache", "sync", "requirement");
 	}
 
 	public void updateEverything(Task t) {
@@ -544,11 +543,9 @@ public class TaskEditView extends JPanel implements IView {
 	 * Takes the members that the user has selected and moves them to the list of members assigned to a task
 	 */
 	public void moveMembersToAssigned() {	
-		System.out.println("Moving to assigned!");
 		MemberListHandler.getInstance().assignMember(members.getSelectedValuesList());
 		updateMembers();
 
-		System.out.println(MemberListHandler.getInstance().getAssigned().size());
 		this.task.setAssignedTo(MemberListHandler.getInstance().getAssigned());
 		saveTask();
 
@@ -564,7 +561,6 @@ public class TaskEditView extends JPanel implements IView {
 		MemberListHandler.getInstance().unAssignMember(assignedMembers.getSelectedValuesList());
 		updateMembers();
 		this.task.setAssignedTo(MemberListHandler.getInstance().getAssigned());
-		System.out.println(MemberListHandler.getInstance().getAssigned().size());
 		saveTask();
 		this.allMembersMouseHandler.clear();
 		this.assignedMembersMouseHandler.clear();
@@ -579,8 +575,8 @@ public class TaskEditView extends JPanel implements IView {
 	 * @param updatedTask is the task that is set to the new task in the edit view. 
 	 */
 	public void updateEVTask(Task updatedTask){
+		//this.task.updateFrom(updatedTask);
 		this.task = updatedTask;
-		
 	}
 
 	/**
@@ -588,31 +584,32 @@ public class TaskEditView extends JPanel implements IView {
 	 * @param requirementsArray Passed in list of requirements from Requirements Manager
 	 */
 	public void getRequirements(Requirement[] requirementsArray) {
+		FontMetrics fm = this.requirementsComboBox.getFontMetrics(this.requirementsComboBox.getFont());
 		this.requirements = requirementsArray;
 		this.requirementTitles = getRequirementTitles();
-		ComboBoxModel<String> model = this.requirementsComboBox.getModel();
-		int size = model.getSize();
+		int size = this.requirementsComboBox.getItemCount();
+//		System.out.println("int size is " + size);
 		boolean foundRequirement = false;
-		if (!task.getRequirement().getName().isEmpty()) {
-			this.requirementsComboBox.setSelectedItem(task.getRequirement().getName());
-		}
-		if (size < requirementTitles.size()) {
+		if (size < this.requirementTitles.size()) {
+			this.requirementsComboBox.removeAll();
 			for (String s : this.requirementTitles) {
+				s = TaskManagerUtil.reduceString(s, 210, fm);
 				foundRequirement = false;
 				for (int i = 0; i < size; i++) {
-					Object element = model.getElementAt(i);
-					if (s == element) {
+					String element = this.requirementsComboBox.getItemAt(i);
+					if (s.equals(element)) {
 						foundRequirement = true;
 					}
 				}
 				if (!foundRequirement) {
-					FontMetrics fm = this.requirementsComboBox.getFontMetrics(this.requirementsComboBox.getFont());
-					String reducedString = TaskManagerUtil.reduceString(s, 220, fm);
-					this.requirementsComboBox.addItem(reducedString);
+					this.requirementsComboBox.addItem(s);
 				}
 			}	
-			if (!task.getRequirement().getName().isEmpty()) {
-				this.requirementsComboBox.setSelectedItem(task.getRequirement().getName());
+//			System.out.println("midway check task getreq getname: " + this.task.getRequirement().getName());
+			if (!this.task.getRequirement().getName().isEmpty()) {
+//				System.out.println("first task getreq getname is NOT empty");
+//				System.out.println("first task getreq getname: " + this.task.getRequirement().getName());
+				setTaskRequirementBox();
 			}
 			else {
 				this.requirementsComboBox.setSelectedIndex(-1);
@@ -624,11 +621,40 @@ public class TaskEditView extends JPanel implements IView {
 	 * Return the titles of the requirements
 	 */
 	public List<String> getRequirementTitles() {
-		this.requirementTitles.clear();
-		for (Requirement r : this.requirements) {
-			requirementTitles.add(r.getName());
+		if (this.requirementTitles.isEmpty()) {
+			for (Requirement r : this.requirements) {
+				requirementTitles.add(r.getName());
+			}	
 		}
 		return requirementTitles;
+	}
+	
+	/**
+	 * Sets requirement dropdown menu based on the requirement of specified task
+	 * Code is partially borrowed from What? We Thought This Was Bio's NewTaskTab.java file
+	 */
+	public void setTaskRequirementBox() {
+		// Set the requirement box
+		for (int i = 0; i < this.requirementsComboBox.getItemCount(); i++) {
+			String req = this.requirementsComboBox.getItemAt(i);
+			System.out.println("req is " + req);
+			String reducedTaskReq = shorterReqTitle(this.task.getRequirement());
+			System.out.println("reducedTaskReq is " + reducedTaskReq);
+			if (reducedTaskReq.equals(req)) {
+				System.out.println("WE SET THE CURRENT ITEM");
+				this.requirementsComboBox.setSelectedItem(req);
+				return;
+			}
+		}
+	}
+	
+	/**
+	 * Shortens requirement title for use in dropdown menu
+	 */
+	public String shorterReqTitle(Requirement aReq) {
+		FontMetrics fm = this.requirementsComboBox.getFontMetrics((this.requirementsComboBox.getFont()));
+		String shortenedTitle = TaskManagerUtil.reduceString(aReq.getName(), 210, fm);
+		return shortenedTitle;
 	}
 
 	private class JListMouseHandler implements MouseListener {
@@ -695,12 +721,4 @@ public class TaskEditView extends JPanel implements IView {
 			return false;
 		}
 	}
-
-	
-	
-	
-	
-	
-	
 }
-

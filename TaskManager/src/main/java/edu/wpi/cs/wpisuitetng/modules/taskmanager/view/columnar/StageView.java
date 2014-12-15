@@ -63,6 +63,8 @@ public class StageView extends JPanel implements IView {
 	public StageView(Stage stage, Task[] tasks) {
 		this.nameLabel = new JLabel("", JLabel.CENTER);
 		this.container = new StageDragDropPanel(this);
+		
+		
 		this.scrollPane = new JScrollPane(this.container);
 		this.layout = new GridBagLayout();
 		
@@ -157,11 +159,12 @@ public class StageView extends JPanel implements IView {
 		
 		TaskView taskView;
 		int i;
+		
 		for (i = 0; i < this.container.getComponentCount(); i++) {
 			taskView = (TaskView) this.container.getComponent(i);
 			if (i >= this.tasks.length) {
 				this.container.remove(i--);
-			} else if (!taskView.getTask().equals(this.tasks[i])) {
+			} else {
 				taskView.setState(this.tasks[i]);
 			}
 			this.updateConstraints(taskView, i);
@@ -170,6 +173,7 @@ public class StageView extends JPanel implements IView {
 			gbc.gridy = i;
 			taskView = new TaskView(this.tasks[i]);
 			taskView.setGateway(this.gateway);
+			taskView.setParentContainer(this);
 			this.container.add(taskView, gbc);
 			this.updateConstraints(taskView, i);
 		}

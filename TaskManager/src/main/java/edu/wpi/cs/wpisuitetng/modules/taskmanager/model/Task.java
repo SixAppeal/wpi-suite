@@ -1,15 +1,27 @@
+/*******************************************************************************
+ * Copyright (c) 2014 -- WPI Suite
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors: Troy Hughes
+ ******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.model;
 
+import java.awt.Color;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Comparator;
+import java.util.Map;
 
 import com.google.gson.Gson;
 
 import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementmanager.models.Requirement;
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.draganddrop.TransferableTaskString;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.util.TaskUtil;
 
 /**
@@ -35,11 +47,36 @@ public class Task extends AbstractModel {
 			return Integer.compare(task1.getPriority(), task2.getPriority());
 		}
 	};
+	
+	/**
+	 * Color categories
+	 */
+	public static final int CATEGORY_NONE = 0;
+	public static final int CATEGORY_GREEN = 1;
+	public static final int CATEGORY_YELLOW = 2;
+	public static final int CATEGORY_RED = 3;
+	public static final int CATEGORY_BLUE = 4;
+	
+	/**
+	 * A map of categories to colors
+	 */
+	public static final Map<Integer, Color> COLORS = new HashMap<Integer, Color>() {
+		private static final long serialVersionUID = 297561479547563732L;
+
+		{
+			put(CATEGORY_NONE, Color.WHITE);
+			put(CATEGORY_GREEN, new Color(0, 200, 0));
+			put(CATEGORY_YELLOW, new Color(250, 217, 0));
+			put(CATEGORY_RED, Color.RED);
+			put(CATEGORY_BLUE, Color.BLUE);
+		}
+	};
 
 	private int id;
 	private boolean archived;
 	private String title;
 	private String description;
+	private int category;
 	private Stage stage;
 	private List<String> assignedTo;
 	private int estimatedEffort; 
@@ -54,7 +91,7 @@ public class Task extends AbstractModel {
 	 * Default constructor (dummy task for initialization)
 	 */
 	public Task() {
-		this("A New Task", "A New Task", new Stage("New"), new LinkedList<String>(), 1, 1,
+		this("A New Task", "A New Task", CATEGORY_NONE, new Stage("New"), new LinkedList<String>(), 1, 1,
 				new Date(), new Requirement(), new LinkedList<Activity>(), new LinkedList<Comment>());
 	}
 
@@ -72,7 +109,7 @@ public class Task extends AbstractModel {
 	 * @param comments lists of comments members put for the task
 	 * @throws IllegalArgumentException
 	 */
-	public Task(String title, String description, Stage stage,
+	public Task(String title, String description, int category, Stage stage,
 			List<String> assignedTo, Integer estimatedEffort,
 			Integer actualEffort, Date dueDate, 
 			Requirement requirement, List<Activity> activities, List<Comment> comments) throws IllegalArgumentException {
@@ -80,6 +117,7 @@ public class Task extends AbstractModel {
 		this.title = TaskUtil.validateTitle(title);
 		this.description = TaskUtil.validateDescription(description);
 		this.stage = TaskUtil.validateStage(stage);
+		this.category = category;
 		this.assignedTo = assignedTo;
 		this.estimatedEffort = TaskUtil.validateEffort(estimatedEffort);
 		this.actualEffort = TaskUtil.validateEffort(actualEffort);
@@ -104,15 +142,36 @@ public class Task extends AbstractModel {
 		
 		if (o instanceof Task) {
 			Task task = (Task) o;
-			return this.id == task.getId()
-				&& this.title.equals(task.getTitle())
-				&& this.description.equals(task.getDescription())
-				&& this.requirement.equals(task.getRequirement())
-				&& this.estimatedEffort == task.getEstimatedEffort()
-				&& this.actualEffort == task.getActualEffort()
-				&& this.dueDate.equals(task.getDueDate());
+			return this.id == task.getId();
 		}
 		return false;
+	}
+	
+	/**
+	 * hasChanged checks the ID's of two tasks, if they are the same it checks if the task has changed. 
+	 * This returns true iff the tasks has changed
+	 * 
+	 * @param task to be compared
+	 * @return	True if two tasks with the same ID's but different other fields have been compared. 
+	 * 			False if the tasks have different ID's 
+	 * 			False if the tasks has not changed 
+	 */
+	public boolean hasChanged(Task task){
+		if(this.equals(task)){
+			// Set's comparison to be true if anything is not the same between the two tasks
+			boolean comparison = this.title.equals(task.getTitle())
+					&& this.description.equals(task.getDescription())
+					&& this.estimatedEffort == task.getEstimatedEffort()
+					&& this.actualEffort == task.getActualEffort()
+					&& this.dueDate.equals(task.getDueDate())
+					&& this.category == task.getCategory()
+					&& this.equalComments(task)
+					&& this.equalActivities(task);
+				
+			return !comparison;		// Return the opposite of this to say true when the task has been changed
+		}
+		return false; 
+		
 	}
 
 	/**
@@ -164,6 +223,32 @@ public class Task extends AbstractModel {
 	 */
 	public String getTitle() {
 		return title;
+	}
+	
+	/**
+	 * Sets the category of the task. Should be one of:
+	 * Task.CATEGORY_NONE, Task.CATEGORY_GREEN, Task.CATEGORY_YELLOW,
+	 * Task.CATEGORY_RED, Task.CATEGORY_BLUE
+	 * @param category A category
+	 */
+	public void setCategory(int category) {
+		if (category != CATEGORY_NONE
+				&& category != CATEGORY_RED
+				&& category != CATEGORY_GREEN
+				&& category != CATEGORY_BLUE
+				&& category != CATEGORY_YELLOW) {
+			this.category = CATEGORY_NONE;
+		} else {
+			this.category = category;
+		}
+	}
+	
+	/**
+	 * Gets the category of the task
+	 * @return The task's category
+	 */
+	public int getCategory() {
+		return category;
 	}
 	
 	/**
@@ -404,6 +489,7 @@ public class Task extends AbstractModel {
 	 * @throws IllegalArgumentException
 	 */
 	public void updateFrom(Task updatedTask) throws IllegalArgumentException {
+		this.id = updatedTask.id;
 		this.title = new String(TaskUtil.validateTitle(updatedTask.getTitle()));
 		this.description = new String(TaskUtil.validateDescription(updatedTask.getDescription()));
 		this.stage = TaskUtil.validateStage(updatedTask.getStage());
@@ -413,8 +499,10 @@ public class Task extends AbstractModel {
 		this.dueDate = TaskUtil.validateDueDate(new Date(updatedTask.getDueDate().getTime()));
 		this.activities = new LinkedList<Activity>(updatedTask.getActivities());
 		this.comments = new LinkedList<Comment>(updatedTask.getComments());
+		this.category = updatedTask.getCategory();
 		this.archived = updatedTask.archived;
 		this.priority = updatedTask.priority;
+		this.requirement = updatedTask.requirement;
 	}
 	
 	/**
@@ -439,5 +527,40 @@ public class Task extends AbstractModel {
 	public void addComment(String user, String comment){
 		this.comments.add(new Comment(user, comment));
 		this.activities.add(new Activity(user + " made a comment!"));
+	}
+	
+	
+	/**
+	 * Checks all the comments within a task and checks if they are equal to another task's comments
+	 * 
+	 * @param task to compare
+	 * @return True iff the tasks have the same comments
+	 */
+	public boolean equalComments(Task task){
+		for (Comment c: task.getComments()){
+			for(Comment com: this.getComments()){
+				if(!com.equals(c)){
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+	
+	/**
+	 * Checks all the activities within a task and checks if they are equal to another task's activites
+	 * 
+	 * @param task to compare
+	 * @return True iff the tasks have the same comments
+	 */
+	public boolean equalActivities(Task task){
+		for (Activity a: task.getActivities()){
+			for(Activity act: this.getActivities()){
+				if(!act.equals(a)){
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 }

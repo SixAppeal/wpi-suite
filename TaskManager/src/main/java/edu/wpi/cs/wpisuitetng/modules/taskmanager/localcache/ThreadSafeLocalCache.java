@@ -6,7 +6,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors: Nathan Hughes
+ * Contributors: Nathan Hughes, Troy Hughes
  ******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache;
@@ -19,6 +19,7 @@ import com.google.gson.Gson;
 
 import edu.wpi.cs.wpisuitetng.exceptions.NotImplementedException;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
+import edu.wpi.cs.wpisuitetng.modules.requirementmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Stage;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.StageList;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
@@ -44,6 +45,7 @@ import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
  *  	bad request (i.e. bug)
  *  	 
  * @author nhhughes
+ * @author thhughes
  *
  */
 public class ThreadSafeLocalCache implements Cache {
@@ -52,6 +54,7 @@ public class ThreadSafeLocalCache implements Cache {
 	List<Task> archives;
 	List<User> members;
 	StageList stages;
+	Requirement[] requirements;
 	Gateway gateway;
 
 	String secret_key = "";
@@ -67,9 +70,13 @@ public class ThreadSafeLocalCache implements Cache {
 		archives = new ArrayList<Task>(); 
 		members = new ArrayList<User>();
 		stages = new StageList();
+
 		TrelloNetwork networksetup = TrelloNetwork.getInstance(); 
 		NetworkConfiguration config = new NetworkConfiguration("https://api.trello.com/1");
 		networksetup.setDefaultNetworkConfiguration(config);
+
+		requirements = new Requirement[0];
+
 	}
 
 	/**
@@ -165,7 +172,7 @@ public class ThreadSafeLocalCache implements Cache {
 		if (!(request.split(":").length == 2 && request.split(":")[0].equals("stages"))) {
 			System.out.println("Bad Request");
 		}
-		System.out.println("The StageList is updating to " + newSL.toString());
+		
 		final Request networkRequest = Network.getInstance().makeRequest(
 				"taskmanager/stages", HttpMethod.POST);
 		networkRequest.addObserver(new UpdateManager(this, request, gateway, request.split(":")[1]));
@@ -190,6 +197,9 @@ public class ThreadSafeLocalCache implements Cache {
 		if (request.equals("stages")) {
 			return stages.toArray(new Stage[0]);
 		}
+		if (request.equals("requirements")) {
+			return requirements;
+		}
 		return null;
 	}
 
@@ -205,16 +215,75 @@ public class ThreadSafeLocalCache implements Cache {
 		throw new NotImplementedException();
 	}
 
+	
+	/**
+	 * Takes in updates generated from a long pull request and updates the cache
+	 * @param taskVal all the updates that have occured since the last sync
+	 */
 	public void updateTasks(String taskVal) {
-		Task[] tasks = new Gson().fromJson(taskVal, Task[].class);
+		Task[] updatedTasks = new Gson().fromJson(taskVal, Task[].class);
+		System.out.println("Tasks to update:");
+		int count = 0;
+		for (Task t : updatedTasks) {
+			System.out.println(count + ") " + t);
+			count++;
+		}
+		List<Task> updatedTaskList = Arrays.asList(updatedTasks);
 		List<Task> unarchived = new ArrayList<Task>();
 		List<Task> archived = new ArrayList<Task>();
-		for (Task toCheck : tasks) {
-			if (toCheck.isArchived()) {
-				archived.add(toCheck);
+		List<Task> used = new ArrayList<Task>();
+		for (Task oldTask : this.tasks) {
+			boolean changed = false;
+			Task taskToInsert = oldTask; 
+			for (Task newTask : updatedTaskList) {
+				if (newTask.getId() == oldTask.getId()) {
+					if (newTask.isArchived()) {
+						taskToInsert = null;
+					}
+					else {
+						changed = true;
+						taskToInsert = newTask;
+					}
+					break;
+				}
 			}
-			else {
-				unarchived.add(toCheck);
+			if (taskToInsert != null) {
+				unarchived.add(taskToInsert);
+				if (changed) {
+					used.add(taskToInsert);
+				}
+			}
+		}
+		for (Task oldTask : this.archives) {
+			boolean changed = false;
+			Task taskToInsert = oldTask; 
+			for (Task newTask : updatedTasks) {
+				if (newTask.getId() == oldTask.getId()) {
+					if (newTask.isArchived()) {
+						taskToInsert = null;
+					}
+					else {
+						taskToInsert = newTask;
+						changed = true;
+					}
+					break;
+				}
+			}
+			if (taskToInsert != null) {
+				archived.add(taskToInsert);
+				if (changed) {
+					used.add(taskToInsert);
+				}
+			}
+		}
+		for (Task newTask : updatedTaskList) {
+			if (!used.contains(newTask)) {
+				if (newTask.isArchived()) {
+					archived.add(newTask);
+				}
+				else {
+					unarchived.add(newTask);
+				}
 			}
 		}
 		this.archives = archived;
@@ -234,6 +303,12 @@ public class ThreadSafeLocalCache implements Cache {
 		this.stages = stages[0];
 		this.gateway.toPresenter("TaskPresenter", "setStages");
 
+	}
+	
+	public void updateReqs(String reqVal) {
+		Requirement[] reqs = new Gson().fromJson(reqVal, Requirement[].class);
+		this.requirements = reqs;
+//		this.gateway.toPresenter("TaskPresenter", "updateRequirements");
 	}
 
 
