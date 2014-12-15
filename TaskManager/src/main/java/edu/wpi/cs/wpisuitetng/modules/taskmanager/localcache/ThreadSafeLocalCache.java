@@ -376,6 +376,7 @@ public class ThreadSafeLocalCache implements Cache {
 		stages.add( new Stage("Scheduled"));
 		stages.add( new Stage("In Progress"));
 		stages.add( new Stage("Completed"));
+		stages.add( new Stage("::Archived Tasks::"));
 		this.store("stages:testing", stages);
 	}
 

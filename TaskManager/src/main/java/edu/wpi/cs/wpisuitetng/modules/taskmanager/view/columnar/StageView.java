@@ -78,6 +78,10 @@ public class StageView extends JPanel implements IView {
 				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
 		this.setBackground(new Color(255, 255, 255));
+		if(stage.getName().equals(new String("::Archived Tasks::"))){
+			this.setBackground(Color.GREEN);
+		}
+		
 		this.setMinimumSize(new Dimension(260, 0));
 		this.setMaximumSize(new Dimension(260, Integer.MAX_VALUE));
 		this.setPreferredSize(new Dimension(260, 400));
@@ -149,8 +153,14 @@ public class StageView extends JPanel implements IView {
 	 * Reflows this views when it's state changes.
 	 */
 	public void reflow() {
-		this.nameLabel.setText(this.stage == null ? "" : this.stage.getName());
 		
+		// Shield the archived tasks column to display a sepparate name. 
+		if(this.stage.getName().equals(new String("::Archived Tasks::"))){
+			this.nameLabel.setText(this.stage == null ? "" : "Archived Tasks");
+		}else{
+			this.nameLabel.setText(this.stage == null ? "" : this.stage.getName());
+		}
+
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.anchor = GridBagConstraints.PAGE_START;
 		gbc.fill = GridBagConstraints.HORIZONTAL;
