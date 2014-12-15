@@ -53,6 +53,7 @@ public class TestTask {
 		assertEquals(newTask.getActualEffort(), new Integer(1));
 		assertEquals(newTask.getAssignedTo().size(), 0);
 		assertEquals(newTask.getDescription(), "A New Task");
+		assertEquals(newTask.getCategory(), Task.CATEGORY_NONE);
 		assertEquals(newTask.getDueDate(), new Date());
 		assertEquals(newTask.getEstimatedEffort(), new Integer(1));
 		assertEquals(newTask.getId(), 0);
