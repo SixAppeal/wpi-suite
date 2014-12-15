@@ -75,6 +75,7 @@ public class TaskView extends JPanel implements  IView {
 	// Components
 	private JLabel titleLabel;
 	private JLabel dateLabel;
+	private JPanel colorBar;
 	private JPanel container;
 
 	private boolean selected;
@@ -82,11 +83,14 @@ public class TaskView extends JPanel implements  IView {
 	public TaskView(Task task, boolean ForSearch) {
 		this.titleLabel = new JLabel("", JLabel.LEFT);
 		this.dateLabel = new JLabel("", JLabel.RIGHT);
+		this.colorBar = new JPanel();
 		this.container = new JPanel();
 		
 		this.container.setOpaque(false);
 		this.container.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, HOVER_COLOR));
 		this.container.setLayout(new GridBagLayout());
+		
+		this.colorBar.setBorder(BorderFactory.createEmptyBorder(0, 2, 0, 0));
 
 		Font titleFont = this.titleLabel.getFont();
 		this.titleLabel.setFont(titleFont.deriveFont(titleFont.getStyle() & ~Font.BOLD));
@@ -146,11 +150,17 @@ public class TaskView extends JPanel implements  IView {
 		this.setLayout(new GridBagLayout());		
 
 		gbc = new GridBagConstraints();
-		gbc.fill = GridBagConstraints.HORIZONTAL;
-		gbc.insets = new Insets(0, 20, 0, 0);
-		gbc.weightx = 1.0;
+		gbc.fill = GridBagConstraints.VERTICAL;
+		gbc.weighty = 1.0;
 		gbc.gridx = 0;
 		gbc.gridy = 0;
+		this.add(this.colorBar, gbc);
+		
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.insets = new Insets(0, 18, 0, 0);
+		gbc.weightx = 1.0;
+		gbc.weighty = 0;
+		gbc.gridx = 1;
 		this.add(this.container, gbc);
 		
 		this.setState(task);
@@ -162,11 +172,14 @@ public class TaskView extends JPanel implements  IView {
 	public TaskView(Task task) {
 		this.titleLabel = new JLabel("", JLabel.LEFT);
 		this.dateLabel = new JLabel("", JLabel.RIGHT);
+		this.colorBar = new JPanel();
 		this.container = new JPanel();
 		
 		this.container.setOpaque(false);
 		this.container.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, HOVER_COLOR));
 		this.container.setLayout(new GridBagLayout());
+		
+		this.colorBar.setBorder(BorderFactory.createEmptyBorder(0, 2, 0, 0));this.colorBar.setBorder(BorderFactory.createEmptyBorder(0, 2, 0, 0));
 
 		Font titleFont = this.titleLabel.getFont();
 		this.titleLabel.setFont(titleFont.deriveFont(titleFont.getStyle() & ~Font.BOLD));
@@ -272,6 +285,9 @@ public class TaskView extends JPanel implements  IView {
 		String text = TaskManagerUtil.reduceString(this.task.getTitle(), MAX_TITLE_LENGTH,
 				this.titleLabel.getFontMetrics(this.titleLabel.getFont()));
 		this.titleLabel.setText(text);
+		System.out.println("Task Color: " + this.task.getCategory() + " " + Task.COLORS.get(this.task.getCategory()));
+		this.colorBar.setBorder(BorderFactory.createMatteBorder(0, 2, 0, 0,
+				Task.COLORS.get(this.task.getCategory())));
 		boolean urgent = task.getDueDate().after(new Date(System.currentTimeMillis() - 86400000)); //urgent if late
 		this.dateLabel.setForeground(urgent?new Color(180, 180, 180):new Color(255, 102, 0));
 		this.dateLabel.setText(new SimpleDateFormat("MM/dd/yy").format(this.task.getDueDate()));

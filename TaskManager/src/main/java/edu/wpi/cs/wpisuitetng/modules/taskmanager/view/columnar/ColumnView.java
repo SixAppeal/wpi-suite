@@ -269,12 +269,4 @@ public class ColumnView extends JPanel implements IView {
 			}
 		}
 	}
-	
-	
-	
-	
-	
-	
-	
-	
 }

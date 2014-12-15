@@ -64,7 +64,7 @@ public class Task extends AbstractModel {
 		private static final long serialVersionUID = 297561479547563732L;
 
 		{
-			put(CATEGORY_NONE, new Color(255, 255, 255, 0));
+			put(CATEGORY_NONE, Color.WHITE);
 			put(CATEGORY_GREEN, Color.GREEN);
 			put(CATEGORY_YELLOW, Color.YELLOW);
 			put(CATEGORY_RED, Color.RED);
@@ -164,6 +164,7 @@ public class Task extends AbstractModel {
 					&& this.estimatedEffort == task.getEstimatedEffort()
 					&& this.actualEffort == task.getActualEffort()
 					&& this.dueDate.equals(task.getDueDate())
+					&& this.category == task.getCategory()
 					&& this.equalComments(task)
 					&& this.equalActivities(task);
 				

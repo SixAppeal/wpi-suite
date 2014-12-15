@@ -33,8 +33,7 @@ public class ColorComboBox extends JComboBox<Integer> {
 	public void setSelectedItem(Object value) {
 		super.setSelectedItem(value);
 		Color color = Task.COLORS.get(value);
-		setBackground(color);
-		setForeground(averageColor(color) > 128 ? Color.BLACK : Color.WHITE);
+		this.setBackground(color);
 	}
 	
 	/**
@@ -56,24 +55,11 @@ public class ColorComboBox extends JComboBox<Integer> {
 				JList<? extends Integer> list, Integer value, int index,
 				boolean isSelected, boolean cellHasFocus) {
 			Color color = Task.COLORS.get(value);
-			if (color.getAlpha() == 0) {
-				color = Color.WHITE;
-			}
 			
+			setText(" ");
 			setBackground(cellHasFocus ? color.brighter() : color);
-			setBorder(BorderFactory.createMatteBorder(1, 0, 1, 0, color.darker()));
-			setForeground(averageColor(color) > 128 ? Color.BLACK : Color.WHITE);
 			
 			return this;
 		}
-	}
-	
-	/**
-	 * Averages the components of a color
-	 * @param color The color to average
-	 * @return The average of the RGB component values of the color
-	 */
-	private static int averageColor(Color color) {
-		return (color.getRed() + color.getGreen() + color.getBlue()) / 3;
 	}
 }

@@ -164,7 +164,7 @@ public class StageView extends JPanel implements IView {
 			taskView = (TaskView) this.container.getComponent(i);
 			if (i >= this.tasks.length) {
 				this.container.remove(i--);
-			} else if (!taskView.getTask().equals(this.tasks[i])) {
+			} else if (taskView.getTask().hasChanged(this.tasks[i])) {
 				taskView.setState(this.tasks[i]);
 			}
 			this.updateConstraints(taskView, i);

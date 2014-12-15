@@ -29,13 +29,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BorderFactory;
-import javax.swing.ComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JList;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
@@ -57,7 +55,6 @@ import edu.wpi.cs.wpisuitetng.modules.requirementmanager.RequirementManager;
 import edu.wpi.cs.wpisuitetng.modules.requirementmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.requirementmanager.models.RequirementModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementmanager.view.ViewEventController;
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.ThreadSafeLocalCache;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Stage;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.StageList;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
@@ -160,7 +157,9 @@ public class TaskEditView extends JPanel implements IView {
 		this.estEffortInput = new JSpinner(new SpinnerNumberModel(1, null, null, 1));
 		this.actEffortInput = new JSpinner(new SpinnerNumberModel(1, null, null, 1));
 		this.requirementTitles = new ArrayList<String>();
+		
 		this.category = new ColorComboBox();
+		this.category.setSelectedItem(this.task.getCategory());
 
 		this.commentPanel.updateView(this.task);
 
@@ -386,6 +385,14 @@ public class TaskEditView extends JPanel implements IView {
 			}
 		});
 		
+		category.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				task.setCategory((Integer) category.getSelectedItem());
+				saveTask();
+			}
+		});
+		
 		stageBoxListener = new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -446,19 +453,18 @@ public class TaskEditView extends JPanel implements IView {
 				),
 				new FormField("Assigned", this.assignedMembersScrollPane)
 			),
+			new FormField("Category", this.category),
 			new FormField("Associated Requirement", this.requirementsComboBox),
 			new ButtonGroup(
 				this.viewRequirement,
 				this.attachRequirement
 			),
-			new FormField("Category", this.category),
 			new ButtonGroup(
 				this.archiveButton,
 				this.closeButton
 			)
 		);
 		
-
 		this.container.setBackground(SidebarView.SIDEBAR_COLOR);
 		this.container.setLayout(new MigLayout("fill, ins 20", "[260]"));
 		this.container.add(this.form, "grow");
@@ -482,7 +488,6 @@ public class TaskEditView extends JPanel implements IView {
 	 * Saves the task currently being edited
 	 */
 	private void saveTask() {
-		System.out.println("Troy Look Here ---> " + this.task.getId());
 		this.gateway.toPresenter("LocalCache", "update", "task:testing", this.task);
 	}
 
@@ -716,12 +721,4 @@ public class TaskEditView extends JPanel implements IView {
 			return false;
 		}
 	}
-
-	
-	
-	
-	
-	
-	
 }
-
