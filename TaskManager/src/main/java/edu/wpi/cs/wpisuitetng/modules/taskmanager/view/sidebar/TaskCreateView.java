@@ -186,7 +186,6 @@ public class TaskCreateView extends JPanel implements IView {
 			titleField,
 			descriptionField,
 			dateInputForm,
-			// new FormField("Due Date", this.dateInput),
 			new FormField("Stage", stages),
 			new ButtonGroup(
 				this.createButton,
