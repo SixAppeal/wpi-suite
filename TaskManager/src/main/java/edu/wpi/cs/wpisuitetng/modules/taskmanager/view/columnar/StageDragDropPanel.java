@@ -74,7 +74,7 @@ public class StageDragDropPanel extends JPanel {
 		{
 			return 0;
 		}
-		return taskView.getLocation().y - taskView.getHeight();
+		return taskView.getLocation().y - taskView.getHeight()/2;
 	}
 	
 	

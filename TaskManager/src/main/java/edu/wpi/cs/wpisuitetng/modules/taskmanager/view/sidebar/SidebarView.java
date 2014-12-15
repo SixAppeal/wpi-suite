@@ -16,12 +16,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Insets;
 import java.io.IOException;
 
 import javax.swing.ImageIcon;
+import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.plaf.basic.BasicTabbedPaneUI;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementmanager.models.Requirement;
@@ -99,6 +103,50 @@ public class SidebarView extends JTabbedPane implements IView {
 				searchView);
 		this.addTab(null, new ImageIcon(this.getClass().getResource("icon_column_edit.png")),
 				columnEditView);
+		
+		
+		//This stuff is for make ing it not strech out more then it needs to
+		this.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e)
+			{
+				UpdateCompates();
+			}
+		});
+		
+	}
+	
+	/**
+	 * Uncompates the current file
+	 * and Compates all other files
+	 */
+	public void UpdateCompates()
+	{
+		int currentIndex = this.getSelectedIndex();
+		int numberOfTabs = this.getTabCount();
+		for(int i = 0; i < numberOfTabs; i++)
+		{
+			Component component = this.getComponentAt(i);
+			if(!(component instanceof EmptyComponentHolder))
+			{
+				EmptyComponentHolder holder = new EmptyComponentHolder(component);
+			
+				this.setComponentAt(i, holder);
+			}
+			
+			
+		}
+		
+		//int currentIndex = this.getSelectedIndex();
+		Component selected = this.getComponentAt(currentIndex);
+		try
+		{
+			this.setComponentAt(currentIndex, ((EmptyComponentHolder) selected).contents);
+		}
+		catch(Exception e)
+		{
+			System.out.println("Fuck, you Swing");
+		}
 	}
 	
 	/**
