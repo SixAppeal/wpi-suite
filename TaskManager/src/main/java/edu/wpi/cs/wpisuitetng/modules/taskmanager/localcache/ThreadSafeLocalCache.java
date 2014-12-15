@@ -19,6 +19,7 @@ import com.google.gson.Gson;
 
 import edu.wpi.cs.wpisuitetng.exceptions.NotImplementedException;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
+import edu.wpi.cs.wpisuitetng.modules.requirementmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Stage;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.StageList;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
@@ -51,6 +52,7 @@ public class ThreadSafeLocalCache implements Cache {
 	List<Task> archives;
 	List<User> members;
 	StageList stages;
+	Requirement[] requirements;
 	Gateway gateway;
 
 	/**
@@ -61,6 +63,7 @@ public class ThreadSafeLocalCache implements Cache {
 		archives = new ArrayList<Task>(); 
 		members = new ArrayList<User>();
 		stages = new StageList();
+		requirements = new Requirement[0];
 	}
 
 	/**
@@ -181,6 +184,9 @@ public class ThreadSafeLocalCache implements Cache {
 		if (request.equals("stages")) {
 			return stages.toArray(new Stage[0]);
 		}
+		if (request.equals("requirements")) {
+			return requirements;
+		}
 		return null;
 	}
 
@@ -284,6 +290,12 @@ public class ThreadSafeLocalCache implements Cache {
 		this.stages = stages[0];
 		this.gateway.toPresenter("TaskPresenter", "setStages");
 
+	}
+	
+	public void updateReqs(String reqVal) {
+		Requirement[] reqs = new Gson().fromJson(reqVal, Requirement[].class);
+		this.requirements = reqs;
+//		this.gateway.toPresenter("TaskPresenter", "updateRequirements");
 	}
 
 

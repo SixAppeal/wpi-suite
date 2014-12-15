@@ -157,6 +157,7 @@ public class SidebarView extends JTabbedPane implements IView {
 			if (view instanceof TaskEditView) {
 				if (task.equals(((TaskEditView) view).getTask())) {
 					setSelectedComponent((TaskEditView)view);
+					((TaskEditView) view).getRequirements((Requirement[])cache.retrieve("requirements"));
 					return;
 				}
 			}
@@ -165,6 +166,7 @@ public class SidebarView extends JTabbedPane implements IView {
 		
 		TaskEditView editView = new TaskEditView(task, stages);
 		editView.setGateway(this.gateway);
+		editView.getRequirements((Requirement[])cache.retrieve("requirements"));
 		this.viewList.add(editView);
 		this.addTab(null, new ImageIcon(this.getClass().getResource("icon_pencil.png")),
 				editView);
@@ -173,6 +175,7 @@ public class SidebarView extends JTabbedPane implements IView {
 	
 	/**
 	 * Passes the retrieved requirements array to the Task Edit View
+	 * @param requirements String of all requirements retrieved
 	 */
 	public void passInRequirements(String requirements) {
 		Requirement[] requirementsArray = Requirement.fromJsonArray(requirements);
