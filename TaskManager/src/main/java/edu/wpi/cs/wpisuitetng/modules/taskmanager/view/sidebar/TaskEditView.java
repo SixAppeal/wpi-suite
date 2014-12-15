@@ -128,10 +128,6 @@ public class TaskEditView extends JPanel implements IView {
 	private ActionListener stageBoxListener;
 
 	private TaskEditView tev;
-	
-	private Requirement selectedRequirement;
-	private Requirement reqs[];
-	private ThreadSafeLocalCache cache;
 
 	JListMouseHandler allMembersMouseHandler;
 	JListMouseHandler assignedMembersMouseHandler;
@@ -145,7 +141,6 @@ public class TaskEditView extends JPanel implements IView {
 		this.stages = stages;
 		this.requirements = new Requirement[0];
 		this.tev = this;
-		this.selectedRequirement = new Requirement();
 		// Populates the member list handler with the assigned members
 		
 		
@@ -425,7 +420,6 @@ public class TaskEditView extends JPanel implements IView {
 					if (r.getName().equals(reqName)) {
 						task.setRequirement(r);
 						saveTask();
-						selectedRequirement = r;
 						System.out.println("button task getreq getname is " + task.getRequirement().getName());
 					}
 				}
@@ -512,7 +506,7 @@ public class TaskEditView extends JPanel implements IView {
 	public void setGateway(Gateway gateway) {
 		this.gateway = gateway;
 		this.commentPanel.setGateway(this.gateway);
-		gateway.toPresenter("LocalCache", "sync", "requirement");
+//		gateway.toPresenter("LocalCache", "sync", "requirement");
 	}
 
 	public void updateEverything(Task t) {
@@ -609,6 +603,7 @@ public class TaskEditView extends JPanel implements IView {
 		System.out.println("int size is " + size);
 		boolean foundRequirement = false;
 		if (size < this.requirementTitles.size()) {
+//			this.requirementsComboBox.removeAll();
 			for (String s : this.requirementTitles) {
 				s = TaskManagerUtil.reduceString(s, 220, fm);
 				foundRequirement = false;
