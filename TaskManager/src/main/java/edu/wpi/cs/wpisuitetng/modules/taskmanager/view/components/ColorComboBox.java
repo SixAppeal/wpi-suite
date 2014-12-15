@@ -34,6 +34,8 @@ public class ColorComboBox extends JComboBox<Integer> {
 		super.setSelectedItem(value);
 		Color color = Task.COLORS.get(value);
 		this.setBackground(color);
+		this.revalidate();
+		this.repaint();
 	}
 	
 	/**

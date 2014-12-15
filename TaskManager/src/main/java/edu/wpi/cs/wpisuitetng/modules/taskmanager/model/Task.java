@@ -65,8 +65,8 @@ public class Task extends AbstractModel {
 
 		{
 			put(CATEGORY_NONE, Color.WHITE);
-			put(CATEGORY_GREEN, Color.GREEN);
-			put(CATEGORY_YELLOW, Color.YELLOW);
+			put(CATEGORY_GREEN, new Color(0, 200, 0));
+			put(CATEGORY_YELLOW, new Color(250, 217, 0));
 			put(CATEGORY_RED, Color.RED);
 			put(CATEGORY_BLUE, Color.BLUE);
 		}
@@ -232,7 +232,15 @@ public class Task extends AbstractModel {
 	 * @param category A category
 	 */
 	public void setCategory(int category) {
-		this.category = category;
+		if (category != CATEGORY_NONE
+				&& category != CATEGORY_RED
+				&& category != CATEGORY_GREEN
+				&& category != CATEGORY_BLUE
+				&& category != CATEGORY_YELLOW) {
+			this.category = CATEGORY_NONE;
+		} else {
+			this.category = category;
+		}
 	}
 	
 	/**
@@ -491,6 +499,7 @@ public class Task extends AbstractModel {
 		this.dueDate = TaskUtil.validateDueDate(new Date(updatedTask.getDueDate().getTime()));
 		this.activities = new LinkedList<Activity>(updatedTask.getActivities());
 		this.comments = new LinkedList<Comment>(updatedTask.getComments());
+		this.category = updatedTask.getCategory();
 		this.archived = updatedTask.archived;
 		this.priority = updatedTask.priority;
 		this.requirement = updatedTask.requirement;
