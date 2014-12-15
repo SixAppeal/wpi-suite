@@ -79,7 +79,7 @@ public class ColumnEditView extends JPanel implements IView {
 		this.moveDnBtn = new JButton();
 		this.titleEntry = new JTextField();
 		this.newName = new JTextField();
-		this.nameChange = new JButton("Edit Name");
+		this.nameChange = new JButton("Rename Stage");
 		this.deleteBtn = new JButton("Delete Stage");
 		
 		this.titleEntry.setBorder(FormField.BORDER_NORMAL);
@@ -347,6 +347,8 @@ public class ColumnEditView extends JPanel implements IView {
 		gbc.insets = new Insets(10, 20, 20, 20);
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		this.add(deleteBtn, gbc);
+		
+		this.setMinimumSize(new Dimension(300, 0));
 	}
 
 	protected void moveCurrentTaskUp() {
