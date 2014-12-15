@@ -347,6 +347,8 @@ public class ColumnEditView extends JPanel implements IView {
 		gbc.insets = new Insets(10, 20, 20, 20);
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		this.add(deleteBtn, gbc);
+		
+		this.setMinimumSize(new Dimension(300, 0));
 	}
 
 	protected void moveCurrentTaskUp() {
