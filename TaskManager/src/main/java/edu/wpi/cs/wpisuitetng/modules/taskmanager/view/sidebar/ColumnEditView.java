@@ -71,6 +71,9 @@ public class ColumnEditView extends JPanel implements IView {
 	private JButton deleteBtn;
 	private Gateway gateway;
 
+	/**
+	 * Creates a sidebar view to change the edit view 
+	 */
 	public ColumnEditView() { 
 		stages = new StageList();
 		this.stageJList = new JList<Stage>();
@@ -351,6 +354,9 @@ public class ColumnEditView extends JPanel implements IView {
 		this.setMinimumSize(new Dimension(300, 0));
 	}
 
+	/**
+	 * Move stage up in the list
+	 */
 	protected void moveCurrentTaskUp() {
 		int index = stageJList.getSelectedIndex();
 		if( index == 0 ) return;
@@ -359,7 +365,9 @@ public class ColumnEditView extends JPanel implements IView {
 		updateJListAndPublish();
 	}
 
-	
+	/**
+	 * move stage down in the list
+	 */
 	protected void moveCurrentTaskDn() {
 		int index = stageJList.getSelectedIndex();
 		if( (index+1) == stages.size() ) return;
@@ -368,6 +376,10 @@ public class ColumnEditView extends JPanel implements IView {
 		updateJListAndPublish();
 	}
 
+	/**
+	 * update list with stages from the cache
+	 * @param newStages list of stages to update from
+	 */
 	public void setStages(StageList newStages) {
 		if( !newStages.equals(stages)) {
 			Stage pSelected = stageJList.getSelectedValue();
@@ -379,12 +391,18 @@ public class ColumnEditView extends JPanel implements IView {
 		}
 	}
 
+	/**
+	 * update create text box
+	 */
 	private void updateTextBox() {
 		boolean valid = !TaskUtil.sanitizeInput(titleEntry.getText()).isEmpty();
 		titleEntry.setBorder(valid ? FormField.BORDER_NORMAL : FormField.BORDER_ERROR);
 		addButton.setEnabled(valid);
 	}
 	
+	/**
+	 * update edit text box
+	 */
 	private void updateEditBox() {
 		boolean valid = !TaskUtil.sanitizeInput(newName.getText()).isEmpty();
 		titleEntry.setBorder(valid ? FormField.BORDER_NORMAL : FormField.BORDER_ERROR);
@@ -397,7 +415,9 @@ public class ColumnEditView extends JPanel implements IView {
 		this.gateway = gateway;
 	}
 
-	
+	/**
+	 * rename the selected stage
+	 */
 	protected void changeNameStage(){
 		boolean valid = !TaskUtil.sanitizeInput(newName.getText()).isEmpty();
 		if (valid){
@@ -422,7 +442,9 @@ public class ColumnEditView extends JPanel implements IView {
 
 	}
 	
-	
+	/**
+	 * add a new stage to the stage list
+	 */
 	protected void addStage(){
 		boolean nameFlag = false;
 		String newStageName = new String(titleEntry.getText());
@@ -456,6 +478,9 @@ public class ColumnEditView extends JPanel implements IView {
 
 	}
 	
+	/**
+	 * update the stage list with the values from the JList
+	 */
 	private void updateJListAndPublish() {
 		Stage pS = stageJList.getSelectedValue();
 		stageJList.setListData(stages.toArray(new Stage[0]));
@@ -464,11 +489,16 @@ public class ColumnEditView extends JPanel implements IView {
 
 	}
 
+	/**
+	 * Tell the cache that a change has occured
+	 */
 	private void publishStages() {
 		this.gateway.toPresenter("TaskPresenter", "publishChanges", stages);
 	}
 	
-	
+	/**
+	 * Scrolls the jlist to the correct spot
+	 */
 	private void scrollMain(){
 		this.gateway.toView("ColumnView", "scrollToPlace", this.stageJList.getSelectedValue());
 	}

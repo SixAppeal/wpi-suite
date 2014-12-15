@@ -6,7 +6,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors: Nathan Hughes
+ * Contributors: William Van Renseelaer Dan Seaman Nathan Hughes Alexander Shoop
  ******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter;

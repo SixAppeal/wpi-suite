@@ -375,6 +375,10 @@ public class TaskView extends JPanel implements  IView {
 		if ( !selected ) this.setBackground(TaskView.HOVER_COLOR);
 	}
 	
+	/**
+	 * Set the parent container for drag and drop
+	 * @param view parent container
+	 */
 	public void setParentContainer(StageView view)
 	{
 		this.parentContainer = view;

@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2014 -- WPI Suite
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors: Troy Hughes, Kyle Peffer, Ray Wang
+ ******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.model;
 
 import java.io.Serializable;
@@ -12,11 +22,8 @@ import com.google.gson.Gson;
  * @author thhughes
  *
  */
-
 public class Comment implements Serializable {
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = -7751779367913054594L;
 	String user;
 	String comment;
@@ -92,7 +99,10 @@ public class Comment implements Serializable {
 		this.user = user;
 	}
 	
-	
+	/**
+	 * Converts the comments to Json
+	 * @return string representation of Json
+	 */
 	public String toJson() {
 		return new Gson().toJson(this, Comment.class);
 	}
