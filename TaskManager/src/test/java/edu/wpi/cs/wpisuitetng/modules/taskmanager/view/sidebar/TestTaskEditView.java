@@ -8,7 +8,6 @@ import org.junit.Test;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Stage;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.StageList;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar.TaskEditView;
 /**
  * runs test on taskeditview
  * @author thhughes

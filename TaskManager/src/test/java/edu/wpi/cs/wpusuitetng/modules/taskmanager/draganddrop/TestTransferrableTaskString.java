@@ -65,7 +65,6 @@ public class TestTransferrableTaskString {
 		assertTrue(!testTransferableTaskString_1.isDataFlavorSupported(new DataFlavor(Task.class, "Task")));
 	}
 	
-	@SuppressWarnings("static-access")
 	@Test 
 	public void tasteDatFlavor(){
 		assertEquals(testTransferableTaskString_1.getTransferDataFlavors()[0], TransferableTaskString.flavor);

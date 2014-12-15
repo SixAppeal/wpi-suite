@@ -9,7 +9,6 @@
 
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components;
 
-import java.awt.Color;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;

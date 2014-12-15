@@ -11,6 +11,7 @@ import java.beans.PropertyChangeListener;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JComboBox;
 import javax.swing.JScrollPane;
@@ -39,6 +40,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.FormFieldValid
  * @author akshoop
  * @author rnorlando
  * @author srojas
+ * @author dpseaman
  */
 
 public class TaskCreateView extends JPanel implements IView {
@@ -94,6 +96,15 @@ public class TaskCreateView extends JPanel implements IView {
 		this.cancelButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if (!title.getText().trim().equals("")
+						|| !description.getText().trim().equals("")) {
+					int value = JOptionPane.showConfirmDialog(container, "You will lose your changes.",
+							"Are you sure?",
+							JOptionPane.YES_NO_OPTION);
+					if (value != JOptionPane.YES_OPTION) {
+						return;
+					}
+				}
 				gateway.toView("SidebarView", "removeCreatePanel", that);
 			}
 		});
@@ -130,13 +141,37 @@ public class TaskCreateView extends JPanel implements IView {
 				return "Please enter a description.";
 			}
 		});
-	
+		
+		FormField dateInputForm = new FormField("Due Date", this.dateInput, new FormFieldValidator() {
+			@Override
+			public boolean validate(JComponent component) {
+				return !(dateInput.getDate() == null);
+			}
+
+			
+			@Override
+			public String getMessage() {
+				return "Please select a due date.";
+			}
+		});
+		
+		this.dateInput.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (dateInput != null) { 
+					dateInputForm.validateInput();
+				}
+				validateForm();
+			}
+		});
+		
+		
 		this.dateInput.addPropertyChangeListener("date", new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
 				task.setDueDate(dateInput.getDate());
 			}
 		});
+		
 
 		this.description.addKeyListener(new KeyAdapter() {
 			public void keyReleased(KeyEvent e) {
@@ -150,7 +185,7 @@ public class TaskCreateView extends JPanel implements IView {
 		this.form = new Form(
 			titleField,
 			descriptionField,
-			new FormField("Due Date", this.dateInput),
+			dateInputForm,
 			new FormField("Stage", stages),
 			new ButtonGroup(
 				this.createButton,
@@ -222,4 +257,12 @@ public class TaskCreateView extends JPanel implements IView {
 	public JTextArea getDescription(){
 		return this.description;
 	}
+	
+	/**
+	 *  sets the focus on a text field
+	 */
+	public void fixFocus(){
+		this.title.requestFocusInWindow();
+	}
 }
+

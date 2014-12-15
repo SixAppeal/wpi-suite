@@ -1,5 +1,6 @@
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.model;
 
+
 /**
  * Basic stage model
  * 
@@ -46,6 +47,13 @@ public class Stage {
 
 	@Override
 	public boolean equals(Object o) {
+		if (this==o) {
+			return true;
+		}
+		if (!(o instanceof Stage)) {
+			return false;
+		}
+		
 		return o instanceof Stage
 			&& this.name.equals(((Stage) o).getName());
 	}

@@ -15,11 +15,6 @@ package edu.wpi.cs.wpusuitetng.modules.taskmanager.draganddrop;
 
 import static org.junit.Assert.*;
 
-import java.awt.Cursor;
-import java.awt.Point;
-import java.awt.dnd.DropTargetContext;
-import java.awt.dnd.DropTargetDragEvent;
-
 import org.junit.Before;
 import org.junit.Test;
 

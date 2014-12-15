@@ -68,7 +68,7 @@ public class StageList extends AbstractModel implements List<Stage>, Queue<Stage
 	
 	@Override
 	public String toString() {
-		String output = new String("[");
+		String output = "[";
 		for( Stage s : this ) {
 			output += "{" + s.toString() + "}, ";
 		}
@@ -76,6 +76,13 @@ public class StageList extends AbstractModel implements List<Stage>, Queue<Stage
 	}
 	
 	public boolean equals(Object o) {
+		if (this==o) {
+			return true;
+		}
+		if (!(o instanceof StageList)) {
+			return false;
+		}
+		
 		if( o instanceof StageList ) {
 			return stageList.equals(((StageList) o).getLL());
 		} else return false;

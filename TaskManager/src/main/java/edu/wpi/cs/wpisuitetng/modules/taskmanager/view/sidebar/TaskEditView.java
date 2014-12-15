@@ -6,7 +6,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors: Nathan Hughes
+ * Contributors: Nathan Hughes, Troy Hughes
  ******************************************************************************/
 
 
@@ -14,7 +14,6 @@ package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
 
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -36,6 +35,7 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
@@ -64,8 +64,6 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.util.TaskManagerUtil;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar.ColumnView;
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar.StageView;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.ButtonGroup;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.Form;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.FormField;
@@ -84,7 +82,10 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.MemberButtonGr
  * @author akshoop
  * @author dpseaman
  * @author thhughes
+<<<<<<< HEAD
 
+=======
+>>>>>>> devel
  */
 public class TaskEditView extends JPanel implements IView {
 	private static final long serialVersionUID = -8972626054612267276L;
@@ -103,8 +104,10 @@ public class TaskEditView extends JPanel implements IView {
 	private JTextField titleInput;
 	private JTextArea titleLabel;
 	private JTextArea descInput;
+	@SuppressWarnings("unused")
 	private JTextArea descLabel;
 	private JXDatePicker dateInput;
+	@SuppressWarnings("unused")
 	private JLabel dateLabel;
 	private JSpinner estEffortInput;
 	private JSpinner actEffortInput;
@@ -137,7 +140,8 @@ public class TaskEditView extends JPanel implements IView {
 	 * Constructor
 	 */
 	public TaskEditView(Task iTask, StageList stages) {
-		this.task = iTask;
+		this.task = new Task();
+		this.task.updateFrom(iTask);
 		this.stages = stages;
 		this.requirements = new Requirement[0];
 		this.tev = this;
@@ -381,7 +385,7 @@ public class TaskEditView extends JPanel implements IView {
 		FormField actEffortField = new FormField("Act. Effort", this.actEffortInput, new FormFieldValidator() {
 			@Override
 			public boolean validate(JComponent component) {
-				return ((Integer) ((JSpinner) component).getValue()).intValue() >= 0;
+				return ((Integer) ((JSpinner) component).getValue()).intValue() > 0;
 			}
 
 			@Override
@@ -403,7 +407,6 @@ public class TaskEditView extends JPanel implements IView {
 		stageBoxListener = new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Fire in the hole!");
 				if( stageInput.getSelectedIndex() > -1) {
 					task.setStage((Stage) stageInput.getSelectedItem());
 					saveTask();
@@ -499,6 +502,7 @@ public class TaskEditView extends JPanel implements IView {
 	 * Saves the task currently being edited
 	 */
 	private void saveTask() {
+		System.out.println("Troy Look Here ---> " + this.task.getId());
 		this.gateway.toPresenter("LocalCache", "update", "task:testing", this.task);
 	}
 
@@ -554,12 +558,12 @@ public class TaskEditView extends JPanel implements IView {
 	 * Takes the members that the user has selected and moves them to the list of members assigned to a task
 	 */
 	public void moveMembersToAssigned() {	
-		System.out.println("Moving to assigned!");
 		MemberListHandler.getInstance().assignMember(members.getSelectedValuesList());
 		updateMembers();
-		System.out.println(MemberListHandler.getInstance().getAssigned().size());
+
 		this.task.setAssignedTo(MemberListHandler.getInstance().getAssigned());
 		saveTask();
+
 		this.allMembersMouseHandler.clear();
 		this.assignedMembersMouseHandler.clear();
 		
@@ -572,7 +576,6 @@ public class TaskEditView extends JPanel implements IView {
 		MemberListHandler.getInstance().unAssignMember(assignedMembers.getSelectedValuesList());
 		updateMembers();
 		this.task.setAssignedTo(MemberListHandler.getInstance().getAssigned());
-		System.out.println(MemberListHandler.getInstance().getAssigned().size());
 		saveTask();
 		this.allMembersMouseHandler.clear();
 		this.assignedMembersMouseHandler.clear();
@@ -587,8 +590,8 @@ public class TaskEditView extends JPanel implements IView {
 	 * @param updatedTask is the task that is set to the new task in the edit view. 
 	 */
 	public void updateEVTask(Task updatedTask){
+		//this.task.updateFrom(updatedTask);
 		this.task = updatedTask;
-		
 	}
 
 	/**
@@ -678,7 +681,6 @@ public class TaskEditView extends JPanel implements IView {
 		return shortenedTitle;
 	}
 
-
 	private class JListMouseHandler implements MouseListener {
 
 		JList<String> list;
@@ -721,6 +723,7 @@ public class TaskEditView extends JPanel implements IView {
 
 		public void mouseClicked(MouseEvent e) {}
 
+		@SuppressWarnings("unused")
 		public void update_selected() {
 			if (this.keyboard_event_count == 0) {
 				this.previous_indexes = this.list.getSelectedIndices();

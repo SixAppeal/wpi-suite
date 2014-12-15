@@ -50,7 +50,6 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
  */
 public class Search {
 	private boolean isInit;
-	private boolean create = true;
 	private Directory index;
 	private Directory temp_index = null;
 	

@@ -51,12 +51,14 @@ public class SidebarView extends JTabbedPane implements IView {
 	private Gateway gateway;
 
 	private StageList stages;
+	@SuppressWarnings("unused")
 	private List<String> requirements;
 	private ThreadSafeLocalCache cache;
 	// Components
 	private List<IView> viewList;
 	private SearchBox searchView;
 	private ColumnEditView columnEditView;
+	private StatisticsView statisticsView;
 
 	/**
 	 * Constructs a sidebar view
@@ -73,6 +75,9 @@ public class SidebarView extends JTabbedPane implements IView {
 		
 		this.columnEditView = new ColumnEditView();
 		this.viewList.add(columnEditView);
+		
+		this.statisticsView = new StatisticsView();
+		this.viewList.add(statisticsView);
 		
 		this.setUI(new BasicTabbedPaneUI() {
 			@Override
@@ -98,12 +103,16 @@ public class SidebarView extends JTabbedPane implements IView {
 				searchView);
 		this.addTab(null, new ImageIcon(this.getClass().getResource("icon_column_edit.png")),
 				columnEditView);
+		this.addTab(null,  new ImageIcon(this.getClass().getResource("icon_stats.png")), 
+				statisticsView);
 	}
 	
 	/**
 	 * Adds a creation panel to the sidebar
 	 */
 	public void addCreatePanel() {
+		this.setVisible(true);
+		
 		// if there is a tab with the edit pane 
 		for (IView view : viewList) {
 			if (view instanceof TaskCreateView) {
@@ -119,7 +128,7 @@ public class SidebarView extends JTabbedPane implements IView {
 		this.addTab(null, new ImageIcon(this.getClass().getResource("icon_plus.png")),
 				createView);
 		this.setSelectedComponent(createView);
-		this.setVisible(true);
+		createView.fixFocus();
 	}
 	
 	/**
@@ -132,6 +141,7 @@ public class SidebarView extends JTabbedPane implements IView {
 			this.removeTabAt(this.indexOfComponent(createView));
 			this.viewList.remove(createView);
 		} catch (IndexOutOfBoundsException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -140,6 +150,7 @@ public class SidebarView extends JTabbedPane implements IView {
 	 * @param task The task to edit
 	 */
 	public void addEditPanel(Task task) {
+		this.setVisible(true);
 		
 		//if there is a tab with the edit pane 
 		for (IView view : viewList) {
@@ -160,7 +171,6 @@ public class SidebarView extends JTabbedPane implements IView {
 		this.addTab(null, new ImageIcon(this.getClass().getResource("icon_pencil.png")),
 				editView);
 		this.setSelectedComponent(editView);
-		this.setVisible(true);
 	}
 	
 	/**
@@ -187,7 +197,7 @@ public class SidebarView extends JTabbedPane implements IView {
 			this.removeTabAt(this.indexOfComponent(editView));
 			this.viewList.remove(editView);
 		} catch (IndexOutOfBoundsException e) {
-			// Do nothing
+			e.printStackTrace();
 		}
 	}
 	

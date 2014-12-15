@@ -15,6 +15,7 @@ import edu.wpi.cs.wpisuitetng.network.models.IRequest;
  */
 public class GetMembersObserver implements RequestObserver {
 
+	@SuppressWarnings("unused")
 	private TaskPresenter presenter;
 	
 	/**

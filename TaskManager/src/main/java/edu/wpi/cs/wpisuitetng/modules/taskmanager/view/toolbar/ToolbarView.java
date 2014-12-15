@@ -4,20 +4,15 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 
-import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.DefaultToolbarView;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.util.TaskManagerUtil;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
@@ -37,6 +32,7 @@ public class ToolbarView extends GradientPanel implements IView {
 	private JButton createTaskButton;
 	private JButton toggleSidebarButton;
 	
+	@SuppressWarnings("unused")
 	private boolean click;
 	
 	/**
@@ -51,10 +47,10 @@ public class ToolbarView extends GradientPanel implements IView {
 		this.createTaskButton.setHorizontalAlignment(SwingConstants.CENTER);
 		this.createTaskButton.setIcon(new ImageIcon(this.getClass().getResource("icon_plus.png")));
 		Font font = this.createTaskButton.getFont();
-		font = new Font(font.getName(), font.getStyle(), 18);
+		font = new Font(font.getName(), font.getStyle(), 16);
 		this.createTaskButton.setFont(font);
 		this.createTaskButton.setBorder(BorderFactory.createCompoundBorder(this.createTaskButton.getBorder(), 
-				BorderFactory.createEmptyBorder(10, 12, 10, 12)));
+				BorderFactory.createEmptyBorder(6, 6, 6, 6)));
 		
 		this.createTaskButton.addActionListener(new ActionListener() {
 			@Override
@@ -67,7 +63,7 @@ public class ToolbarView extends GradientPanel implements IView {
 		//this.toggleSidebarButton.setIcon(new ImageIcon(this.getClass().getResource("icon_right.png")));
 		this.toggleSidebarButton.setFont(font);
 		this.toggleSidebarButton.setBorder(BorderFactory.createCompoundBorder(this.toggleSidebarButton.getBorder(), 
-				BorderFactory.createEmptyBorder(10, 12, 10, 12)));
+				BorderFactory.createEmptyBorder(6, 6, 6, 6)));
 		
 		this.toggleSidebarButton.addActionListener(new ActionListener() {
 			@Override
@@ -104,8 +100,8 @@ public class ToolbarView extends GradientPanel implements IView {
 		gbc.gridy = 0;
 		this.add(this.createTaskButton, gbc);
 		
-		
-		
+		gbc.anchor = GridBagConstraints.LAST_LINE_END;
+		gbc.insets.right = 20;
 		gbc.weightx = 1.0;
 		gbc.gridx = 1;
 		this.add(this.toggleSidebarButton, gbc);
