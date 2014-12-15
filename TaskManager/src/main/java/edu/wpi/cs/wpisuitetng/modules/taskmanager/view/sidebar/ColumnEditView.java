@@ -79,7 +79,7 @@ public class ColumnEditView extends JPanel implements IView {
 		this.moveDnBtn = new JButton();
 		this.titleEntry = new JTextField();
 		this.newName = new JTextField();
-		this.nameChange = new JButton("Edit Name");
+		this.nameChange = new JButton("Rename Stage");
 		this.deleteBtn = new JButton("Delete Stage");
 		
 		this.titleEntry.setBorder(FormField.BORDER_NORMAL);

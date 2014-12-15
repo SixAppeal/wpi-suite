@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors: Will Rensselaer, Thomas Meehan, Alex Shoop, Ryan Orlando, Troy Hughes,
- * Jill Hennessy, Ryan Wang, Santiago Rojas, Dan Seaman, Kyle Peffer, Nathan Hughes, Will Temple
+ * Jill Hennessy, Ray Wang, Santiago Rojas, Dan Seaman, Kyle Peffer, Nathan Hughes, Will Temple
  ******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.taskmanager;
