@@ -445,6 +445,7 @@ public class Task extends AbstractModel {
 		this.comments = new LinkedList<Comment>(updatedTask.getComments());
 		this.archived = updatedTask.archived;
 		this.priority = updatedTask.priority;
+		this.requirement = updatedTask.requirement;
 	}
 	
 	/**

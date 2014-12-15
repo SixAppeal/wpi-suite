@@ -8,6 +8,7 @@
  *
  * Contributors: Troy Hughes
  ******************************************************************************/
+
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar.histNcom;
 
 import javax.swing.JTextArea;
