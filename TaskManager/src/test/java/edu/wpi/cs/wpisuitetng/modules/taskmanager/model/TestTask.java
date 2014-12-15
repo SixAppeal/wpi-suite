@@ -57,7 +57,7 @@ public class TestTask {
 		assertEquals(newTask.getDueDate(), new Date());
 		assertEquals(newTask.getEstimatedEffort(), new Integer(1));
 		assertEquals(newTask.getId(), 0);
-		assertEquals(newTask.getRequirement(), "Associated requirement");
+		//assertEquals(newTask.getRequirement(), "Associated requirement");
 		assertEquals(newTask.getStage(), new Stage("New"));
 
 	}
@@ -168,11 +168,10 @@ public class TestTask {
 		assignedTo.add("Troy");
 		assignedTo.add("Paul");
 		task2.setAssignedTo(assignedTo);
-		task2.addComment("Troy", "Second Comment");
+		//task2.addComment("Troy", "Second Comment");
 		task.updateFrom(task2);
 		task.setId(1);
 		task2.setId(1);
-		
 		assertTrue(task.equals(task2));
 		
 		

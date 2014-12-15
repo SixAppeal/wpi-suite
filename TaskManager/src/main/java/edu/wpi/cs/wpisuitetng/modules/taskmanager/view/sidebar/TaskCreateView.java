@@ -11,6 +11,7 @@ import java.beans.PropertyChangeListener;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JComboBox;
 import javax.swing.JScrollPane;
@@ -95,6 +96,15 @@ public class TaskCreateView extends JPanel implements IView {
 		this.cancelButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if (!title.getText().trim().equals("")
+						|| !description.getText().trim().equals("")) {
+					int value = JOptionPane.showConfirmDialog(container, "You will lose your changes.",
+							"Are you sure?",
+							JOptionPane.YES_NO_OPTION);
+					if (value != JOptionPane.YES_OPTION) {
+						return;
+					}
+				}
 				gateway.toView("SidebarView", "removeCreatePanel", that);
 			}
 		});
@@ -176,7 +186,6 @@ public class TaskCreateView extends JPanel implements IView {
 			titleField,
 			descriptionField,
 			dateInputForm,
-			// new FormField("Due Date", this.dateInput),
 			new FormField("Stage", stages),
 			new ButtonGroup(
 				this.createButton,

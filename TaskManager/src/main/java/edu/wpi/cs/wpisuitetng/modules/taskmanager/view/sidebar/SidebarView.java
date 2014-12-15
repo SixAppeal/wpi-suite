@@ -16,12 +16,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Insets;
 import java.io.IOException;
 
 import javax.swing.ImageIcon;
+import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.plaf.basic.BasicTabbedPaneUI;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementmanager.models.Requirement;
@@ -58,6 +62,7 @@ public class SidebarView extends JTabbedPane implements IView {
 	private List<IView> viewList;
 	private SearchBox searchView;
 	private ColumnEditView columnEditView;
+	private StatisticsView statisticsView;
 
 	/**
 	 * Constructs a sidebar view
@@ -74,6 +79,9 @@ public class SidebarView extends JTabbedPane implements IView {
 		
 		this.columnEditView = new ColumnEditView();
 		this.viewList.add(columnEditView);
+		
+		this.statisticsView = new StatisticsView();
+		this.viewList.add(statisticsView);
 		
 		this.setUI(new BasicTabbedPaneUI() {
 			@Override
@@ -99,12 +107,61 @@ public class SidebarView extends JTabbedPane implements IView {
 				searchView);
 		this.addTab(null, new ImageIcon(this.getClass().getResource("icon_column_edit.png")),
 				columnEditView);
+		this.addTab(null,  new ImageIcon(this.getClass().getResource("icon_stats.png")), 
+				statisticsView);
+		
+		
+		//This stuff is for make ing it not strech out more then it needs to
+		this.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e)
+			{
+				UpdateCompates();
+			}
+		});
+		
+	}
+	
+	/**
+	 * Uncompates the current file
+	 * and Compates all other files
+	 */
+	public void UpdateCompates()
+	{
+		int currentIndex = this.getSelectedIndex();
+		int numberOfTabs = this.getTabCount();
+		for(int i = 0; i < numberOfTabs; i++)
+		{
+			Component component = this.getComponentAt(i);
+			if(!(component instanceof EmptyComponentHolder))
+			{
+				EmptyComponentHolder holder = new EmptyComponentHolder(component);
+			
+				this.setComponentAt(i, holder);
+			}
+			
+			
+		}
+		
+		//int currentIndex = this.getSelectedIndex();
+		Component selected = this.getComponentAt(currentIndex);
+		try
+		{
+			this.setComponentAt(currentIndex, ((EmptyComponentHolder) selected).contents);
+		}
+		catch(Exception e)
+		{
+			System.out.println("Fuck, you Swing");
+		}
+		
 	}
 	
 	/**
 	 * Adds a creation panel to the sidebar
 	 */
 	public void addCreatePanel() {
+		this.setVisible(true);
+		
 		// if there is a tab with the edit pane 
 		for (IView view : viewList) {
 			if (view instanceof TaskCreateView) {
@@ -120,8 +177,6 @@ public class SidebarView extends JTabbedPane implements IView {
 		this.addTab(null, new ImageIcon(this.getClass().getResource("icon_plus.png")),
 				createView);
 		this.setSelectedComponent(createView);
-		this.setVisible(true);
-		
 		createView.fixFocus();
 	}
 	
@@ -144,12 +199,14 @@ public class SidebarView extends JTabbedPane implements IView {
 	 * @param task The task to edit
 	 */
 	public void addEditPanel(Task task) {
+		this.setVisible(true);
 		
 		//if there is a tab with the edit pane 
 		for (IView view : viewList) {
 			if (view instanceof TaskEditView) {
 				if (task.equals(((TaskEditView) view).getTask())) {
 					setSelectedComponent((TaskEditView)view);
+					((TaskEditView) view).getRequirements((Requirement[])cache.retrieve("requirements"));
 					return;
 				}
 			}
@@ -158,15 +215,16 @@ public class SidebarView extends JTabbedPane implements IView {
 		
 		TaskEditView editView = new TaskEditView(task, stages);
 		editView.setGateway(this.gateway);
+		editView.getRequirements((Requirement[])cache.retrieve("requirements"));
 		this.viewList.add(editView);
 		this.addTab(null, new ImageIcon(this.getClass().getResource("icon_pencil.png")),
 				editView);
 		this.setSelectedComponent(editView);
-		this.setVisible(true);
 	}
 	
 	/**
 	 * Passes the retrieved requirements array to the Task Edit View
+	 * @param requirements String of all requirements retrieved
 	 */
 	public void passInRequirements(String requirements) {
 		Requirement[] requirementsArray = Requirement.fromJsonArray(requirements);

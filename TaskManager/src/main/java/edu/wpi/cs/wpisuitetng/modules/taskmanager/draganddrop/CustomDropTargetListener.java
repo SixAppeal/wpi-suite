@@ -130,21 +130,30 @@ public class CustomDropTargetListener implements DropTargetListener {
 		dropTask.setStage(this.column.getStageView().getStage());
 		TaskView droppedTask =  new TaskView(dropTask); 
 		
-		gateway.toPresenter("LocalCache", "update", "task:testing", dropTask);
+		if(dropTask.equals(null))
+		{
+			gateway.toPresenter("LocalCache", "update", "task:testing", dropTask);
+		}
+		else
+		{
+			
+		}
 		
 		
 		
-		final int dropYLoc = dtde.getLocation().y;
-		
+		final int dropYLoc = dtde.getLocation().y + column.getYOffSet();
 		Map<Integer, TaskView> yLocMapForTasks = new HashMap<Integer, TaskView>();
+		
 		yLocMapForTasks.put(dropYLoc, droppedTask);
 		for (TaskView nextPanel : column.getStageView().getTaskViews()) {
+			
 			
 			int y = nextPanel.getY();
 			if (nextPanel.getTaskID() != (droppedTask.getTaskID())) {
 				yLocMapForTasks.put(y, nextPanel);
 			}
 		}
+		
 		
 		
 		List<Integer> sortableYValues = new ArrayList<Integer>();
@@ -161,7 +170,8 @@ public class CustomDropTargetListener implements DropTargetListener {
 		inMemoryTaskList.addAll(orderedTasks);
 		
 		int priority = 1;
-		for (TaskView t : inMemoryTaskList) {
+		for (TaskView t : inMemoryTaskList) 
+		{
 			Task tr = t.getTask(); 
 			tr.setPriority(priority);
 			this.column.getStageView().getGateway().toPresenter("LocalCache", "update", "task:testing", tr);

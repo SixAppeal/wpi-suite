@@ -47,10 +47,10 @@ public class ToolbarView extends GradientPanel implements IView {
 		this.createTaskButton.setHorizontalAlignment(SwingConstants.CENTER);
 		this.createTaskButton.setIcon(new ImageIcon(this.getClass().getResource("icon_plus.png")));
 		Font font = this.createTaskButton.getFont();
-		font = new Font(font.getName(), font.getStyle(), 18);
+		font = new Font(font.getName(), font.getStyle(), 16);
 		this.createTaskButton.setFont(font);
 		this.createTaskButton.setBorder(BorderFactory.createCompoundBorder(this.createTaskButton.getBorder(), 
-				BorderFactory.createEmptyBorder(10, 12, 10, 12)));
+				BorderFactory.createEmptyBorder(6, 6, 6, 6)));
 		
 		this.createTaskButton.addActionListener(new ActionListener() {
 			@Override
@@ -63,7 +63,7 @@ public class ToolbarView extends GradientPanel implements IView {
 		//this.toggleSidebarButton.setIcon(new ImageIcon(this.getClass().getResource("icon_right.png")));
 		this.toggleSidebarButton.setFont(font);
 		this.toggleSidebarButton.setBorder(BorderFactory.createCompoundBorder(this.toggleSidebarButton.getBorder(), 
-				BorderFactory.createEmptyBorder(10, 12, 10, 12)));
+				BorderFactory.createEmptyBorder(6, 6, 6, 6)));
 		
 		this.toggleSidebarButton.addActionListener(new ActionListener() {
 			@Override
@@ -100,8 +100,8 @@ public class ToolbarView extends GradientPanel implements IView {
 		gbc.gridy = 0;
 		this.add(this.createTaskButton, gbc);
 		
-		
-		
+		gbc.anchor = GridBagConstraints.LAST_LINE_END;
+		gbc.insets.right = 20;
 		gbc.weightx = 1.0;
 		gbc.gridx = 1;
 		this.add(this.toggleSidebarButton, gbc);

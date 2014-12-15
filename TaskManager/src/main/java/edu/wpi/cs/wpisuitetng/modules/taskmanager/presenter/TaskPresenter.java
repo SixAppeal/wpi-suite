@@ -31,7 +31,6 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar.TaskView;
  * @author akshoop
  */
 public class TaskPresenter implements IPresenter{
-
 	private Gateway gateway;
 	private Cache cache;
 	private LinkedList<TaskView> selectedTasks;
