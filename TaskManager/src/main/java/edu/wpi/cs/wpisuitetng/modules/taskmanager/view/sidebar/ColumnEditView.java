@@ -154,7 +154,7 @@ public class ColumnEditView extends JPanel implements IView {
 			@Override
 			public void keyReleased(KeyEvent e) {
 			    if (e.getKeyCode() == KeyEvent.VK_ENTER ){
-			    	System.out.println("Yea fuck Swing!");
+			    	System.out.println("Yeah fuck Swing!");
 			    	addStage();
 			    }
 			}
@@ -254,11 +254,6 @@ public class ColumnEditView extends JPanel implements IView {
 		this.setBackground(TaskManagerUtil.SIDEBAR_COLOR);
 		GridBagConstraints gbc = new GridBagConstraints();
 		this.setLayout(new GridBagLayout());
-		
-		//The formatting here could use some work
-		
-		//It would help a ton if anyone knew which dimensions each number
-			//in the insets object acutally corresponded to
 
 		//top left bottom right
 		
