@@ -63,6 +63,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.util.TaskManagerUtil;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.ButtonGroup;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.ColorComboBox;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.Form;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.FormField;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.FormFieldValidator;
@@ -119,6 +120,7 @@ public class TaskEditView extends JPanel implements IView {
 	private JButton viewRequirement;
 	private JButton attachRequirement;
 	private JComboBox<String> requirementsComboBox;
+	private ColorComboBox category;
 	private JButton archiveButton;
 	private JButton closeButton;
 	private Form form;
@@ -142,6 +144,7 @@ public class TaskEditView extends JPanel implements IView {
 		this.stages = stages;
 		this.requirements = new Requirement[0];
 		this.tev = this;
+		TaskEditView that = this; 
 		// Populates the member list handler with the assigned members
 		
 		
@@ -158,6 +161,7 @@ public class TaskEditView extends JPanel implements IView {
 		this.estEffortInput = new JSpinner(new SpinnerNumberModel(1, null, null, 1));
 		this.actEffortInput = new JSpinner(new SpinnerNumberModel(1, null, null, 1));
 		this.requirementTitles = new ArrayList<String>();
+		this.category = new ColorComboBox();
 
 		this.commentPanel.updateView(this.task);
 
@@ -173,7 +177,6 @@ public class TaskEditView extends JPanel implements IView {
 		this.stageInput = new JComboBox<Stage>();
 		this.archiveButton = new JButton("Archive");
 		this.closeButton = new JButton("Close");
-		TaskEditView that = this;			// What the actual fuck... 
 		
 		this.titleLabel.setOpaque(false);
 		this.titleLabel.setBorder(BorderFactory.createEmptyBorder());
@@ -438,33 +441,31 @@ public class TaskEditView extends JPanel implements IView {
 		this.stageInput.addActionListener(stageBoxListener);
 
 		this.form = new Form(
-				titleField,
-				descField,
-				new FormField("Due Date", this.dateInput),
-				new HorizontalForm(
-						estEffortField,
-						actEffortField
-						),
-						new HorizontalForm(
-								new FormField("Members", this.membersScrollPane),
-								new Form(
-//										new ButtonGroup(addMemberButton),
-//										new ButtonGroup(removeMemberButton)
-										new MemberButtonGroup(addMemberButton, removeMemberButton)
-									),
-								new FormField("Assigned", this.assignedMembersScrollPane)
-								),
-								new FormField("Associated Requirement", this.requirementsComboBox),
-								new ButtonGroup(
-										this.viewRequirement,
-										this.attachRequirement
-										),
-										//new FormField("Stage", this.stageInput),
-										new ButtonGroup(
-												this.archiveButton,
-												this.closeButton
-												)
-				);
+			titleField,
+			descField,
+			new FormField("Due Date", this.dateInput),
+			new HorizontalForm(
+				estEffortField,
+				actEffortField
+			),
+			new HorizontalForm(
+				new FormField("Members", this.membersScrollPane),
+				new Form(
+					new MemberButtonGroup(addMemberButton, removeMemberButton)
+				),
+				new FormField("Assigned", this.assignedMembersScrollPane)
+			),
+			new FormField("Associated Requirement", this.requirementsComboBox),
+			new ButtonGroup(
+				this.viewRequirement,
+				this.attachRequirement
+			),
+			new FormField("Category", this.category),
+			new ButtonGroup(
+				this.archiveButton,
+				this.closeButton
+			)
+		);
 		
 
 		this.container.setBackground(SidebarView.SIDEBAR_COLOR);
