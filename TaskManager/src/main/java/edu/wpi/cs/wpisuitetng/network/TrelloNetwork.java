@@ -6,9 +6,12 @@ public class TrelloNetwork extends Network {
 
 	protected TrelloNetwork() {
 	}
-
-	public static void setInstance(TrelloNetwork network) {
-		instance = network;
+	
+	/**
+	 * Begins the import from Trello
+	 */
+	public void beginImport() {
+		
 	}
 
 	/**
