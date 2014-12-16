@@ -75,7 +75,7 @@ public class Comment implements Serializable {
 	
 	@Override
 	public String toString(){
-		return (sdf.format(this.dateAndTime) + " -- " + this.user + ": " + this.comment);
+		return (sdf.format(this.dateAndTime.getTime()) + " -- " + this.user + ": " + this.comment);
 	}
 	
 	/**

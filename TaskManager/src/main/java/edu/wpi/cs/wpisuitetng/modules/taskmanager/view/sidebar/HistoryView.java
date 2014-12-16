@@ -73,7 +73,7 @@ public class HistoryView extends JPanel implements IView{
 			fields.clear();
 			
 			for(Activity a: activities){
-				ActivityLabel temp = new ActivityLabel(a.getActivity());		
+				ActivityLabel temp = new ActivityLabel(a.toString());		
 				fields.add(temp);
 			}
 			reflow();

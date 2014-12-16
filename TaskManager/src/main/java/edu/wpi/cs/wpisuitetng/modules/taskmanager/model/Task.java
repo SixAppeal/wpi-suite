@@ -168,7 +168,7 @@ public class Task extends AbstractModel {
 	public void addToHistory(Object original, Object newInfo, String field) {
 		if(!newInfo.equals(original))
 		{
-			activities.add(new Activity("The " + field + " was changed to " + newInfo.toString()));
+			activities.add(new Activity("changed the " + field + " from " + original.toString() + " to " + newInfo.toString()));
 		}
 	}
 	
