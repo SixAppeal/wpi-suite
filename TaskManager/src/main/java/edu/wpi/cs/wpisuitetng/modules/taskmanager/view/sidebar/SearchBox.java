@@ -98,12 +98,15 @@ public class SearchBox extends JPanel implements IView {
 			@Override
 			public void itemStateChanged(ItemEvent arg0) {
 				if (archiveModeOn){
+					
 					archiveModeOn = false;
+					displayResults(resultsG);
 				}
 				else{
-					archiveModeOn = true;
+					archiveModeOn = true; 
+					displayResults(resultsG);
 				}
-				displayResults(resultsG);
+				
 			}
 		});
 
@@ -257,4 +260,12 @@ public class SearchBox extends JPanel implements IView {
 	public void setGateway(Gateway gateway) {
 		this.gateway = gateway;
 	}
+	/**
+	 * returns true if the search box is empty
+	 * @return boolean if true
+	 */
+	public boolean isSearchBoxEmpty(){
+		return searchBox.getText().isEmpty();
+	}
+	
 }
