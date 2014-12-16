@@ -6,7 +6,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors: Nathan Hughes, Santiago Rojas, Jill Hennessy, Kyle Peffer, Troy Hughes
+ * Contributors: Team Six-Appeal
  ******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.model;
 
@@ -18,6 +18,7 @@ package edu.wpi.cs.wpisuitetng.modules.taskmanager.model;
  * @author jrhennessy
  * @author krpeffer
  * @author thhughes
+ * @author tmeehan
  * 
  */
 public class Activity {

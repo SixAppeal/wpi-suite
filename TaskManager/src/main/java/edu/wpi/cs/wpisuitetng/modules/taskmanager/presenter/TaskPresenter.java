@@ -6,7 +6,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors: William Van Renseelaer Dan Seaman Nathan Hughes Alexander Shoop
+ * Contributors: Team Six-Appeal
  ******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter;
@@ -28,6 +28,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar.TaskView;
  * @author wavanrensselaer
  * @author dpseaman
  * @author nhhughes
+ * @author tmeehan
  * @author akshoop
  */
 public class TaskPresenter implements IPresenter{

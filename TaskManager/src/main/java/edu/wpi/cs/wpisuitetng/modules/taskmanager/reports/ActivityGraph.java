@@ -22,7 +22,7 @@ import org.jscience.mathematics.vector.Float64Matrix;
 
 /**
  * G(V,E) and adjacency matrix representation of user activity over a specified time span
- * @author nathan
+ * @author nhhughes
  *
  */
 public class ActivityGraph {

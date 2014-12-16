@@ -6,7 +6,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors: Nathan Hughes
+ * Contributors: Team Six-Appeal
  ******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache;
 
@@ -19,7 +19,7 @@ import edu.wpi.cs.wpisuitetng.network.models.IRequest;
 
 /**
  * Request observer to track an add operation for the cache
- * @author nathan
+ * @author nhhughes
  *
  */
 public class AddManager implements RequestObserver {

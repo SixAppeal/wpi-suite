@@ -7,7 +7,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors: Nathan Hughes, Alexander Shoop, Will Rensselaer, Thomas Meehan, Ryan Orlando, Troy Hughes, Nathan Hughes
+ * Contributors: Team Six-Appeal
  ******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
@@ -44,8 +44,9 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
  * @author srojas
  * @author thhughes
  * @author nhhughes
- * @author dpseaman
  * @author tmeehan
+ * @author dpseaman
+ * 
  */
 public class SidebarView extends JTabbedPane implements IView {
 	private static final long serialVersionUID = -9157611802121055998L;
