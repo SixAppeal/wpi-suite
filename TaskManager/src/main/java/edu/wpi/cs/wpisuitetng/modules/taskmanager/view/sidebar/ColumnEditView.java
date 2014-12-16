@@ -94,7 +94,7 @@ public class ColumnEditView extends JPanel implements IView {
 		
 		// disable stage name editing and delete when there's no stage selected
 		if (stageJList.isSelectionEmpty()){
-
+			// Just checking 
 		}
 		this.addButton.setEnabled(false);
 		this.newName.setEnabled(false);
