@@ -7,7 +7,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors: Nathan Hughes, Alexander Shoop, Will Rensselaer, Thomas Meehan, Ryan Orlando, Troy Hughes, Nathan Hughes
+ * Contributors: Team Six-Appeal
  ******************************************************************************/
 
 

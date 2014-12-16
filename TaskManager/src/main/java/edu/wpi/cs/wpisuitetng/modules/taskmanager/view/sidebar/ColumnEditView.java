@@ -6,7 +6,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors: Nathan Hughes, Santiago Rojas
+ * Contributors: Team Six-Appeal
  ******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
@@ -48,6 +48,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.FormField;
  * @author wmtemple
  * @author wavanrensselaer
  * @author thhughes
+ * @author tmeehan
  * @author srojas
  * @author dpseaman
  * @author tmeehan

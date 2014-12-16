@@ -6,8 +6,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors: Will Rensselaer, Thomas Meehan, Alex Shoop, Ryan Orlando, Troy Hughes,
- * Jill Hennessy, Ray Wang, Santiago Rojas, Dan Seaman, Kyle Peffer, Nathan Hughes, Will Temple
+ * Contributors: Team Six-Appeal
  ******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.taskmanager;
