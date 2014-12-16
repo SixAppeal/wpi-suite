@@ -29,6 +29,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementmanager.models.characteristics.
  * 
  * @version $Revision: 1.0 $
  * @author justinhess
+ * @author rnorlando
  */
 public class Requirement extends AbstractModel {
 
@@ -912,5 +913,26 @@ public class Requirement extends AbstractModel {
      */
     public void setWasCreated(boolean wasCreated) {
         this.wasCreated = wasCreated;
+    }
+    
+    @Override
+    public boolean equals(Object that)
+    {
+    	if(this.getClass() != that.getClass())
+    	{
+    		return false;
+    	}
+    	Requirement thatReq = (Requirement)that;
+    	if(thatReq.getId() !=this.getId())
+    	{
+    		return false;
+    	}
+    	return true;
+    }
+    
+    @Override
+    public int hashCode()
+    {
+    	return this.getId();
     }
 }

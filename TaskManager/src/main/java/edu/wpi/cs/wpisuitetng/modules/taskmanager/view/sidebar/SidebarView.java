@@ -7,21 +7,28 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors: Nathan Hughes, Alexander Shoop, Will Rensselaer, Thomas Meehan, Ryan Orlando, Troy Hughes, Nathan Hughes
+ * Contributors: Team Six-Appeal
  ******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Insets;
 import java.io.IOException;
 
 import javax.swing.ImageIcon;
+import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.plaf.basic.BasicTabbedPaneUI;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementmanager.models.Requirement;
@@ -40,8 +47,9 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
  * @author srojas
  * @author thhughes
  * @author nhhughes
- * @author dpseaman
  * @author tmeehan
+ * @author dpseaman
+ * 
  */
 public class SidebarView extends JTabbedPane implements IView {
 	private static final long serialVersionUID = -9157611802121055998L;
@@ -105,6 +113,51 @@ public class SidebarView extends JTabbedPane implements IView {
 				columnEditView);
 		this.addTab(null,  new ImageIcon(this.getClass().getResource("icon_stats.png")), 
 				statisticsView);
+		
+		
+		//This stuff is for make ing it not strech out more then it needs to
+		this.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e)
+			{
+				UpdateCompates();
+			}
+		});
+		
+	}
+	
+	/**
+	 * Uncompates the current file
+	 * and Compates all other files
+	 */
+	public void UpdateCompates()
+	{
+		int currentIndex = this.getSelectedIndex();
+		int numberOfTabs = this.getTabCount();
+		for(int i = 0; i < numberOfTabs; i++)
+		{
+			Component component = this.getComponentAt(i);
+			if(!(component instanceof EmptyComponentHolder))
+			{
+				EmptyComponentHolder holder = new EmptyComponentHolder(component);
+			
+				this.setComponentAt(i, holder);
+			}
+			
+			
+		}
+		
+		//int currentIndex = this.getSelectedIndex();
+		Component selected = this.getComponentAt(currentIndex);
+		try
+		{
+			this.setComponentAt(currentIndex, ((EmptyComponentHolder) selected).contents);
+		}
+		catch(Exception e)
+		{
+			System.out.println("Fuck, you Swing");
+		}
+		
 	}
 	
 	/**
@@ -157,6 +210,7 @@ public class SidebarView extends JTabbedPane implements IView {
 			if (view instanceof TaskEditView) {
 				if (task.equals(((TaskEditView) view).getTask())) {
 					setSelectedComponent((TaskEditView)view);
+					((TaskEditView) view).getRequirements((Requirement[])cache.retrieve("requirements"));
 					return;
 				}
 			}
@@ -165,6 +219,7 @@ public class SidebarView extends JTabbedPane implements IView {
 		
 		TaskEditView editView = new TaskEditView(task, stages);
 		editView.setGateway(this.gateway);
+		editView.getRequirements((Requirement[])cache.retrieve("requirements"));
 		this.viewList.add(editView);
 		this.addTab(null, new ImageIcon(this.getClass().getResource("icon_pencil.png")),
 				editView);
@@ -173,14 +228,23 @@ public class SidebarView extends JTabbedPane implements IView {
 	
 	/**
 	 * Passes the retrieved requirements array to the Task Edit View
+	 * @param requirements String of all requirements retrieved
 	 */
 	public void passInRequirements(String requirements) {
 		Requirement[] requirementsArray = Requirement.fromJsonArray(requirements);
 		
+		//This is a band aid
+		ArrayList<Requirement> requirmentlist = new ArrayList<Requirement>();
+		for (Requirement r : requirementsArray) {
+			requirmentlist.add(r);
+		}
+		Set<Requirement> setR = new HashSet<Requirement>(requirmentlist);
+		Requirement[] requirementsArray2 = (Requirement[]) (setR).toArray(new Requirement[0]);
+		
 		// check if tab exists with the edit pane
 		for (IView view : viewList) {
 			if (view instanceof TaskEditView) {
-				((TaskEditView) view).getRequirements(requirementsArray);
+				((TaskEditView) view).getRequirements(requirementsArray2);
 			}
 		}
 	}
@@ -222,6 +286,10 @@ public class SidebarView extends JTabbedPane implements IView {
 		this.searchView.updateIndex(all_tasks);
 	}
 	
+	/**
+	 * Set stages from an update sync for stage list
+	 * @param sl stage list to update from
+	 */
 	public void setStages(StageList sl) {
 		this.stages = sl;
 		for (IView v : this.viewList) {
@@ -232,6 +300,12 @@ public class SidebarView extends JTabbedPane implements IView {
 		columnEditView.setStages(this.stages);
 	}
 
+	/**
+	 * Find specific task
+	 * @param tasks list of tasks
+	 * @param id tasks id to search for
+	 * @return task with specific id
+	 */
 	public Task findTask(Task [] tasks, int id) {
 		for (Task t: tasks) {
 			if (t.getId() == id) {
@@ -241,6 +315,10 @@ public class SidebarView extends JTabbedPane implements IView {
 		return null;
 	}
 	
+	/**
+	 * Set the copy of the local cache
+	 * @param cache cache to use
+	 */
 	public void setCache(ThreadSafeLocalCache cache) {
 		this.cache = cache;
 	}
@@ -265,21 +343,16 @@ public class SidebarView extends JTabbedPane implements IView {
 				}
 			}
 		}
-		
-	
-	
-	
-	
+			
 	
 	/**
 	 * Goes through and re adds all of the tasks to the TaskEditViews
 	 */
-	
-	/*
-	 * This method causes an infinite loop and crashes the server everytime I run it... Not sure what's up here. 
-	 * 
-	 */
 	public void reflowTasks() {
+		/*
+		 * This method causes an infinite loop and crashes the server everytime I run it... Not sure what's up here. 
+		 * 
+		 */
 		Task[] reference = (Task[]) this.cache.retrieve("task");
 		for (int i = 0; i < this.getComponentCount(); i ++) {
 			if (this.getComponent(i) instanceof TaskEditView) {
@@ -292,4 +365,7 @@ public class SidebarView extends JTabbedPane implements IView {
 		}
 	}
 	
+	public StatisticsView getStatsView() {
+		return this.statisticsView;
+	}
 }

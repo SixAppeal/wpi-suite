@@ -1,4 +1,5 @@
 /*******************************************************************************
+ * 
  * Copyright (c) 2014 -- WPI Suite
  *
  * All rights reserved. This program and the accompanying materials
@@ -8,19 +9,33 @@
  *
  * Contributors: Team Six-Appeal
  ******************************************************************************/
-package edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter;
+
+
+package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
+
+import java.awt.Component;
 
 
 /**
- * Presenter interface that all presenters implement
+ * This Class holds is an empty JPanel, but holds the info for anothe JPanel
  * 
- * @author wavanrensselaer
- * @author dpseaman
+ * @author rnOrlando
+ *
  */
-public interface IPresenter {
+public class EmptyComponentHolder extends Component
+{
+	
+	private static final long serialVersionUID = 14623864823L;
+	
+	public Component contents;
+	
 	/**
-	 * This should set the gateway to be used by the presenter
-	 * @param gateway A Gateway object
+	 * Constructor For EmptyJPanelHolder just sents the contents
+	 * @param con
 	 */
-	public void setGateway(Gateway gateway);
+	EmptyComponentHolder(Component con)
+	{
+		contents = con;
+	}
+
 }

@@ -5,7 +5,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors: Team Sixappeal
+ * Contributors: Team Six-Appeal
  ******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
 
@@ -42,7 +42,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
  * @author krpeffer
  * @author rwang3
  * @author wavanrensselaer
- * @author tmeehan
+ * 
  *
  */
 public class TaskActivitiesAndComments extends JPanel implements IView {

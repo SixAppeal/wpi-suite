@@ -6,7 +6,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors: Nathan Hughes
+ * Contributors: SixAppeal
  ******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.reports;
 
@@ -20,6 +20,11 @@ import java.util.Map.Entry;
 import org.jscience.mathematics.vector.Float64Matrix;
 
 
+/**
+ * G(V,E) and adjacency matrix representation of user activity over a specified time span
+ * @author nhhughes
+ *
+ */
 public class ActivityGraph {
 
 	private Map<UserActivity, List<UserActivity>> graph;
@@ -27,11 +32,19 @@ public class ActivityGraph {
 	private Map<UserActivity, Integer> orders;
 	private List<UserActivity> nodes;
 	
+	/**
+	 * Makes an empty graph to use
+	 */
 	public ActivityGraph() {
 		this.graph = new HashMap<UserActivity, List<UserActivity>>();
 		this.nodes = new ArrayList<UserActivity>();
 	}
 	
+	/**
+	 * Adds a node to the empty graph
+	 * @param nodeToAdd Node to add to the graph
+	 * @return whether the add was successful or not
+	 */
 	public boolean addNode(UserActivity nodeToAdd) {
 		if (this.graph.containsKey(nodeToAdd)) {
 			return false;
@@ -41,6 +54,12 @@ public class ActivityGraph {
 		return true;
 	}
 	
+	/**
+	 * Adds an edge to the graph.  If the nodes in the edge specified don't exist, add the nodes as well
+	 * @param source source node
+	 * @param destination destination node
+	 * @return whether the edge was added successfully or not
+	 */
 	public boolean addEdge(UserActivity source, UserActivity destination) {
 		if (this.graph.containsKey(source)) {
 			if (!this.graph.get(source).contains(destination)) {
@@ -62,16 +81,28 @@ public class ActivityGraph {
 		return false;
 	}
 	
+	/**
+	 * Heuristic Function for determining edge weight in the adjacency matrix
+	 * @param source source node
+	 * @param destination destination node
+	 * @return a double representing the edge weight between the source and destination
+	 */
 	private double someFunc(UserActivity source, UserActivity destination) {
-		double to_return = ((double)(source.getImportance()  + destination.getImportance()))/((double)(source.getImportance() + destination.getImportance()));
-		System.out.println(to_return);
+		double to_return = source.getImportance().get(destination.getName());
 		return to_return;
 	}
 
+	/**
+	 * Getter for the order of the nodes in the graph (for use with the adjacency matrix)
+	 * @return a map keyed by UserActivity with indices in the adjacency matrix as values
+	 */
 	public Map<UserActivity, Integer> getNodeOrders() {
 		return orders;
 	}
 	
+	/**
+	 * Calculates the newest representation of the adjacency matrix based on recent updates to the graph
+	 */
 	public void calcAdjacencyMatrix() {
 		int dimension = this.graph.size();
 		double[][] matrixArray = new double[dimension][dimension];
@@ -91,6 +122,11 @@ public class ActivityGraph {
 		orders = columns;
 	}
 	
+	/**
+	 * Gets the user activity associated with the key of the UserActivity Node (the name of the user)
+	 * @param key name of the user to find
+	 * @return the UserActivity object associated with the user
+	 */
 	public UserActivity getNode(String key) {
 		for (UserActivity user: this.nodes) {
 			if (user.getName().equals(key)) {
@@ -100,6 +136,11 @@ public class ActivityGraph {
 		return null;
 	}
 	
+	/**
+	 * Updates the user activity in the graph based on the inputted user activity
+	 * @param user user activity to update
+	 * @return whether the update was successful or not
+	 */
 	public boolean updateNode(UserActivity user) {
 		for (UserActivity oldUser : this.nodes) {
 			if (oldUser.getName().equals(user.getName())) {
@@ -109,6 +150,11 @@ public class ActivityGraph {
 		return false;
 	}
 	
+	/**
+	 * Gets the adjacency matrix representation of the graph
+	 * calcAdjacencyMatrix must be called before this between updates of the graph for an accurate representation
+	 * @return weighted adjacency matrix of the graph
+	 */
 	public Float64Matrix getAdjacencyMatrix() {
 		return this.adjacencyMatrix;
 	}

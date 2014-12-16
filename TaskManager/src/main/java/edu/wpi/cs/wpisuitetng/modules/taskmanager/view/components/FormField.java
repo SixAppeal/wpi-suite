@@ -1,3 +1,14 @@
+/*******************************************************************************
+ * Copyright (c) 2014 -- WPI Suite
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors: Team Six-Appeal
+ ******************************************************************************/
+
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components;
 
 import java.awt.Color;
@@ -22,14 +33,14 @@ public class FormField extends FormElement {
 	 */
 	public static final Border BORDER_NORMAL = BorderFactory.createCompoundBorder(
 			BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1),
-			BorderFactory.createEmptyBorder(5, 5, 5, 5));
+			BorderFactory.createLineBorder(Color.WHITE, 5));
 	
 	/**
 	 * The border assigned to fields in the error state
 	 */
 	public static final Border BORDER_ERROR = BorderFactory.createCompoundBorder(
 			BorderFactory.createLineBorder(Color.RED, 1),
-			BorderFactory.createEmptyBorder(5, 5, 5, 5));
+			BorderFactory.createLineBorder(Color.WHITE, 5));
 	
 	/**
 	 * This will give the field a default border
