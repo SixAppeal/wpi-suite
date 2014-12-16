@@ -98,7 +98,9 @@ public class SearchBox extends JPanel implements IView {
 			@Override
 			public void itemStateChanged(ItemEvent arg0) {
 				if (archiveModeOn){
-					
+					if (isSearchBoxEmpty()){
+						resultsG.clear();
+					}
 					archiveModeOn = false;
 					displayResults(resultsG);
 				}
@@ -106,7 +108,7 @@ public class SearchBox extends JPanel implements IView {
 					archiveModeOn = true; 
 					displayResults(resultsG);
 				}
-				
+
 			}
 		});
 
@@ -172,11 +174,13 @@ public class SearchBox extends JPanel implements IView {
 		int count = 0;
 		if (archiveModeOn && (searchBox.getText().isEmpty())){
 			for (Task t : taskList){
-				TaskView content = new TaskView(t, true);
-				content.setGateway(this.gateway);
-				gbc.gridy = count;
-				this.resultsBox.add(content, gbc);
-				count++;
+				if (t.isArchived()){
+					TaskView content = new TaskView(t, true);
+					content.setGateway(this.gateway);
+					gbc.gridy = count;
+					this.resultsBox.add(content, gbc);
+					count++;
+				}
 			}
 		}
 		else {
@@ -267,5 +271,5 @@ public class SearchBox extends JPanel implements IView {
 	public boolean isSearchBoxEmpty(){
 		return searchBox.getText().isEmpty();
 	}
-	
+
 }
