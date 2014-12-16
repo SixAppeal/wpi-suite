@@ -321,6 +321,7 @@ public class SidebarView extends JTabbedPane implements IView {
 	 */
 	public void setCache(ThreadSafeLocalCache cache) {
 		this.cache = cache;
+		this.statisticsView.setCache(cache);
 	}
 	
 	
