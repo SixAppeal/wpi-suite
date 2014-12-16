@@ -13,6 +13,8 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -25,6 +27,7 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
+import javax.swing.border.MatteBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -90,6 +93,7 @@ public class TaskActivitiesAndComments extends JPanel implements IView {
 		taskCommentList = new JList<Comment>();
 		
 		taskCommentArea = new JTextArea();
+		taskCommentArea.setBorder(new MatteBorder(1, 1, 1, 1, (Color) SystemColor.activeCaption));
 		taskCommentArea.setLineWrap(true);
 		taskCommentArea.setWrapStyleWord(true);
 		taskCommentArea.addKeyListener(new KeyListener(){
@@ -204,7 +208,7 @@ public class TaskActivitiesAndComments extends JPanel implements IView {
 		this.t = t;
 
 //		taskActivitiesList.setListData(t.getActivities().toArray(new Activity[0]));
-		activitiesPanel.displayActivities(t);
+		activitiesPanel.display(t);
 		taskCommentList.setListData(t.getComments().toArray(new Comment[0]));
 		//saveCommentButton.setEnabled(true);
 		this.revalidate();

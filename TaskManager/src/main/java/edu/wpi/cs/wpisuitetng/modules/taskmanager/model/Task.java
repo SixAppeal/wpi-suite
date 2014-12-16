@@ -17,6 +17,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Comparator;
 import java.util.Map;
+import java.text.SimpleDateFormat;
 
 import com.google.gson.Gson;
 
@@ -259,7 +260,7 @@ public class Task extends AbstractModel {
 	public void addToHistory(Object original, Object newInfo, String field) {
 		if(!newInfo.equals(original))
 		{
-			activities.add(new Activity("The " + field + " was changed to " + newInfo.toString()));
+			activities.add(new Activity("changed the " + field + " from " + original.toString() + " to " + newInfo.toString()));
 		}
 	}
 	
@@ -490,7 +491,9 @@ public class Task extends AbstractModel {
 	 * Set archival status to true
 	 */
 	public void archive() {
-		this.activities.add(new Activity("This task was Archived on " + this.getDueDate().toString()));
+		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy h:mm a");
+		Date archiveDate = new Date();
+		this.activities.add(new Activity("This task was Archived on " + sdf.format(archiveDate)));
 		this.archived = true;
 	}
 	
@@ -498,7 +501,9 @@ public class Task extends AbstractModel {
 	 * Set archival status to false
 	 */
 	public void unarchive() {
-		this.activities.add(new Activity("This task was Unarchived on " + this.getDueDate().toString()));
+		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy h:mm a");
+		Date unArchiveDate = new Date();
+		this.activities.add(new Activity("This task was Unarchived on " + sdf.format(unArchiveDate)));
 		this.archived = false;
 	}
 
