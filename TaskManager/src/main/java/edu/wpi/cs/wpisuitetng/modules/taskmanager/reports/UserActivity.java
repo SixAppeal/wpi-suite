@@ -6,11 +6,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
-<<<<<<< HEAD
  * Contributors: SixAppeal
-=======
- * Contributors: Team Six-Appeal
->>>>>>> 0ce8acbe0431f451a25a6b888bc1248463634f07
  ******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.reports;

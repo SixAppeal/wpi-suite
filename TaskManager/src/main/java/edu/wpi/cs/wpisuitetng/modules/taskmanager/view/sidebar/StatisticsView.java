@@ -14,10 +14,12 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +29,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -39,6 +42,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.Cache;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.ThreadSafeLocalCache;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.reports.ReportGenerator;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.ButtonGroup;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.Form;
@@ -53,7 +57,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar.JListMouseHandler
  * 
  * @author dpseaman
  * @author thhughes
- *
+ * @author nhhughes
  */
 
 public class StatisticsView extends JPanel implements IView{
@@ -64,7 +68,7 @@ public class StatisticsView extends JPanel implements IView{
 	private static final long serialVersionUID = -7282532926324062923L;
 
 	private Gateway gateway;
-
+	private ThreadSafeLocalCache cache;
 	private JXDatePicker startDate;
 	private JXDatePicker endDate;
 	private JButton createButton;
@@ -75,7 +79,8 @@ public class StatisticsView extends JPanel implements IView{
 	private JScrollPane selectedMembersScrollPane;
 	private JButton addMemberButton;
 	private JButton removeMemberButton;
-
+	private JButton pickFileButton;
+	private JTextField dirPath;
 	private List<String> usernames = new ArrayList<String>();
 	private List<String> assigned = new ArrayList<String>();
 	private List<String> unassigned = new ArrayList<String>();
@@ -93,7 +98,10 @@ public class StatisticsView extends JPanel implements IView{
 		this.createButton = new JButton ("Create");
 
 		this.createButton.setEnabled(false);
-
+		this.pickFileButton = new JButton("Choose File Path");
+		this.dirPath = new JTextField("");
+		this.dirPath.setEditable(false);
+		
 		this.members = new JList<String>();
 		this.membersScrollPane = new JScrollPane(this.members);
 
@@ -153,6 +161,33 @@ public class StatisticsView extends JPanel implements IView{
 		selectedMembersScrollPane.setPreferredSize(new Dimension(selectedMembers.getMinimumSize().width, 150));
 		membersScrollPane.setPreferredSize(new Dimension(members.getMinimumSize().width, 150));
 
+		FormField dirPathForm = new FormField("Directory to Create", this.dirPath, new FormFieldValidator() {
+			@Override
+			public boolean validate(JComponent component) {
+				if (dirPath.getText().length() == 0) {
+					return false;
+				}
+				if (Files.notExists(Paths.get(dirPath.getText()))) {
+					return true;
+				}
+				else {
+					File file = new File(dirPath.getText());
+					if (file.isDirectory() && file.list().length == 0) {
+						return true;
+					}
+				}
+				return false;
+			}
+			
+			@Override
+			public String getMessage() {
+				if (dirPath.getText().length() == 0) {
+					return "Please enter a directory";
+				}
+				return "Please enter a non-existing or empty directory";
+			}
+			
+		});
 
 		// form field for start date
 		FormField startDateForm = new FormField("Start Date", this.startDate, new FormFieldValidator() {
@@ -201,14 +236,45 @@ public class StatisticsView extends JPanel implements IView{
 			}
 		});
 
-		this.createButton.addActionListener(new ActionListener() {
+		this.pickFileButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				JFileChooser saveFile = new JFileChooser();
-				saveFile.showSaveDialog(null);
+				saveFile.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+				int returnVal = saveFile.showDialog(StatisticsView.this, "Create");
+				
+				if (returnVal == JFileChooser.APPROVE_OPTION) {
+					File file = saveFile.getSelectedFile();
+					dirPath.setText(file.getAbsolutePath());
+				}
+				
+				else {
+					
+				}
+				validateForm();
 			}
 		});
 
+		this.createButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String path = dirPath.getText();
+				File file = new File(path);
+				if (!file.exists()) {
+					file.mkdir();
+				}
+				path = path + "/index.html";
+				file = new File(path);
+				if (cache != null) {
+					ReportGenerator generator = new ReportGenerator(file, startDate.getDate(), endDate.getDate(), cache, assigned);
+				}
+				else {
+					System.out.println("Problem Occured!");
+				}
+
+			}
+		});
+		
 		this.form = new Form(
 				startDateForm,
 				endDateForm,
@@ -219,6 +285,10 @@ public class StatisticsView extends JPanel implements IView{
 								),
 								new FormField("Selected", this.selectedMembersScrollPane)
 						),
+						new ButtonGroup(
+								this.pickFileButton
+								),
+						dirPathForm,
 						new ButtonGroup(
 								this.createButton
 								)
@@ -234,6 +304,10 @@ public class StatisticsView extends JPanel implements IView{
 
 	}
 
+	public void setCache(ThreadSafeLocalCache cache) {
+		this.cache = cache;
+	}
+	
 	/**
 	 * 
 	 * @param selected
@@ -268,7 +342,6 @@ public class StatisticsView extends JPanel implements IView{
 	public void moveMembersToAll() {
 		unassigned.addAll(selectedMembers.getSelectedValuesList());
 		assigned.removeAll(selectedMembers.getSelectedValuesList());
-		System.out.println(unassigned);
 		updateMembers();
 
 		this.allMembersMouseHandler.clear();
