@@ -94,10 +94,12 @@ public class ColumnEditView extends JPanel implements IView {
 		
 		// disable stage name editing and delete when there's no stage selected
 		if (stageJList.isSelectionEmpty()){
-			this.newName.setEnabled(false);
-			this.nameChange.setEnabled(false);
-			this.deleteBtn.setEnabled(false);
+
 		}
+		this.addButton.setEnabled(false);
+		this.newName.setEnabled(false);
+		this.nameChange.setEnabled(false);
+		this.deleteBtn.setEnabled(false);
 
 		addButton.addActionListener( new ActionListener() {
 			@Override
@@ -145,18 +147,24 @@ public class ColumnEditView extends JPanel implements IView {
 
 			@Override
 			public void keyPressed(KeyEvent e) {
-			    if (e.getKeyCode() == KeyEvent.VK_ENTER ){
-			    	System.out.println("Fuck Swing!");
-			    	addStage();
-			    }
+				if (!TaskUtil.sanitizeInput(titleEntry.getText()).isEmpty()){
+					if (e.getKeyCode() == KeyEvent.VK_ENTER ){
+				    	System.out.println("Fuck Swing!");
+				    	addStage();
+				    }
+				}
+
 			}
 
 			@Override
 			public void keyReleased(KeyEvent e) {
-			    if (e.getKeyCode() == KeyEvent.VK_ENTER ){
-			    	System.out.println("Yeah fuck Swing!");
-			    	addStage();
-			    }
+				if (!TaskUtil.sanitizeInput(titleEntry.getText()).isEmpty()){
+					if (e.getKeyCode() == KeyEvent.VK_ENTER ){
+				    	System.out.println("Yeah Fuck Swing!");
+				    	addStage();
+				    }
+				}
+
 			}
 			
 
@@ -314,6 +322,7 @@ public class ColumnEditView extends JPanel implements IView {
 		gbc.insets = new Insets(10, 20, 20, 20);
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		this.add(deleteBtn, gbc);
+	
 	}
 
 	protected void moveCurrentTaskUp() {
