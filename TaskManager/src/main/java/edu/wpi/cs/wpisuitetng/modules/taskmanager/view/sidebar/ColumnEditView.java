@@ -319,7 +319,9 @@ public class ColumnEditView extends JPanel implements IView {
 		gbc.insets = new Insets(10, 20, 10, 20);
 		gbc.fill = GridBagConstraints.BOTH;
 		this.add(stageJList, gbc);
-
+ 
+		
+		
 		gbc.gridwidth = 1;
 		gbc.gridx = 0;
 		gbc.gridy = 2;
