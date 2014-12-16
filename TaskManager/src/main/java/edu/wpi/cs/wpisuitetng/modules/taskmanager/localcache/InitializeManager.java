@@ -66,11 +66,6 @@ public class InitializeManager implements RequestObserver{
 			((ThreadSafeLocalCache)this.localCache).updateMembers(updateValue);
 			this.initSync.release();
 		}
-//		if (splitPath[splitPath.length-1].equals("requirement")) {
-//			String reqVal = iReq.getResponse().getBody();
-//			((ThreadSafeLocalCache)this.localCache).updateReqs(reqVal);
-//			this.initSync.release();
-//		}
 	}
 
 	/**

@@ -490,7 +490,6 @@ public class TaskEditView extends JPanel implements IView {
 	public void setGateway(Gateway gateway) {
 		this.gateway = gateway;
 		this.commentPanel.setGateway(this.gateway);
-//		gateway.toPresenter("LocalCache", "sync", "requirement");
 	}
 
 	/**
@@ -597,7 +596,6 @@ public class TaskEditView extends JPanel implements IView {
 			this.requirementsComboBox.removeAll();
 			for (String s : this.requirementTitles) {
 				s = TaskManagerUtil.reduceString(s, 220, fm);
-				System.out.println("reducedString s is " + s);
 				foundRequirement = false;
 				for (int i = 0; i < size; i++) {
 					String element = this.requirementsComboBox.getItemAt(i);
@@ -609,7 +607,6 @@ public class TaskEditView extends JPanel implements IView {
 					this.requirementsComboBox.addItem(s);
 				}
 			}	
-			System.out.println("midway check task getreq getname: " + this.task.getRequirement().getName());
 			setTaskRequirementBox();
 		}
 	}
