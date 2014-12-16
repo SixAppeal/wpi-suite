@@ -393,7 +393,7 @@ public class Task extends AbstractModel {
 	 * Set archival status to false
 	 */
 	public void unarchive() {
-		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/ h:mm a");
+		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy h:mm a");
 		Date unArchiveDate = new Date();
 		this.activities.add(new Activity("This task was Unarchived on " + sdf.format(unArchiveDate)));
 		this.archived = false;
