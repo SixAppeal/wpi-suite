@@ -1,5 +1,16 @@
+/*******************************************************************************
+ * Copyright (c) 2014 -- WPI Suite
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors: Dan Seaman
+ ******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
 
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -118,6 +129,7 @@ public class StatisticsView extends JPanel implements IView{
 		this.setLayout(new MigLayout("fill, ins 20", "[260]"));
 		this.add(this.form, "grow");
 		
+		this.setMinimumSize(new Dimension(300, 0));
 	}
 	
 	

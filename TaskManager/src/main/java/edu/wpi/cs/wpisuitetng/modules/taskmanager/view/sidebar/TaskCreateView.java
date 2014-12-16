@@ -1,3 +1,14 @@
+/*******************************************************************************
+ * Copyright (c) 2014 -- WPI Suite
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors: William Van Rensselaer, Will Temple, Alex Shoop, Ryan Orlando, Santiago Rojas
+ * Dan Seaman, Troy Hughes
+ ******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
 
 import java.awt.Dimension;
@@ -230,7 +241,10 @@ public class TaskCreateView extends JPanel implements IView {
 		return false;
 	}
 
-	
+	/**
+	 * Set stages on the create view
+	 * @param sl stage lists to update from
+	 */
 	public void setStages(StageList sl) {
 		if( !stages.equals(sl) ) {
 			Object pSelected = stages.getSelectedItem();
@@ -251,7 +265,6 @@ public class TaskCreateView extends JPanel implements IView {
 	}
 
 	/**
-	 * 
 	 * @return JTextArea that is the description of the TaskCreateView
 	 */
 	public JTextArea getDescription(){

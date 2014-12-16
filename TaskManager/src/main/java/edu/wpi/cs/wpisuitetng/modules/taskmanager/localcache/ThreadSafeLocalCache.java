@@ -279,12 +279,20 @@ public class ThreadSafeLocalCache implements Cache {
 		this.gateway.toPresenter("TaskPresenter", "updateSearch");
 	}
 
+	/**
+	 * Update the members in the cache and reflow view accordingly
+	 * @param userVal Json string of users
+	 */
 	public void updateMembers(String userVal) {
 		User[] users = new Gson().fromJson(userVal, User[].class);
 		this.members = Arrays.asList(users);
 		this.gateway.toPresenter("TaskPresenter", "notifyMemberHandler");
 	}
 
+	/**
+	 * Update the stages in the cache and reflow view accordingly
+	 * @param stageVal Json string of stages
+	 */
 	public void updateStages(String stageVal) {
 		StageList[] stages = new Gson().fromJson(stageVal, StageList[].class);
 		this.stages = stages[0];
@@ -292,6 +300,10 @@ public class ThreadSafeLocalCache implements Cache {
 
 	}
 	
+	/**
+	 * Update the requirements in the cache and reflow accordingly
+	 * @param reqVal Json string of requirements
+	 */
 	public void updateReqs(String reqVal) {
 		Requirement[] reqs = new Gson().fromJson(reqVal, Requirement[].class);
 		this.requirements = reqs;
@@ -392,6 +404,11 @@ public class ThreadSafeLocalCache implements Cache {
 		this.store("stages:testing", stages);
 	}
 
+	/**
+	 * Update name of stage in stage list
+	 * @param oldName previous stage name
+	 * @param newName new stage name
+	 */
 	public void renameStage(String oldName, String newName) {
 		for (Task t : tasks) {
 			if (t.getStage().toString().equals(oldName)) {
