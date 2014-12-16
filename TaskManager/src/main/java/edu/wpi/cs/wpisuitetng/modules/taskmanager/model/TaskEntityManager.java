@@ -6,7 +6,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors: Nathan Hughes
+ * Contributors: Team Six-Appeal
  ******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.model;
@@ -31,6 +31,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.util.TaskUtil;
  * @author nhhughes
  * @author srojas
  * @author jrhennessy
+ * @author tmeehan
  * @author Thhughes
  * 
  */

@@ -6,7 +6,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors: Nathan Hughes, Santiago Rojas
+ * Contributors: Team Six-Appeal
  ******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
@@ -48,6 +48,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.FormField;
  * @author wmtemple
  * @author wavanrensselaer
  * @author thhughes
+ * @author tmeehan
  * @author srojas
  * @author dpseaman
  * @author tmeehan
@@ -70,7 +71,10 @@ public class ColumnEditView extends JPanel implements IView {
 	private JButton nameChange;
 	private JButton deleteBtn;
 	private Gateway gateway;
-
+ 
+	/**
+	 * Creates a sidebar view to change the edit view 
+	 */
 	public ColumnEditView() { 
 		stages = new StageList();
 		this.stageJList = new JList<Stage>();
@@ -79,7 +83,7 @@ public class ColumnEditView extends JPanel implements IView {
 		this.moveDnBtn = new JButton();
 		this.titleEntry = new JTextField();
 		this.newName = new JTextField();
-		this.nameChange = new JButton("Edit Name");
+		this.nameChange = new JButton("Rename Stage");
 		this.deleteBtn = new JButton("Delete Stage");
 		
 		this.titleEntry.setBorder(FormField.BORDER_NORMAL);
@@ -93,9 +97,11 @@ public class ColumnEditView extends JPanel implements IView {
 		this.moveDnBtn.setPreferredSize(new Dimension(100, 25));
 		
 		// disable stage name editing and delete when there's no stage selected
+
 		if (stageJList.isSelectionEmpty()){
 			// Just checking 
 		}
+
 		this.addButton.setEnabled(false);
 		this.newName.setEnabled(false);
 		this.nameChange.setEnabled(false);
@@ -170,6 +176,35 @@ public class ColumnEditView extends JPanel implements IView {
 
 		});
 		
+		newName.addKeyListener( new KeyListener() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+				
+			}
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+				updateEditBox();
+			}
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+				updateEditBox();
+			}
+		});
+		
+		newName.addFocusListener(new FocusListener() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				updateEditBox();
+			}
+
+			@Override
+			public void focusLost(FocusEvent e) {
+				updateEditBox();
+			}
+		});
+		
 
 		stageJList.addKeyListener( new KeyListener() {
 			@Override
@@ -201,7 +236,6 @@ public class ColumnEditView extends JPanel implements IView {
 			public void valueChanged(ListSelectionEvent e) {
 				if (!stageJList.isSelectionEmpty()) {
 					newName.setEnabled(true);
-					nameChange.setEnabled(true);
 					deleteBtn.setEnabled(true);
 				}else{
 					deleteBtn.setEnabled(false);
@@ -322,9 +356,15 @@ public class ColumnEditView extends JPanel implements IView {
 		gbc.insets = new Insets(10, 20, 20, 20);
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		this.add(deleteBtn, gbc);
-	
+
+		this.setMinimumSize(new Dimension(300, 0));
+		
+
 	}
 
+	/**
+	 * Move stage up in the list
+	 */
 	protected void moveCurrentTaskUp() {
 		int index = stageJList.getSelectedIndex();
 		if( index == 0 ) return;
@@ -333,7 +373,9 @@ public class ColumnEditView extends JPanel implements IView {
 		updateJListAndPublish();
 	}
 
-	
+	/**
+	 * move stage down in the list
+	 */
 	protected void moveCurrentTaskDn() {
 		int index = stageJList.getSelectedIndex();
 		if( (index+1) == stages.size() ) return;
@@ -342,6 +384,10 @@ public class ColumnEditView extends JPanel implements IView {
 		updateJListAndPublish();
 	}
 
+	/**
+	 * update list with stages from the cache
+	 * @param newStages list of stages to update from
+	 */
 	public void setStages(StageList newStages) {
 		if( !newStages.equals(stages)) {
 			Stage pSelected = stageJList.getSelectedValue();
@@ -353,10 +399,22 @@ public class ColumnEditView extends JPanel implements IView {
 		}
 	}
 
+	/**
+	 * update create text box
+	 */
 	private void updateTextBox() {
 		boolean valid = !TaskUtil.sanitizeInput(titleEntry.getText()).isEmpty();
 		titleEntry.setBorder(valid ? FormField.BORDER_NORMAL : FormField.BORDER_ERROR);
 		addButton.setEnabled(valid);
+	}
+	
+	/**
+	 * update edit text box
+	 */
+	private void updateEditBox() {
+		boolean valid = !TaskUtil.sanitizeInput(newName.getText()).isEmpty();
+		titleEntry.setBorder(valid ? FormField.BORDER_NORMAL : FormField.BORDER_ERROR);
+		nameChange.setEnabled(valid);
 	}
 
 
@@ -365,12 +423,14 @@ public class ColumnEditView extends JPanel implements IView {
 		this.gateway = gateway;
 	}
 
-	
+	/**
+	 * rename the selected stage
+	 */
 	protected void changeNameStage(){
 		boolean valid = !TaskUtil.sanitizeInput(newName.getText()).isEmpty();
 		if (valid){
 			
-//			int index = stageJList.getSelectedIndex();	
+			//int index = stageJList.getSelectedIndex();	
 			//Stage stage = stageJList.getSelectedValue();
 			Stage stage;
 			
@@ -384,12 +444,15 @@ public class ColumnEditView extends JPanel implements IView {
 			stages.add(stageJList.getSelectedIndex(), stage);
 			updateJListAndPublish();
 			newName.setText("");
+			nameChange.setEnabled(false);
 			 
 		}
 
 	}
 	
-	
+	/**
+	 * add a new stage to the stage list
+	 */
 	protected void addStage(){
 		boolean nameFlag = false;
 		String newStageName = new String(titleEntry.getText());
@@ -406,6 +469,9 @@ public class ColumnEditView extends JPanel implements IView {
 			if(s.getName().equals(newStageName)){
 				nameFlag = true;
 			}
+			if(s.getName().equals(new String(""))){
+				stages.remove(s);
+			}
 		}
 		if (nameFlag){
 			//TODO visual feedback when there is the input is invalid
@@ -418,9 +484,11 @@ public class ColumnEditView extends JPanel implements IView {
 			addButton.setEnabled(false);
 		}
 
-		
 	}
 	
+	/**
+	 * update the stage list with the values from the JList
+	 */
 	private void updateJListAndPublish() {
 		Stage pS = stageJList.getSelectedValue();
 		stageJList.setListData(stages.toArray(new Stage[0]));
@@ -429,11 +497,16 @@ public class ColumnEditView extends JPanel implements IView {
 
 	}
 
+	/**
+	 * Tell the cache that a change has occured
+	 */
 	private void publishStages() {
 		this.gateway.toPresenter("TaskPresenter", "publishChanges", stages);
 	}
 	
-	
+	/**
+	 * Scrolls the jlist to the correct spot
+	 */
 	private void scrollMain(){
 		this.gateway.toView("ColumnView", "scrollToPlace", this.stageJList.getSelectedValue());
 	}

@@ -6,14 +6,17 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors: Troy Hughes
+ * Contributors: Team Six-Appeal
  ******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.model;
 
+import java.awt.Color;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Comparator;
+import java.util.Map;
 
 import com.google.gson.Gson;
 
@@ -29,6 +32,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.util.TaskUtil;
  * @author srojas
  * @author jrhennessy
  * @author Thhughes
+ * @author tmeehan
  * @author krpeffer
  * @author rwang3
  * @author rnorlando
@@ -44,11 +48,36 @@ public class Task extends AbstractModel {
 			return Integer.compare(task1.getPriority(), task2.getPriority());
 		}
 	};
+	
+	/**
+	 * Color categories
+	 */
+	public static final int CATEGORY_NONE = 0;
+	public static final int CATEGORY_GREEN = 1;
+	public static final int CATEGORY_YELLOW = 2;
+	public static final int CATEGORY_RED = 3;
+	public static final int CATEGORY_BLUE = 4;
+	
+	/**
+	 * A map of categories to colors
+	 */
+	public static final Map<Integer, Color> COLORS = new HashMap<Integer, Color>() {
+		private static final long serialVersionUID = 297561479547563732L;
+
+		{
+			put(CATEGORY_NONE, Color.WHITE);
+			put(CATEGORY_GREEN, new Color(0, 200, 0));
+			put(CATEGORY_YELLOW, new Color(250, 217, 0));
+			put(CATEGORY_RED, Color.RED);
+			put(CATEGORY_BLUE, Color.BLUE);
+		}
+	};
 
 	private int id;
 	private boolean archived;
 	private String title;
 	private String description;
+	private int category;
 	private Stage stage;
 	private List<String> assignedTo;
 	private int estimatedEffort; 
@@ -58,12 +87,13 @@ public class Task extends AbstractModel {
 	private List<Activity> activities;
 	private List<Comment> comments;
 	private int priority;
+	private String currentRequirementName;
 
 	/**
 	 * Default constructor (dummy task for initialization)
 	 */
 	public Task() {
-		this("A New Task", "A New Task", new Stage("New"), new LinkedList<String>(), 1, 1,
+		this("A New Task", "A New Task", CATEGORY_NONE, new Stage("New"), new LinkedList<String>(), 1, 1,
 				new Date(), new Requirement(), new LinkedList<Activity>(), new LinkedList<Comment>());
 	}
 
@@ -81,7 +111,7 @@ public class Task extends AbstractModel {
 	 * @param comments lists of comments members put for the task
 	 * @throws IllegalArgumentException
 	 */
-	public Task(String title, String description, Stage stage,
+	public Task(String title, String description, int category, Stage stage,
 			List<String> assignedTo, Integer estimatedEffort,
 			Integer actualEffort, Date dueDate, 
 			Requirement requirement, List<Activity> activities, List<Comment> comments) throws IllegalArgumentException {
@@ -89,6 +119,7 @@ public class Task extends AbstractModel {
 		this.title = TaskUtil.validateTitle(title);
 		this.description = TaskUtil.validateDescription(description);
 		this.stage = TaskUtil.validateStage(stage);
+		this.category = category;
 		this.assignedTo = assignedTo;
 		this.estimatedEffort = TaskUtil.validateEffort(estimatedEffort);
 		this.actualEffort = TaskUtil.validateEffort(actualEffort);
@@ -135,6 +166,7 @@ public class Task extends AbstractModel {
 					&& this.estimatedEffort == task.getEstimatedEffort()
 					&& this.actualEffort == task.getActualEffort()
 					&& this.dueDate.equals(task.getDueDate())
+					&& this.category == task.getCategory()
 					&& this.equalComments(task)
 					&& this.equalActivities(task);
 				
@@ -196,12 +228,38 @@ public class Task extends AbstractModel {
 	}
 	
 	/**
+	 * Sets the category of the task. Should be one of:
+	 * Task.CATEGORY_NONE, Task.CATEGORY_GREEN, Task.CATEGORY_YELLOW,
+	 * Task.CATEGORY_RED, Task.CATEGORY_BLUE
+	 * @param category A category
+	 */
+	public void setCategory(int category) {
+		if (category != CATEGORY_NONE
+				&& category != CATEGORY_RED
+				&& category != CATEGORY_GREEN
+				&& category != CATEGORY_BLUE
+				&& category != CATEGORY_YELLOW) {
+			this.category = CATEGORY_NONE;
+		} else {
+			this.category = category;
+		}
+	}
+	
+	/**
+	 * Gets the category of the task
+	 * @return The task's category
+	 */
+	public int getCategory() {
+		return category;
+	}
+	
+	/**
 	 * adds changes to the task's history
 	 */
 	public void addToHistory(Object original, Object newInfo, String field) {
 		if(!newInfo.equals(original))
 		{
-			activities.add(new Activity("The" + field + " was changed to " + newInfo.toString()));
+			activities.add(new Activity("The " + field + " was changed to " + newInfo.toString()));
 		}
 	}
 	
@@ -376,6 +434,23 @@ public class Task extends AbstractModel {
 	}
 	
 	/**
+	 * Retrieves the current requirement name
+	 * @return reqName Current requirement name
+	 */
+	public String getCurrentRequirementName() {
+		return this.currentRequirementName;
+	}
+	
+	/**
+	 * Sets the current requirement name
+	 * @return reqName Current requirement name
+	 */
+	public void setCurrentRequirementName(String currentReqName) {
+		this.addToHistory(this.getCurrentRequirementName(), currentReqName, "Associated Requirement");
+		this.currentRequirementName = currentReqName;
+	}
+	
+	/**
 	 * 
 	 * @return the priority value to be listed on screen
 	 */
@@ -443,8 +518,11 @@ public class Task extends AbstractModel {
 		this.dueDate = TaskUtil.validateDueDate(new Date(updatedTask.getDueDate().getTime()));
 		this.activities = new LinkedList<Activity>(updatedTask.getActivities());
 		this.comments = new LinkedList<Comment>(updatedTask.getComments());
+		this.category = updatedTask.getCategory();
 		this.archived = updatedTask.archived;
 		this.priority = updatedTask.priority;
+		this.currentRequirementName = updatedTask.getCurrentRequirementName();
+//		this.requirement = updatedTask.requirement;
 	}
 	
 	/**
