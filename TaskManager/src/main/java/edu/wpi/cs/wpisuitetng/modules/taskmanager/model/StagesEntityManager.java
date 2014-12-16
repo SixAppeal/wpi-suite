@@ -6,7 +6,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors: William Temple
+ * Contributors: Team Six-Appeal
  ******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.model;
@@ -24,6 +24,7 @@ import edu.wpi.cs.wpisuitetng.modules.EntityManager;
 import edu.wpi.cs.wpisuitetng.modules.Model;
 
 /**
+ * 
  * Entity Manager to keep track of stages
  * @author wmtemple
  *

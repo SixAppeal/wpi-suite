@@ -7,7 +7,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors: Nathan Hughes, Alexander Shoop
+ * Contributors: Team Six-Appeal
  ******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.model.search;
@@ -17,6 +17,7 @@ package edu.wpi.cs.wpisuitetng.modules.taskmanager.model.search;
  * 
  * @author akshoop
  * @author nhhughes
+ * 
  */
 public class SearchException extends Exception {
 	/**

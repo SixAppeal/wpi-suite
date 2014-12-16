@@ -6,7 +6,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors: Dan Seaman
+ * Contributors: Team Six-Appeal
  ******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
 
@@ -181,7 +181,7 @@ public class StatisticsView extends JPanel implements IView{
 		FormField endDateForm = new FormField("End Date", this.endDate, new FormFieldValidator() {
 			@Override
 			public boolean validate(JComponent component) {
-				return !(endDate.getDate() == null && startDate.getDate().compareTo(endDate.getDate()) >= 0);
+				return endDate.getDate() != null && endDate.getDate().compareTo(startDate.getDate()) > 0;
 			}
 
 			@Override

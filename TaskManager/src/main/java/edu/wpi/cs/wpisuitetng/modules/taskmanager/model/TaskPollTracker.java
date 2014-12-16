@@ -6,7 +6,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors: Nathan Hughes
+ * Contributors: Team Six-Appeal
  ******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.model;
@@ -20,6 +20,7 @@ import java.util.concurrent.Semaphore;
  * Task Poll tracker keeps track of the all clients that need to be notified via long pulling
  * @author nhhughes
  * @author srojas
+ * @author tmeehan
  */
 public class TaskPollTracker {
 
