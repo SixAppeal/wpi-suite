@@ -86,7 +86,6 @@ public class ThreadSafeLocalCache implements Cache {
 		networkRequest.addObserver(new AddManager(this, request, gateway, request.split(":")[1]));
 		networkRequest.setBody(taskToStore.toJson());
 		networkRequest.send();
-		this.tasks.add(taskToStore);
 	}	
 
 	/**

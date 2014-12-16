@@ -34,6 +34,8 @@ public class AddManager implements RequestObserver {
 	@Override
 	public void responseSuccess(IRequest iReq) {
 		for (String s: callbacks) {
+			String temp1 = s.split(":")[0];
+			String temp2 = s.split(":")[1];
 			gateway.toPresenter(s.split(":")[0], s.split(":")[1]);
 		}
 	}
