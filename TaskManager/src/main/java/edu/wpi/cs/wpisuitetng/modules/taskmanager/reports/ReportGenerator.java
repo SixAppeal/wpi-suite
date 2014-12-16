@@ -15,7 +15,6 @@ package edu.wpi.cs.wpisuitetng.modules.taskmanager.reports;
 import java.awt.Color;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
@@ -32,9 +31,6 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementmanager.models.Requirement;
-import edu.wpi.cs.wpisuitetng.modules.requirementmanager.models.RequirementModel;
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.Cache;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.ThreadSafeLocalCache;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Activity;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Comment;
@@ -82,19 +78,20 @@ public class ReportGenerator {
 	public void generateReport(List<String> completedTasks) {
 		try {
 			PrintStream out = new PrintStream(file);
-			out.print("<html><body><h1>Task Manager Report:</h1><br>");
+			out.print("<link rel=\"stylesheet\" type=\"text/css\" href=\"report.css\"/>");
+			out.print("<html><body><h1>Task Manager Report:</h1><hr><br>");
 			out.print("<h3>Start Date: </h3>" + start);
 			out.print("<br><h3>End Date: </h3>" + end);
-			out.print("<br><br>");
+			out.print("<hr><br><br>");
 			out.print("<h3>Members Included</h3>");
 			printMembers(out);
-			out.println("<h3>Tasks Completed During Time Period</h3>");
+			out.println("<hr><h3>Tasks Completed During Time Period</h3>");
 			printTasks(out, completedTasks);
-			out.print("<div>");
+			out.print("<hr><div>");
 			out.print("<img src=\"actualeffort.png\" alt=\"Actual Effort\" style=\"width:400px;height:400px\">");
-			out.print("</div><div>");
+			out.print("</div><hr><div>");
 			out.print("<img src=\"estimatedimportance.png\" alt=\"Estimated Importance of Each Team Member\" style=\"width:400px;height:400px\">");
-			out.print("</div><div>");
+			out.print("</div><hr><div>");
 			out.print("<img src=\"importancegraph.png\" alt=\"Graph Visualization of Importance\" style=\"width:400px;height:400px\">");
 			out.print("</div></body>");
 			out.print("</html>");
@@ -105,6 +102,34 @@ public class ReportGenerator {
 			int location = path.lastIndexOf(name);
 			path = path.substring(0, location);
 
+			File cssFile = new File(path + "report.css");
+			PrintStream outCss = new PrintStream(cssFile);
+			outCss.println("@import url(http://fonts.googleapis.com/css?family=Ubuntu:300,400|Open+Sans:400italic,700italic,400,700);");
+			outCss.println("html {");
+			outCss.println("\tmargin: 0;");
+			outCss.println("\tpadding: 0;");
+			outCss.println("}\n");
+			outCss.println("body {");
+			outCss.println("\tfont-family: 'Open Sans', sans-serf, arial;");
+			outCss.println("}\n");
+			outCss.println("h1,");
+			outCss.println("h2,");
+			outCss.println("h3 {");
+			outCss.println("\tfont-family: 'Ubuntu', 'Helvetica Neue', Helvetica, arial;");
+			outCss.println("}\n");
+			outCss.println("a {");
+			outCss.println("\tcolor: #337ab7;");
+			outCss.println("\ttextdectoration: none;");
+			outCss.println("}\n");
+			outCss.println("a:hover {");
+			outCss.println("\tborder-bottom: 1px dotted;");
+			outCss.println("}\n");
+			outCss.println("p {");
+			outCss.println("\tmargin-bottom: 10px;");
+			outCss.println("}\n");
+			
+			outCss.close();
+			
 			double values[] = {1.0};
 			CategoryDataset dataSet = createData(values, members, "Actual Effort");
 			createChart(dataSet, path + "actualeffort.png", "Actual Effort");
