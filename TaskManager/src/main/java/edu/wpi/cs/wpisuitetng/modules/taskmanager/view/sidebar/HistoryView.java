@@ -36,7 +36,7 @@ public class HistoryView extends JPanel implements IView{
 	private Gateway gateway;
 	private JPanel container;
 	private JScrollPane scrollpane;
-	private List<JTextArea> historyFields;
+	private List<JTextArea> fields;
 	private GridBagLayout gbc;
 	private Task internalTask; 			// Keeps an internal task for comparing.  
 	
@@ -46,7 +46,7 @@ public class HistoryView extends JPanel implements IView{
 		this.container = new JPanel();
 		this.scrollpane = new JScrollPane(this.container);
 		
-		this.historyFields = new ArrayList<JTextArea>();
+		this.fields = new ArrayList<JTextArea>();
 		
 		gbc = new GridBagLayout();
 		this.container.setLayout(gbc);
@@ -67,16 +67,16 @@ public class HistoryView extends JPanel implements IView{
 	 * 
 	 * @param task
 	 */
-	public void displayActivities(Task task){
+	public void display(Task task){
 		if(!task.equals(internalTask)){
 			List<Activity> activities = task.getActivities();
-			historyFields.clear();
+			fields.clear();
 			
 			for(Activity a: activities){
 				ActivityLabel temp = new ActivityLabel(a.getActivity());		
-				historyFields.add(temp);
+				fields.add(temp);
 			}
-			reflowHistory();
+			reflow();
 			this.internalTask = task;
 		}
 		
@@ -87,7 +87,7 @@ public class HistoryView extends JPanel implements IView{
 	 * This function reflows the history pane to update everything based off the 
 	 * updated history list. 
 	 */
-	public void reflowHistory(){
+	public void reflow(){
 		this.container.removeAll();
 		GridBagConstraints gbc = new GridBagConstraints();
 		
@@ -100,14 +100,14 @@ public class HistoryView extends JPanel implements IView{
 		gbc.gridy = 0;
 		
 		int i = 0;
-		for(JTextArea j : historyFields){
+		for(JTextArea j : fields){
 			gbc.gridy = i;
 			
 			if (i != 0) {
 				gbc.insets.top = 10;
 			}
 			
-			if (i == historyFields.size() - 1) {
+			if (i == fields.size() - 1) {
 				gbc.insets.bottom = 20;
 			}
 			gbc.insets = new Insets(0,0,0,0);
