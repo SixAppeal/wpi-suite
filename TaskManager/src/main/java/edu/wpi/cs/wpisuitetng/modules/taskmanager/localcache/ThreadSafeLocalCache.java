@@ -306,7 +306,6 @@ public class ThreadSafeLocalCache implements Cache {
 	public void updateReqs(String reqVal) {
 		Requirement[] reqs = new Gson().fromJson(reqVal, Requirement[].class);
 		this.requirements = reqs;
-//		this.gateway.toPresenter("TaskPresenter", "updateRequirements");
 	}
 
 
