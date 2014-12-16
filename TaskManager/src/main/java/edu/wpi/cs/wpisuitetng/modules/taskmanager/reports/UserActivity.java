@@ -6,10 +6,17 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
+<<<<<<< HEAD
+ * Contributors: SixAppeal
+=======
  * Contributors: Team Six-Appeal
+>>>>>>> 0ce8acbe0431f451a25a6b888bc1248463634f07
  ******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.reports;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Class to represent the amount of work a user has done during the week
@@ -18,7 +25,7 @@ package edu.wpi.cs.wpisuitetng.modules.taskmanager.reports;
  */
 public class UserActivity {
 	
-	private int importance;
+	private Map<String, Double> weights;
 	private String name;
 	
 	/**
@@ -26,7 +33,7 @@ public class UserActivity {
 	 * @param username username of user associated with object
 	 */
 	public UserActivity(String username) {
-		this.importance = 0;
+		this.weights = new HashMap<String, Double>();
 		this.name = username;
 	}
 	
@@ -34,16 +41,16 @@ public class UserActivity {
 	 * Get the importance of the user in question
 	 * @return an integer score of the importance of the user
 	 */
-	public int getImportance() {
-		return this.importance;
+	public Map<String, Double> getImportance() {
+		return this.weights;
 	}
 	
 	/**
 	 * Set the importance of the user
 	 * @param importance importance of the user
 	 */
-	public void setImportance(int importance) {
-		this.importance = importance;
+	public void setImportance(Map<String, Double> weights) {
+		this.weights = weights;
 	}
 	
 	/**
@@ -67,7 +74,7 @@ public class UserActivity {
 	 */
 	@Override
 	public String toString() {
-		return (this.name + ": " + this.importance);
+		return (this.name + ": " + this.weights.toString());
 	}
 	
 	/**
@@ -99,7 +106,7 @@ public class UserActivity {
 	 * @param user
 	 */
 	public void copyFrom(UserActivity user) {
-		this.importance = user.importance;
+		this.weights = user.weights;
 	}
 	
 }

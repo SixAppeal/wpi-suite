@@ -13,6 +13,8 @@ package edu.wpi.cs.wpisuitetng.modules.taskmanager.reports;
 
 import static org.junit.Assert.*;
 
+import java.util.Map;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -53,13 +55,17 @@ public class TestReports {
 		graph.calcAdjacencyMatrix();
 		System.out.println(graph.getAdjacencyMatrix());
 		UserActivity toUpdate = new UserActivity("Bob");
-		toUpdate.setImportance(1);
+		Map<String, Double> importance = toUpdate.getImportance();
+		importance.put("George", 1.0);
+		toUpdate.setImportance(importance);
 		UserActivity toUpdate2 = new UserActivity("George");
-		
-		toUpdate2.setImportance(1);
+		importance = toUpdate2.getImportance();
+		importance.put("Bob", 0.5);
+		toUpdate2.setImportance(importance);
 		graph.updateNode(toUpdate);
 		graph.updateNode(toUpdate2);
 		graph.addEdge(toUpdate, toUpdate2);
+		graph.addEdge(toUpdate2, toUpdate);
 		graph.calcAdjacencyMatrix();
 		System.out.println(graph.getAdjacencyMatrix());
 		
