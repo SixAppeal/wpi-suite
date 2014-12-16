@@ -6,8 +6,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors: William Van Rensselaer, Will Temple, Alex Shoop, Ryan Orlando, Santiago Rojas
- * Dan Seaman, Troy Hughes
+ * Contributors: Team Six-Appeal
  ******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
 
@@ -51,6 +50,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.FormFieldValid
  * @author akshoop
  * @author rnorlando
  * @author srojas
+ * @author tmeehan
  * @author dpseaman
  */
 

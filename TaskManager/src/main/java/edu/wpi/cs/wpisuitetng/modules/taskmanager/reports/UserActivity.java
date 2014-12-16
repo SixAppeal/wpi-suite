@@ -6,14 +6,14 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors: Nathan Hughes
+ * Contributors: Team Six-Appeal
  ******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.reports;
 
 /**
  * Class to represent the amount of work a user has done during the week
- * @author nathan
+ * @author nhhughes
  *
  */
 public class UserActivity {
