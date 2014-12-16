@@ -86,6 +86,7 @@ public class Task extends AbstractModel {
 	private List<Activity> activities;
 	private List<Comment> comments;
 	private int priority;
+	private String currentRequirementName;
 
 	/**
 	 * Default constructor (dummy task for initialization)
@@ -257,7 +258,7 @@ public class Task extends AbstractModel {
 	public void addToHistory(Object original, Object newInfo, String field) {
 		if(!newInfo.equals(original))
 		{
-			activities.add(new Activity("The" + field + " was changed to " + newInfo.toString()));
+			activities.add(new Activity("The " + field + " was changed to " + newInfo.toString()));
 		}
 	}
 	
@@ -432,6 +433,23 @@ public class Task extends AbstractModel {
 	}
 	
 	/**
+	 * Retrieves the current requirement name
+	 * @return reqName Current requirement name
+	 */
+	public String getCurrentRequirementName() {
+		return this.currentRequirementName;
+	}
+	
+	/**
+	 * Sets the current requirement name
+	 * @return reqName Current requirement name
+	 */
+	public void setCurrentRequirementName(String currentReqName) {
+		this.addToHistory(this.getCurrentRequirementName(), currentReqName, "Associated Requirement");
+		this.currentRequirementName = currentReqName;
+	}
+	
+	/**
 	 * 
 	 * @return the priority value to be listed on screen
 	 */
@@ -502,7 +520,8 @@ public class Task extends AbstractModel {
 		this.category = updatedTask.getCategory();
 		this.archived = updatedTask.archived;
 		this.priority = updatedTask.priority;
-		this.requirement = updatedTask.requirement;
+		this.currentRequirementName = updatedTask.getCurrentRequirementName();
+//		this.requirement = updatedTask.requirement;
 	}
 	
 	/**

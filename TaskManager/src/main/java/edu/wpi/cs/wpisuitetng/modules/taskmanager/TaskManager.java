@@ -173,6 +173,10 @@ public class TaskManager implements IJanewayModule {
 				"core/user", HttpMethod.GET); //request for members
 		networkRequestMembers.addObserver(new InitializeManager(localCache, waitingForInit));
 		networkRequestMembers.send();
+//		final Request networkRequestRequirements = Network.getInstance().makeRequest(
+//				"requirementmanager/requirement", HttpMethod.GET); //request for requirements
+//		networkRequestRequirements.addObserver(new InitializeManager(localCache, waitingForInit));
+//		networkRequestRequirements.send();
 		try {
 			waitingForInit.acquire();
 		} catch (InterruptedException e) {
