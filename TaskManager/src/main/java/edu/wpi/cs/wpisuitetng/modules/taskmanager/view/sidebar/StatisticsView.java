@@ -6,12 +6,13 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors: Nathan Hughes, Troy Hughes
+ * Contributors: Dan Seaman, Troy Hughes
  ******************************************************************************/
 
 
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -50,6 +51,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar.JListMouseHandler
  *  A view for creating a PDF of statistics
  * 
  * @author dpseaman
+ * @author thhughes
  *
  */
 
@@ -65,7 +67,6 @@ public class StatisticsView extends JPanel implements IView{
 	private JXDatePicker startDate;
 	private JXDatePicker endDate;
 	private JButton createButton;
-	private Task memberTask;
 
 	private JList<String> members;
 	private JScrollPane membersScrollPane;
@@ -73,8 +74,12 @@ public class StatisticsView extends JPanel implements IView{
 	private JScrollPane selectedMembersScrollPane;
 	private JButton addMemberButton;
 	private JButton removeMemberButton;
-	private ArrayList<String> allMembers;
-	
+
+	private List<String> usernames = new ArrayList<String>();
+	private List<String> assigned = new ArrayList<String>();
+	private List<String> unassigned = new ArrayList<String>();
+	private boolean flag = false;
+
 	JListMouseHandler allMembersMouseHandler;
 	JListMouseHandler selectedMembersMouseHandler;
 
@@ -85,9 +90,8 @@ public class StatisticsView extends JPanel implements IView{
 		this.startDate = new JXDatePicker();
 		this.endDate = new JXDatePicker();
 		this.createButton = new JButton ("Create");
-		
-		this.createButton.setEnabled(false);
 
+		this.createButton.setEnabled(false);
 
 		this.members = new JList<String>();
 		this.membersScrollPane = new JScrollPane(this.members);
@@ -100,11 +104,8 @@ public class StatisticsView extends JPanel implements IView{
 
 		this.selectedMembers.setVisibleRowCount(4);				
 		this.selectedMembers.setLayoutOrientation(JList.VERTICAL);
-	
-		this.allMembers = new ArrayList<String>();
-		
-		
-		
+
+
 
 		// Buttons below
 		addMemberButton = new JButton(">>");
@@ -123,8 +124,12 @@ public class StatisticsView extends JPanel implements IView{
 			}
 		});
 
+
+		// Member mouse handlers
 		allMembersMouseHandler = new JListMouseHandler(members);
 		selectedMembersMouseHandler = new JListMouseHandler(selectedMembers);
+
+
 		// Member JList Action Listeners
 		members.addListSelectionListener(new ListSelectionListener() {
 			@Override
@@ -175,12 +180,12 @@ public class StatisticsView extends JPanel implements IView{
 		FormField endDateForm = new FormField("End Date", this.endDate, new FormFieldValidator() {
 			@Override
 			public boolean validate(JComponent component) {
-				return !(endDate.getDate() == null);
+				return !(endDate.getDate() == null && startDate.getDate().compareTo(endDate.getDate()) >= 0);
 			}
 
 			@Override
 			public String getMessage() {
-				return "Please select an end date";
+				return "Please select an end date after the start date";
 			}
 		});
 
@@ -225,7 +230,7 @@ public class StatisticsView extends JPanel implements IView{
 		this.updateMembers();
 
 	}
-	
+
 	/**
 	 * 
 	 * @param selected
@@ -234,8 +239,8 @@ public class StatisticsView extends JPanel implements IView{
 	 *  Update Panels is used to redraw the lists once something is changed
 	 */
 	public void updateMembers() {
-		this.members.setListData(this.allMembers.toArray(new String[0]));
-		this.selectedMembers.setListData(new ArrayList<String>().toArray(new String[0]));
+		this.members.setListData(unassigned.toArray(new String[0]));
+		this.selectedMembers.setListData(assigned.toArray(new String[0]));
 		this.revalidate();
 		this.repaint();
 	}
@@ -243,26 +248,30 @@ public class StatisticsView extends JPanel implements IView{
 	/**
 	 * Takes the members that the user has selected and moves them to the list of members selected to a task
 	 */
-	public void moveMembersToSelected() {	
-		MemberListHandler.getInstance().assignMember(members.getSelectedValuesList());
+	public void moveMembersToSelected() {
+		assigned.addAll(members.getSelectedValuesList());
+		unassigned.removeAll(members.getSelectedValuesList());
 		updateMembers();
+
 
 		this.allMembersMouseHandler.clear();
 		this.selectedMembersMouseHandler.clear();
-		
+
 	}
 
 	/**
 	 * Take the members that are selected in the selected Members list and moves them back to the All Members list
 	 */
 	public void moveMembersToAll() {
-		MemberListHandler.getInstance().unAssignMember(selectedMembers.getSelectedValuesList());
+		unassigned.addAll(selectedMembers.getSelectedValuesList());
+		assigned.removeAll(selectedMembers.getSelectedValuesList());
+		System.out.println(unassigned);
 		updateMembers();
 
 		this.allMembersMouseHandler.clear();
 		this.selectedMembersMouseHandler.clear();
 	}
-	
+
 	public void notifyAllMembersMouseHandler() {
 		this.allMembersMouseHandler.just_changed = true;
 	}
@@ -281,46 +290,27 @@ public class StatisticsView extends JPanel implements IView{
 
 
 
-	
+
 	@Override
 	public void setGateway(Gateway gateway) {
-		System.out.println("Fuck this shit!");
 		this.gateway = gateway;
 	}		
-	
+
 	public void updateAll(ThreadSafeLocalCache localCache){
-		setGlobal(localCache);
-		updateMembers();
-	}
-	
-	/**
-	 * 
-	 * @param localCache
-	 *            local cache of all the data
-	 * 
-	 *            Converts the array of Objects from the Loal Cache to an array
-	 *            of Users Then converts the array of users to a list<String> of
-	 *            the usernames
-	 */
-	private void setGlobal(Cache localCache) {
-		Object[] output = localCache.retrieve("member");
-		User[] memberArray = (User[]) output;
-		this.allMembers = new ArrayList<String>(usersToUsernames(memberArray));
-	}
-
-	/**
-	 * Converts an array of users to a list of usernames
-	 * 
-	 * @param userList
-	 *            list of users
-	 * @return List<String> that are the usernames of the users
-	 */
-	private List<String> usersToUsernames(User[] userList) {
-		List<String> output = new ArrayList<String>();
-		for (int i = 0; i < userList.length; i++) {
-			output.add(userList[i].getUsername());
+		if (flag == false){
+			usernames = MemberListHandler.getInstance().getGlobal();
+			assigned = usernames;
+			flag = true;
+			this.updateMembers();
 		}
-		return output;
+		else {
+			List<String> newList = new ArrayList<String>(usernames);
+			newList.removeAll(unassigned);
+			if (!(newList.equals(assigned))) {
+				this.selectedMembers.setListData(MemberListHandler.getInstance().getGlobal().toArray(new String [0]));
+				revalidate();
+				repaint();
+			}
+		}
 	}
-
 }

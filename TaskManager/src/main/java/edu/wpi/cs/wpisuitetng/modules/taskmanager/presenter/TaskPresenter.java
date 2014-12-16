@@ -78,15 +78,15 @@ public class TaskPresenter implements IPresenter{
 	public void addAllToView( Task[] tasks ) {
 		this.gateway.toView("ColumnView", "setTasks", new Object[] { tasks }); 
 	}
-	
+
 	/**
 	 * Tells the MemberListHandler to update
 	 */
 	public void notifyMemberHandler() {
 		this.gateway.toView("MemberListHandler", "updateAll", cache);
-//		this.gateway.toView("StatisticsView", "updateAll", cache);        THIS IS MAKING ERRORS HAPPEN
+		this.gateway.toView("StatisticsView", "updateAll", cache);    
 	}
-	
+
 	/**
 	 * Updates all the tasks in the ColumnView
 	 */
