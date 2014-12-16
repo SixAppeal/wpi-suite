@@ -6,7 +6,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors: Nathan Hughes
+ * Contributors: Team Six-Appeal
  ******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter;
@@ -28,6 +28,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar.TaskView;
  * @author wavanrensselaer
  * @author dpseaman
  * @author nhhughes
+ * @author tmeehan
  * @author akshoop
  */
 public class TaskPresenter implements IPresenter{
@@ -78,14 +79,15 @@ public class TaskPresenter implements IPresenter{
 	public void addAllToView( Task[] tasks ) {
 		this.gateway.toView("ColumnView", "setTasks", new Object[] { tasks }); 
 	}
-	
+
 	/**
 	 * Tells the MemberListHandler to update
 	 */
 	public void notifyMemberHandler() {
 		this.gateway.toView("MemberListHandler", "updateAll", cache);
-	};
-	
+		this.gateway.toView("StatisticsView", "updateAll", cache);    
+	}
+
 	/**
 	 * Updates all the tasks in the ColumnView
 	 */

@@ -7,7 +7,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors: Nathan Hughes, Alexander Shoop, Will Rensselaer, Thomas Meehan, Ryan Orlando, Troy Hughes, Nathan Hughes
+ * Contributors: Team Six-Appeal
  ******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
@@ -44,8 +44,9 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
  * @author srojas
  * @author thhughes
  * @author nhhughes
- * @author dpseaman
  * @author tmeehan
+ * @author dpseaman
+ * 
  */
 public class SidebarView extends JTabbedPane implements IView {
 	private static final long serialVersionUID = -9157611802121055998L;
@@ -274,6 +275,10 @@ public class SidebarView extends JTabbedPane implements IView {
 		this.searchView.updateIndex(all_tasks);
 	}
 	
+	/**
+	 * Set stages from an update sync for stage list
+	 * @param sl stage list to update from
+	 */
 	public void setStages(StageList sl) {
 		this.stages = sl;
 		for (IView v : this.viewList) {
@@ -284,6 +289,12 @@ public class SidebarView extends JTabbedPane implements IView {
 		columnEditView.setStages(this.stages);
 	}
 
+	/**
+	 * Find specific task
+	 * @param tasks list of tasks
+	 * @param id tasks id to search for
+	 * @return task with specific id
+	 */
 	public Task findTask(Task [] tasks, int id) {
 		for (Task t: tasks) {
 			if (t.getId() == id) {
@@ -293,6 +304,10 @@ public class SidebarView extends JTabbedPane implements IView {
 		return null;
 	}
 	
+	/**
+	 * Set the copy of the local cache
+	 * @param cache cache to use
+	 */
 	public void setCache(ThreadSafeLocalCache cache) {
 		this.cache = cache;
 	}
@@ -317,21 +332,16 @@ public class SidebarView extends JTabbedPane implements IView {
 				}
 			}
 		}
-		
-	
-	
-	
-	
+			
 	
 	/**
 	 * Goes through and re adds all of the tasks to the TaskEditViews
 	 */
-	
-	/*
-	 * This method causes an infinite loop and crashes the server everytime I run it... Not sure what's up here. 
-	 * 
-	 */
 	public void reflowTasks() {
+		/*
+		 * This method causes an infinite loop and crashes the server everytime I run it... Not sure what's up here. 
+		 * 
+		 */
 		Task[] reference = (Task[]) this.cache.retrieve("task");
 		for (int i = 0; i < this.getComponentCount(); i ++) {
 			if (this.getComponent(i) instanceof TaskEditView) {
@@ -344,4 +354,7 @@ public class SidebarView extends JTabbedPane implements IView {
 		}
 	}
 	
+	public StatisticsView getStatsView() {
+		return this.statisticsView;
+	}
 }

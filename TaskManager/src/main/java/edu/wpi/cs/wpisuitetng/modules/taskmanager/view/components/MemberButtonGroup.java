@@ -1,5 +1,13 @@
-
-
+/*******************************************************************************
+ * Copyright (c) 2014 -- WPI Suite
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors: Team Six-Appeal
+ ******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components;
 
@@ -10,6 +18,11 @@ import java.awt.Insets;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
+/**
+ * Deals with the vertical alignment of buttons
+ * @author nhhughes
+ *
+ */
 public class MemberButtonGroup extends FormElement {
 	private static final long serialVersionUID = -156399870170357184L;
 	

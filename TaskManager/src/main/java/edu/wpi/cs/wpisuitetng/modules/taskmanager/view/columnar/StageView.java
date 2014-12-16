@@ -6,7 +6,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors: Will Rensselaer, Thomas Meehan, Ryan Orlando
+ * Contributors: Team Six-Appeal
  ******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar;
@@ -164,7 +164,7 @@ public class StageView extends JPanel implements IView {
 			taskView = (TaskView) this.container.getComponent(i);
 			if (i >= this.tasks.length) {
 				this.container.remove(i--);
-			} else if (!taskView.getTask().equals(this.tasks[i])) {
+			} else {
 				taskView.setState(this.tasks[i]);
 			}
 			this.updateConstraints(taskView, i);
