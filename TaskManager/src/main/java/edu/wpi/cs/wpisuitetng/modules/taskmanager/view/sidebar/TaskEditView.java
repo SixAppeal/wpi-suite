@@ -9,7 +9,6 @@
  * Contributors: Nathan Hughes, Troy Hughes
  ******************************************************************************/
 
-
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
 
 import java.awt.Container;
@@ -498,11 +497,19 @@ public class TaskEditView extends JPanel implements IView {
 //		gateway.toPresenter("LocalCache", "sync", "requirement");
 	}
 
+	/**
+	 * update all the fields of the edit view
+	 * @param t task with new values
+	 */
 	public void updateEverything(Task t) {
 		this.task.setStage(t.getStage());
 		this.stageInput.setSelectedItem(t.getStage());
 	}
 
+	/**
+	 * Set the stages upon a stage sync
+	 * @param sl stage list will new stage values
+	 */
 	public void setStages( StageList sl ) {
 		if(!stages.equals(sl)) {
 			Object pSelected = stageInput.getSelectedItem();
@@ -516,20 +523,21 @@ public class TaskEditView extends JPanel implements IView {
 	}
 	
 	
-	
+	/**
+	 * update the highlighted members
+	 */
 	public void notifyAllMembersMouseHandler() {
 		this.allMembersMouseHandler.just_changed = true;
 	}
 
+	/**
+	 * update the highlighted members
+	 */
 	public void notifyAssignedMembersMouseHandler() {
 		this.assignedMembersMouseHandler.just_changed = true;
 	}
 	
 	/**
-	 * 
-	 * @param assigned
-	 * @param all
-	 * 
 	 *  Update Panels is used to redraw the lists once something is changed
 	 */
 	public void updateMembers() {
@@ -657,68 +665,4 @@ public class TaskEditView extends JPanel implements IView {
 		return shortenedTitle;
 	}
 
-	private class JListMouseHandler implements MouseListener {
-
-		JList<String> list;
-		Boolean just_changed;
-		int[] previous_indexes;
-		int keyboard_event_count;
-
-		public JListMouseHandler (JList<String> list) {
-			this.list = list;
-			just_changed = false;
-			previous_indexes = list.getSelectedIndices();
-		}
-
-		public void mousePressed(MouseEvent e) {
-			int clicked_index = this.list.locationToIndex(e.getPoint());
-			if (this.just_changed) {
-				this.just_changed = false;
-
-				for (int i : previous_indexes) {
-					if (!this.inArray(i, this.list.getSelectedIndices())) {
-						this.list.addSelectionInterval(i, i);
-					}
-				}
-				if (this.inArray(clicked_index, this.list.getSelectedIndices()) && this.inArray(clicked_index, previous_indexes)) {
-					this.list.removeSelectionInterval(clicked_index, clicked_index);
-				}
-			}
-			else {
-				list.removeSelectionInterval(clicked_index, clicked_index);
-			}
-			this.previous_indexes = this.list.getSelectedIndices();
-
-		}
-
-		public void mouseReleased(MouseEvent e) {}
-
-		public void mouseEntered(MouseEvent e) {}
-
-		public void mouseExited(MouseEvent e) {}
-
-		public void mouseClicked(MouseEvent e) {}
-
-		@SuppressWarnings("unused")
-		public void update_selected() {
-			if (this.keyboard_event_count == 0) {
-				this.previous_indexes = this.list.getSelectedIndices();
-				this.keyboard_event_count++;
-			}
-		}
-
-		public void clear() {
-			this.list.clearSelection();
-			this.previous_indexes = this.list.getSelectedIndices();
-		}
-
-		private Boolean inArray(int to_check, int[] array) {
-			for (int i : array) {
-				if (i == to_check) {
-					return true;
-				}
-			}
-			return false;
-		}
-	}
 }
