@@ -353,4 +353,7 @@ public class SidebarView extends JTabbedPane implements IView {
 		}
 	}
 	
+	public StatisticsView getStatsView() {
+		return this.statisticsView;
+	}
 }

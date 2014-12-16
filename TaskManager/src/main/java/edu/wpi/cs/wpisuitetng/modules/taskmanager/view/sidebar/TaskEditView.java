@@ -20,8 +20,6 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
@@ -438,6 +436,7 @@ public class TaskEditView extends JPanel implements IView {
 		this.stageInput.addActionListener(stageBoxListener);
 
 		this.form = new Form(
+
 			titleField,
 			descField,
 			new FormField("Due Date", this.dateInput),
@@ -463,6 +462,7 @@ public class TaskEditView extends JPanel implements IView {
 				this.closeButton
 			)
 		);
+
 		
 		this.container.setBackground(SidebarView.SIDEBAR_COLOR);
 		this.container.setLayout(new MigLayout("fill, ins 20", "[260]"));
@@ -637,6 +637,7 @@ public class TaskEditView extends JPanel implements IView {
 		return requirementTitles;
 	}
 	
+
 	/**
 	 * Sets requirement dropdown menu based on the requirement of specified task
 	 * Code is partially borrowed from What? We Thought This Was Bio's NewTaskTab.java file
@@ -664,5 +665,4 @@ public class TaskEditView extends JPanel implements IView {
 		String shortenedTitle = TaskManagerUtil.reduceString(aReq.getName(), 210, fm);
 		return shortenedTitle;
 	}
-
 }
