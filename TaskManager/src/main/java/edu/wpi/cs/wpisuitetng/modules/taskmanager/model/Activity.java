@@ -1,5 +1,7 @@
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.model;
 
+import java.util.Calendar;
+
 /**
  * Class to capture an activity, which stores information based on changes made to a task
  * 
@@ -11,6 +13,7 @@ package edu.wpi.cs.wpisuitetng.modules.taskmanager.model;
  */
 public class Activity {
 	String activity;
+	Calendar dateAndTime;
 	
 	public Activity(){
 		this.activity = "";
