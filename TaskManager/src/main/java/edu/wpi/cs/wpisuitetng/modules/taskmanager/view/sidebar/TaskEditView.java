@@ -84,6 +84,7 @@ public class TaskEditView extends JPanel implements IView {
 
 	private Gateway gateway;
 
+	private Task taskAsAdded;
 	private Task task;
 	private StageList stages;
 	private Requirement[] requirements;
@@ -134,6 +135,7 @@ public class TaskEditView extends JPanel implements IView {
 	 */
 	public TaskEditView(Task iTask, StageList stages) {
 		this.task = new Task();
+		this.taskAsAdded = iTask;
 		this.task.updateFrom(iTask);
 		this.stages = stages;
 		this.requirements = new Requirement[0];
@@ -250,7 +252,7 @@ public class TaskEditView extends JPanel implements IView {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				task.setArchived(!task.isArchived());
-				gateway.toPresenter("LocalCache", "update", task.isArchived()?"archive":"task" + ":testing", task);
+				saveTask();
 				if( task.isArchived() ) gateway.toView("SidebarView", "removeEditPanel", that);
 			}
 		});
@@ -484,6 +486,7 @@ public class TaskEditView extends JPanel implements IView {
 	 * Saves the task currently being edited
 	 */
 	private void saveTask() {
+		if ( task.hasChanged(taskAsAdded) );
 		this.gateway.toPresenter("LocalCache", "update", "task:testing", this.task);
 	}
 
@@ -499,17 +502,33 @@ public class TaskEditView extends JPanel implements IView {
 	 */
 	public void updateEverything(Task t) {
 		
+		this.taskAsAdded = t;
+		
 		if( t.hasChanged(this.task)) {
+			
+			ActionListener al;
+			
 			this.task.updateFrom(t);
-			this.titleInput.setText( task.getTitle() );
-			this.descInput.setText(task.getDescription());
-			this.dateInput.setDate(task.getDueDate());
-			this.estEffortInput.setValue(task.getEstimatedEffort());
-			this.actEffortInput.setValue(task.getActualEffort());
+			
+			if( !this.titleInput.getText().equals(task.getTitle()) ) this.titleInput.setText( task.getTitle() );
+			if( !this.descInput.getText().equals(task.getDescription()) ) this.descInput.setText(task.getDescription());
+			
+			if( !this.dateInput.getDate().equals(task.getDueDate()) ) this.dateInput.setDate(task.getDueDate());
+			
+			if( !this.estEffortInput.getValue().equals(task.getEstimatedEffort()) )
+				this.estEffortInput.setValue(task.getEstimatedEffort());
+			
+			if( !this.actEffortInput.getValue().equals(task.getActualEffort()) )
+				this.actEffortInput.setValue(task.getActualEffort());
+			
 			MemberListHandler.getInstance().populateMembers(task.getAssignedTo());
 			this.updateMembers();
-			this.category.setSelectedIndex(task.getCategory());
-			this.requirementsComboBox.setSelectedItem(task.getCurrentRequirementName());
+			
+			if( ! this.category.getSelectedItem().equals(task.getCategory()) )
+				this.category.setSelectedIndex(task.getCategory());
+			
+			if( !this.requirementsComboBox.getSelectedItem().equals(task.getCurrentRequirementName()) )
+					this.requirementsComboBox.setSelectedItem(task.getCurrentRequirementName());
 		}
 		
 		if (task.isArchived()) {
