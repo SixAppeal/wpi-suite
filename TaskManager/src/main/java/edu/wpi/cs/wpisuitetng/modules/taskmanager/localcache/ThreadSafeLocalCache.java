@@ -210,12 +210,12 @@ public class ThreadSafeLocalCache implements Cache {
 	 */
 	public void updateTasks(String taskVal) {
 		Task[] updatedTasks = new Gson().fromJson(taskVal, Task[].class);
-		System.out.println("Tasks to update:");
-		int count = 0;
-		for (Task t : updatedTasks) {
-			System.out.println(count + ") " + t);
-			count++;
-		}
+//		System.out.println("Tasks to update:");
+//		int count = 0;
+//		for (Task t : updatedTasks) {
+//			System.out.println(count + ") " + t);
+//			count++;
+//		}
 		List<Task> updatedTaskList = Arrays.asList(updatedTasks);
 		List<Task> unarchived = new ArrayList<Task>();
 		List<Task> archived = new ArrayList<Task>();

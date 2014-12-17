@@ -22,6 +22,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.PriorityQueue;
 
 import org.jfree.chart.ChartFactory;
@@ -49,7 +50,9 @@ public class ReportGenerator {
 	private Date start;
 	private Date end;
 	private List<String> members;
-
+	private List<Double> actualEffortValues;
+	private List<String> actualEffortMembers;
+	
 	/**
 	 * Creates a report based on the parameters passed in
 	 * @param file the file path for the index.html file in the report
@@ -70,6 +73,14 @@ public class ReportGenerator {
 		Map<String, Double> actualEffort;
 		generateHistory(allHistory, allTasks);
 		actualEffort = generateCompletedTasks(titles, allTasks, startDate, endDate);
+		List<Double> actualMemberEfforts = new ArrayList<Double>();
+		List<String> actualMembers = new ArrayList<String>();
+		for (Entry<String, Double> actualMemberTuple : actualEffort.entrySet()) {
+			actualMemberEfforts.add(actualMemberTuple.getValue());
+			actualMembers.add(actualMemberTuple.getKey());
+		}
+		this.actualEffortValues = actualMemberEfforts;
+		this.actualEffortMembers = actualMembers;
 		generateReport(titles);
 	}
 
@@ -132,11 +143,11 @@ public class ReportGenerator {
 			
 			outCss.close();
 			
-			double values[] = {1.0};
-			CategoryDataset dataSet = createData(values, members, "Actual Effort");
+			
+			CategoryDataset dataSet = createData(this.actualEffortValues, this.actualEffortMembers, "Actual Effort");
 			createChart(dataSet, path + "actualeffort.png", "Actual Effort");
 			createChart(dataSet, path + "estimatedimportance.png", "Importance");
-			createChart(dataSet, path + "importancegraph.png", "Importance");
+//			createChart(dataSet, path + "importancegraph.png", "Importance");
 
 		} catch (FileNotFoundException e) {
 			System.out.println("Cannot Create File!");
@@ -153,11 +164,11 @@ public class ReportGenerator {
 		for (Task toAnalyze : tasks) {
 			List<Activity> taskHistory = toAnalyze.getActivities();
 			for (Activity activityToAnalyze : taskHistory) {
-				//do stuff involving history
+				history.add(new HistoryElement(toAnalyze, activityToAnalyze.getUser(), true, activityToAnalyze.getDateAndTime()));
 			}
 			List<Comment> taskComments = toAnalyze.getComments();
 			for (Comment commentToAnalyze : taskComments) {
-				//do stuff involving comments
+				history.add(new HistoryElement(toAnalyze, commentToAnalyze.getUser(), true, commentToAnalyze.getTime()));	 
 			}
 		}
 		List<HistoryElement> elements = new ArrayList<HistoryElement>();
@@ -165,7 +176,14 @@ public class ReportGenerator {
 			elements.add(history.remove());
 		}
 		for (int i = 1; i < elements.size(); i++) {
-			//update contributors with 
+			for (int j = i-1;j>0;j--){
+				if(elements.get(i).getAssociatedTask() == elements.get(j).getAssociatedTask()){
+					List<String> contributingToAdd = new ArrayList<String>(elements.get(j).getOldContributingMembers());
+					contributingToAdd.add(elements.get(j).getContributingMember());
+					elements.get(i).setOldContributingMembers(contributingToAdd);
+					break;
+				}
+			}
 		}
 
 	}
@@ -204,8 +222,10 @@ public class ReportGenerator {
 	 */
 	public boolean isCompleted(Date start, Date end, Task toCheck) {
 		List<Activity> log = new ArrayList<Activity>();
+		System.out.println(log);
 		for (int i = log.size() - 1; i >= 0; i--) {
 			Activity activityToCheck = log.get(i);
+			System.out.println(start + " : " + end + " : " + activityToCheck.getDateAndTime());
 			if (activityToCheck.getActivity().contains("Completed")) {
 				if (start.compareTo(activityToCheck.getDateAndTime()) == -1 && end.compareTo(activityToCheck.getDateAndTime()) == 1) {
 					return true;
@@ -227,6 +247,9 @@ public class ReportGenerator {
 	 */
 	public Map<String, Double> generateCompletedTasks(List<String> titles, Task[] tasks, Date start, Date end) {
 		Map<String, Double> toReturn = new HashMap<String, Double>();
+		for (Task t : tasks) {
+			System.out.println(t);
+		}
 		for (Task toAnalyze : tasks ) {
 			if (isCompleted(start, end, toAnalyze)) {
 				titles.add(toAnalyze.getTitle());
@@ -287,10 +310,10 @@ public class ReportGenerator {
 	 * @param category type of analysis performed
 	 * @return
 	 */
-	private CategoryDataset createData(double[] data, List<String> members, String category) {
+	private CategoryDataset createData(List<Double> data, List<String> members, String category) {
 		DefaultCategoryDataset dataSet = new DefaultCategoryDataset();
 		for (int k = 0; k < members.size(); k++) {
-			dataSet.setValue(data[k], members.get(k), category);// populate
+			dataSet.setValue(data.get(k), members.get(k), category);
 		}
 		return dataSet;
 	}
