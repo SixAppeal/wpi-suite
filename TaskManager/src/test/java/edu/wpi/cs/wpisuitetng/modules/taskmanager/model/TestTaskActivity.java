@@ -13,6 +13,8 @@ package edu.wpi.cs.wpisuitetng.modules.taskmanager.model;
 
 import static org.junit.Assert.*;
 
+import java.text.SimpleDateFormat;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -75,6 +77,7 @@ public class TestTaskActivity {
 	public void testActivityToString(){
 		Activity newActivity = new Activity();
 		newActivity.setActivity("This is a test string");
-		assertEquals(newActivity.toString(), "This is a test string");
+		assertEquals(newActivity.toString(), new SimpleDateFormat("h:mm a, MM/dd/yyyy").format(newActivity.getDate())
+				+ "> " + newActivity.getUser() + ": This is a test string");
 	}
 }

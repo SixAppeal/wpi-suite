@@ -13,6 +13,8 @@ package edu.wpi.cs.wpisuitetng.modules.taskmanager.model;
 
 import static org.junit.Assert.*;
 
+import java.text.SimpleDateFormat;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -96,10 +98,11 @@ public class TestTaskComment {
 	@Test
 	public void testCommentToString(){
 		Comment newComment = new Comment();
-		assertEquals(newComment.toString(), "" + ": " + "");
+		String date = new SimpleDateFormat("h:mm a, MM/dd/yyyy").format(newComment.getDate());
+		assertEquals(newComment.toString(), date + "> : ");
 		newComment.setUser("New User");
-		assertEquals(newComment.toString(), "New User" + ": " + "");
+		assertEquals(newComment.toString(), date + "> New User: ");
 		newComment.setComment("This is a Comment!");
-		assertEquals(newComment.toString(), "New User: This is a Comment!");
+		assertEquals(newComment.toString(), date + "> New User: This is a Comment!");
 	}
 }
