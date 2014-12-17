@@ -1,3 +1,14 @@
+/*******************************************************************************
+ * Copyright (c) 2014 -- WPI Suite
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors: Team Six-Appeal
+ ******************************************************************************/
+
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache;
 
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
@@ -7,14 +18,28 @@ import edu.wpi.cs.wpisuitetng.network.RequestObserver;
 import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
 import edu.wpi.cs.wpisuitetng.network.models.IRequest;
 
+/**
+ * Request observer to deal with long polling / that syncs with everything in a more intelligent manager
+ * @author nhhughes
+ *
+ */
 public class ThreadSafeSyncObserver implements RequestObserver {
 
 	private Gateway gateway;
 
+	/**
+	 * Construct a sync observer with a copy of the gateway
+	 * @param gateway copy of the gateway
+	 */
 	public ThreadSafeSyncObserver (Gateway gateway) {
 		this.gateway = gateway;
 	}
 
+	
+	/**
+	 * On success of a long poll request, initiate a new request.
+	 * On every success, notify the presenter accordingly 
+	 */
 	@Override
 	public void responseSuccess(IRequest iReq) {
 		String[] splitUrl = iReq.getUrl().toString().split("/");

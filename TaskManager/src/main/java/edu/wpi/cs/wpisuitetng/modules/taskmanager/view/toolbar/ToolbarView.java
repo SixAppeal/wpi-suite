@@ -1,3 +1,14 @@
+/*******************************************************************************
+ * Copyright (c) 2014 -- WPI Suite
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors: Team Six-Appeal
+ ******************************************************************************/
+
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.toolbar;
 
 import java.awt.Color;
@@ -33,6 +44,7 @@ public class ToolbarView extends GradientPanel implements IView {
 	
 	private JButton createTaskButton;
 	private JButton importButton;
+	private JButton helpButton;
 	private JButton toggleSidebarButton;
 	
 	@SuppressWarnings("unused")
@@ -45,7 +57,8 @@ public class ToolbarView extends GradientPanel implements IView {
 	public ToolbarView() {
 		this.createTaskButton = new JButton("  Create Task");
 		this.importButton = new JButton("Import");
-		this.toggleSidebarButton = new JButton("  Toggle Sidebar");
+		this.helpButton = new JButton();
+		this.toggleSidebarButton = new JButton("Toggle Sidebar");
 		this.click = true;
 		
 		this.createTaskButton.setHorizontalAlignment(SwingConstants.CENTER);
@@ -70,6 +83,18 @@ public class ToolbarView extends GradientPanel implements IView {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				TrelloNetwork.getInstance().beginImport();
+			}
+		});
+
+		this.helpButton.setHorizontalAlignment(SwingConstants.CENTER);
+		this.helpButton.setIcon(new ImageIcon(this.getClass().getResource("icon_question.png")));
+		this.helpButton.setFont(font);
+		this.helpButton.setBorder(border);
+		
+		this.helpButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
 			}
 		});
 		
@@ -117,10 +142,14 @@ public class ToolbarView extends GradientPanel implements IView {
 		this.add(this.importButton, gbc);
 		
 		gbc.anchor = GridBagConstraints.LAST_LINE_END;
-		gbc.insets.right = 20;
 		gbc.weightx = 1.0;
 		gbc.gridx = 2;
 		this.add(this.toggleSidebarButton, gbc);
+		
+		gbc.insets.right = 20;
+		gbc.gridx = 3;
+		gbc.weightx = 0;
+		this.add(this.helpButton, gbc);
 	}
 
 	/**

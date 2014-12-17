@@ -5,7 +5,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors: Team Sixappeal
+ * Contributors: Team Six-Appeal
  ******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
 
@@ -17,6 +17,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -42,7 +44,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
  * @author krpeffer
  * @author rwang3
  * @author wavanrensselaer
- * @author tmeehan
+ * 
  *
  */
 public class TaskActivitiesAndComments extends JPanel implements IView {
@@ -67,7 +69,7 @@ public class TaskActivitiesAndComments extends JPanel implements IView {
 	
 	JComponent commentPanel;
 	JComponent commentLabel;
-	JList<Comment> taskCommentList;	//Displays the Task's comment history
+	JList<String> taskCommentList;	//Displays the Task's comment history
 	JTextArea taskCommentArea;
 	
 	JButton saveCommentButton; //Saves the comment
@@ -87,7 +89,7 @@ public class TaskActivitiesAndComments extends JPanel implements IView {
 		
 		commentLabel = new JLabel ("Comments");
 		commentLabel.setForeground(labelColor);
-		taskCommentList = new JList<Comment>();
+		taskCommentList = new JList<String>();
 		
 		taskCommentArea = new JTextArea();
 		taskCommentArea.setLineWrap(true);
@@ -203,10 +205,10 @@ public class TaskActivitiesAndComments extends JPanel implements IView {
 		
 		this.t = t;
 
-//		taskActivitiesList.setListData(t.getActivities().toArray(new Activity[0]));
 		activitiesPanel.displayActivities(t);
-		taskCommentList.setListData(t.getComments().toArray(new Comment[0]));
-		//saveCommentButton.setEnabled(true);
+//		taskCommentList.setListData(t.getComments().toArray(new Comment[0]));
+		displayComments(t.getComments());
+
 		this.revalidate();
 	}
 	
@@ -229,4 +231,19 @@ public class TaskActivitiesAndComments extends JPanel implements IView {
 	public void setGateway(Gateway gateway) {
 		this.gateway = gateway;
 	}
+	
+	/***
+	*   The method below that is what you run in the update view. I think all the variables are the same, but I'm not sure. 
+	*/
+
+	public void displayComments(List<Comment> comments){
+			List<String> displayableComments = new LinkedList<String>(); 
+			
+			for (Comment c: comments){
+				displayableComments.add(c.viewableComment());
+			}
+			
+			taskCommentList.setListData(displayableComments.toArray(new String[0]));
+			
+		}
 }

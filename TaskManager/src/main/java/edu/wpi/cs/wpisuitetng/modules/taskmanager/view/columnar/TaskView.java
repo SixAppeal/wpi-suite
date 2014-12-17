@@ -6,7 +6,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors: Will Van Rensselaer, Alex Shoop, Thomas Meehan, Ryan Orlando
+ * Contributors: Team Six-Appeal
  ******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar;
@@ -375,6 +375,10 @@ public class TaskView extends JPanel implements  IView {
 		if ( !selected ) this.setBackground(TaskView.HOVER_COLOR);
 	}
 	
+	/**
+	 * Set the parent container for drag and drop
+	 * @param view parent container
+	 */
 	public void setParentContainer(StageView view)
 	{
 		this.parentContainer = view;

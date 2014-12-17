@@ -6,7 +6,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors: Troy Hughes
+ * Contributors: Team Six-Appeal
  ******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar.histNcom;
@@ -18,11 +18,13 @@ import java.awt.SystemColor;
 import java.awt.Color;
 import javax.swing.border.MatteBorder;
 
+/**
+ * Custom Class For Activities
+ * @author thhughes
+ *
+ */
 public class ActivityLabel extends JTextArea {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 7750945195661034198L;
 
 	

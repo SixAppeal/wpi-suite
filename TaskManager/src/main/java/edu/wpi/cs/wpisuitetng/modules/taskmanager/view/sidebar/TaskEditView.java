@@ -6,9 +6,8 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors: Nathan Hughes, Troy Hughes
+ * Contributors: Team Six-Appeal
  ******************************************************************************/
-
 
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
 
@@ -21,8 +20,6 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
@@ -174,6 +171,7 @@ public class TaskEditView extends JPanel implements IView {
 		
 		this.stageInput = new JComboBox<Stage>();
 		this.archiveButton = new JButton("Archive");
+		this.archiveButton.setEnabled(!this.task.isArchived());
 		this.closeButton = new JButton("Close");
 		
 		this.titleLabel.setOpaque(false);
@@ -407,14 +405,10 @@ public class TaskEditView extends JPanel implements IView {
 		this.attachRequirement.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String reqName = (String) requirementsComboBox.getSelectedItem();
-				for (Requirement r : requirements) {
-					if (r.getName().equals(reqName)) {
-						task.setRequirement(r);
-						saveTask();
-//						System.out.println("button task getreq getname is " + task.getRequirement().getName());
-					}
-				}
+				int index = requirementsComboBox.getSelectedIndex();
+				
+				task.setCurrentRequirementName(requirementTitles.get(index));
+				saveTask();
 			}
 		});
 
@@ -423,8 +417,8 @@ public class TaskEditView extends JPanel implements IView {
 		this.viewRequirement.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String reqName = (String) requirementsComboBox
-						.getSelectedItem();
+				int index  = requirementsComboBox.getSelectedIndex();
+				String reqName = requirementTitles.get(index);
 				Container c = tev;
 				c = c.getParent().getParent().getParent().getParent();
 				JTabbedPane tabPane = (JTabbedPane) c;
@@ -439,6 +433,7 @@ public class TaskEditView extends JPanel implements IView {
 		this.stageInput.addActionListener(stageBoxListener);
 
 		this.form = new Form(
+
 			titleField,
 			descField,
 			new FormField("Due Date", this.dateInput),
@@ -453,23 +448,27 @@ public class TaskEditView extends JPanel implements IView {
 				),
 				new FormField("Assigned", this.assignedMembersScrollPane)
 			),
-			new FormField("Category", this.category),
 			new FormField("Associated Requirement", this.requirementsComboBox),
 			new ButtonGroup(
-				this.viewRequirement,
-				this.attachRequirement
+					this.viewRequirement,
+					this.attachRequirement
 			),
+
+			new FormField("Category", this.category),
+			new Form(),
+			new Form(),
 			new ButtonGroup(
-				this.archiveButton,
-				this.closeButton
+					this.archiveButton,
+					this.closeButton
 			)
 		);
 		
+
 		this.container.setBackground(SidebarView.SIDEBAR_COLOR);
 		this.container.setLayout(new MigLayout("fill, ins 20", "[260]"));
 		this.container.add(this.form, "grow");
 
-		this.scrollPane.setMinimumSize(new Dimension(300, 0));
+		this.scrollPane.setMinimumSize(new Dimension(320, 0));
 
 		this.setLayout(new MigLayout("fill, ins 0", "[300][300]"));
 		this.add(this.scrollPane, "grow");
@@ -495,14 +494,21 @@ public class TaskEditView extends JPanel implements IView {
 	public void setGateway(Gateway gateway) {
 		this.gateway = gateway;
 		this.commentPanel.setGateway(this.gateway);
-//		gateway.toPresenter("LocalCache", "sync", "requirement");
 	}
 
+	/**
+	 * update all the fields of the edit view
+	 * @param t task with new values
+	 */
 	public void updateEverything(Task t) {
 		this.task.setStage(t.getStage());
 		this.stageInput.setSelectedItem(t.getStage());
 	}
 
+	/**
+	 * Set the stages upon a stage sync
+	 * @param sl stage list will new stage values
+	 */
 	public void setStages( StageList sl ) {
 		if(!stages.equals(sl)) {
 			Object pSelected = stageInput.getSelectedItem();
@@ -516,20 +522,21 @@ public class TaskEditView extends JPanel implements IView {
 	}
 	
 	
-	
+	/**
+	 * update the highlighted members
+	 */
 	public void notifyAllMembersMouseHandler() {
 		this.allMembersMouseHandler.just_changed = true;
 	}
 
+	/**
+	 * update the highlighted members
+	 */
 	public void notifyAssignedMembersMouseHandler() {
 		this.assignedMembersMouseHandler.just_changed = true;
 	}
 	
 	/**
-	 * 
-	 * @param assigned
-	 * @param all
-	 * 
 	 *  Update Panels is used to redraw the lists once something is changed
 	 */
 	public void updateMembers() {
@@ -577,6 +584,7 @@ public class TaskEditView extends JPanel implements IView {
 	public void updateEVTask(Task updatedTask){
 		//this.task.updateFrom(updatedTask);
 		this.task = updatedTask;
+		commentPanel.updateView(updatedTask);
 	}
 
 	/**
@@ -588,12 +596,11 @@ public class TaskEditView extends JPanel implements IView {
 		this.requirements = requirementsArray;
 		this.requirementTitles = getRequirementTitles();
 		int size = this.requirementsComboBox.getItemCount();
-//		System.out.println("int size is " + size);
 		boolean foundRequirement = false;
 		if (size < this.requirementTitles.size()) {
-			this.requirementsComboBox.removeAll();
+			this.requirementsComboBox.removeAllItems();
 			for (String s : this.requirementTitles) {
-				s = TaskManagerUtil.reduceString(s, 210, fm);
+				s = TaskManagerUtil.reduceString(s, 220, fm);
 				foundRequirement = false;
 				for (int i = 0; i < size; i++) {
 					String element = this.requirementsComboBox.getItemAt(i);
@@ -605,15 +612,7 @@ public class TaskEditView extends JPanel implements IView {
 					this.requirementsComboBox.addItem(s);
 				}
 			}	
-//			System.out.println("midway check task getreq getname: " + this.task.getRequirement().getName());
-			if (!this.task.getRequirement().getName().isEmpty()) {
-//				System.out.println("first task getreq getname is NOT empty");
-//				System.out.println("first task getreq getname: " + this.task.getRequirement().getName());
-				setTaskRequirementBox();
-			}
-			else {
-				this.requirementsComboBox.setSelectedIndex(-1);
-			}
+			setTaskRequirementBox();
 		}
 	}
 
@@ -629,23 +628,30 @@ public class TaskEditView extends JPanel implements IView {
 		return requirementTitles;
 	}
 	
+
 	/**
 	 * Sets requirement dropdown menu based on the requirement of specified task
 	 * Code is partially borrowed from What? We Thought This Was Bio's NewTaskTab.java file
 	 */
 	public void setTaskRequirementBox() {
 		// Set the requirement box
-		for (int i = 0; i < this.requirementsComboBox.getItemCount(); i++) {
+		boolean set = false;
+		int i;
+		
+		for ( i = 0; i < this.requirementsComboBox.getItemCount(); i++) {
 			String req = this.requirementsComboBox.getItemAt(i);
-			System.out.println("req is " + req);
-			String reducedTaskReq = shorterReqTitle(this.task.getRequirement());
-			System.out.println("reducedTaskReq is " + reducedTaskReq);
-			if (reducedTaskReq.equals(req)) {
-				System.out.println("WE SET THE CURRENT ITEM");
+			if(requirementTitles.get(i).equals(this.task.getCurrentRequirementName()))
+			{
 				this.requirementsComboBox.setSelectedItem(req);
+				set = true;
 				return;
 			}
 		}
+		if(!set)
+		{
+			this.requirementsComboBox.setSelectedIndex(-1);
+		}
+		
 	}
 	
 	/**
@@ -653,72 +659,9 @@ public class TaskEditView extends JPanel implements IView {
 	 */
 	public String shorterReqTitle(Requirement aReq) {
 		FontMetrics fm = this.requirementsComboBox.getFontMetrics((this.requirementsComboBox.getFont()));
-		String shortenedTitle = TaskManagerUtil.reduceString(aReq.getName(), 210, fm);
+		String shortenedTitle = TaskManagerUtil.reduceString(aReq.getName(), 220, fm);
 		return shortenedTitle;
 	}
-
-	private class JListMouseHandler implements MouseListener {
-
-		JList<String> list;
-		Boolean just_changed;
-		int[] previous_indexes;
-		int keyboard_event_count;
-
-		public JListMouseHandler (JList<String> list) {
-			this.list = list;
-			just_changed = false;
-			previous_indexes = list.getSelectedIndices();
-		}
-
-		public void mousePressed(MouseEvent e) {
-			int clicked_index = this.list.locationToIndex(e.getPoint());
-			if (this.just_changed) {
-				this.just_changed = false;
-
-				for (int i : previous_indexes) {
-					if (!this.inArray(i, this.list.getSelectedIndices())) {
-						this.list.addSelectionInterval(i, i);
-					}
-				}
-				if (this.inArray(clicked_index, this.list.getSelectedIndices()) && this.inArray(clicked_index, previous_indexes)) {
-					this.list.removeSelectionInterval(clicked_index, clicked_index);
-				}
-			}
-			else {
-				list.removeSelectionInterval(clicked_index, clicked_index);
-			}
-			this.previous_indexes = this.list.getSelectedIndices();
-
-		}
-
-		public void mouseReleased(MouseEvent e) {}
-
-		public void mouseEntered(MouseEvent e) {}
-
-		public void mouseExited(MouseEvent e) {}
-
-		public void mouseClicked(MouseEvent e) {}
-
-		@SuppressWarnings("unused")
-		public void update_selected() {
-			if (this.keyboard_event_count == 0) {
-				this.previous_indexes = this.list.getSelectedIndices();
-				this.keyboard_event_count++;
-			}
-		}
-
-		public void clear() {
-			this.list.clearSelection();
-			this.previous_indexes = this.list.getSelectedIndices();
-		}
-
-		private Boolean inArray(int to_check, int[] array) {
-			for (int i : array) {
-				if (i == to_check) {
-					return true;
-				}
-			}
-			return false;
-		}
-	}
+	
+	
 }

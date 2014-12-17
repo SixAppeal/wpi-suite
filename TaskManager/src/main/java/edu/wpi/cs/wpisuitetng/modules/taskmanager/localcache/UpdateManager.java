@@ -1,3 +1,14 @@
+/*******************************************************************************
+ * Copyright (c) 2014 -- WPI Suite
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors: Team Six-Appeal
+ ******************************************************************************/
+
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache;
 
 import java.util.ArrayList;
@@ -7,6 +18,11 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
 import edu.wpi.cs.wpisuitetng.network.RequestObserver;
 import edu.wpi.cs.wpisuitetng.network.models.IRequest;
 
+/**
+ * A request observer to deal with updates to an object request by the view
+ * @author nhhughes
+ *
+ */
 public class UpdateManager implements RequestObserver {
 
 	//private Cache localCache;
@@ -14,6 +30,13 @@ public class UpdateManager implements RequestObserver {
 	private Gateway gateway;
 	private List<String> callbacks;
 	
+	/**
+	 * Makes an update manager with copies of the gateway, the local cache, and the type of object it's updating 
+	 * @param localCache cache to use
+	 * @param toUpdate type to update (task, member, etc..)
+	 * @param gateway gateway to use
+	 * @param callbacks strings representing classes to notify via. the gateway
+	 */
 	public UpdateManager(Cache localCache, String toUpdate, Gateway gateway, List<String> callbacks) {
 		//this.localCache = localCache;
 		this.toUpdate = toUpdate;
@@ -21,6 +44,13 @@ public class UpdateManager implements RequestObserver {
 		this.callbacks = callbacks;
 	}
 
+	/**
+	 * Makes an update manager with copies of the gateway and the local cache
+	 * @param localCache cache to use
+	 * @param toUpdate type to update (task, member, etc...)
+	 * @param gateway gateway to use
+	 * @param revocationCallback method to call in the presenter
+	 */
 	public UpdateManager(Cache localCache, String toUpdate, Gateway gateway, String revocationCallback) {
 		//this.localCache = localCache;
 		this.toUpdate = toUpdate;
@@ -29,6 +59,9 @@ public class UpdateManager implements RequestObserver {
 		//this.callbacks.add(revocationCallback);
 	}
 	
+	/**
+	 * Run all callbacks associated with the update manager 
+	 */
 	@Override
 	public void responseSuccess(IRequest iReq) {
 		for (String s: callbacks) {
