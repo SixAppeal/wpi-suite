@@ -16,6 +16,7 @@ package edu.wpi.cs.wpisuitetng.janeway.modules;
 import java.awt.BorderLayout;
 import java.awt.Desktop;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.MalformedURLException;
@@ -49,8 +50,14 @@ public class DummyModule implements IJanewayModule {
 	 */
 	public DummyModule() {
 		
-		this.manager = new JButton("View The God Manager");
-		this.food = new JButton("Request Food Of The Gods");
+		this.manager = new JButton("<html>View The God<br>     Manager</html>");
+		this.food = new JButton("<html>Request Food Of<br>    The Gods</html>");
+		
+		Font font = this.manager.getFont();
+		font = new Font(font.getName(), font.getStyle(), 26);
+		
+		this.manager.setFont(font);
+		this.food.setFont(font);
 		
 		// Setup button panel
 		JPanel buttonPanel = new JPanel();
