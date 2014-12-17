@@ -13,10 +13,12 @@
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.reports;
 
 import java.awt.Color;
+import java.awt.Desktop;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -99,11 +101,17 @@ public class ReportGenerator {
 				userImportanceGraph.addNode(toAdd);
 			}
 		}
+		for (String member1 : members) {
+			for (String member2 : members) {
+				userImportanceGraph.addEdge(new UserActivity(member1), new UserActivity(member2));
+			}
+		}
 		double identity[][] = new double[members.size()][members.size()];
 		for (int i = 0; i < members.size(); i++) {
 			identity[i][i] = 1.0;
 		}
 		List<Double> centralities = new ArrayList<Double>();
+		userImportanceGraph.calcAdjacencyMatrix();
 		Float64Matrix adjacencyMatrix = userImportanceGraph.getAdjacencyMatrix();
 		Float64Matrix communicabilityMatrix = Float64Matrix.valueOf(identity).minus(adjacencyMatrix.times(Float64.valueOf(0.1))).inverse();
 		for (int i = 0; i < members.size(); i++) {
@@ -132,8 +140,10 @@ public class ReportGenerator {
 			printTasks(out, completedTasks);
 			out.print("<hr><div>");
 			out.print("<img src=\"actualeffort.png\" alt=\"Actual Effort\" style=\"width:400px;height:400px\">");
-			out.print("</div><hr><div>");
-			out.print("<img src=\"estimatedimportance.png\" alt=\"Estimated Importance of Each Team Member\" style=\"width:400px;height:400px\">");
+			if (members.size() > 1) {
+				out.print("</div><hr><div>");
+				out.print("<img src=\"estimatedimportance.png\" alt=\"Estimated Importance of Each Team Member\" style=\"width:400px;height:400px\">");
+			}
 			out.print("</div></body>");
 			out.print("</html>");
 			out.close();
@@ -174,8 +184,35 @@ public class ReportGenerator {
 			
 			CategoryDataset dataSet = createData(this.actualEffortValues, this.actualEffortMembers, "Actual Effort");
 			createChart(dataSet, path + "actualeffort.png", "Actual Effort");
-			createChart(dataSet, path + "estimatedimportance.png", "Importance");
-//			createChart(dataSet, path + "importancegraph.png", "Importance");
+			
+			List<String> sortedMembers = new ArrayList<String>();
+			for (int i = 0; i < order.size(); i++) {
+				for (UserActivity key : order.keySet()) {
+					if (order.get(key) == i) {
+						sortedMembers.add(key.getName());
+						break;
+					}
+				}
+			}
+			List<String> sortedSelectedMembers = new ArrayList<String>();
+			for (String member : sortedMembers) {
+				if (members.contains(member)) {
+					sortedSelectedMembers.add(member);
+				}
+			}
+			CategoryDataset dataSet2 = createData(centralities, sortedSelectedMembers, "Importance");
+			if (members.size() > 1) {
+				createChart(dataSet2, path + "estimatedimportance.png", "Importance");
+			}
+			
+			Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
+		    if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE)) {
+		        try {
+		            desktop.browse(file.toURI());
+		        } catch (Exception e) {
+		            e.printStackTrace();
+		        }
+		    }
 
 		} catch (FileNotFoundException e) {
 			System.out.println("Cannot Create File!");
@@ -192,11 +229,15 @@ public class ReportGenerator {
 		for (Task toAnalyze : tasks) {
 			List<Activity> taskHistory = toAnalyze.getActivities();
 			for (Activity activityToAnalyze : taskHistory) {
-				history.add(new HistoryElement(toAnalyze, activityToAnalyze.getUser(), true, activityToAnalyze.getDate()));
+				if (this.start.compareTo(activityToAnalyze.getDate()) == - 1 && activityToAnalyze.getDate().compareTo(this.end) == -1) {
+					history.add(new HistoryElement(toAnalyze, activityToAnalyze.getUser(), true, activityToAnalyze.getDate()));
+				}
 			}
 			List<Comment> taskComments = toAnalyze.getComments();
 			for (Comment commentToAnalyze : taskComments) {
-				history.add(new HistoryElement(toAnalyze, commentToAnalyze.getUser(), true, commentToAnalyze.getDate()));	 
+				if (this.start.compareTo(commentToAnalyze.getDate()) == - 1 && commentToAnalyze.getDate().compareTo(this.end) == -1) {
+					history.add(new HistoryElement(toAnalyze, commentToAnalyze.getUser(), true, commentToAnalyze.getDate()));	 
+				}
 			}
 		}
 		List<HistoryElement> elements = new ArrayList<HistoryElement>();

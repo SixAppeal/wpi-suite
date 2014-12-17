@@ -496,7 +496,12 @@ public class ThreadSafeLocalCache implements Cache {
 			Task task = new Task();
 			task.setTitle(card.getName());
 			if (card.getDesc() != null) {
-				task.setDescription(card.getDesc());
+				try {
+					task.setDescription(card.getDesc());
+				}
+				catch (IllegalArgumentException e) {
+					task.setDescription("Sample Description");
+				}
 			}
 			if (card.getDue() != null) {
 				DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
