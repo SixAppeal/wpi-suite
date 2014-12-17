@@ -154,7 +154,7 @@ public class ThreadSafeLocalCache implements Cache {
 		final Request networkRequest = Network.getInstance().makeRequest(
 				"taskmanager/task2", HttpMethod.POST);
 		networkRequest.setBody(newTask.toJson());
-		networkRequest.addObserver(new UpdateManager(this, request, gateway, request.split(":")[1]));
+		networkRequest.addObserver(new UpdateManager(request, gateway, request.split(":")[1]));
 		networkRequest.send();
 
 	}
@@ -188,7 +188,7 @@ public class ThreadSafeLocalCache implements Cache {
 		
 		final Request networkRequest = Network.getInstance().makeRequest(
 				"taskmanager/stages", HttpMethod.POST);
-		networkRequest.addObserver(new UpdateManager(this, request, gateway, request.split(":")[1]));
+		networkRequest.addObserver(new UpdateManager(request, gateway, request.split(":")[1]));
 		networkRequest.setBody(newSL.toJson());
 		networkRequest.send();
 	}
