@@ -188,7 +188,7 @@ public class ColumnView extends JPanel implements IView {
 		GridBagConstraints gbc = this.layout.getConstraints(view);
 		if (i == this.stages.size() - 1) {
 			gbc.weightx = 1.0;
-			gbc.insets.right = 70;
+			gbc.insets.right = 20;
 		} else {
 			gbc.weightx = 0;
 			gbc.insets.right = 20;
