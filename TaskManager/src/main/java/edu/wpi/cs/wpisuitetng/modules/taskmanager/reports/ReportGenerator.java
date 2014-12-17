@@ -33,6 +33,9 @@ import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
+import org.jscience.mathematics.number.Float64;
+import org.jscience.mathematics.vector.Float64Matrix;
+import org.jscience.mathematics.vector.Matrix;
 
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.ThreadSafeLocalCache;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Activity;
@@ -71,17 +74,43 @@ public class ReportGenerator {
 		Task[] allTasks = (Task []) cache.retrieve("task");
 		List<String> titles = new ArrayList<String>();
 		Map<String, Double> actualEffort;
-		generateHistory(allHistory, allTasks);
+		List<HistoryElement> historyLog = generateHistory(allHistory, allTasks);
 		actualEffort = generateCompletedTasks(titles, allTasks, startDate, endDate);
 		List<Double> actualMemberEfforts = new ArrayList<Double>();
 		List<String> actualMembers = new ArrayList<String>();
 		for (Entry<String, Double> actualMemberTuple : actualEffort.entrySet()) {
-			actualMemberEfforts.add(actualMemberTuple.getValue());
-			actualMembers.add(actualMemberTuple.getKey());
+			if (members.contains(actualMemberTuple.getKey())) {
+				actualMemberEfforts.add(actualMemberTuple.getValue());
+				actualMembers.add(actualMemberTuple.getKey());
+			}
 		}
 		this.actualEffortValues = actualMemberEfforts;
 		this.actualEffortMembers = actualMembers;
-		generateReport(titles);
+		for (HistoryElement historyElement : historyLog) {
+			
+			for (String member : members) {
+				Map<String, Double> weights = new HashMap<String, Double>();
+				for (String member2 : members) {
+					Double weight = historyElement.getScore(member, member2);
+					weights.put(member2, weight);
+				}
+				UserActivity toAdd = new UserActivity(member);
+				toAdd.setImportance(weights);
+				userImportanceGraph.addNode(toAdd);
+			}
+		}
+		double identity[][] = new double[members.size()][members.size()];
+		for (int i = 0; i < members.size(); i++) {
+			identity[i][i] = 1.0;
+		}
+		List<Double> centralities = new ArrayList<Double>();
+		Float64Matrix adjacencyMatrix = userImportanceGraph.getAdjacencyMatrix();
+		Float64Matrix communicabilityMatrix = Float64Matrix.valueOf(identity).minus(adjacencyMatrix.times(Float64.valueOf(0.1))).inverse();
+		for (int i = 0; i < members.size(); i++) {
+			System.out.println(communicabilityMatrix.get(i, i));
+			centralities.add(communicabilityMatrix.get(i, i).doubleValue());
+		}
+		generateReport(titles, centralities, userImportanceGraph.getNodeOrders());
 
 	}
 
@@ -89,7 +118,7 @@ public class ReportGenerator {
 	 * Generate the html and png files need
 	 * @param completedTasks tasks completed in time span
 	 */
-	public void generateReport(List<String> completedTasks) {
+	public void generateReport(List<String> completedTasks, List<Double> centralities, Map<UserActivity, Integer> order) {
 		try {
 			PrintStream out = new PrintStream(file);
 			out.print("<link rel=\"stylesheet\" type=\"text/css\" href=\"report.css\"/>");
@@ -105,8 +134,6 @@ public class ReportGenerator {
 			out.print("<img src=\"actualeffort.png\" alt=\"Actual Effort\" style=\"width:400px;height:400px\">");
 			out.print("</div><hr><div>");
 			out.print("<img src=\"estimatedimportance.png\" alt=\"Estimated Importance of Each Team Member\" style=\"width:400px;height:400px\">");
-			out.print("</div><hr><div>");
-			out.print("<img src=\"importancegraph.png\" alt=\"Graph Visualization of Importance\" style=\"width:400px;height:400px\">");
 			out.print("</div></body>");
 			out.print("</html>");
 			out.close();
@@ -161,7 +188,7 @@ public class ReportGenerator {
 	 * @param history empty priority queue to use
 	 * @param tasks all the tasks current in the database
 	 */
-	public void generateHistory(PriorityQueue<HistoryElement> history, Task[] tasks) {
+	public List<HistoryElement> generateHistory(PriorityQueue<HistoryElement> history, Task[] tasks) {
 		for (Task toAnalyze : tasks) {
 			List<Activity> taskHistory = toAnalyze.getActivities();
 			for (Activity activityToAnalyze : taskHistory) {
@@ -186,6 +213,7 @@ public class ReportGenerator {
 				}
 			}
 		}
+		return elements;
 
 	}
 
@@ -223,10 +251,9 @@ public class ReportGenerator {
 	 */
 	public boolean isCompleted(Date start, Date end, Task toCheck) {
 		List<Activity> log = new ArrayList<Activity>();
-		System.out.println(log);
+		log = toCheck.getActivities();
 		for (int i = log.size() - 1; i >= 0; i--) {
 			Activity activityToCheck = log.get(i);
-			System.out.println(start + " : " + end + " : " + activityToCheck.getDate());
 			if (activityToCheck.getActivity().contains("Completed")) {
 				if (start.compareTo(activityToCheck.getDate()) == -1 && end.compareTo(activityToCheck.getDate()) == 1) {
 					return true;
