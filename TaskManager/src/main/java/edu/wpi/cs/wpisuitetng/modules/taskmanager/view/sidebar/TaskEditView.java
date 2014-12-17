@@ -465,7 +465,7 @@ public class TaskEditView extends JPanel implements IView {
 		this.container.setLayout(new MigLayout("fill, ins 20", "[260]"));
 		this.container.add(this.form, "grow");
 
-		this.scrollPane.setMinimumSize(new Dimension(300, 0));
+		this.scrollPane.setMinimumSize(new Dimension(320, 0));
 
 		this.setLayout(new MigLayout("fill, ins 0", "[300][300]"));
 		this.add(this.scrollPane, "grow");
@@ -595,7 +595,7 @@ public class TaskEditView extends JPanel implements IView {
 		int size = this.requirementsComboBox.getItemCount();
 		boolean foundRequirement = false;
 		if (size < this.requirementTitles.size()) {
-			this.requirementsComboBox.removeAll();
+			this.requirementsComboBox.removeAllItems();
 			for (String s : this.requirementTitles) {
 				s = TaskManagerUtil.reduceString(s, 220, fm);
 				foundRequirement = false;
