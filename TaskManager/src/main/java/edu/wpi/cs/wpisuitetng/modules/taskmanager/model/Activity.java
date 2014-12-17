@@ -10,6 +10,11 @@
  ******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.model;
 
+import java.util.Date;
+import java.text.SimpleDateFormat;
+
+import edu.wpi.cs.wpisuitetng.janeway.config.ConfigManager;
+
 /**
  * Class to capture an activity, which stores information based on changes made to a task
  * 
@@ -22,10 +27,15 @@ package edu.wpi.cs.wpisuitetng.modules.taskmanager.model;
  * 
  */
 public class Activity {
+	String user;
 	String activity;
+	Date date;
+	SimpleDateFormat sdf = new SimpleDateFormat("h:mm a, MM/dd/yyyy");
 	
 	public Activity(){
+		this.user = "";
 		this.activity = "";
+		this.date = new Date();
 	}
 	
 	/**
@@ -34,7 +44,9 @@ public class Activity {
 	 * @param comment comment that the member made
 	 */
 	public Activity(String comment){
+		this.user = ConfigManager.getConfig().getUserName();
 		this.activity = comment;
+		this.date = new Date();
 	}
 
 	/**
@@ -53,7 +65,7 @@ public class Activity {
 	
 	@Override
 	public String toString(){
-		return this.activity;
+		return (sdf.format(date) + "> " + this.user + ": " + this.activity);
 	}
 	
 	
