@@ -94,4 +94,11 @@ public class Activity {
 		return new Gson().toJson(this, Comment.class);
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
+	public String getUser(){
+		return this.user;
+	}
 }

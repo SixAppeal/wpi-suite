@@ -148,22 +148,44 @@ public class ReportGenerator {
 	 * @param tasks all the tasks current in the database
 	 */
 	public void generateHistory(PriorityQueue<HistoryElement> history, Task[] tasks) {
+		/*
+		 * History should be empty, everything should be added to history
+		 */
 		for (Task toAnalyze : tasks) {
 			List<Activity> taskHistory = toAnalyze.getActivities();
 			for (Activity activityToAnalyze : taskHistory) {
 				//do stuff involving history
+				//activityToAnalyze.
+				
+				
+				/*
+				 * Create a history element for every piece of history, and the user that created it. True for history. Date: when it happened
+				 */
 			}
 			List<Comment> taskComments = toAnalyze.getComments();
 			for (Comment commentToAnalyze : taskComments) {
-				//do stuff involving comments
+				//do stuff involving comments ^^ Do the same thing there. 
 			}
 		}
 		List<HistoryElement> elements = new ArrayList<HistoryElement>();
+		// History is ordered by date
 		while (!history.isEmpty()) {
 			elements.add(history.remove());
-		}
+		}	// Elements has everything in order of date
 		for (int i = 1; i < elements.size(); i++) {
 			//update contributors with 
+			for (int j = i-1;j>0;j--){
+				// If the ith hist element's task ID == jth hist element's task id
+					// Get the jth history element old contributing members
+					// get the jth history elements contributing members
+				// set the ith old contributing members to (jth old cont members and jth cont members
+
+			}
+	
+			
+			/*
+			 * Need to go through elements and 'propigate the contributing members' 
+			 */
 		}
 
 	}
