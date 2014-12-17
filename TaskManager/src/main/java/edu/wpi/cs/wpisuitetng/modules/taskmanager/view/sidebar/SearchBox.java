@@ -97,6 +97,7 @@ public class SearchBox extends JPanel implements IView {
 
 		this.searchCheckBox = new JCheckBox();
 		this.searchCheckBox.addItemListener(new ItemListener() {
+			//ask Santiago if you have questions 
 			@Override
 			public void itemStateChanged(ItemEvent arg0) {
 				if (archiveModeOn){
