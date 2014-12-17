@@ -290,10 +290,12 @@ public class SearchBox extends JPanel implements IView {
 
 		if (this.toSearch.isInitialized()) {
 			this.toSearch.updateIndex(all_tasks);
+			this.displayResults(resultsG);
 		}
 		else {
 			this.toSearch.initialize();
 			this.toSearch.createIndex(all_tasks);
+			this.displayResults(resultsG);
 		}
 	}
 
