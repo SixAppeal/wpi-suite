@@ -22,10 +22,8 @@ import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
 import javax.swing.border.CompoundBorder;
 
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
@@ -172,7 +170,6 @@ public class ToolbarView extends GradientPanel implements IView {
 		this.gateway = gateway;
 	}
 	
-<<<<<<< HEAD
 	/**
 	 * Creates a window to select the Trello board to use
 	 * @param boards A list of boards
@@ -187,7 +184,8 @@ public class ToolbarView extends GradientPanel implements IView {
 		} else {
 			JOptionPane.showMessageDialog(this, "You have no Trello boards to import from.");
 		}
-=======
+	}
+
 	public JButton getToggle() {
 		return this.toggleSidebarButton;
 	}
@@ -204,6 +202,5 @@ public class ToolbarView extends GradientPanel implements IView {
 		toggleSidebarButton.revalidate();
 		toggleSidebarButton.repaint();
 		click = true;
->>>>>>> devel
 	}
 }
