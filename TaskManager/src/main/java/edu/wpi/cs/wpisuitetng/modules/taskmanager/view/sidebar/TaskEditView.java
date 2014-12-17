@@ -29,6 +29,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import javax.swing.JOptionPane;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
@@ -77,12 +78,14 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.MemberButtonGr
  * @author akshoop
  * @author dpseaman
  * @author thhughes
+ * @author rnorlando
  */
 public class TaskEditView extends JPanel implements IView {
 	private static final long serialVersionUID = -8972626054612267276L;
 
 	private Gateway gateway;
 
+	private Task taskAsAdded;
 	private Task task;
 	private StageList stages;
 	private Requirement[] requirements;
@@ -133,6 +136,7 @@ public class TaskEditView extends JPanel implements IView {
 	 */
 	public TaskEditView(Task iTask, StageList stages) {
 		this.task = new Task();
+		this.taskAsAdded = iTask;
 		this.task.updateFrom(iTask);
 		this.stages = stages;
 		this.requirements = new Requirement[0];
@@ -171,6 +175,7 @@ public class TaskEditView extends JPanel implements IView {
 		
 		this.stageInput = new JComboBox<Stage>();
 		this.archiveButton = new JButton("Archive");
+		this.archiveButton.setEnabled(!this.task.isArchived());
 		this.closeButton = new JButton("Close");
 		
 		this.titleLabel.setOpaque(false);
@@ -248,9 +253,9 @@ public class TaskEditView extends JPanel implements IView {
 		this.archiveButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				task.archive();
-				gateway.toPresenter("LocalCache", "update", "archive:testing", task);
-				gateway.toView("SidebarView", "removeEditPanel", that);
+				task.setArchived(!task.isArchived());
+				saveTask();
+				if( task.isArchived() ) gateway.toView("SidebarView", "removeEditPanel", that);
 			}
 		});
 		
@@ -447,24 +452,27 @@ public class TaskEditView extends JPanel implements IView {
 				),
 				new FormField("Assigned", this.assignedMembersScrollPane)
 			),
-			new FormField("Category", this.category),
 			new FormField("Associated Requirement", this.requirementsComboBox),
 			new ButtonGroup(
-				this.viewRequirement,
-				this.attachRequirement
+					this.viewRequirement,
+					this.attachRequirement
 			),
+
+			new FormField("Category", this.category),
+			new Form(),
+			new Form(),
 			new ButtonGroup(
-				this.archiveButton,
-				this.closeButton
+					this.archiveButton,
+					this.closeButton
 			)
 		);
-
 		
+
 		this.container.setBackground(SidebarView.SIDEBAR_COLOR);
 		this.container.setLayout(new MigLayout("fill, ins 20", "[260]"));
 		this.container.add(this.form, "grow");
 
-		this.scrollPane.setMinimumSize(new Dimension(300, 0));
+		this.scrollPane.setMinimumSize(new Dimension(320, 0));
 
 		this.setLayout(new MigLayout("fill, ins 0", "[300][300]"));
 		this.add(this.scrollPane, "grow");
@@ -483,6 +491,7 @@ public class TaskEditView extends JPanel implements IView {
 	 * Saves the task currently being edited
 	 */
 	private void saveTask() {
+		if ( task.hasChanged(taskAsAdded) );
 		this.gateway.toPresenter("LocalCache", "update", "task:testing", this.task);
 	}
 
@@ -497,8 +506,45 @@ public class TaskEditView extends JPanel implements IView {
 	 * @param t task with new values
 	 */
 	public void updateEverything(Task t) {
-		this.task.setStage(t.getStage());
-		this.stageInput.setSelectedItem(t.getStage());
+		
+		this.taskAsAdded = t;
+		
+		if( t.hasChanged(this.task)) {
+			
+			this.task.updateFrom(t);
+			
+			if( !this.titleInput.getText().equals(task.getTitle()) ) this.titleInput.setText( task.getTitle() );
+			if( !this.descInput.getText().equals(task.getDescription()) ) this.descInput.setText(task.getDescription());
+			
+			if( !this.dateInput.getDate().equals(task.getDueDate()) ) this.dateInput.setDate(task.getDueDate());
+			
+			if( !this.estEffortInput.getValue().equals(task.getEstimatedEffort()) )
+				this.estEffortInput.setValue(task.getEstimatedEffort());
+			
+			if( !this.actEffortInput.getValue().equals(task.getActualEffort()) )
+				this.actEffortInput.setValue(task.getActualEffort());
+			
+			MemberListHandler.getInstance().populateMembers(task.getAssignedTo());
+			this.updateMembers();
+			
+			if( ! this.category.getSelectedItem().equals(task.getCategory()) )
+				this.category.setSelectedIndex(task.getCategory());
+			
+			if( !this.requirementsComboBox.getSelectedItem().equals(task.getCurrentRequirementName()) )
+					this.requirementsComboBox.setSelectedItem(task.getCurrentRequirementName());
+		}
+		
+		if (task.isArchived()) {
+			
+			JOptionPane.showMessageDialog(null, "The task " + task.getTitle() + " has been archived.");
+			this.archiveButton.setText("Unarchive");
+			
+		} else {
+			
+			this.archiveButton.setText("Archive");
+		
+		}
+		
 	}
 
 	/**
@@ -580,6 +626,7 @@ public class TaskEditView extends JPanel implements IView {
 	public void updateEVTask(Task updatedTask){
 		//this.task.updateFrom(updatedTask);
 		this.task = updatedTask;
+		commentPanel.updateView(updatedTask);
 	}
 
 	/**
@@ -593,7 +640,7 @@ public class TaskEditView extends JPanel implements IView {
 		int size = this.requirementsComboBox.getItemCount();
 		boolean foundRequirement = false;
 		if (size < this.requirementTitles.size()) {
-			this.requirementsComboBox.removeAll();
+			this.requirementsComboBox.removeAllItems();
 			for (String s : this.requirementTitles) {
 				s = TaskManagerUtil.reduceString(s, 220, fm);
 				foundRequirement = false;
@@ -656,5 +703,25 @@ public class TaskEditView extends JPanel implements IView {
 		FontMetrics fm = this.requirementsComboBox.getFontMetrics((this.requirementsComboBox.getFont()));
 		String shortenedTitle = TaskManagerUtil.reduceString(aReq.getName(), 220, fm);
 		return shortenedTitle;
+	}
+	
+	@Override
+	public boolean equals(Object obj)
+	{
+		if(!obj.getClass().equals(this.getClass()))
+		{
+			return false;
+		}
+		
+		if (obj instanceof TaskEditView) 
+		{
+			TaskEditView that = (TaskEditView) obj;
+			if (this.task.equals(that.getTask())) 
+			{
+				return true;
+			}
+		}
+		
+		return false;
 	}
 }

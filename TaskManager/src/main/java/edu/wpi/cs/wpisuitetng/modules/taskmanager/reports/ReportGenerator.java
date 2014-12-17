@@ -82,6 +82,7 @@ public class ReportGenerator {
 		this.actualEffortValues = actualMemberEfforts;
 		this.actualEffortMembers = actualMembers;
 		generateReport(titles);
+
 	}
 
 	/**

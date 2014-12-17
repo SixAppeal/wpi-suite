@@ -28,6 +28,8 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
 import edu.wpi.cs.wpisuitetng.network.Network;
 import edu.wpi.cs.wpisuitetng.network.Request;
+import edu.wpi.cs.wpisuitetng.network.TrelloNetwork;
+import edu.wpi.cs.wpisuitetng.network.configuration.NetworkConfiguration;
 import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
 
 /**
@@ -57,6 +59,11 @@ public class ThreadSafeLocalCache implements Cache {
 	Requirement[] requirements;
 	Gateway gateway;
 
+	String secret_key = "";
+	String application_key = "";
+	String boardId = "";
+	String token = "";
+	
 	/**
 	 * Create a new instance of the cache
 	 */
@@ -65,7 +72,13 @@ public class ThreadSafeLocalCache implements Cache {
 		archives = new ArrayList<Task>(); 
 		members = new ArrayList<User>();
 		stages = new StageList();
+
+		TrelloNetwork networksetup = TrelloNetwork.getInstance(); 
+		NetworkConfiguration config = new NetworkConfiguration("https://api.trello.com/1");
+		networksetup.setDefaultNetworkConfiguration(config);
+
 		requirements = new Requirement[0];
+
 	}
 
 	/**
@@ -118,6 +131,20 @@ public class ThreadSafeLocalCache implements Cache {
 		if (!((request.split(":")[0].equals("task") || request.split(":")[0].equals("archive")) && request.split(":").length == 2)) {
 			System.out.println("Bad Request!");
 			return;
+		}
+		if (archives.contains(newTask)) {
+			int index = archives.indexOf(newTask);
+			if (!archives.get(index).hasChanged(newTask)) {
+				System.out.println("Trying to update task with no updates");
+				return;
+			}
+		}
+		if (tasks.contains(newTask)) {
+			int index = tasks.indexOf(newTask);
+			if (!tasks.get(index).hasChanged(newTask)) {
+				System.out.println("Trying to update task with no updates");
+				return;
+			}
 		}
 		updateHelper(newTask, archives);
 		updateHelper(newTask, tasks);
@@ -224,7 +251,7 @@ public class ThreadSafeLocalCache implements Cache {
 			boolean changed = false;
 			Task taskToInsert = oldTask; 
 			for (Task newTask : updatedTaskList) {
-				if (newTask.getId() == oldTask.getId()) {
+				if (newTask.equals(oldTask)) {
 					if (newTask.isArchived()) {
 						taskToInsert = null;
 					}
@@ -246,7 +273,7 @@ public class ThreadSafeLocalCache implements Cache {
 			boolean changed = false;
 			Task taskToInsert = oldTask; 
 			for (Task newTask : updatedTasks) {
-				if (newTask.getId() == oldTask.getId()) {
+				if (newTask.equals(oldTask)) {
 					if (newTask.isArchived()) {
 						taskToInsert = null;
 					}
@@ -388,6 +415,23 @@ public class ThreadSafeLocalCache implements Cache {
 			networkRequest.addObserver(syncer);
 			networkRequest.send();
 		}
+		if (request.equals("auth")) {
+
+			TrelloNetwork networksetup = TrelloNetwork.getInstance(); 
+			NetworkConfiguration config = new NetworkConfiguration("https://trello.com/1/OAuthGetRequestToken?key=" + application_key + "&secret=" + secret_key);
+			final Request networkRequest2 = TrelloNetwork.getInstance().makeRequest("", HttpMethod.GET);
+			networkRequest2.addObserver(new TrelloManager(this));
+			networkRequest2.send();
+//          Oauth Reqest Sequence   					
+//			https://trello.com/1/OAuthGetRequestToken
+//			https://trello.com/1/OAuthAuthorizeToken
+//			https://trello.com/1/OAuthGetAccessToken
+		}
+		if (request.equals("trello")) {
+			final Request networkRequest2 = TrelloNetwork.getInstance().makeRequest("board/" + boardId + "/cards?key=" + application_key + "&token=" + token + "&fields=name", HttpMethod.GET);
+			networkRequest2.addObserver(new TrelloManager(this));
+			networkRequest2.send();
+		}
 	}
 
 	/**
@@ -425,7 +469,7 @@ public class ThreadSafeLocalCache implements Cache {
 	public void archiveTasksForStage(Stage stage) {
 		for (Task task : this.tasks) {
 			if (task.getStage().equals(stage)) {
-				task.archive();
+				task.setArchived(true);
 				update("archive:testing", task);
 			}
 		}

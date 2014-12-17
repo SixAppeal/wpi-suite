@@ -41,7 +41,7 @@ public class HistoryView extends JPanel implements IView{
 	private JPanel container;
 	private JScrollPane scrollpane;
 	private List<JTextArea> fields;
-	private GridBagLayout gbc;
+	private GridBagLayout layout;
 	private Task internalTask; 			// Keeps an internal task for comparing.  
 	
 	
@@ -52,14 +52,17 @@ public class HistoryView extends JPanel implements IView{
 		
 		this.fields = new ArrayList<JTextArea>();
 		
-		gbc = new GridBagLayout();
-		this.container.setLayout(gbc);
+		layout = new GridBagLayout();
+		this.container.setLayout(layout);
 		
 		this.scrollpane.setMinimumSize(new Dimension(300, 0));
 		this.scrollpane.setMaximumSize(new Dimension(300, Integer.MAX_VALUE));
 		
 		//this.setLayout(new MigLayout("fill, ins 20", "[300]"));
 		this.setLayout(new BorderLayout(0,0));
+		
+		//this.setLayout(new GridBagLayout());
+
 		
 		this.add(this.scrollpane);
 		
@@ -95,7 +98,7 @@ public class HistoryView extends JPanel implements IView{
 		this.container.removeAll();
 		GridBagConstraints gbc = new GridBagConstraints();
 		
-		gbc.anchor = GridBagConstraints.PAGE_START;
+		gbc.anchor = GridBagConstraints.FIRST_LINE_START;
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.weightx = 0;
 		gbc.weighty = 0;
@@ -113,6 +116,7 @@ public class HistoryView extends JPanel implements IView{
 			
 			if (i == fields.size() - 1) {
 				gbc.insets.bottom = 20;
+				gbc.weighty = 1;
 			}
 			gbc.insets = new Insets(0,0,0,0);
 			this.container.add(j, gbc);
