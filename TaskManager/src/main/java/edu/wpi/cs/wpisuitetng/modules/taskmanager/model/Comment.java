@@ -34,7 +34,6 @@ public class Comment implements Serializable {
 	String user;
 	String comment;
 	Date date;
-	SimpleDateFormat sdf = new SimpleDateFormat("h:mm a, MM/dd/yyyy");
 	
 	/**
 	 * Default Constructor for comments
@@ -98,6 +97,7 @@ public class Comment implements Serializable {
 	
 	@Override
 	public String toString(){
+		SimpleDateFormat sdf = new SimpleDateFormat("h:mm a, MM/dd/yyyy");
 		return (sdf.format(date) + "> " + this.user + ": " + this.comment);
 	}
 	

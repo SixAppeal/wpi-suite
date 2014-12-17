@@ -13,6 +13,8 @@ package edu.wpi.cs.wpisuitetng.modules.taskmanager.model;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 
+import com.google.gson.Gson;
+
 import edu.wpi.cs.wpisuitetng.janeway.config.ConfigManager;
 
 /**
@@ -30,7 +32,7 @@ public class Activity {
 	String user;
 	String activity;
 	Date date;
-	SimpleDateFormat sdf = new SimpleDateFormat("h:mm a, MM/dd/yyyy");
+	
 	
 	/**
 	 * Default constructor
@@ -67,9 +69,13 @@ public class Activity {
 	
 	@Override
 	public String toString(){
+		SimpleDateFormat sdf = new SimpleDateFormat("h:mm a, MM/dd/yyyy");
 		return (sdf.format(date) + "> " + this.user + ": " + this.activity);
 	}
 	
+	public String toJson() {
+		return new Gson().toJson(this, Activity.class);
+	}
 	
 	/**
 	 * Checks to see if two activities are equal
