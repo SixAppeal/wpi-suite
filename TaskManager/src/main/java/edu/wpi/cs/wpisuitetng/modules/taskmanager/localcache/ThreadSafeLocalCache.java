@@ -117,6 +117,20 @@ public class ThreadSafeLocalCache implements Cache {
 			System.out.println("Bad Request!");
 			return;
 		}
+		if (archives.contains(newTask)) {
+			int index = archives.indexOf(newTask);
+			if (!archives.get(index).hasChanged(newTask)) {
+				System.out.println("Trying to update task with no updates");
+				return;
+			}
+		}
+		if (tasks.contains(newTask)) {
+			int index = tasks.indexOf(newTask);
+			if (!tasks.get(index).hasChanged(newTask)) {
+				System.out.println("Trying to update task with no updates");
+				return;
+			}
+		}
 		updateHelper(newTask, archives);
 		updateHelper(newTask, tasks);
 		if (newTask.isArchived()) {
