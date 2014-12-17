@@ -581,6 +581,7 @@ public class TaskEditView extends JPanel implements IView {
 	public void updateEVTask(Task updatedTask){
 		//this.task.updateFrom(updatedTask);
 		this.task = updatedTask;
+		commentPanel.updateView(updatedTask);
 	}
 
 	/**
@@ -658,4 +659,6 @@ public class TaskEditView extends JPanel implements IView {
 		String shortenedTitle = TaskManagerUtil.reduceString(aReq.getName(), 220, fm);
 		return shortenedTitle;
 	}
+	
+	
 }
