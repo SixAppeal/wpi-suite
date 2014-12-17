@@ -73,6 +73,7 @@ public class ReportGenerator {
 		generateHistory(allHistory, allTasks);
 		generateCompletedTasks(titles, allTasks, startDate, endDate);
 		generateReport(titles);
+
 	}
 
 	/**

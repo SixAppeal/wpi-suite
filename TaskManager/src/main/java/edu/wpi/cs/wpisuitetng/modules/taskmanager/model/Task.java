@@ -131,6 +131,7 @@ public class Task extends AbstractModel {
 		this.activities = activities;
 		this.archived = false;
 		this.priority = 0;
+		this.currentRequirementName = "";
 	}
 	
 	/**
