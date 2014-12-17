@@ -65,12 +65,13 @@ public class SearchBox extends JPanel implements IView {
 	Search toSearch;
 	JTextField searchBox;
 	JCheckBox searchCheckBox;
-	JPanel resultsBox; //keeps the previous list of searched results
+	JPanel resultsBox; //keeps the previous list of searched results 
 	Form form;
 	GridBagConstraints gbc;
 	List<Task> taskList;
 	JLabel archiveLabel;
 	boolean archiveModeOn;
+
 
 
 	/**
@@ -83,7 +84,6 @@ public class SearchBox extends JPanel implements IView {
 		this.archiveModeOn = false;
 		this.archiveLabel = new JLabel("Archived Tasks");
 
-		//this.scrollPane.setOpaque(false);
 		this.scrollPane.setBorder(BorderFactory.createEmptyBorder());
 		this.scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
@@ -132,10 +132,14 @@ public class SearchBox extends JPanel implements IView {
 		searchBox.addKeyListener( new KeyListener() {
 			@Override
 			public void keyPressed(KeyEvent e) {
-				// TODO Auto-generated method stub
+				// needed a robot to help me over here :)
+				if((searchBox.getText().length() == 1) && e.getKeyCode() == KeyEvent.VK_BACK_SPACE){
+					searchBox.setText("");
+				}
 				if(archiveModeOn && isSearchBoxEmpty()){
 					searchBox.removeAll();
-					
+					displayResults(new ArrayList<Integer>());
+
 				}
 				else {
 					resultsG.clear();
@@ -182,9 +186,12 @@ public class SearchBox extends JPanel implements IView {
 		gbc.gridy = 1;
 		this.container.add(archiveLabel, gbc);
 
-		gbc.insets.top = 0;
+		gbc.insets = new Insets(10, 10, 10, 10);
+		//gbc.insets.top = 0;
+		gbc.gridwidth = 2; 
+		gbc.gridx = 0;
 		gbc.weightx = 1;
-		gbc.weighty = 1.0;
+		gbc.weighty = 1;
 		gbc.gridy = 2;
 		this.container.add(resultsBox, gbc);
 
