@@ -23,12 +23,14 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.border.CompoundBorder;
 
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.util.TaskManagerUtil;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.GradientPanel;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.WebBrowser;
 import edu.wpi.cs.wpisuitetng.network.TrelloNetwork;
 
 /**
@@ -102,7 +104,14 @@ public class ToolbarView extends GradientPanel implements IView {
 		this.helpButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-
+				SwingUtilities.invokeLater( new Runnable() {
+					@Override
+					public void run() {
+						WebBrowser browser = new WebBrowser();
+						browser.setVisible(true);
+						browser.setTitle("WPISuite Task Manager Help Documentation");
+						browser.load("http://users.wpi.edu/~wmtemple/wpi-suite-tm-docs/");
+					}});
 			}
 		});			
 
