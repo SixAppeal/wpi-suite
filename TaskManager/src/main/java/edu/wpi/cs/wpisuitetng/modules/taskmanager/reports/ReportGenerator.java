@@ -154,9 +154,11 @@ public class ReportGenerator {
 		for (Task toAnalyze : tasks) {
 			List<Activity> taskHistory = toAnalyze.getActivities();
 			for (Activity activityToAnalyze : taskHistory) {
+
 				
 				history.add(new HistoryElement(toAnalyze, activityToAnalyze.getUser(), true, activityToAnalyze.getDate()));
 		
+
 			}
 			List<Comment> taskComments = toAnalyze.getComments();
 			for (Comment commentToAnalyze : taskComments) {
