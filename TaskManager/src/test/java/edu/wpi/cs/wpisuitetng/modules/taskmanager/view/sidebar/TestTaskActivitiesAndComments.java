@@ -16,6 +16,8 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
+
 public class TestTaskActivitiesAndComments {
 
 	TaskActivitiesAndComments testTaskAaC;
@@ -23,7 +25,7 @@ public class TestTaskActivitiesAndComments {
 	
 	@Before
 	public void setup(){
-		testTaskAaC = new TaskActivitiesAndComments();
+		testTaskAaC = new TaskActivitiesAndComments(new Task());
 		
 	}
 	
