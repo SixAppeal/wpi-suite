@@ -337,7 +337,7 @@ public class ColumnEditView extends JPanel implements IView {
 		//gbc.gridwidth = 2;
 		gbc.gridy = 2;
 		gbc.weighty = 1;
-		gbc.insets = new Insets(10, 20, 10, 20);
+		gbc.insets = new Insets(10, 20, 10, 10);
 		gbc.fill = GridBagConstraints.BOTH;
 		this.add(stageJList, gbc);
 		
@@ -348,7 +348,7 @@ public class ColumnEditView extends JPanel implements IView {
 		this.add(middleGroup, gbc);
 		
 		gbc.gridy = 4;
-		gbc.insets = new Insets(10, 20, 20, 20);
+		gbc.insets = new Insets(10, 20, 20, 10);
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		this.add(deleteBtn, gbc);
 
