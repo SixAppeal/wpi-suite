@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.Comparator;
 import java.util.Map;
 
+import java.text.SimpleDateFormat;
+
 import com.google.gson.Gson;
 
 import edu.wpi.cs.wpisuitetng.exceptions.WPISuiteException;
@@ -582,7 +584,9 @@ public class Task extends AbstractModel {
 	 * @param b new archival status
 	 */
 	public void setArchived(boolean b) {
-		this.activities.add(new Activity("This task was " + (b?"":"Un") + "archived on " + this.getDueDate().toString()));
+		Date archiveDate = new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("h:mm a, MM/dd/yyyy");
+		this.activities.add(new Activity("This task was " + (b?"":"Un") + "archived on " + sdf.format(archiveDate)));
 		this.archived = b;
 	}
 }
