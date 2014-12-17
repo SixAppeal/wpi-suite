@@ -352,10 +352,10 @@ public class SidebarView extends JTabbedPane implements IView {
 		for (IView view : viewList) {
 			if (view instanceof TaskEditView) {
 				for(Task aTask: taskList){
-					if (((TaskEditView) view).getTask().getId() == aTask.getId()) {
-						((TaskEditView) view).updateEVTask(aTask);
+					if (((TaskEditView) view).getTask().equals(aTask)) {
+						((TaskEditView) view).updateEverything(aTask);
 						break;
-					}		
+					}
 				}
 				}
 			}

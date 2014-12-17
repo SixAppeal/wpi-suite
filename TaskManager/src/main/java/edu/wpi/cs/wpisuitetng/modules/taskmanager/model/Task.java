@@ -20,6 +20,7 @@ import java.util.Map;
 
 import com.google.gson.Gson;
 
+import edu.wpi.cs.wpisuitetng.exceptions.WPISuiteException;
 import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.util.TaskUtil;
@@ -31,7 +32,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.util.TaskUtil;
  * @author nhhughes
  * @author srojas
  * @author jrhennessy
- * @author Thhughes
+ * @author thhughes
  * @author tmeehan
  * @author krpeffer
  * @author rwang3
@@ -130,6 +131,7 @@ public class Task extends AbstractModel {
 		this.activities = activities;
 		this.archived = false;
 		this.priority = 0;
+		this.currentRequirementName = "";
 	}
 	
 	/**
@@ -157,22 +159,29 @@ public class Task extends AbstractModel {
 	 * @return	True if two tasks with the same ID's but different other fields have been compared. 
 	 * 			False if the tasks have different ID's 
 	 * 			False if the tasks has not changed 
+	 * @throws WPISuiteException 
 	 */
-	public boolean hasChanged(Task task){
+	public boolean hasChanged(Task task) throws RuntimeException{
 		if(this.equals(task)){
 			// Set's comparison to be true if anything is not the same between the two tasks
-			boolean comparison = this.title.equals(task.getTitle())
+			boolean comparison =
+					   this.title.equals(task.getTitle())
 					&& this.description.equals(task.getDescription())
 					&& this.estimatedEffort == task.getEstimatedEffort()
 					&& this.actualEffort == task.getActualEffort()
 					&& this.dueDate.equals(task.getDueDate())
 					&& this.category == task.getCategory()
 					&& this.equalComments(task)
-					&& this.equalActivities(task);
-				
+					&& this.equalActivities(task)
+					&& this.archived == task.isArchived()
+					&& this.stage.equals(task.getStage())
+					&& this.assignedTo.equals(task.getAssignedTo())
+					&& this.priority == task.getPriority()
+					&& this.currentRequirementName.equals(task.getCurrentRequirementName());
+			
 			return !comparison;		// Return the opposite of this to say true when the task has been changed
 		}
-		return false; 
+		throw new RuntimeException("Tried to compare task with different ID using hasChanged!"); 
 		
 	}
 
@@ -485,22 +494,6 @@ public class Task extends AbstractModel {
 	public boolean isArchived() {
 		return archived;
 	}
-	
-	/**
-	 * Set archival status to true
-	 */
-	public void archive() {
-		this.activities.add(new Activity("This task was Archived on " + this.getDueDate().toString()));
-		this.archived = true;
-	}
-	
-	/**
-	 * Set archival status to false
-	 */
-	public void unarchive() {
-		this.activities.add(new Activity("This task was Unarchived on " + this.getDueDate().toString()));
-		this.archived = false;
-	}
 
 	/**
 	 * Master setter which updates this task according to a new task without changing its id.
@@ -582,5 +575,14 @@ public class Task extends AbstractModel {
 			}
 		}
 		return true;
+	}
+
+	/**
+	 * Set the archival of this task
+	 * @param b new archival status
+	 */
+	public void setArchived(boolean b) {
+		this.activities.add(new Activity("This task was " + (b?"":"Un") + "archived on " + this.getDueDate().toString()));
+		this.archived = b;
 	}
 }
