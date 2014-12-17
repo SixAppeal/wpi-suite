@@ -506,8 +506,6 @@ public class TaskEditView extends JPanel implements IView {
 		
 		if( t.hasChanged(this.task)) {
 			
-			ActionListener al;
-			
 			this.task.updateFrom(t);
 			
 			if( !this.titleInput.getText().equals(task.getTitle()) ) this.titleInput.setText( task.getTitle() );
