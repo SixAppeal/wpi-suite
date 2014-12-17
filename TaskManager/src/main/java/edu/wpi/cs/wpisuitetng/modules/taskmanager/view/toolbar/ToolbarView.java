@@ -69,7 +69,7 @@ public class ToolbarView extends GradientPanel implements IView {
 		this.importButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				TrelloNetwork.getInstance();
+				TrelloNetwork.getInstance().beginImport();
 			}
 		});
 		
