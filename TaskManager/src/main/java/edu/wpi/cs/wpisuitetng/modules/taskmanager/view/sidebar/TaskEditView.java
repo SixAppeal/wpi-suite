@@ -451,19 +451,22 @@ public class TaskEditView extends JPanel implements IView {
 				),
 				new FormField("Assigned", this.assignedMembersScrollPane)
 			),
-			new FormField("Category", this.category),
 			new FormField("Associated Requirement", this.requirementsComboBox),
 			new ButtonGroup(
-				this.viewRequirement,
-				this.attachRequirement
+					this.viewRequirement,
+					this.attachRequirement
 			),
+
+			new FormField("Category", this.category),
+			new Form(),
+			new Form(),
 			new ButtonGroup(
-				this.archiveButton,
-				this.closeButton
+					this.archiveButton,
+					this.closeButton
 			)
 		);
-
 		
+
 		this.container.setBackground(SidebarView.SIDEBAR_COLOR);
 		this.container.setLayout(new MigLayout("fill, ins 20", "[260]"));
 		this.container.add(this.form, "grow");
