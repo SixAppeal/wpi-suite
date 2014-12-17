@@ -498,21 +498,44 @@ public class ColumnEditView extends JPanel implements IView {
 			
 		}else{
 			stages.add(new Stage(newStageName));
-			updateJListAndPublish();
+			updateJListAndPublishAStage(new Stage(newStageName));
 			titleEntry.setText("");
 			addButton.setEnabled(false);
+			publishStages();
 		}
 
 	}
 	
 	/**
-	 * update the stage list with the values from the JList
+	 * update the stage list with the a stage
 	 */
 	private void updateJListAndPublish() {
 		Stage pS = stageJList.getSelectedValue();
 		stageJList.setListData(stages.toArray(new Stage[0]));
 		stageJList.setSelectedValue(pS, true);
 		publishStages();
+
+	}
+
+	/**
+	 * Tell the cache that a change has occured
+	 */
+	private void publishAStage(StageList aStagelist) {
+		this.gateway.toPresenter("TaskPresenter", "publishStage", aStagelist);
+	}
+	
+	
+	/**
+	 * update the stage list with the values from the JList
+	 */
+	private void updateJListAndPublishAStage(Stage aStage) {
+		StageList aStageList = new StageList();
+		aStageList.add(aStage);
+		
+		Stage pS = stageJList.getSelectedValue();
+		stageJList.setListData(stages.toArray(new Stage[0]));
+		stageJList.setSelectedValue(pS, true);
+		publishAStage(aStageList);
 
 	}
 
