@@ -11,7 +11,10 @@
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.model;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.text.SimpleDateFormat;
+
+import com.google.gson.Gson;
 
 import edu.wpi.cs.wpisuitetng.janeway.config.ConfigManager;
 /**
@@ -28,13 +31,13 @@ import edu.wpi.cs.wpisuitetng.janeway.config.ConfigManager;
 public class Activity {
 	String user;
 	String activity;
-	Calendar dateAndTime;
-	SimpleDateFormat sdf = new SimpleDateFormat("h:mm a, MMM d, yyyy");
+	Date dateAndTime;
+	
 	
 	public Activity(){
 		this.user = "";
 		this.activity = "";
-		this.dateAndTime = Calendar.getInstance();
+		this.dateAndTime = new Date();
 	}
 	
 	/**
@@ -45,7 +48,6 @@ public class Activity {
 	public Activity(String comment){
 		this.user = ConfigManager.getConfig().getUserName();
 		this.activity = comment;
-		this.dateAndTime = Calendar.getInstance();
 	}
 
 	/**
@@ -62,13 +64,10 @@ public class Activity {
 		this.activity = comment;
 	}
 	
-	public Calendar getTime() {
-		return this.dateAndTime;
-	}
 	
 	@Override
 	public String toString(){
-		return (sdf.format(this.dateAndTime.getTime()) + ": " + this.user + " " + this.activity);
+		return DateFormatPrinter.getInstance().getString(this.dateAndTime, this.user, this.activity);
 	}
 	
 	
@@ -87,5 +86,12 @@ public class Activity {
 		return result;
 	}
 	
+	/**
+	 * Converts the comments to Json
+	 * @return string representation of Json
+	 */
+	public String toJson() {
+		return new Gson().toJson(this, Comment.class);
+	}
 	
 }

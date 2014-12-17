@@ -22,7 +22,6 @@ import java.text.SimpleDateFormat;
 import com.google.gson.Gson;
 
 import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
-import edu.wpi.cs.wpisuitetng.modules.requirementmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.util.TaskUtil;
 
 /**
@@ -84,7 +83,6 @@ public class Task extends AbstractModel {
 	private int estimatedEffort; 
 	private int actualEffort;
 	private Date dueDate;
-	private Requirement requirement;
 	private List<Activity> activities;
 	private List<Comment> comments;
 	private int priority;
@@ -95,7 +93,7 @@ public class Task extends AbstractModel {
 	 */
 	public Task() {
 		this("A New Task", "A New Task", CATEGORY_NONE, new Stage("New"), new LinkedList<String>(), 1, 1,
-				new Date(), new Requirement(), new LinkedList<Activity>(), new LinkedList<Comment>());
+				new Date(), new LinkedList<Activity>(), new LinkedList<Comment>());
 	}
 
 	/**
@@ -115,7 +113,7 @@ public class Task extends AbstractModel {
 	public Task(String title, String description, int category, Stage stage,
 			List<String> assignedTo, Integer estimatedEffort,
 			Integer actualEffort, Date dueDate, 
-			Requirement requirement, List<Activity> activities, List<Comment> comments) throws IllegalArgumentException {
+			List<Activity> activities, List<Comment> comments) throws IllegalArgumentException {
 		super();
 		this.title = TaskUtil.validateTitle(title);
 		this.description = TaskUtil.validateDescription(description);
@@ -125,12 +123,12 @@ public class Task extends AbstractModel {
 		this.estimatedEffort = TaskUtil.validateEffort(estimatedEffort);
 		this.actualEffort = TaskUtil.validateEffort(actualEffort);
 		this.dueDate = TaskUtil.validateDueDate(dueDate);
-		this.requirement = requirement;
 		this.activities = activities;
 		this.comments = comments;
 		this.activities = activities;
 		this.archived = false;
 		this.priority = 0;
+		this.currentRequirementName = "";
 	}
 	
 	/**
@@ -417,24 +415,6 @@ public class Task extends AbstractModel {
 	}
 	
 	/**
-	 * Retrieves the associated requirement of the task
-	 * @return requirement Associated Requirement of the task
-	 */
-	public Requirement getRequirement() {
-		return requirement;
-	}
-	
-	/**
-	 * Set the associated requirement of the task
-	 * @param aReq Requirement to use for setting
-	 */
-	public void setRequirement(Requirement aReq) {
-		String reqName = aReq.getName();
-		this.addToHistory(this.getRequirement(), reqName, "Associated Requirement");
-		this.requirement = TaskUtil.validateRequirement(aReq);
-	}
-	
-	/**
 	 * Retrieves the current requirement name
 	 * @return reqName Current requirement name
 	 */
@@ -527,7 +507,6 @@ public class Task extends AbstractModel {
 		this.archived = updatedTask.archived;
 		this.priority = updatedTask.priority;
 		this.currentRequirementName = updatedTask.getCurrentRequirementName();
-//		this.requirement = updatedTask.requirement;
 	}
 	
 	/**

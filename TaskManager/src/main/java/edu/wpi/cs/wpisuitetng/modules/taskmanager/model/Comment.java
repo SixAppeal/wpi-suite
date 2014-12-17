@@ -11,8 +11,8 @@
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.model;
 
 import java.io.Serializable;
-
 import java.util.Calendar;
+import java.util.Date;
 import java.text.SimpleDateFormat;
 
 import com.google.gson.Gson;
@@ -31,16 +31,16 @@ public class Comment implements Serializable {
 	private static final long serialVersionUID = -7751779367913054594L;
 	String user;
 	String comment;
-	Calendar dateAndTime;
-	SimpleDateFormat sdf = new SimpleDateFormat("h:mm a, MMM d, yyyy");
+	Date dateAndTime;
 	
 	/**
 	 * Default Constructor for comments
 	 */
 	public Comment(){
-		dateAndTime = Calendar.getInstance();
+		dateAndTime = new Date(); 
 		this.user = "";
 		this.comment = "";
+		
 	}
 	
 	/**
@@ -49,7 +49,7 @@ public class Comment implements Serializable {
 	 * @param comment
 	 */
 	public Comment(String user, String comment){
-		dateAndTime = Calendar.getInstance();
+		dateAndTime = new Date();
 		this.user = user;
 		this.comment = comment;
 	}
@@ -70,7 +70,7 @@ public class Comment implements Serializable {
 		return this.user;
 	}
 	
-	public Calendar getTime(){
+	public Date getTime(){
 		return this.dateAndTime;
 	}
 	
@@ -100,9 +100,10 @@ public class Comment implements Serializable {
 	
 	@Override
 	public String toString(){
-		return (sdf.format(this.dateAndTime.getTime()) + " -- " + this.user + ": " + this.comment);
+		return DateFormatPrinter.getInstance().getString(this.dateAndTime, this.user, this.comment);
 	}
 	
+
 	/**
 	 * sets the user to a new user
 	 * @param user

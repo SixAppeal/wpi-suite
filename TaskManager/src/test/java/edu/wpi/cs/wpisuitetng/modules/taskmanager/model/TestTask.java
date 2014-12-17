@@ -65,7 +65,7 @@ public class TestTask {
 		assertEquals(newTask.getAssignedTo().size(), 0);
 		assertEquals(newTask.getDescription(), "A New Task");
 		assertEquals(newTask.getCategory(), Task.CATEGORY_NONE);
-		assertEquals(newTask.getDueDate(), new Date());
+		//assertEquals(newTask.getDueDate(), new Date());
 		assertEquals(newTask.getEstimatedEffort(), new Integer(1));
 		assertEquals(newTask.getId(), 0);
 		//assertEquals(newTask.getRequirement(), "Associated requirement");
@@ -187,6 +187,8 @@ public class TestTask {
 		
 		
 	}
+	
+	@Test
 	public void testEqual_false(){
 		Task task2 = new Task();
 		List<String> assignedTo = new ArrayList<String>();
@@ -204,8 +206,11 @@ public class TestTask {
 	}
 	
 	
-	
-	
+	@Test
+	public void testToJson() {
+		Task task2 = new Task();
+		System.out.println(task2.toJson());
+	}
 	
 	
 	
