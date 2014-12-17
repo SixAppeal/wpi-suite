@@ -19,7 +19,10 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.PriorityQueue;
 
 import org.jfree.chart.ChartFactory;
@@ -47,7 +50,9 @@ public class ReportGenerator {
 	private Date start;
 	private Date end;
 	private List<String> members;
-
+	private List<Double> actualEffortValues;
+	private List<String> actualEffortMembers;
+	
 	/**
 	 * Creates a report based on the parameters passed in
 	 * @param file the file path for the index.html file in the report
@@ -65,9 +70,17 @@ public class ReportGenerator {
 		PriorityQueue<HistoryElement> allHistory = new PriorityQueue<HistoryElement>();
 		Task[] allTasks = (Task []) cache.retrieve("task");
 		List<String> titles = new ArrayList<String>();
-
+		Map<String, Double> actualEffort;
 		generateHistory(allHistory, allTasks);
-		generateCompletedTasks(titles, allTasks, startDate, endDate);
+		actualEffort = generateCompletedTasks(titles, allTasks, startDate, endDate);
+		List<Double> actualMemberEfforts = new ArrayList<Double>();
+		List<String> actualMembers = new ArrayList<String>();
+		for (Entry<String, Double> actualMemberTuple : actualEffort.entrySet()) {
+			actualMemberEfforts.add(actualMemberTuple.getValue());
+			actualMembers.add(actualMemberTuple.getKey());
+		}
+		this.actualEffortValues = actualMemberEfforts;
+		this.actualEffortMembers = actualMembers;
 		generateReport(titles);
 
 	}
@@ -79,19 +92,20 @@ public class ReportGenerator {
 	public void generateReport(List<String> completedTasks) {
 		try {
 			PrintStream out = new PrintStream(file);
-			out.print("<html><body><h1>Task Manager Report:</h1><br>");
+			out.print("<link rel=\"stylesheet\" type=\"text/css\" href=\"report.css\"/>");
+			out.print("<html><body><h1>Task Manager Report:</h1><hr><br>");
 			out.print("<h3>Start Date: </h3>" + start);
 			out.print("<br><h3>End Date: </h3>" + end);
-			out.print("<br><br>");
+			out.print("<hr><br><br>");
 			out.print("<h3>Members Included</h3>");
 			printMembers(out);
-			out.println("<h3>Tasks Completed During Time Period</h3>");
+			out.println("<hr><h3>Tasks Completed During Time Period</h3>");
 			printTasks(out, completedTasks);
-			out.print("<div>");
+			out.print("<hr><div>");
 			out.print("<img src=\"actualeffort.png\" alt=\"Actual Effort\" style=\"width:400px;height:400px\">");
-			out.print("</div><div>");
+			out.print("</div><hr><div>");
 			out.print("<img src=\"estimatedimportance.png\" alt=\"Estimated Importance of Each Team Member\" style=\"width:400px;height:400px\">");
-			out.print("</div><div>");
+			out.print("</div><hr><div>");
 			out.print("<img src=\"importancegraph.png\" alt=\"Graph Visualization of Importance\" style=\"width:400px;height:400px\">");
 			out.print("</div></body>");
 			out.print("</html>");
@@ -102,11 +116,39 @@ public class ReportGenerator {
 			int location = path.lastIndexOf(name);
 			path = path.substring(0, location);
 
-			double values[] = {1.0};
-			CategoryDataset dataSet = createData(values, members, "Actual Effort");
+			File cssFile = new File(path + "report.css");
+			PrintStream outCss = new PrintStream(cssFile);
+			outCss.println("@import url(http://fonts.googleapis.com/css?family=Ubuntu:300,400|Open+Sans:400italic,700italic,400,700);");
+			outCss.println("html {");
+			outCss.println("\tmargin: 0;");
+			outCss.println("\tpadding: 0;");
+			outCss.println("}\n");
+			outCss.println("body {");
+			outCss.println("\tfont-family: 'Open Sans', sans-serf, arial;");
+			outCss.println("}\n");
+			outCss.println("h1,");
+			outCss.println("h2,");
+			outCss.println("h3 {");
+			outCss.println("\tfont-family: 'Ubuntu', 'Helvetica Neue', Helvetica, arial;");
+			outCss.println("}\n");
+			outCss.println("a {");
+			outCss.println("\tcolor: #337ab7;");
+			outCss.println("\ttextdectoration: none;");
+			outCss.println("}\n");
+			outCss.println("a:hover {");
+			outCss.println("\tborder-bottom: 1px dotted;");
+			outCss.println("}\n");
+			outCss.println("p {");
+			outCss.println("\tmargin-bottom: 10px;");
+			outCss.println("}\n");
+			
+			outCss.close();
+			
+			
+			CategoryDataset dataSet = createData(this.actualEffortValues, this.actualEffortMembers, "Actual Effort");
 			createChart(dataSet, path + "actualeffort.png", "Actual Effort");
 			createChart(dataSet, path + "estimatedimportance.png", "Importance");
-			createChart(dataSet, path + "importancegraph.png", "Importance");
+//			createChart(dataSet, path + "importancegraph.png", "Importance");
 
 		} catch (FileNotFoundException e) {
 			System.out.println("Cannot Create File!");
@@ -123,11 +165,11 @@ public class ReportGenerator {
 		for (Task toAnalyze : tasks) {
 			List<Activity> taskHistory = toAnalyze.getActivities();
 			for (Activity activityToAnalyze : taskHistory) {
-				//do stuff involving history
+				history.add(new HistoryElement(toAnalyze, activityToAnalyze.getUser(), true, activityToAnalyze.getDate()));
 			}
 			List<Comment> taskComments = toAnalyze.getComments();
 			for (Comment commentToAnalyze : taskComments) {
-				//do stuff involving comments
+				history.add(new HistoryElement(toAnalyze, commentToAnalyze.getUser(), true, commentToAnalyze.getDate()));	 
 			}
 		}
 		List<HistoryElement> elements = new ArrayList<HistoryElement>();
@@ -135,7 +177,14 @@ public class ReportGenerator {
 			elements.add(history.remove());
 		}
 		for (int i = 1; i < elements.size(); i++) {
-			//update contributors with 
+			for (int j = i-1;j>0;j--){
+				if(elements.get(i).getAssociatedTask() == elements.get(j).getAssociatedTask()){
+					List<String> contributingToAdd = new ArrayList<String>(elements.get(j).getOldContributingMembers());
+					contributingToAdd.add(elements.get(j).getContributingMember());
+					elements.get(i).setOldContributingMembers(contributingToAdd);
+					break;
+				}
+			}
 		}
 
 	}
@@ -173,7 +222,21 @@ public class ReportGenerator {
 	 * @return
 	 */
 	public boolean isCompleted(Date start, Date end, Task toCheck) {
-		return true;
+		List<Activity> log = new ArrayList<Activity>();
+		System.out.println(log);
+		for (int i = log.size() - 1; i >= 0; i--) {
+			Activity activityToCheck = log.get(i);
+			System.out.println(start + " : " + end + " : " + activityToCheck.getDate());
+			if (activityToCheck.getActivity().contains("Completed")) {
+				if (start.compareTo(activityToCheck.getDate()) == -1 && end.compareTo(activityToCheck.getDate()) == 1) {
+					return true;
+				}
+				else {
+					return false;
+				}
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -183,12 +246,25 @@ public class ReportGenerator {
 	 * @param start
 	 * @param end
 	 */
-	public void generateCompletedTasks(List<String> titles, Task[] tasks, Date start, Date end) {
+	public Map<String, Double> generateCompletedTasks(List<String> titles, Task[] tasks, Date start, Date end) {
+		Map<String, Double> toReturn = new HashMap<String, Double>();
+		for (Task t : tasks) {
+			System.out.println(t);
+		}
 		for (Task toAnalyze : tasks ) {
 			if (isCompleted(start, end, toAnalyze)) {
 				titles.add(toAnalyze.getTitle());
+				for (String assignedMember : toAnalyze.getAssignedTo()) {
+					if (toReturn.containsKey(assignedMember)) {
+						toReturn.put(assignedMember, toReturn.get(assignedMember + toAnalyze.getActualEffort()));
+					}
+					else {
+						toReturn.put(assignedMember, (double)toAnalyze.getActualEffort());
+					}
+				}
 			}
 		}
+		return toReturn;
 	}
 
 	/**
@@ -235,10 +311,10 @@ public class ReportGenerator {
 	 * @param category type of analysis performed
 	 * @return
 	 */
-	private CategoryDataset createData(double[] data, List<String> members, String category) {
+	private CategoryDataset createData(List<Double> data, List<String> members, String category) {
 		DefaultCategoryDataset dataSet = new DefaultCategoryDataset();
 		for (int k = 0; k < members.size(); k++) {
-			dataSet.setValue(data[k], members.get(k), category);// populate
+			dataSet.setValue(data.get(k), members.get(k), category);
 		}
 		return dataSet;
 	}

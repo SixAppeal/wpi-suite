@@ -28,6 +28,14 @@ import com.google.gson.Gson;
  */
 public class Comment implements Serializable {
 	
+	public Date getDate() {
+		return date;
+	}
+
+	public void setDate(Date date) {
+		this.date = date;
+	}
+
 	private static final long serialVersionUID = -7751779367913054594L;
 	
 	private static final int MAX_LENGTH = 20;
