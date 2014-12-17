@@ -29,6 +29,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.ListModel;
@@ -215,13 +216,7 @@ public class ColumnEditView extends JPanel implements IView {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if( e.getKeyCode() == KeyEvent.VK_DELETE && !stageJList.isSelectionEmpty()) {
-
-					if( stages.size() > 1 ) {
-						stages.remove(stageJList.getSelectedIndex());
-						updateJListAndPublish();
-					} else {
-						//TODO visual feedback when there is only one stage
-					}
+					deleteSelectedStage();
 				}
 			}
 
@@ -280,16 +275,7 @@ public class ColumnEditView extends JPanel implements IView {
 			public void actionPerformed(ActionEvent e) {
 				
 				if( !stageJList.isSelectionEmpty()) {
-					if( stages.size() > 1) {
-						Stage stage = stages.remove(stageJList.getSelectedIndex());
-						updateJListAndPublish();
-						gateway.toPresenter("LocalCache", "archiveTasksForStage", stage);
-					}
-					
-					if( stages.size() > 1 ) {
-						stages.remove(stageJList.getSelectedIndex());
-						updateJListAndPublish();
-					}
+					deleteSelectedStage();
 				}
 				
 				stageJList.setSelectedIndex(0);
@@ -391,6 +377,24 @@ public class ColumnEditView extends JPanel implements IView {
 			}
 		}
 		return true;
+	}
+	
+	/**
+	 * Deletes the task selected in the Task.
+	 */
+	protected void deleteSelectedStage() {
+		
+		if( stages.size() > 1) {
+			
+			if( JOptionPane.showConfirmDialog(this, "All tasks in this stage\nwill be archived.",
+				"Are you sure?",
+				JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION) return;
+			
+			Stage stage = stages.remove(stageJList.getSelectedIndex());
+			updateJListAndPublish();
+			gateway.toPresenter("LocalCache", "archiveTasksForStage", stage);
+		}
+		
 	}
 	
 	/**

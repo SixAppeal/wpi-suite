@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import com.google.gson.Gson;
 
 import edu.wpi.cs.wpisuitetng.exceptions.NotImplementedException;
@@ -435,6 +437,7 @@ public class ThreadSafeLocalCache implements Cache {
 	 * @param stage The stage with tasks to archive
 	 */
 	public void archiveTasksForStage(Stage stage) {
+		boolean bInit = true;
 		for (Task task : this.tasks) {
 			if (task.getStage().equals(stage)) {
 				task.setArchived(true);
