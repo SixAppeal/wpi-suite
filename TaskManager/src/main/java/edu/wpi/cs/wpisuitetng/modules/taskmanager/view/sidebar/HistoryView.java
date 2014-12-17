@@ -72,7 +72,7 @@ public class HistoryView extends JPanel implements IView{
 	 * @param task
 	 */
 	public void displayActivities(Task task){
-		if(!task.equals(internalTask)){
+		if(task.hasChanged(internalTask)){
 			List<Activity> activities = task.getActivities();
 			historyFields.clear();
 			

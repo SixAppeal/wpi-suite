@@ -221,6 +221,7 @@ public class TaskActivitiesAndComments extends JPanel implements IView {
 		updateView(t);
 		taskCommentArea.setText("");
 		saveCommentButton.setEnabled(false);
+		this.gateway.toPresenter("LocalCache", "update", "task:testing", this.t);
 	}
 	
 	/**
