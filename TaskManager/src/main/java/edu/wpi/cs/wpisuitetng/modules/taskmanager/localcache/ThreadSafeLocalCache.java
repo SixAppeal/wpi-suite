@@ -130,6 +130,20 @@ public class ThreadSafeLocalCache implements Cache {
 			System.out.println("Bad Request!");
 			return;
 		}
+		if (archives.contains(newTask)) {
+			int index = archives.indexOf(newTask);
+			if (!archives.get(index).hasChanged(newTask)) {
+				System.out.println("Trying to update task with no updates");
+				return;
+			}
+		}
+		if (tasks.contains(newTask)) {
+			int index = tasks.indexOf(newTask);
+			if (!tasks.get(index).hasChanged(newTask)) {
+				System.out.println("Trying to update task with no updates");
+				return;
+			}
+		}
 		updateHelper(newTask, archives);
 		updateHelper(newTask, tasks);
 		if (newTask.isArchived()) {
@@ -235,7 +249,7 @@ public class ThreadSafeLocalCache implements Cache {
 			boolean changed = false;
 			Task taskToInsert = oldTask; 
 			for (Task newTask : updatedTaskList) {
-				if (newTask.getId() == oldTask.getId()) {
+				if (newTask.equals(oldTask)) {
 					if (newTask.isArchived()) {
 						taskToInsert = null;
 					}
@@ -257,7 +271,7 @@ public class ThreadSafeLocalCache implements Cache {
 			boolean changed = false;
 			Task taskToInsert = oldTask; 
 			for (Task newTask : updatedTasks) {
-				if (newTask.getId() == oldTask.getId()) {
+				if (newTask.equals(oldTask)) {
 					if (newTask.isArchived()) {
 						taskToInsert = null;
 					}
@@ -453,7 +467,7 @@ public class ThreadSafeLocalCache implements Cache {
 	public void archiveTasksForStage(Stage stage) {
 		for (Task task : this.tasks) {
 			if (task.getStage().equals(stage)) {
-				task.archive();
+				task.setArchived(true);
 				update("archive:testing", task);
 			}
 		}

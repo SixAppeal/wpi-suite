@@ -29,6 +29,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import javax.swing.JOptionPane;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
@@ -84,6 +85,7 @@ public class TaskEditView extends JPanel implements IView {
 
 	private Gateway gateway;
 
+	private Task taskAsAdded;
 	private Task task;
 	private StageList stages;
 	private Requirement[] requirements;
@@ -134,6 +136,7 @@ public class TaskEditView extends JPanel implements IView {
 	 */
 	public TaskEditView(Task iTask, StageList stages) {
 		this.task = new Task();
+		this.taskAsAdded = iTask;
 		this.task.updateFrom(iTask);
 		this.stages = stages;
 		this.requirements = new Requirement[0];
@@ -250,9 +253,9 @@ public class TaskEditView extends JPanel implements IView {
 		this.archiveButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				task.archive();
-				gateway.toPresenter("LocalCache", "update", "archive:testing", task);
-				gateway.toView("SidebarView", "removeEditPanel", that);
+				task.setArchived(!task.isArchived());
+				saveTask();
+				if( task.isArchived() ) gateway.toView("SidebarView", "removeEditPanel", that);
 			}
 		});
 		
@@ -488,6 +491,7 @@ public class TaskEditView extends JPanel implements IView {
 	 * Saves the task currently being edited
 	 */
 	private void saveTask() {
+		if ( task.hasChanged(taskAsAdded) );
 		this.gateway.toPresenter("LocalCache", "update", "task:testing", this.task);
 	}
 
@@ -502,8 +506,45 @@ public class TaskEditView extends JPanel implements IView {
 	 * @param t task with new values
 	 */
 	public void updateEverything(Task t) {
-		this.task.setStage(t.getStage());
-		this.stageInput.setSelectedItem(t.getStage());
+		
+		this.taskAsAdded = t;
+		
+		if( t.hasChanged(this.task)) {
+			
+			this.task.updateFrom(t);
+			
+			if( !this.titleInput.getText().equals(task.getTitle()) ) this.titleInput.setText( task.getTitle() );
+			if( !this.descInput.getText().equals(task.getDescription()) ) this.descInput.setText(task.getDescription());
+			
+			if( !this.dateInput.getDate().equals(task.getDueDate()) ) this.dateInput.setDate(task.getDueDate());
+			
+			if( !this.estEffortInput.getValue().equals(task.getEstimatedEffort()) )
+				this.estEffortInput.setValue(task.getEstimatedEffort());
+			
+			if( !this.actEffortInput.getValue().equals(task.getActualEffort()) )
+				this.actEffortInput.setValue(task.getActualEffort());
+			
+			MemberListHandler.getInstance().populateMembers(task.getAssignedTo());
+			this.updateMembers();
+			
+			if( ! this.category.getSelectedItem().equals(task.getCategory()) )
+				this.category.setSelectedIndex(task.getCategory());
+			
+			if( !this.requirementsComboBox.getSelectedItem().equals(task.getCurrentRequirementName()) )
+					this.requirementsComboBox.setSelectedItem(task.getCurrentRequirementName());
+		}
+		
+		if (task.isArchived()) {
+			
+			JOptionPane.showMessageDialog(null, "The task " + task.getTitle() + " has been archived.");
+			this.archiveButton.setText("Unarchive");
+			
+		} else {
+			
+			this.archiveButton.setText("Archive");
+		
+		}
+		
 	}
 
 	/**
