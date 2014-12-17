@@ -321,16 +321,23 @@ public class ReportGenerator {
 		}
 		for (Task toAnalyze : tasks ) {
 			if (isCompleted(start, end, toAnalyze)) {
+				System.out.println(toAnalyze.getTitle());
 				titles.add(toAnalyze.getTitle());
 				for (String assignedMember : toAnalyze.getAssignedTo()) {
+					System.out.println("Doing stuff" + assignedMember);
 					if (toReturn.containsKey(assignedMember)) {
-						toReturn.put(assignedMember, toReturn.get(assignedMember + toAnalyze.getActualEffort()));
+						System.out.println("updated stuff!");
+						toReturn.put(assignedMember, toReturn.get(assignedMember) + toAnalyze.getActualEffort());
 					}
 					else {
+						System.out.println("didn't update stuff");
 						toReturn.put(assignedMember, (double)toAnalyze.getActualEffort());
 					}
 				}
 			}
+		}
+		for (Entry<String, Double> e : toReturn.entrySet()) {
+			System.out.println(e.getKey() + " :: " + e.getValue());
 		}
 		return toReturn;
 	}
