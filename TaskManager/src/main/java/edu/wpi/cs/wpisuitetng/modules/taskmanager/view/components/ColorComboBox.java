@@ -20,6 +20,7 @@ import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.util.TaskManagerUtil;
 
 /**
  * An extension of JComboBox that supports picking a color.
@@ -43,7 +44,8 @@ public class ColorComboBox extends JComboBox<Integer> {
 	public void setSelectedItem(Object value) {
 		super.setSelectedItem(value);
 		Color color = Task.COLORS.get(value);
-		this.setBackground(color);
+		this.setForeground(TaskManagerUtil.averageColor(color) > 128 ? Color.BLACK : Color.WHITE);
+		this.setBackground(color.brighter());
 		this.revalidate();
 		this.repaint();
 	}
@@ -68,10 +70,31 @@ public class ColorComboBox extends JComboBox<Integer> {
 				boolean isSelected, boolean cellHasFocus) {
 			Color color = Task.COLORS.get(value);
 			
-			setText(" ");
-			setBackground(cellHasFocus ? color.brighter() : color);
+			switch (value) {
+			case Task.CATEGORY_BLUE:
+				setText("BLUE");
+				break;
+			case Task.CATEGORY_GREEN:
+				setText("GREEN");
+				break;
+			case Task.CATEGORY_NONE:
+				setText("No Category");
+				break;
+			case Task.CATEGORY_RED:
+				setText("RED");
+				break;
+			case Task.CATEGORY_YELLOW:
+				setText("YELLOW");
+				break;
+			}
+			
+			setBackground( cellHasFocus? color.brighter() : color );
+			setForeground(TaskManagerUtil.averageColor(color) > 128 ? Color.BLACK : Color.WHITE);
+
+			//setBackground(cellHasFocus ? color.brighter() : color);
 			
 			return this;
 		}
+		
 	}
 }
