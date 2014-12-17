@@ -29,6 +29,23 @@ import edu.wpi.cs.wpisuitetng.janeway.config.ConfigManager;
  * 
  */
 public class Activity {
+	
+	public String getUser() {
+		return user;
+	}
+
+	public void setUser(String user) {
+		this.user = user;
+	}
+
+	public Date getDate() {
+		return date;
+	}
+
+	public void setDate(Date date) {
+		this.date = date;
+	}
+
 	String user;
 	String activity;
 	Date date;
