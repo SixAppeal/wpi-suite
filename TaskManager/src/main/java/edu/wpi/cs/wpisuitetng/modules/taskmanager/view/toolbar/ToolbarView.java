@@ -22,10 +22,14 @@ import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.border.CompoundBorder;
 
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.trello.TrelloBoard;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.trello.TrelloNetwork;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.util.TaskManagerUtil;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
@@ -90,7 +94,7 @@ public class ToolbarView extends GradientPanel implements IView {
 		this.importButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				TrelloNetwork.getInstance().beginImport();
+				TrelloNetwork.getInstance().beginImport(gateway);
 			}
 		});
 
@@ -165,5 +169,21 @@ public class ToolbarView extends GradientPanel implements IView {
 	@Override
 	public void setGateway(Gateway gateway) {
 		this.gateway = gateway;
+	}
+	
+	/**
+	 * Creates a window to select the Trello board to use
+	 * @param boards A list of boards
+	 * @param token The user token for importing
+	 */
+	public void chooseTrelloBoard(TrelloBoard[] boards, String token) {
+		if (boards.length > 0) {
+			TrelloBoard choice = (TrelloBoard) JOptionPane.showInputDialog(this, "Your boards:", "Choose a Trello Board",
+					JOptionPane.QUESTION_MESSAGE, null, boards, boards[0]);
+			
+			TrelloNetwork.getInstance().importCards(choice, token, gateway);
+		} else {
+			JOptionPane.showMessageDialog(this, "You have no Trello boards to import from.");
+		}
 	}
 }

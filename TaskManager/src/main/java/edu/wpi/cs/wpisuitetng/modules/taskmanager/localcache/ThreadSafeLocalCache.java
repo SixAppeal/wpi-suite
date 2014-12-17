@@ -11,11 +11,12 @@
 
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
-
-import javax.swing.JOptionPane;
 
 import com.google.gson.Gson;
 
@@ -26,6 +27,9 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Stage;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.StageList;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.trello.TrelloCard;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.trello.TrelloImport;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.trello.TrelloList;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.trello.TrelloNetwork;
 import edu.wpi.cs.wpisuitetng.network.Network;
 import edu.wpi.cs.wpisuitetng.network.Request;
@@ -473,6 +477,41 @@ public class ThreadSafeLocalCache implements Cache {
 				task.setArchived(true);
 				update("archive:testing", task);
 			}
+		}
+	}
+	
+	/**
+	 * Adds an import from Trello
+	 * @param importObj The imported object from trello
+	 */
+	public void trelloImport(TrelloImport importObj) {
+		for (TrelloList list : importObj.getLists()) {
+			Stage stage = new Stage(list.getName());
+			if (!this.stages.contains(stage)) {
+				this.stages.add(stage);
+			}
+		}
+		update("stages:testing", stages);
+		for (TrelloCard card : importObj.getCards()) {
+			Task task = new Task();
+			task.setTitle(card.getName());
+			if (card.getDesc() != null) {
+				task.setDescription(card.getDesc());
+			}
+			if (card.getDue() != null) {
+				DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+				try {
+					task.setDueDate(formatter.parse(card.getDue()));
+				} catch (Exception e) {
+					task.setDueDate(new Date());
+				}
+			}
+			for (TrelloList list : importObj.getLists()) {
+				if (list.getId().equals(card.getIdList())) {
+					task.setStage(new Stage(list.getName()));
+				}
+			}
+			store("task:testing", task);
 		}
 	}
 }
