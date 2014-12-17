@@ -59,11 +59,13 @@ public class ToolbarView extends GradientPanel implements IView {
 	public ToolbarView() {
 		this.createTaskButton = new JButton("  Create Task");
 
+
 		this.helpButton = new JButton();
 		this.toggleSidebarButton = new JButton("Toggle Sidebar");
 
 		this.importButton = new JButton("Import");
 		this.toggleSidebarButton = new JButton("  Toggle Sidebar");
+
 
 		this.click = true;
 		
@@ -100,6 +102,7 @@ public class ToolbarView extends GradientPanel implements IView {
 		this.helpButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+
 			}
 		});			
 
@@ -109,7 +112,6 @@ public class ToolbarView extends GradientPanel implements IView {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				TrelloNetwork.getInstance().beginImport();
-
 			}
 		});
 		
