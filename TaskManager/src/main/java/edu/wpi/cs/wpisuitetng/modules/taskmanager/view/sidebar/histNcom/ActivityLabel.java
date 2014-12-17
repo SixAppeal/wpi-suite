@@ -41,7 +41,6 @@ public class ActivityLabel extends JTextArea {
 		setBorder(new MatteBorder(0, 0, 1, 0, SystemColor.activeCaption));
 		setLineWrap(true);
 		setWrapStyleWord(true);
-		//setMaximumSize(new Dimension(280, 40));
 
 	}
 

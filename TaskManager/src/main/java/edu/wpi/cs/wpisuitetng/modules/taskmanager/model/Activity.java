@@ -24,13 +24,15 @@ package edu.wpi.cs.wpisuitetng.modules.taskmanager.model;
 public class Activity {
 	String activity;
 	
+	/**
+	 * Default constructor
+	 */
 	public Activity(){
 		this.activity = "";
 	}
 	
 	/**
 	 * Constructor for an activity
-	 * @param member member that made the comment
 	 * @param comment comment that the member made
 	 */
 	public Activity(String comment){

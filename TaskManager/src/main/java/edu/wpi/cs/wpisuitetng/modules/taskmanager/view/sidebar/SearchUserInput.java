@@ -63,16 +63,11 @@ public class SearchUserInput implements KeyListener {
 			else {
 				fullString = fullString.substring(0, fullString.length() - 1);
 			}
-			System.out.println("gettext length is " + searchBox.getText().length());
 			try {
 				if (searchBox.getText().length() >= 1) {
-//					System.out.println("length of backspace1 results is: "
-//							+ toSearch.searchFor(searchBox.getText() + "*")
-//									.size());
 					searchPanel.displayResults(toSearch.searchFor(searchBox
 							.getText() + "*"));
 				} else if (searchBox.getText().length() == 0) {
-					//searchPanel.resultsBox.removeAll();
 					searchPanel.revalidate();
 					searchPanel.repaint();
 				}
@@ -117,15 +112,8 @@ public class SearchUserInput implements KeyListener {
 
 			// Check if full string contains the quotation mark
 			if (fullString.indexOf("\"") != -1) {
-//				System.out.println("length of full quote results is: "
-//						+ toSearch.searchFor(fullString).size());
 				searchPanel.displayResults(toSearch.searchFor(fullString));
 			} else {
-//				System.out.println("full string for wild is " + fullString);
-//				System.out.println("string of gettext is "
-//						+ searchBox.getText());
-//				System.out.println("length of full wild results is: "
-//						+ toSearch.searchFor(fullString + "*").size());
 				searchPanel
 						.displayResults(toSearch.searchFor(fullString + "*"));
 			}

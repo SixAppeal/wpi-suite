@@ -11,14 +11,10 @@
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
 
 import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,10 +33,7 @@ import net.miginfocom.swing.MigLayout;
 
 import org.jdesktop.swingx.JXDatePicker;
 
-import edu.wpi.cs.wpisuitetng.modules.core.models.User;
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.Cache;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.ThreadSafeLocalCache;
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.reports.ReportGenerator;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
@@ -62,9 +55,6 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar.JListMouseHandler
 
 public class StatisticsView extends JPanel implements IView{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -7282532926324062923L;
 
 	private Gateway gateway;
@@ -91,6 +81,9 @@ public class StatisticsView extends JPanel implements IView{
 
 	private Form form;
 
+	/**
+	 * Constructor
+	 */
 	public StatisticsView () {
 
 		this.startDate = new JXDatePicker();
@@ -304,6 +297,10 @@ public class StatisticsView extends JPanel implements IView{
 
 	}
 
+	/**
+	 * Sets the cache of the current StatisticsView
+	 * @param cache
+	 */
 	public void setCache(ThreadSafeLocalCache cache) {
 		this.cache = cache;
 	}
@@ -372,6 +369,10 @@ public class StatisticsView extends JPanel implements IView{
 		this.gateway = gateway;
 	}		
 
+	/**
+	 * Updates all members of StatisticsView
+	 * @param localCache
+	 */
 	public void updateAll(ThreadSafeLocalCache localCache){
 		if (flag == false){
 			usernames = MemberListHandler.getInstance().getGlobal();

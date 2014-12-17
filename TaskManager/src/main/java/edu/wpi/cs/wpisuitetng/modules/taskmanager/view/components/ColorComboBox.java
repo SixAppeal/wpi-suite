@@ -13,7 +13,6 @@ package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components;
 import java.awt.Color;
 import java.awt.Component;
 
-import javax.swing.BorderFactory;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;

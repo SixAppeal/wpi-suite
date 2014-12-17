@@ -435,7 +435,7 @@ public class ThreadSafeLocalCache implements Cache {
 	}
 
 	/**
-	 * Makes inital stage list
+	 * Makes initial stage list
 	 */
 	@Override
 	public void initStageList() {

@@ -42,14 +42,11 @@ public class GetMembersObserver implements RequestObserver {
 	 */
 	@Override
 	public void responseSuccess(IRequest iReq) {
-		// TODO Auto-generated method stub
 		User[] members = new Gson().fromJson(iReq.getResponse().getBody(), User[].class);
 		String[] to_submit = new String[members.length];
 		for (int i = 0; i < members.length; i++) {
 			to_submit[i] = members[i].getUsername();
 		}
-		//presenter.updateMembers(to_submit);
-		
 	}
 
 	/**

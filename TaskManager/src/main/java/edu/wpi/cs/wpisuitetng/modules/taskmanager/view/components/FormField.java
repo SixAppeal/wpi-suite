@@ -156,6 +156,12 @@ public class FormField extends FormElement {
 		this.add(this.message, gbc);
 	}
 	
+	/**
+	 * Other Constructor
+	 * @param name
+	 * @param field
+	 * @param expandVertical
+	 */
 	public FormField(String name, JComponent field, Boolean expandVertical) {
 		this.name = name;
 		this.label = new JLabel(this.name);

@@ -25,10 +25,17 @@ public class RequirementObserver implements RequestObserver {
 
 	private Gateway gateway;
 
+	/**
+	 * Default constructor
+	 * @param gateway
+	 */
 	public RequirementObserver(Gateway gateway) {
 		this.gateway = gateway;
 	}
 
+	/**
+	 * Upon success with the RequirementObserver, execute SidebarView's passInRequirements method
+	 */
 	@Override
 	public void responseSuccess(IRequest iReq) {
 		String requirements = iReq.getResponse().getBody();
@@ -41,7 +48,7 @@ public class RequirementObserver implements RequestObserver {
 	 */
 	@Override
 	public void responseError(IRequest iReq) {
-		// Auto generated
+		// TODO Auto generated
 	}
 
 	/**
@@ -49,6 +56,6 @@ public class RequirementObserver implements RequestObserver {
 	 */
 	@Override
 	public void fail(IRequest iReq, Exception exception) {
-		// Auto generated
+		// TODO Auto generated
 	}
 }

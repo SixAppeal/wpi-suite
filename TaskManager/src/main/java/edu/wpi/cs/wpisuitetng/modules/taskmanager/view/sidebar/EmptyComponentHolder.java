@@ -17,7 +17,7 @@ import java.awt.Component;
 
 
 /**
- * This Class holds is an empty JPanel, but holds the info for anothe JPanel
+ * This Class holds is an empty JPanel, but holds the info for another JPanel
  * 
  * @author rnOrlando
  *

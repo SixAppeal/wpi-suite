@@ -14,12 +14,7 @@ package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.Robot;
 
-import javax.swing.*;
-
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -97,7 +92,6 @@ public class SearchBox extends JPanel implements IView {
 
 		this.searchCheckBox = new JCheckBox();
 		this.searchCheckBox.addItemListener(new ItemListener() {
-			//ask Santiago if you have questions 
 			@Override
 			public void itemStateChanged(ItemEvent arg0) {
 				if (archiveModeOn){
@@ -133,7 +127,6 @@ public class SearchBox extends JPanel implements IView {
 		searchBox.addKeyListener( new KeyListener() {
 			@Override
 			public void keyPressed(KeyEvent e) {
-				// needed a robot to help me over here :)
 				if((searchBox.getText().length() == 1) && e.getKeyCode() == KeyEvent.VK_BACK_SPACE){
 					searchBox.setText("");
 				}
@@ -308,6 +301,7 @@ public class SearchBox extends JPanel implements IView {
 	public void setGateway(Gateway gateway) {
 		this.gateway = gateway;
 	}
+	
 	/**
 	 * returns true if the search box is empty
 	 * @return boolean if true
@@ -315,7 +309,4 @@ public class SearchBox extends JPanel implements IView {
 	public boolean isSearchBoxEmpty(){
 		return searchBox.getText().isEmpty();
 	}
-
-
-
 }

@@ -32,7 +32,6 @@ import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ListModel;
 import javax.swing.event.ListSelectionEvent;
@@ -104,18 +103,11 @@ public class ColumnEditView extends JPanel implements IView {
 		this.moveUpBtn.setIcon(new ImageIcon(this.getClass().getResource("icon_up.png")));
 		this.moveDnBtn.setIcon(new ImageIcon(this.getClass().getResource("icon_down.png")));
 		
-		/*this.moveUpBtn.setPreferredSize(new Dimension(100, 25));
-		this.moveDnBtn.setPreferredSize(new Dimension(100, 25));*/
-		
 		this.moveUpBtn.setMinimumSize(new Dimension(100, 25));
 		this.moveDnBtn.setMinimumSize(new Dimension(100, 25));
 		
 		this.titleEntry.setMinimumSize(new Dimension(100, 25));
 		this.newName.setMinimumSize(new Dimension(100, 25));
-		
-		
-		
-		// disable stage name editing and delete when there's no stage selected
 
 		if (stageJList.isSelectionEmpty()){
 			// Just checking 
@@ -167,14 +159,13 @@ public class ColumnEditView extends JPanel implements IView {
 			@Override
 			public void keyTyped(KeyEvent e) {
 				// For some reason doesn't work for the below methods to add stuffs... Not sure. 
-			    
 			}
 
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if (!TaskUtil.sanitizeInput(titleEntry.getText()).isEmpty()){
 					if (e.getKeyCode() == KeyEvent.VK_ENTER ){
-				    	System.out.println("Fuck Swing!");
+//				    	System.out.println("Fuck Swing!");
 				    	addStage();
 				    }
 				}
@@ -185,7 +176,7 @@ public class ColumnEditView extends JPanel implements IView {
 			public void keyReleased(KeyEvent e) {
 				if (!TaskUtil.sanitizeInput(titleEntry.getText()).isEmpty()){
 					if (e.getKeyCode() == KeyEvent.VK_ENTER ){
-				    	System.out.println("Yeah Fuck Swing!");
+//				    	System.out.println("Yeah Fuck Swing!");
 				    	addStage();
 				    }
 				}
@@ -324,10 +315,9 @@ public class ColumnEditView extends JPanel implements IView {
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		this.add(topLine, gbc);
 		
-		//gbc.gridwidth = 2;
 		gbc.gridy = 2;
 		gbc.weighty = 1;
-		gbc.insets = new Insets(10, 20, 10, 20);
+		gbc.insets = new Insets(10, 20, 10, 10);
 		gbc.fill = GridBagConstraints.BOTH;
 		this.add(stageJList, gbc);
 		
@@ -338,15 +328,12 @@ public class ColumnEditView extends JPanel implements IView {
 		this.add(middleGroup, gbc);
 		
 		gbc.gridy = 4;
-		gbc.insets = new Insets(10, 20, 20, 20);
+		gbc.insets = new Insets(10, 20, 20, 10);
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		this.add(deleteBtn, gbc);
 
 		this.setMinimumSize(new Dimension(300, 0));
 		this.setPreferredSize(new Dimension(300, 0));
-//		this.topLine.setMinimumSize(new Dimension(300, 0));
-//		this.middleGroup.setMinimumSize(new Dimension(300, 0));
-
 	}
 
 	/**
@@ -459,9 +446,7 @@ public class ColumnEditView extends JPanel implements IView {
 	protected void changeNameStage(){
 		boolean valid = !TaskUtil.sanitizeInput(newName.getText()).isEmpty();
 		if (valid){
-			
-			//int index = stageJList.getSelectedIndex();	
-			//Stage stage = stageJList.getSelectedValue();
+
 			Stage stage;
 			
 			stage = stages.remove(stageJList.getSelectedIndex());
