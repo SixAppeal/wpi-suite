@@ -222,7 +222,7 @@ public class ThreadSafeLocalCache implements Cache {
 			boolean changed = false;
 			Task taskToInsert = oldTask; 
 			for (Task newTask : updatedTaskList) {
-				if (newTask.getId() == oldTask.getId()) {
+				if (newTask.equals(oldTask)) {
 					if (newTask.isArchived()) {
 						taskToInsert = null;
 					}
@@ -244,7 +244,7 @@ public class ThreadSafeLocalCache implements Cache {
 			boolean changed = false;
 			Task taskToInsert = oldTask; 
 			for (Task newTask : updatedTasks) {
-				if (newTask.getId() == oldTask.getId()) {
+				if (newTask.equals(oldTask)) {
 					if (newTask.isArchived()) {
 						taskToInsert = null;
 					}
@@ -423,7 +423,7 @@ public class ThreadSafeLocalCache implements Cache {
 	public void archiveTasksForStage(Stage stage) {
 		for (Task task : this.tasks) {
 			if (task.getStage().equals(stage)) {
-				task.archive();
+				task.setArchived(true);
 				update("archive:testing", task);
 			}
 		}

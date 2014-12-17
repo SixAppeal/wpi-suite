@@ -29,6 +29,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import javax.swing.JOptionPane;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
@@ -248,9 +249,9 @@ public class TaskEditView extends JPanel implements IView {
 		this.archiveButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				task.archive();
-				gateway.toPresenter("LocalCache", "update", "archive:testing", task);
-				gateway.toView("SidebarView", "removeEditPanel", that);
+				task.setArchived(!task.isArchived());
+				gateway.toPresenter("LocalCache", "update", task.isArchived()?"archive":"task" + ":testing", task);
+				if( task.isArchived() ) gateway.toView("SidebarView", "removeEditPanel", that);
 			}
 		});
 		
@@ -497,8 +498,31 @@ public class TaskEditView extends JPanel implements IView {
 	 * @param t task with new values
 	 */
 	public void updateEverything(Task t) {
-		this.task.setStage(t.getStage());
-		this.stageInput.setSelectedItem(t.getStage());
+		
+		if( t.hasChanged(this.task)) {
+			this.task.updateFrom(t);
+			this.titleInput.setText( task.getTitle() );
+			this.descInput.setText(task.getDescription());
+			this.dateInput.setDate(task.getDueDate());
+			this.estEffortInput.setValue(task.getEstimatedEffort());
+			this.actEffortInput.setValue(task.getActualEffort());
+			MemberListHandler.getInstance().populateMembers(task.getAssignedTo());
+			this.updateMembers();
+			this.category.setSelectedIndex(task.getCategory());
+			this.requirementsComboBox.setSelectedItem(task.getCurrentRequirementName());
+		}
+		
+		if (task.isArchived()) {
+			
+			JOptionPane.showMessageDialog(null, "The task " + task.getTitle() + " has been archived.");
+			this.archiveButton.setText("Unarchive");
+			
+		} else {
+			
+			this.archiveButton.setText("Archive");
+		
+		}
+		
 	}
 
 	/**
