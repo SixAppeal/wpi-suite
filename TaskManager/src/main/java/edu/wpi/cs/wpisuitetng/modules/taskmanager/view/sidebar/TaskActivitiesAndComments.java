@@ -208,7 +208,7 @@ public class TaskActivitiesAndComments extends JPanel implements IView {
 
 		activitiesPanel.displayActivities(t);
 		displayComments(t.getComments());
-
+		System.out.println(t.getComments().toString());
 		this.revalidate();
 	}
 	
