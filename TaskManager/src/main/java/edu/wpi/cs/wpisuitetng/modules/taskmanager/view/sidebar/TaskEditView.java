@@ -658,4 +658,6 @@ public class TaskEditView extends JPanel implements IView {
 		String shortenedTitle = TaskManagerUtil.reduceString(aReq.getName(), 220, fm);
 		return shortenedTitle;
 	}
+	
+	
 }
