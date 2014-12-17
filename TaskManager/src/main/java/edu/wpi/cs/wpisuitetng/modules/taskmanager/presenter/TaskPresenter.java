@@ -36,6 +36,10 @@ public class TaskPresenter implements IPresenter{
 	private Cache cache;
 	private LinkedList<TaskView> selectedTasks;
 	
+	/**
+	 * Default constructor
+	 * @param cache
+	 */
 	public TaskPresenter(Cache cache) {
 		super();
 		this.cache = cache;
@@ -103,7 +107,6 @@ public class TaskPresenter implements IPresenter{
 	 */
 	public void showSearch() {
 		this.gateway.toView("SidebarView", "showSearchBox");
-		//this.gateway.toView("ColumnView", "reflow");
 	}
 	
 	/**

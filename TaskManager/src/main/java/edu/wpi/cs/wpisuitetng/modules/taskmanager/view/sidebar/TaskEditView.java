@@ -624,7 +624,6 @@ public class TaskEditView extends JPanel implements IView {
 	 * @param updatedTask is the task that is set to the new task in the edit view. 
 	 */
 	public void updateEVTask(Task updatedTask){
-		//this.task.updateFrom(updatedTask);
 		this.task = updatedTask;
 		commentPanel.updateView(updatedTask);
 	}

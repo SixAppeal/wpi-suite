@@ -50,7 +50,7 @@ public class Comment implements Serializable {
 	}
 	
 	/**
-	 * 
+	 * getter for comment
 	 * @return comment
 	 */
 	public String getComment(){
@@ -58,7 +58,7 @@ public class Comment implements Serializable {
 	}
 	
 	/**
-	 * 
+	 * getter for user
 	 * @return user
 	 */
 	public String getUser(){
@@ -110,8 +110,6 @@ public class Comment implements Serializable {
 		return new Gson().toJson(this, Comment.class);
 	}
 	
-
-
 	/**
 	 * This returns a displayable comment in a JList<String>. It is used in the TaskEditView mainly, but could be applied elsewhere. 
 	 * 

@@ -1,6 +1,14 @@
+/*******************************************************************************
+ * Copyright (c) 2014 -- WPI Suite
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors: Team Six-Appeal
+ ******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar.histNcom;
-
-import javax.swing.JPanel;
 
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.FormElement;
 
@@ -13,8 +21,15 @@ import java.util.List;
 
 import javax.swing.ScrollPaneConstants;
 
+/**
+ * A form display class to handle scroll panes for tasks and comments
+ * 
+ * @author rwang3
+ *
+ */
 public class FormDisplay extends FormElement {
 	
+	private static final long serialVersionUID = 1L;
 	List<FormElement> elements;
 	JScrollPane scrollPane;
 
