@@ -281,5 +281,16 @@ public class TaskCreateView extends JPanel implements IView {
 	public void fixFocus(){
 		this.title.requestFocusInWindow();
 	}
+	
+	@Override
+	public boolean equals(Object obj)
+	{
+		if(!obj.getClass().equals(this.getClass()))
+		{
+			return false;
+		}
+		
+		return true;
+	}
 }
 

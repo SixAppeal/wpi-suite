@@ -23,11 +23,13 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
+import javax.swing.border.CompoundBorder;
 
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.util.TaskManagerUtil;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.GradientPanel;
+import edu.wpi.cs.wpisuitetng.network.TrelloNetwork;
 
 /**
  * Sets up upper toolbar of RequirementManager tab
@@ -41,7 +43,10 @@ public class ToolbarView extends GradientPanel implements IView {
 	private Gateway gateway;
 	
 	private JButton createTaskButton;
+
 	private JButton helpButton;
+	private JButton importButton;
+
 	private JButton toggleSidebarButton;
 	
 	@SuppressWarnings("unused")
@@ -53,17 +58,25 @@ public class ToolbarView extends GradientPanel implements IView {
 	 */
 	public ToolbarView() {
 		this.createTaskButton = new JButton("  Create Task");
+
+
 		this.helpButton = new JButton();
 		this.toggleSidebarButton = new JButton("Toggle Sidebar");
+
+		this.importButton = new JButton("Import");
+		this.toggleSidebarButton = new JButton("  Toggle Sidebar");
+
+
 		this.click = true;
 		
 		this.createTaskButton.setHorizontalAlignment(SwingConstants.CENTER);
 		this.createTaskButton.setIcon(new ImageIcon(this.getClass().getResource("icon_plus.png")));
 		Font font = this.createTaskButton.getFont();
 		font = new Font(font.getName(), font.getStyle(), 16);
+		CompoundBorder border = BorderFactory.createCompoundBorder(this.createTaskButton.getBorder(), 
+				BorderFactory.createEmptyBorder(6, 6, 6, 6));
 		this.createTaskButton.setFont(font);
-		this.createTaskButton.setBorder(BorderFactory.createCompoundBorder(this.createTaskButton.getBorder(), 
-				BorderFactory.createEmptyBorder(6, 6, 6, 6)));
+		this.createTaskButton.setBorder(border);
 		
 		this.createTaskButton.addActionListener(new ActionListener() {
 			@Override
@@ -72,24 +85,40 @@ public class ToolbarView extends GradientPanel implements IView {
 			}
 		});
 		
+		this.importButton.setFont(font);
+		this.importButton.setBorder(border);
+		this.importButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				TrelloNetwork.getInstance().beginImport();
+			}
+		});
+
 		this.helpButton.setHorizontalAlignment(SwingConstants.CENTER);
 		this.helpButton.setIcon(new ImageIcon(this.getClass().getResource("icon_question.png")));
 		this.helpButton.setFont(font);
-		this.helpButton.setBorder(BorderFactory.createCompoundBorder(this.helpButton.getBorder(),
-				BorderFactory.createEmptyBorder(6, 6, 6, 6)));
+		this.helpButton.setBorder(border);
 		
 		this.helpButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
+
+			}
+		});			
+
+		this.importButton.setFont(font);
+		this.importButton.setBorder(border);
+		this.importButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				TrelloNetwork.getInstance().beginImport();
 			}
 		});
 		
 		this.toggleSidebarButton.setHorizontalAlignment(SwingConstants.CENTER);
 		//this.toggleSidebarButton.setIcon(new ImageIcon(this.getClass().getResource("icon_right.png")));
 		this.toggleSidebarButton.setFont(font);
-		this.toggleSidebarButton.setBorder(BorderFactory.createCompoundBorder(this.toggleSidebarButton.getBorder(), 
-				BorderFactory.createEmptyBorder(6, 6, 6, 6)));
+		this.toggleSidebarButton.setBorder(border);
 		
 		this.toggleSidebarButton.addActionListener(new ActionListener() {
 			@Override
@@ -126,13 +155,16 @@ public class ToolbarView extends GradientPanel implements IView {
 		gbc.gridy = 0;
 		this.add(this.createTaskButton, gbc);
 		
+		gbc.gridx = 1;
+		this.add(this.importButton, gbc);
+		
 		gbc.anchor = GridBagConstraints.LAST_LINE_END;
 		gbc.weightx = 1.0;
-		gbc.gridx = 1;
+		gbc.gridx = 2;
 		this.add(this.toggleSidebarButton, gbc);
 		
 		gbc.insets.right = 20;
-		gbc.gridx = 2;
+		gbc.gridx = 3;
 		gbc.weightx = 0;
 		this.add(this.helpButton, gbc);
 	}
