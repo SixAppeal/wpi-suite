@@ -17,7 +17,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -73,6 +73,7 @@ public class TaskActivitiesAndComments extends JPanel implements IView {
 	JTextArea taskCommentArea;
 	
 	JButton saveCommentButton; //Saves the comment
+	
 	/**
 	 * Constructor
 	 */
@@ -206,7 +207,6 @@ public class TaskActivitiesAndComments extends JPanel implements IView {
 		this.t = t;
 
 		activitiesPanel.displayActivities(t);
-//		taskCommentList.setListData(t.getComments().toArray(new Comment[0]));
 		displayComments(t.getComments());
 
 		this.revalidate();
@@ -221,6 +221,7 @@ public class TaskActivitiesAndComments extends JPanel implements IView {
 		updateView(t);
 		taskCommentArea.setText("");
 		saveCommentButton.setEnabled(false);
+		this.gateway.toPresenter("LocalCache", "update", "task:testing", this.t);
 	}
 	
 	/**
@@ -237,13 +238,15 @@ public class TaskActivitiesAndComments extends JPanel implements IView {
 	*/
 
 	public void displayComments(List<Comment> comments){
-			List<String> displayableComments = new LinkedList<String>(); 
+			List<String> displayableComments = new ArrayList<String>();
+			
 			
 			for (Comment c: comments){
 				displayableComments.add(c.viewableComment());
 			}
 			
 			taskCommentList.setListData(displayableComments.toArray(new String[0]));
+			//taskCommentList.setListData(displayableComments.toArray(new ActivityLabel[displayableComments.size()]));
 			
 		}
 }

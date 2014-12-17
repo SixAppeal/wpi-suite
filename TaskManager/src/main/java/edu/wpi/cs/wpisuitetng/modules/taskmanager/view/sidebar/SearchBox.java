@@ -14,12 +14,7 @@ package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.Robot;
 
-import javax.swing.*;
-
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -97,7 +92,6 @@ public class SearchBox extends JPanel implements IView {
 
 		this.searchCheckBox = new JCheckBox();
 		this.searchCheckBox.addItemListener(new ItemListener() {
-			//ask Santiago if you have questions 
 			@Override
 			public void itemStateChanged(ItemEvent arg0) {
 				if (archiveModeOn){
@@ -133,7 +127,6 @@ public class SearchBox extends JPanel implements IView {
 		searchBox.addKeyListener( new KeyListener() {
 			@Override
 			public void keyPressed(KeyEvent e) {
-				// needed a robot to help me over here :)
 				if((searchBox.getText().length() == 1) && e.getKeyCode() == KeyEvent.VK_BACK_SPACE){
 					searchBox.setText("");
 				}
@@ -166,14 +159,14 @@ public class SearchBox extends JPanel implements IView {
 		gbc = new GridBagConstraints();
 		gbc.anchor = GridBagConstraints.PAGE_START;
 		gbc.fill = GridBagConstraints.HORIZONTAL;
-		gbc.insets = new Insets(20, 20, 20, 20);
+		gbc.insets = new Insets(20, 20, 0, 20);
 		gbc.weightx = 1.0;
 		gbc.gridx = 0;
 		gbc.gridy = 0;
 		gbc.gridwidth = 2;
 		this.container.add(searchBox, gbc);
 
-		gbc.insets = new Insets(10, 20, 10, 10);
+		gbc.insets = new Insets(5, 20, 0, 0);
 		gbc.weightx = 0;
 		gbc.weighty = 0;
 		gbc.gridx = 0;
@@ -181,13 +174,14 @@ public class SearchBox extends JPanel implements IView {
 		gbc.gridwidth = 1;
 		this.container.add(searchCheckBox, gbc);
 
+		gbc.insets = new Insets(8, 5, 0, 20);
 		gbc.weightx = 1;
 		gbc.weighty = 0;
 		gbc.gridx = 1;
 		gbc.gridy = 1;
 		this.container.add(archiveLabel, gbc);
 
-		gbc.insets = new Insets(10, 10, 10, 10);
+		gbc.insets = new Insets(5, 10, 10, 10);
 		//gbc.insets.top = 0;
 		gbc.gridwidth = 2; 
 		gbc.gridx = 0;
@@ -290,10 +284,12 @@ public class SearchBox extends JPanel implements IView {
 
 		if (this.toSearch.isInitialized()) {
 			this.toSearch.updateIndex(all_tasks);
+			this.displayResults(resultsG);
 		}
 		else {
 			this.toSearch.initialize();
 			this.toSearch.createIndex(all_tasks);
+			this.displayResults(resultsG);
 		}
 	}
 
@@ -305,6 +301,7 @@ public class SearchBox extends JPanel implements IView {
 	public void setGateway(Gateway gateway) {
 		this.gateway = gateway;
 	}
+	
 	/**
 	 * returns true if the search box is empty
 	 * @return boolean if true
@@ -312,7 +309,4 @@ public class SearchBox extends JPanel implements IView {
 	public boolean isSearchBoxEmpty(){
 		return searchBox.getText().isEmpty();
 	}
-
-
-
 }

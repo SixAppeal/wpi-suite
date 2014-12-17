@@ -18,8 +18,11 @@ import java.util.List;
 import java.util.Comparator;
 import java.util.Map;
 
+import java.text.SimpleDateFormat;
+
 import com.google.gson.Gson;
 
+import edu.wpi.cs.wpisuitetng.exceptions.WPISuiteException;
 import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementmanager.models.Requirement;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.util.TaskUtil;
@@ -31,7 +34,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.util.TaskUtil;
  * @author nhhughes
  * @author srojas
  * @author jrhennessy
- * @author Thhughes
+ * @author thhughes
  * @author tmeehan
  * @author krpeffer
  * @author rwang3
@@ -102,6 +105,8 @@ public class Task extends AbstractModel {
 	 * 
 	 * @param title name for the task
 	 * @param description explanation of the task
+	 * @param stage Stage of task
+	 * @param category Color category of task
 	 * @param assignedTo list of members that are assigned to the task
 	 * @param estimatedEffort number that represents how much effort (units of work)
 	 * @param actualEffort number that represents the actual effort
@@ -127,9 +132,9 @@ public class Task extends AbstractModel {
 		this.requirement = requirement;
 		this.activities = activities;
 		this.comments = comments;
-		this.activities = activities;
 		this.archived = false;
 		this.priority = 0;
+		this.currentRequirementName = "";
 	}
 	
 	/**
@@ -157,22 +162,29 @@ public class Task extends AbstractModel {
 	 * @return	True if two tasks with the same ID's but different other fields have been compared. 
 	 * 			False if the tasks have different ID's 
 	 * 			False if the tasks has not changed 
+	 * @throws WPISuiteException 
 	 */
-	public boolean hasChanged(Task task){
+	public boolean hasChanged(Task task) throws RuntimeException{
 		if(this.equals(task)){
 			// Set's comparison to be true if anything is not the same between the two tasks
-			boolean comparison = this.title.equals(task.getTitle())
+			boolean comparison =
+					   this.title.equals(task.getTitle())
 					&& this.description.equals(task.getDescription())
 					&& this.estimatedEffort == task.getEstimatedEffort()
 					&& this.actualEffort == task.getActualEffort()
 					&& this.dueDate.equals(task.getDueDate())
 					&& this.category == task.getCategory()
 					&& this.equalComments(task)
-					&& this.equalActivities(task);
-				
+					&& this.equalActivities(task)
+					&& this.archived == task.isArchived()
+					&& this.stage.equals(task.getStage())
+					&& this.assignedTo.equals(task.getAssignedTo())
+					&& this.priority == task.getPriority()
+					&& this.currentRequirementName.equals(task.getCurrentRequirementName());
+			
 			return !comparison;		// Return the opposite of this to say true when the task has been changed
 		}
-		return false; 
+		throw new RuntimeException("Tried to compare task with different ID using hasChanged!"); 
 		
 	}
 
@@ -259,7 +271,8 @@ public class Task extends AbstractModel {
 	public void addToHistory(Object original, Object newInfo, String field) {
 		if(!newInfo.equals(original))
 		{
-			activities.add(new Activity("The " + field + " was changed to " + newInfo.toString()));
+			activities.add(new Activity("The " + field + " was changed from "
+					+ original.toString()+ " to " + newInfo.toString()));
 		}
 	}
 	
@@ -399,7 +412,7 @@ public class Task extends AbstractModel {
 	}
 
 	/**
-	 * 
+	 * getter for dueDate
 	 * @return due date for the task
 	 */
 	public Date getDueDate() {
@@ -407,7 +420,7 @@ public class Task extends AbstractModel {
 	}
 
 	/**
-	 * 
+	 * setter for dueDate
 	 * @param dueDate due date for the task
 	 */
 	public void setDueDate(Date dueDate) throws IllegalArgumentException  {
@@ -451,28 +464,33 @@ public class Task extends AbstractModel {
 	}
 	
 	/**
-	 * 
+	 * getter for priority value
 	 * @return the priority value to be listed on screen
 	 */
 	public int getPriority()
 	{
 		return this.priority;
 	}
-	
+
 	/**
 	 *  sets the priority for the task
 	 * @param what the priority should be
 	 */
-	public void setActivities(List<Activity> activities) throws IllegalArgumentException  {
-		this.activities = activities;
-	}
-
 	public void setPriority(int priority) {
 		this.priority = priority;
 	}
-
+	
 	/**
-	 * 
+	 * Sets activities of the task
+	 * @param activities Activities used to set
+	 * @throws IllegalArgumentException
+	 */
+	public void setActivities(List<Activity> activities) throws IllegalArgumentException  {
+		this.activities = activities;
+	}
+	
+	/**
+	 * getter for list of activities
 	 * @return list of activities on the task
 	 */
 	public List<Activity> getActivities() {
@@ -484,22 +502,6 @@ public class Task extends AbstractModel {
 	 */
 	public boolean isArchived() {
 		return archived;
-	}
-	
-	/**
-	 * Set archival status to true
-	 */
-	public void archive() {
-		this.activities.add(new Activity("This task was Archived on " + this.getDueDate().toString()));
-		this.archived = true;
-	}
-	
-	/**
-	 * Set archival status to false
-	 */
-	public void unarchive() {
-		this.activities.add(new Activity("This task was Unarchived on " + this.getDueDate().toString()));
-		this.archived = false;
 	}
 
 	/**
@@ -522,7 +524,6 @@ public class Task extends AbstractModel {
 		this.archived = updatedTask.archived;
 		this.priority = updatedTask.priority;
 		this.currentRequirementName = updatedTask.getCurrentRequirementName();
-//		this.requirement = updatedTask.requirement;
 	}
 	
 	/**
@@ -582,5 +583,16 @@ public class Task extends AbstractModel {
 			}
 		}
 		return true;
+	}
+
+	/**
+	 * Set the archival of this task
+	 * @param b new archival status
+	 */
+	public void setArchived(boolean b) {
+		Date archiveDate = new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("h:mm a, MM/dd/yyyy");
+		this.activities.add(new Activity("This task was " + (b?"":"Un") + "archived on " + sdf.format(archiveDate)));
+		this.archived = b;
 	}
 }

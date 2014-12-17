@@ -12,6 +12,9 @@ package edu.wpi.cs.wpisuitetng.modules.taskmanager.model;
 
 import java.io.Serializable;
 
+import java.util.Date;
+import java.text.SimpleDateFormat;
+
 import com.google.gson.Gson;
 
 /**
@@ -30,6 +33,7 @@ public class Comment implements Serializable {
 	private static final int MAX_LENGTH = 20;
 	String user;
 	String comment;
+	Date date;
 	
 	/**
 	 * Default Constructor for comments
@@ -37,6 +41,7 @@ public class Comment implements Serializable {
 	public Comment(){
 		this.user = "";
 		this.comment = "";
+		this.date = new Date();
 	}
 	
 	/**
@@ -47,10 +52,11 @@ public class Comment implements Serializable {
 	public Comment(String user, String comment){
 		this.user = user;
 		this.comment = comment;
+		this.date = new Date();
 	}
 	
 	/**
-	 * 
+	 * getter for comment
 	 * @return comment
 	 */
 	public String getComment(){
@@ -58,7 +64,7 @@ public class Comment implements Serializable {
 	}
 	
 	/**
-	 * 
+	 * getter for user
 	 * @return user
 	 */
 	public String getUser(){
@@ -91,7 +97,8 @@ public class Comment implements Serializable {
 	
 	@Override
 	public String toString(){
-		return (this.user + ": " + this.comment);
+		SimpleDateFormat sdf = new SimpleDateFormat("h:mm a, MM/dd/yyyy");
+		return (sdf.format(date) + "> " + this.user + ": " + this.comment);
 	}
 	
 	/**
@@ -110,8 +117,6 @@ public class Comment implements Serializable {
 		return new Gson().toJson(this, Comment.class);
 	}
 	
-
-
 	/**
 	 * This returns a displayable comment in a JList<String>. It is used in the TaskEditView mainly, but could be applied elsewhere. 
 	 * 

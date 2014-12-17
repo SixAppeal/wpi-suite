@@ -9,18 +9,6 @@
  * Contributors: Team Six-Appeal
  ******************************************************************************/
 
-/**
- * Issues:
- * 	1) The only available space to drag is where tasks aren't (need to make task view drop targets as well
- *  5) database clears drag and drop order
- * Order of things I'm going to take a look at if you guys don't get to them:
- *  1) the available space thing.  I have a workaround, I think.
- *  2) the gateway stuff.  TaskView cannot contain anything with Task or Gateway in it. Probably need a global mouse listener or something. Other 
- *  option is the gateway, task and everything else becomes a JPanel (which is a pretty bad option.
- *  3) database stuff
- *  I'm figuring that you guys can definitely handle graphics / animation / everything else.  
- */
-
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar;
 
 import java.awt.Component;
@@ -252,9 +240,10 @@ public class ColumnView extends JPanel implements IView {
         return dragAndDropPanelDataFlavor;
     }
 	
-	
-	
-	
+	/**
+	 * Scroll to the specified area
+	 * @param viewStage
+	 */
 	public void scrollToPlace(Stage viewStage){
 		int location = 0;
 		int division = 0;

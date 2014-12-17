@@ -16,6 +16,7 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -29,6 +30,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.ListModel;
@@ -63,6 +65,9 @@ public class ColumnEditView extends JPanel implements IView {
 	 */
 	private static final long serialVersionUID = 7727625542299321948L;
 
+	private JPanel topLine;
+	private JPanel middleGroup;
+	
 	private StageList stages;
 	private JList<Stage> stageJList;
 	private JTextField titleEntry;
@@ -78,6 +83,9 @@ public class ColumnEditView extends JPanel implements IView {
 	 * Creates a sidebar view to change the edit view 
 	 */
 	public ColumnEditView() { 
+		this.topLine = new JPanel();		
+		this.middleGroup = new JPanel();
+		
 		stages = new StageList();
 		this.stageJList = new JList<Stage>();
 		this.addButton = new JButton("Create Stage");
@@ -95,10 +103,11 @@ public class ColumnEditView extends JPanel implements IView {
 		this.moveUpBtn.setIcon(new ImageIcon(this.getClass().getResource("icon_up.png")));
 		this.moveDnBtn.setIcon(new ImageIcon(this.getClass().getResource("icon_down.png")));
 		
-		this.moveUpBtn.setPreferredSize(new Dimension(100, 25));
-		this.moveDnBtn.setPreferredSize(new Dimension(100, 25));
+		this.moveUpBtn.setMinimumSize(new Dimension(100, 25));
+		this.moveDnBtn.setMinimumSize(new Dimension(100, 25));
 		
-		// disable stage name editing and delete when there's no stage selected
+		this.titleEntry.setMinimumSize(new Dimension(100, 25));
+		this.newName.setMinimumSize(new Dimension(100, 25));
 
 		if (stageJList.isSelectionEmpty()){
 			// Just checking 
@@ -150,14 +159,13 @@ public class ColumnEditView extends JPanel implements IView {
 			@Override
 			public void keyTyped(KeyEvent e) {
 				// For some reason doesn't work for the below methods to add stuffs... Not sure. 
-			    
 			}
 
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if (!TaskUtil.sanitizeInput(titleEntry.getText()).isEmpty()){
 					if (e.getKeyCode() == KeyEvent.VK_ENTER ){
-				    	System.out.println("Fuck Swing!");
+//				    	System.out.println("Fuck Swing!");
 				    	addStage();
 				    }
 				}
@@ -168,7 +176,7 @@ public class ColumnEditView extends JPanel implements IView {
 			public void keyReleased(KeyEvent e) {
 				if (!TaskUtil.sanitizeInput(titleEntry.getText()).isEmpty()){
 					if (e.getKeyCode() == KeyEvent.VK_ENTER ){
-				    	System.out.println("Yeah Fuck Swing!");
+//				    	System.out.println("Yeah Fuck Swing!");
 				    	addStage();
 				    }
 				}
@@ -215,13 +223,7 @@ public class ColumnEditView extends JPanel implements IView {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if( e.getKeyCode() == KeyEvent.VK_DELETE && !stageJList.isSelectionEmpty()) {
-
-					if( stages.size() > 1 ) {
-						stages.remove(stageJList.getSelectedIndex());
-						updateJListAndPublish();
-					} else {
-						//TODO visual feedback when there is only one stage
-					}
+					deleteSelectedStage();
 				}
 			}
 
@@ -238,7 +240,7 @@ public class ColumnEditView extends JPanel implements IView {
 			public void valueChanged(ListSelectionEvent e) {
 				if (!stageJList.isSelectionEmpty()) {
 					newName.setEnabled(true);
-					deleteBtn.setEnabled(true);
+					deleteBtn.setEnabled(stages.size() > 1);
 				}else{
 					deleteBtn.setEnabled(false);
 					nameChange.setEnabled(false);
@@ -280,90 +282,58 @@ public class ColumnEditView extends JPanel implements IView {
 			public void actionPerformed(ActionEvent e) {
 				
 				if( !stageJList.isSelectionEmpty()) {
-					if( stages.size() > 1) {
-						Stage stage = stages.remove(stageJList.getSelectedIndex());
-						updateJListAndPublish();
-						gateway.toPresenter("LocalCache", "archiveTasksForStage", stage);
-					} else {
-						//TODO visual feedback when there is only one stage
-					}
+					deleteSelectedStage();
 				}
+				
 				stageJList.setSelectedIndex(0);
 				stageJList.clearSelection();
 				
 			}});
 		
+		this.topLine.setLayout(new GridLayout(1, 2, 10, 10));
+		this.topLine.add(titleEntry);
+		this.topLine.add(addButton);
+		
+		this.middleGroup.setLayout(new GridLayout(2, 2, 10, 10));
+		this.middleGroup.add(newName);
+		this.middleGroup.add(nameChange);
+		this.middleGroup.add(moveDnBtn);
+		this.middleGroup.add(moveUpBtn);
 		
 
 		this.setBackground(TaskManagerUtil.SIDEBAR_COLOR);
 		GridBagConstraints gbc = new GridBagConstraints();
-		this.setLayout(new GridBagLayout());
+		this.setLayout(new GridBagLayout());		
+				
 
 		//top left bottom right
 		
 		gbc.gridx = 0;
-		gbc.gridy = 0;
-		gbc.weightx = 1.0;
+		gbc.gridy = 1;
+		gbc.weightx = 1;
 		gbc.insets = new Insets(20, 20, 0, 10);
 		gbc.fill = GridBagConstraints.HORIZONTAL;
-		this.add(titleEntry, gbc);
-
-		gbc.gridx = 1;
-		gbc.weightx = 0;
-		gbc.insets = new Insets(20, 0, 0, 20);
-		this.add(addButton, gbc);
-
-		gbc.gridwidth = 2;
-		gbc.gridx = 0;
-		gbc.gridy = 1;
-		gbc.weighty = 1.0;
-		gbc.weightx = 1.0;
-		gbc.insets = new Insets(10, 20, 10, 20);
+		this.add(topLine, gbc);
+		
+		gbc.gridy = 2;
+		gbc.weighty = 1;
+		gbc.insets = new Insets(10, 20, 10, 10);
 		gbc.fill = GridBagConstraints.BOTH;
 		this.add(stageJList, gbc);
- 
 		
-		
-		gbc.gridwidth = 1;
-		gbc.gridx = 0;
-		gbc.gridy = 2;
-		gbc.weightx = 1.0;
+		gbc.gridy = 3;
 		gbc.weighty = 0;
-		gbc.insets = new Insets(0, 20, 0, 10);
+		gbc.insets = new Insets(20, 20, 0, 10);
 		gbc.fill = GridBagConstraints.HORIZONTAL;
-		this.add(newName, gbc);
-
-		gbc.gridx = 1;
-		gbc.gridy = 2;
-		gbc.weightx = 0;
-		gbc.insets = new Insets(0, 0, 0, 20);
-		this.add(nameChange, gbc);
-
-		gbc.weightx = 1.0;
-		gbc.gridx = 0;
-		gbc.gridy = 3;
-		gbc.weighty = 0.0;
-		gbc.insets = new Insets(10, 20, 0, 10);
-		gbc.fill = GridBagConstraints.HORIZONTAL;
-		this.add(moveDnBtn, gbc);
-
-		gbc.gridx = 1;
-		gbc.gridy = 3;
-		gbc.insets = new Insets(10, 0, 0, 20);
-		this.add(moveUpBtn, gbc);
+		this.add(middleGroup, gbc);
 		
-		gbc.weightx = 1.0;
-		gbc.gridx = 0;
 		gbc.gridy = 4;
-		gbc.weighty = 0.0;
-		gbc.gridwidth = 2;
-		gbc.insets = new Insets(10, 20, 20, 20);
+		gbc.insets = new Insets(10, 20, 20, 10);
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		this.add(deleteBtn, gbc);
 
 		this.setMinimumSize(new Dimension(300, 0));
-		
-
+		this.setPreferredSize(new Dimension(300, 0));
 	}
 
 	/**
@@ -387,6 +357,24 @@ public class ColumnEditView extends JPanel implements IView {
 			}
 		}
 		return true;
+	}
+	
+	/**
+	 * Deletes the task selected in the Task.
+	 */
+	protected void deleteSelectedStage() {
+		
+		if( stages.size() > 1) {
+			
+			if( JOptionPane.showConfirmDialog(this, "All tasks in this stage\nwill be archived.",
+				"Are you sure?",
+				JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION) return;
+			
+			Stage stage = stages.remove(stageJList.getSelectedIndex());
+			updateJListAndPublish();
+			gateway.toPresenter("LocalCache", "archiveTasksForStage", stage);
+		}
+		
 	}
 	
 	/**
@@ -424,6 +412,8 @@ public class ColumnEditView extends JPanel implements IView {
 			stageJList.setListData(stages.toArray(new Stage[0]));
 			if(pSelected != null && stages.contains(pSelected)) stageJList.setSelectedValue(pSelected, true);
 		}
+		
+		if( stages.size() <= 1 ) this.deleteBtn.setEnabled(false);
 	}
 
 	/**
@@ -456,9 +446,7 @@ public class ColumnEditView extends JPanel implements IView {
 	protected void changeNameStage(){
 		boolean valid = !TaskUtil.sanitizeInput(newName.getText()).isEmpty();
 		if (valid){
-			
-			//int index = stageJList.getSelectedIndex();	
-			//Stage stage = stageJList.getSelectedValue();
+
 			Stage stage;
 			
 			stage = stages.remove(stageJList.getSelectedIndex());
@@ -506,6 +494,7 @@ public class ColumnEditView extends JPanel implements IView {
 			
 		}else{
 			stages.add(new Stage(newStageName));
+			this.deleteBtn.setEnabled(true);
 			updateJListAndPublish();
 			titleEntry.setText("");
 			addButton.setEnabled(false);
@@ -517,6 +506,7 @@ public class ColumnEditView extends JPanel implements IView {
 	 * update the stage list with the values from the JList
 	 */
 	private void updateJListAndPublish() {
+		this.deleteBtn.setEnabled( stages.size() > 1);
 		Stage pS = stageJList.getSelectedValue();
 		stageJList.setListData(stages.toArray(new Stage[0]));
 		stageJList.setSelectedValue(pS, true);
@@ -525,7 +515,7 @@ public class ColumnEditView extends JPanel implements IView {
 	}
 
 	/**
-	 * Tell the cache that a change has occured
+	 * Tell the cache that a change has occurred
 	 */
 	private void publishStages() {
 		this.gateway.toPresenter("TaskPresenter", "publishChanges", stages);

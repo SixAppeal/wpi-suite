@@ -46,6 +46,15 @@ public class TaskManagerUtil {
 	}
 	
 	/**
+	 * returns the average value 0-255 of the RGB spectrum of a color
+	 * @param c The color to evaluate
+	 * @return the average value of the Red, Green, and Blue components
+	 */
+	public static int averageColor(Color c) {
+		return (c.getRed() + c.getGreen() + c.getBlue()) / 3;
+	}
+	
+	/**
 	 * Cuts a string and simulates a wrapping around feature FOR TWO LINES ONLY
 	 * NOTE: should work, but it might be off by a letter*
 	 * 

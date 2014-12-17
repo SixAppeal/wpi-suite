@@ -117,10 +117,10 @@ public class TestTask {
 	public void testArchived(){
 		assertFalse(task.isArchived());
 		
-		task.archive();
+		task.setArchived(true);
 		assertTrue(task.isArchived());
 		
-		task.unarchive();
+		task.setArchived(false);
 		assertFalse(task.isArchived());
 		
 	}
