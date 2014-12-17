@@ -16,6 +16,7 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -30,6 +31,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ListModel;
 import javax.swing.event.ListSelectionEvent;
@@ -63,6 +65,9 @@ public class ColumnEditView extends JPanel implements IView {
 	 */
 	private static final long serialVersionUID = 7727625542299321948L;
 
+	private JPanel topLine;
+	private JPanel middleGroup;
+	
 	private StageList stages;
 	private JList<Stage> stageJList;
 	private JTextField titleEntry;
@@ -78,6 +83,9 @@ public class ColumnEditView extends JPanel implements IView {
 	 * Creates a sidebar view to change the edit view 
 	 */
 	public ColumnEditView() { 
+		this.topLine = new JPanel();		
+		this.middleGroup = new JPanel();
+		
 		stages = new StageList();
 		this.stageJList = new JList<Stage>();
 		this.addButton = new JButton("Create Stage");
@@ -95,8 +103,16 @@ public class ColumnEditView extends JPanel implements IView {
 		this.moveUpBtn.setIcon(new ImageIcon(this.getClass().getResource("icon_up.png")));
 		this.moveDnBtn.setIcon(new ImageIcon(this.getClass().getResource("icon_down.png")));
 		
-		this.moveUpBtn.setPreferredSize(new Dimension(100, 25));
-		this.moveDnBtn.setPreferredSize(new Dimension(100, 25));
+		/*this.moveUpBtn.setPreferredSize(new Dimension(100, 25));
+		this.moveDnBtn.setPreferredSize(new Dimension(100, 25));*/
+		
+		this.moveUpBtn.setMinimumSize(new Dimension(100, 25));
+		this.moveDnBtn.setMinimumSize(new Dimension(100, 25));
+		
+		this.titleEntry.setMinimumSize(new Dimension(100, 25));
+		this.newName.setMinimumSize(new Dimension(100, 25));
+		
+		
 		
 		// disable stage name editing and delete when there's no stage selected
 
@@ -293,76 +309,53 @@ public class ColumnEditView extends JPanel implements IView {
 				
 			}});
 		
+		this.topLine.setLayout(new GridLayout(1, 2, 10, 10));
+		this.topLine.add(titleEntry);
+		this.topLine.add(addButton);
+		
+		this.middleGroup.setLayout(new GridLayout(2, 2, 10, 10));
+		this.middleGroup.add(newName);
+		this.middleGroup.add(nameChange);
+		this.middleGroup.add(moveDnBtn);
+		this.middleGroup.add(moveUpBtn);
 		
 
 		this.setBackground(TaskManagerUtil.SIDEBAR_COLOR);
 		GridBagConstraints gbc = new GridBagConstraints();
-		this.setLayout(new GridBagLayout());
+		this.setLayout(new GridBagLayout());		
+				
 
 		//top left bottom right
 		
 		gbc.gridx = 0;
-		gbc.gridy = 0;
-		gbc.weightx = 1.0;
+		gbc.gridy = 1;
+		gbc.weightx = 1;
 		gbc.insets = new Insets(20, 20, 0, 10);
 		gbc.fill = GridBagConstraints.HORIZONTAL;
-		this.add(titleEntry, gbc);
-
-		gbc.gridx = 1;
-		gbc.weightx = 0;
-		gbc.insets = new Insets(20, 0, 0, 20);
-		this.add(addButton, gbc);
-
-		gbc.gridwidth = 2;
-		gbc.gridx = 0;
-		gbc.gridy = 1;
-		gbc.weighty = 1.0;
-		gbc.weightx = 1.0;
+		this.add(topLine, gbc);
+		
+		//gbc.gridwidth = 2;
+		gbc.gridy = 2;
+		gbc.weighty = 1;
 		gbc.insets = new Insets(10, 20, 10, 20);
 		gbc.fill = GridBagConstraints.BOTH;
 		this.add(stageJList, gbc);
- 
 		
-		
-		gbc.gridwidth = 1;
-		gbc.gridx = 0;
-		gbc.gridy = 2;
-		gbc.weightx = 1.0;
+		gbc.gridy = 3;
 		gbc.weighty = 0;
-		gbc.insets = new Insets(0, 20, 0, 10);
+		gbc.insets = new Insets(20, 20, 0, 10);
 		gbc.fill = GridBagConstraints.HORIZONTAL;
-		this.add(newName, gbc);
-
-		gbc.gridx = 1;
-		gbc.gridy = 2;
-		gbc.weightx = 0;
-		gbc.insets = new Insets(0, 0, 0, 20);
-		this.add(nameChange, gbc);
-
-		gbc.weightx = 1.0;
-		gbc.gridx = 0;
-		gbc.gridy = 3;
-		gbc.weighty = 0.0;
-		gbc.insets = new Insets(10, 20, 0, 10);
-		gbc.fill = GridBagConstraints.HORIZONTAL;
-		this.add(moveDnBtn, gbc);
-
-		gbc.gridx = 1;
-		gbc.gridy = 3;
-		gbc.insets = new Insets(10, 0, 0, 20);
-		this.add(moveUpBtn, gbc);
+		this.add(middleGroup, gbc);
 		
-		gbc.weightx = 1.0;
-		gbc.gridx = 0;
 		gbc.gridy = 4;
-		gbc.weighty = 0.0;
-		gbc.gridwidth = 2;
 		gbc.insets = new Insets(10, 20, 20, 20);
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		this.add(deleteBtn, gbc);
 
 		this.setMinimumSize(new Dimension(300, 0));
-		
+		this.setPreferredSize(new Dimension(300, 0));
+//		this.topLine.setMinimumSize(new Dimension(300, 0));
+//		this.middleGroup.setMinimumSize(new Dimension(300, 0));
 
 	}
 
