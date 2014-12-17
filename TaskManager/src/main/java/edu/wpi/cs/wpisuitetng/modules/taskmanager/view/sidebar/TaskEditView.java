@@ -333,11 +333,43 @@ public class TaskEditView extends JPanel implements IView {
 				}
 			}
 		});
+		
+		FormField dateInputForm = new FormField("Due Date", this.dateInput, new FormFieldValidator() {
+			@Override
+			public boolean validate(JComponent component) {
+				return dateInput.getDate() != null
+						&& !dateInput.getEditor().getText().equals("");
+			}
+
+
+			@Override
+			public String getMessage() {
+				return "Please select a due date.";
+			}
+		});
 
 		this.dateInput.addPropertyChangeListener("date", new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
 				task.setDueDate(dateInput.getDate());
+				saveTask();
+			}
+		});
+		
+		this.dateInput.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (dateInput != null) { 
+					dateInputForm.validateInput();
+				}
+				saveTask();
+			}
+		});
+
+		this.dateInput.getEditor().addKeyListener(new KeyAdapter() {
+			public void keyReleased(KeyEvent e) {
+				if (e.getKeyCode() != 9) { // tab key
+					dateInputForm.validateInput();
+				}
 				saveTask();
 			}
 		});
@@ -440,7 +472,7 @@ public class TaskEditView extends JPanel implements IView {
 
 			titleField,
 			descField,
-			new FormField("Due Date", this.dateInput),
+			dateInputForm,
 			new HorizontalForm(
 				estEffortField,
 				actEffortField
