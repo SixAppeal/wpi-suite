@@ -11,8 +11,10 @@ package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -25,8 +27,10 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
+import javax.swing.border.MatteBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -77,12 +81,13 @@ public class TaskActivitiesAndComments extends JPanel implements IView {
 	/**
 	 * Constructor
 	 */
-	public TaskActivitiesAndComments() {
+	public TaskActivitiesAndComments(Task t) {
 		Color labelColor = new Color(160, 160, 160);
 		
+		this.t = t;
 		activitiesAndComments = new JTabbedPane();
 		
-		activitiesPanel = new HistoryView();
+		activitiesPanel = new HistoryView(this.t);
 		commentPanel = new JPanel();
 		
 		activitiesLabel = new JLabel("Task History");
@@ -93,6 +98,7 @@ public class TaskActivitiesAndComments extends JPanel implements IView {
 		taskCommentList = new JList<String>();
 		
 		taskCommentArea = new JTextArea();
+		taskCommentArea.setBorder(new MatteBorder(1, 1, 1, 1, SystemColor.activeCaption));
 		taskCommentArea.setLineWrap(true);
 		taskCommentArea.setWrapStyleWord(true);
 		taskCommentArea.addKeyListener(new KeyListener(){
@@ -176,13 +182,18 @@ public class TaskActivitiesAndComments extends JPanel implements IView {
 		commentsgbc.insets.top = 20;
 		commentsgbc.gridy = 0;
 		commentsgbc.gridx = 0;
-		commentPanel.add(commentLabel,commentsgbc);
+		//commentPanel.add(commentLabel,commentsgbc);
+		
+		JScrollPane scrollpane = new JScrollPane(taskCommentList);
+		scrollpane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollpane.setPreferredSize(new Dimension(200,200));
 		
 		commentsgbc.insets.top = 5;
+		commentsgbc.fill = GridBagConstraints.BOTH;
 		commentsgbc.gridy = 1;
 		commentsgbc.weighty = 1.;
 		commentsgbc.weightx = 0.;
-		commentPanel.add(taskCommentList,commentsgbc);
+		commentPanel.add(scrollpane,commentsgbc);
 		commentsgbc.weighty = 0.;
 		commentsgbc.weightx = 1.;
 		commentsgbc.gridy = 2;

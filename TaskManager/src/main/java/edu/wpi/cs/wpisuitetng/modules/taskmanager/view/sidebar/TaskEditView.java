@@ -148,7 +148,7 @@ public class TaskEditView extends JPanel implements IView {
 		// UI stuff
 		this.container = new JPanel();
 		this.scrollPane = new JScrollPane(this.container);
-		this.commentPanel = new TaskActivitiesAndComments();
+		this.commentPanel = new TaskActivitiesAndComments(this.task);
 		this.titleInput = new JTextField(this.task.getTitle());
 		this.titleLabel = new JTextArea(this.task.getTitle());
 		this.descInput = new JTextArea(this.task.getDescription(), 5, 0);

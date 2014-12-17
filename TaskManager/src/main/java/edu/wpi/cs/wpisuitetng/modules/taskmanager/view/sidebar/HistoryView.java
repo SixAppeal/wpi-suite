@@ -45,8 +45,9 @@ public class HistoryView extends JPanel implements IView{
 	private Task internalTask; 			// Keeps an internal task for comparing.  
 	
 	
-	public HistoryView(){
+	public HistoryView(Task t){
 		this.internalTask = new Task();
+		internalTask.updateFrom(t);
 		this.container = new JPanel();
 		this.scrollpane = new JScrollPane(this.container);
 		
