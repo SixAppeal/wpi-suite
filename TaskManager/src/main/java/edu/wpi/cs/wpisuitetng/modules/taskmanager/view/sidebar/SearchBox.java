@@ -14,12 +14,15 @@ package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.Robot;
 
 import javax.swing.*;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -62,7 +65,7 @@ public class SearchBox extends JPanel implements IView {
 	Search toSearch;
 	JTextField searchBox;
 	JCheckBox searchCheckBox;
-	JPanel resultsBox;
+	JPanel resultsBox; //keeps the previous list of searched results
 	Form form;
 	GridBagConstraints gbc;
 	List<Task> taskList;
@@ -87,25 +90,32 @@ public class SearchBox extends JPanel implements IView {
 		toSearch = new Search();
 		toSearch.initialize();
 		resultsBox = new JPanel();
+		this.resultsG = new ArrayList<Integer>();
 
 		resultsBox.setLayout(new GridBagLayout());
 		resultsBox.setOpaque(false);
 
 		this.searchCheckBox = new JCheckBox();
-
-
 		this.searchCheckBox.addItemListener(new ItemListener() {
 			@Override
 			public void itemStateChanged(ItemEvent arg0) {
 				if (archiveModeOn){
-					if (isSearchBoxEmpty()){
-						resultsG.clear();
-					}
+					//check box unchecked -> archive mode off
 					archiveModeOn = false;
-					displayResults(resultsG);
+					resultsBox.removeAll();
+					if(isSearchBoxEmpty()){
+						displayResults(new ArrayList<Integer>());
+					}
+					else{ 
+						displayResults(resultsG);
+					}
 				}
 				else{
+					//checked
 					archiveModeOn = true; 
+					if (!isSearchBoxEmpty()){
+						resultsBox.removeAll();
+					}
 					displayResults(resultsG);
 				}
 
@@ -116,12 +126,34 @@ public class SearchBox extends JPanel implements IView {
 		searchBox = new JTextField();
 		searchBox.setBorder(FormField.BORDER_NORMAL);
 		searchBox.addKeyListener(new SearchUserInput(this.searchBox, this.toSearch, this));
-		searchBox.addActionListener( new ActionListener() {
+		/**
+		 * Key listener for the searchBox
+		 */
+		searchBox.addKeyListener( new KeyListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				resultsG.clear();
-				displayResults(resultsG);
-			}});
+			public void keyPressed(KeyEvent e) {
+				// TODO Auto-generated method stub
+				if(archiveModeOn && isSearchBoxEmpty()){
+					searchBox.removeAll();
+					
+				}
+				else {
+					resultsG.clear();
+					displayResults(resultsG);
+				}
+			}
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+
+			}
+
+			@Override
+			public void keyTyped(KeyEvent e) {
+
+			}
+
+		});
 
 		this.container.setLayout(new GridBagLayout());
 		this.container.setBackground(SidebarView.SIDEBAR_COLOR);
@@ -151,6 +183,7 @@ public class SearchBox extends JPanel implements IView {
 		this.container.add(archiveLabel, gbc);
 
 		gbc.insets.top = 0;
+		gbc.weightx = 1;
 		gbc.weighty = 1.0;
 		gbc.gridy = 2;
 		this.container.add(resultsBox, gbc);
@@ -161,7 +194,8 @@ public class SearchBox extends JPanel implements IView {
 	}
 
 	/**
-	 * Display the results
+	 * Display the results, if archive mode: only show archived. if not: show the not archived. 
+	 * I would advise people not to try to change this :P 
 	 * @param results The list of task IDs to print 
 	 */
 	public void displayResults(List<Integer> results) {
@@ -172,7 +206,7 @@ public class SearchBox extends JPanel implements IView {
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 
 		int count = 0;
-		if (archiveModeOn && (searchBox.getText().isEmpty())){
+		if (archiveModeOn && (isSearchBoxEmpty())){
 			for (Task t : taskList){
 				if (t.isArchived()){
 					TaskView content = new TaskView(t, true);
@@ -187,7 +221,6 @@ public class SearchBox extends JPanel implements IView {
 			for (Integer r: results) {
 				gbc.fill = GridBagConstraints.HORIZONTAL;
 				Task t = getTask(r);
-
 				if (archiveModeOn && t.isArchived()){
 					TaskView content = new TaskView(t, true);
 					content.setGateway(this.gateway);
@@ -271,5 +304,7 @@ public class SearchBox extends JPanel implements IView {
 	public boolean isSearchBoxEmpty(){
 		return searchBox.getText().isEmpty();
 	}
+
+
 
 }
