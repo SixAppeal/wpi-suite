@@ -93,8 +93,16 @@ public class ColumnEditView extends JPanel implements IView {
 		this.moveUpBtn.setIcon(new ImageIcon(this.getClass().getResource("icon_up.png")));
 		this.moveDnBtn.setIcon(new ImageIcon(this.getClass().getResource("icon_down.png")));
 		
-		this.moveUpBtn.setPreferredSize(new Dimension(100, 25));
-		this.moveDnBtn.setPreferredSize(new Dimension(100, 25));
+		/*this.moveUpBtn.setPreferredSize(new Dimension(100, 25));
+		this.moveDnBtn.setPreferredSize(new Dimension(100, 25));*/
+		
+		this.moveUpBtn.setMinimumSize(new Dimension(100, 25));
+		this.moveDnBtn.setMinimumSize(new Dimension(100, 25));
+		
+		this.titleEntry.setMinimumSize(new Dimension(100, 25));
+		this.newName.setMinimumSize(new Dimension(100, 25));
+		
+		
 		
 		// disable stage name editing and delete when there's no stage selected
 
@@ -325,7 +333,7 @@ public class ColumnEditView extends JPanel implements IView {
 		gbc.gridwidth = 1;
 		gbc.gridx = 0;
 		gbc.gridy = 2;
-		gbc.weightx = 1.0;
+		gbc.weightx = 0;
 		gbc.weighty = 0;
 		gbc.insets = new Insets(0, 20, 0, 10);
 		gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -337,7 +345,7 @@ public class ColumnEditView extends JPanel implements IView {
 		gbc.insets = new Insets(0, 0, 0, 20);
 		this.add(nameChange, gbc);
 
-		gbc.weightx = 1.0;
+		gbc.weightx = 0;
 		gbc.gridx = 0;
 		gbc.gridy = 3;
 		gbc.weighty = 0.0;
