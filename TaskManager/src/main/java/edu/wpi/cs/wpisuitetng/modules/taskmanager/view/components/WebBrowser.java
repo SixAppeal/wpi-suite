@@ -21,7 +21,6 @@ import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 
 import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
 
 /**
  * An embedable browser frame
@@ -49,7 +48,7 @@ public class WebBrowser extends JFrame {
 	}
 	
 	/**
-	 * Creates the scenen for the browser
+	 * Creates the scene for the browser
 	 */
 	private void createScene() {
 		Platform.runLater(new Runnable() {

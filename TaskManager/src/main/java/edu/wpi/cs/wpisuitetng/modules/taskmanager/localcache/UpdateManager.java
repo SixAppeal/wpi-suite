@@ -24,21 +24,17 @@ import edu.wpi.cs.wpisuitetng.network.models.IRequest;
  *
  */
 public class UpdateManager implements RequestObserver {
-
-	//private Cache localCache;
 	private String toUpdate;
 	private Gateway gateway;
 	private List<String> callbacks;
 	
 	/**
 	 * Makes an update manager with copies of the gateway, the local cache, and the type of object it's updating 
-	 * @param localCache cache to use
 	 * @param toUpdate type to update (task, member, etc..)
 	 * @param gateway gateway to use
 	 * @param callbacks strings representing classes to notify via. the gateway
 	 */
-	public UpdateManager(Cache localCache, String toUpdate, Gateway gateway, List<String> callbacks) {
-		//this.localCache = localCache;
+	public UpdateManager(String toUpdate, Gateway gateway, List<String> callbacks) {
 		this.toUpdate = toUpdate;
 		this.gateway = gateway;
 		this.callbacks = callbacks;
@@ -46,17 +42,14 @@ public class UpdateManager implements RequestObserver {
 
 	/**
 	 * Makes an update manager with copies of the gateway and the local cache
-	 * @param localCache cache to use
 	 * @param toUpdate type to update (task, member, etc...)
 	 * @param gateway gateway to use
 	 * @param revocationCallback method to call in the presenter
 	 */
-	public UpdateManager(Cache localCache, String toUpdate, Gateway gateway, String revocationCallback) {
-		//this.localCache = localCache;
+	public UpdateManager(String toUpdate, Gateway gateway, String revocationCallback) {
 		this.toUpdate = toUpdate;
 		this.gateway = gateway;
 		this.callbacks = new ArrayList<String>();
-		//this.callbacks.add(revocationCallback);
 	}
 	
 	/**

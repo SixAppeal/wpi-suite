@@ -6,7 +6,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors: SixAppeal
+ * Contributors: Six-Appeal
  ******************************************************************************/
 
 
@@ -15,7 +15,6 @@ package edu.wpi.cs.wpisuitetng.modules.taskmanager.reports;
 import java.awt.Color;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
@@ -32,9 +31,6 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementmanager.models.Requirement;
-import edu.wpi.cs.wpisuitetng.modules.requirementmanager.models.RequirementModel;
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.Cache;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache.ThreadSafeLocalCache;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Activity;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Comment;
