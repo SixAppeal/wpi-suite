@@ -10,7 +10,6 @@
  ******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.model;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 
@@ -58,12 +57,12 @@ public class Activity {
 	
 	/**
 	 * Constructor for an activity
-	 * @param member member that made the comment
 	 * @param comment comment that the member made
 	 */
 	public Activity(String comment){
 		this.user = ConfigManager.getConfig().getUserName();
 		this.activity = comment;
+		this.dateAndTime = new Date();
 	}
 
 	/**
@@ -83,9 +82,9 @@ public class Activity {
 	
 	@Override
 	public String toString(){
-		return DateFormatPrinter.getInstance().getString(this.dateAndTime, this.user, this.activity);
+		SimpleDateFormat sdf = new SimpleDateFormat("h:mm a, MM/dd/yyyy");
+		return (sdf.format(dateAndTime) + "> " + this.user + ": " + this.activity);
 	}
-	
 	
 	/**
 	 * Checks to see if two activities are equal

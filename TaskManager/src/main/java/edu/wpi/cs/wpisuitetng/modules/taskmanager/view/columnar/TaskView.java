@@ -86,6 +86,11 @@ public class TaskView extends JPanel implements  IView {
 
 	private boolean selected;
 	
+	/**
+	 * Constructor
+	 * @param task
+	 * @param ForSearch
+	 */
 	public TaskView(Task task, boolean ForSearch) {
 		this.titleLabel = new JLabel("", JLabel.LEFT);
 		this.dateLabel = new JLabel("", JLabel.RIGHT);
@@ -221,9 +226,6 @@ public class TaskView extends JPanel implements  IView {
 		this.addMouseListener(new MouseListener() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-//				 if(e.getClickCount()==2){
-//					 gateway.toPresenter("TaskPresenter", "editTask", task);
-//			        }
 				 gateway.toPresenter("TaskPresenter", "editTask", task);
 				
 			}
@@ -385,6 +387,5 @@ public class TaskView extends JPanel implements  IView {
 		setTransferHandler(new DragAndDropTransferHandler());
 		setDropTarget(new DropTarget(TaskView.this,
 				new CustomDropTargetListener(new StageDragDropPanel (this, view))));
-		//this.container = new StageDragDropPanel(this, view);
 	}
 }

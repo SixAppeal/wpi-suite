@@ -147,43 +147,12 @@ public class TaskCreateView extends JPanel implements IView {
 				return !description.getText().trim().equals("");
 			}
 
-			
+
 			@Override
 			public String getMessage() {
 				return "Please enter a description.";
 			}
 		});
-		
-		FormField dateInputForm = new FormField("Due Date", this.dateInput, new FormFieldValidator() {
-			@Override
-			public boolean validate(JComponent component) {
-				return !(dateInput.getDate() == null);
-			}
-
-			
-			@Override
-			public String getMessage() {
-				return "Please select a due date.";
-			}
-		});
-		
-		this.dateInput.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (dateInput != null) { 
-					dateInputForm.validateInput();
-				}
-				validateForm();
-			}
-		});
-		
-		
-		this.dateInput.addPropertyChangeListener("date", new PropertyChangeListener() {
-			@Override
-			public void propertyChange(PropertyChangeEvent evt) {
-				task.setDueDate(dateInput.getDate());
-			}
-		});
-		
 
 		this.description.addKeyListener(new KeyAdapter() {
 			public void keyReleased(KeyEvent e) {
@@ -194,16 +163,57 @@ public class TaskCreateView extends JPanel implements IView {
 			}
 		});
 
+
+		FormField dateInputForm = new FormField("Due Date", this.dateInput, new FormFieldValidator() {
+			@Override
+			public boolean validate(JComponent component) {
+				return dateInput.getDate() != null
+						&& !dateInput.getEditor().getText().equals("");
+			}
+
+
+			@Override
+			public String getMessage() {
+				return "Please select a due date.";
+			}
+		});
+
+
+		this.dateInput.addPropertyChangeListener("date", new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+					task.setDueDate(dateInput.getDate());
+			}
+		});
+
+		this.dateInput.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (dateInput != null) { 
+					dateInputForm.validateInput();
+				}
+				validateForm();
+			}
+		});
+
+		this.dateInput.getEditor().addKeyListener(new KeyAdapter() {
+			public void keyReleased(KeyEvent e) {
+				if (e.getKeyCode() != 9) { // tab key
+					dateInputForm.validateInput();
+				}
+				validateForm();
+			}
+		});
+		
 		this.form = new Form(
-			titleField,
-			descriptionField,
-			dateInputForm,
-			new FormField("Stage", stages),
-			new ButtonGroup(
-				this.createButton,
-				this.cancelButton
-			)
-		);
+				titleField,
+				descriptionField,
+				dateInputForm,
+				new FormField("Stage", stages),
+				new ButtonGroup(
+						this.createButton,
+						this.cancelButton
+						)
+				);
 
 		this.container.setBackground(SidebarView.SIDEBAR_COLOR);
 		this.container.setLayout(new MigLayout("fill, ins 20", "[260]"));
@@ -211,7 +221,7 @@ public class TaskCreateView extends JPanel implements IView {
 
 		this.scrollPane.setMinimumSize(new Dimension(300, 0));
 		this.scrollPane.setMaximumSize(new Dimension(300, Integer.MAX_VALUE));
-		
+
 		this.setLayout(new MigLayout("fill, ins 0", "[300]"));
 		this.add(this.scrollPane, "grow");
 
@@ -229,7 +239,7 @@ public class TaskCreateView extends JPanel implements IView {
 		this.gateway = gateway;
 	}
 
-	
+
 	/**
 	 * Checks if the title or description are empty
 	 * @return boolean describing if both fields contain stuff
@@ -255,12 +265,12 @@ public class TaskCreateView extends JPanel implements IView {
 			Object pSelected = stages.getSelectedItem();
 			stages.removeAllItems();
 			for (Stage s : sl) stages.addItem(s);
-			
-			
+
+
 			if (pSelected != null && sl.contains(pSelected)) stages.setSelectedItem(pSelected);
 		}
 	}
-	
+
 	/**
 	 * 
 	 * @return JTextField object that is the title of the TaskCreateView
@@ -275,14 +285,14 @@ public class TaskCreateView extends JPanel implements IView {
 	public JTextArea getDescription(){
 		return this.description;
 	}
-	
+
 	/**
 	 *  sets the focus on a text field
 	 */
 	public void fixFocus(){
 		this.title.requestFocusInWindow();
 	}
-	
+
 	@Override
 	public boolean equals(Object obj)
 	{
@@ -290,7 +300,7 @@ public class TaskCreateView extends JPanel implements IView {
 		{
 			return false;
 		}
-		
+
 		return true;
 	}
 }

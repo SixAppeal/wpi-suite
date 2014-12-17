@@ -87,15 +87,15 @@ public class TaskPollTracker {
 	 */
 	public void update(Task task) {
 		this.task = task;
-		System.out.println("Got Here! " + toBeNotified.size());
-		System.out.flush();
+//		System.out.println("Got Here! " + toBeNotified.size());
+//		System.out.flush();
 		for (Thread entityToNotify : toBeNotified) {
 			entityToNotify.interrupt();
 		}
 		int notifiesPending = toBeNotified.size();
 		toBeNotified.clear();
 		this.notificationLock.release(notifiesPending);
-		System.out.println("ToBeNotified has been cleared! ");
+//		System.out.println("ToBeNotified has been cleared! ");
 	}
 	
 }

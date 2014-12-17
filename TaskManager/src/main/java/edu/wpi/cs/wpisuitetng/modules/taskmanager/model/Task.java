@@ -19,6 +19,8 @@ import java.util.Comparator;
 import java.util.Map;
 import java.text.SimpleDateFormat;
 
+import java.text.SimpleDateFormat;
+
 import com.google.gson.Gson;
 
 import edu.wpi.cs.wpisuitetng.exceptions.WPISuiteException;
@@ -102,6 +104,8 @@ public class Task extends AbstractModel {
 	 * 
 	 * @param title name for the task
 	 * @param description explanation of the task
+	 * @param stage Stage of task
+	 * @param category Color category of task
 	 * @param assignedTo list of members that are assigned to the task
 	 * @param estimatedEffort number that represents how much effort (units of work)
 	 * @param actualEffort number that represents the actual effort
@@ -126,7 +130,6 @@ public class Task extends AbstractModel {
 		this.dueDate = TaskUtil.validateDueDate(dueDate);
 		this.activities = activities;
 		this.comments = comments;
-		this.activities = activities;
 		this.archived = false;
 		this.priority = 0;
 		this.currentRequirementName = "";
@@ -406,7 +409,7 @@ public class Task extends AbstractModel {
 	}
 
 	/**
-	 * 
+	 * getter for dueDate
 	 * @return due date for the task
 	 */
 	public Date getDueDate() {
@@ -414,7 +417,7 @@ public class Task extends AbstractModel {
 	}
 
 	/**
-	 * 
+	 * setter for dueDate
 	 * @param dueDate due date for the task
 	 */
 	public void setDueDate(Date dueDate) throws IllegalArgumentException  {
@@ -440,28 +443,33 @@ public class Task extends AbstractModel {
 	}
 	
 	/**
-	 * 
+	 * getter for priority value
 	 * @return the priority value to be listed on screen
 	 */
 	public int getPriority()
 	{
 		return this.priority;
 	}
-	
+
 	/**
 	 *  sets the priority for the task
 	 * @param what the priority should be
 	 */
-	public void setActivities(List<Activity> activities) throws IllegalArgumentException  {
-		this.activities = activities;
-	}
-
 	public void setPriority(int priority) {
 		this.priority = priority;
 	}
-
+	
 	/**
-	 * 
+	 * Sets activities of the task
+	 * @param activities Activities used to set
+	 * @throws IllegalArgumentException
+	 */
+	public void setActivities(List<Activity> activities) throws IllegalArgumentException  {
+		this.activities = activities;
+	}
+	
+	/**
+	 * getter for list of activities
 	 * @return list of activities on the task
 	 */
 	public List<Activity> getActivities() {
@@ -582,7 +590,9 @@ public class Task extends AbstractModel {
 	 * @param b new archival status
 	 */
 	public void setArchived(boolean b) {
-		this.activities.add(new Activity("This task was " + (b?"":"Un") + "archived on " + this.getDueDate().toString()));
+		Date archiveDate = new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("h:mm a, MM/dd/yyyy");
+		this.activities.add(new Activity("This task was " + (b?"":"Un") + "archived on " + sdf.format(archiveDate)));
 		this.archived = b;
 	}
 }

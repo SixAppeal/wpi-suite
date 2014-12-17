@@ -27,21 +27,16 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar.TaskView;
 public class TaskDraggableMouseListener extends DraggableMouseListener{
 
 	private TaskView taskAssoc;
-	//private boolean hasMoved;
 
 	/**
 	 * Constructor
 	 * @param t Task view task is listening on
 	 */
-
 	public TaskDraggableMouseListener(TaskView t) {
 		super(t);
 		this.taskAssoc = t;
-		//this.hasMoved = false;
-
 	}
 
-	//TODO @wmtemple, add single click selector
 	/**
 	 * @see  java.awt.event.MouseAdapter.mouseClicked
 	 */

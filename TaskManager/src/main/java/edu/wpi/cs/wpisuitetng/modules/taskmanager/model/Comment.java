@@ -15,6 +15,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 
+import java.util.Date;
+import java.text.SimpleDateFormat;
+
 import com.google.gson.Gson;
 
 /**
@@ -33,6 +36,7 @@ public class Comment implements Serializable {
 	private static final int MAX_LENGTH = 20;
 	String user;
 	String comment;
+
 	Date dateAndTime;
 	
 	/**
@@ -42,7 +46,7 @@ public class Comment implements Serializable {
 		dateAndTime = new Date(); 
 		this.user = "";
 		this.comment = "";
-		
+		this.dateAndTime = new Date();
 	}
 	
 	/**
@@ -54,10 +58,11 @@ public class Comment implements Serializable {
 		dateAndTime = new Date();
 		this.user = user;
 		this.comment = comment;
+		this.dateAndTime = new Date();
 	}
 	
 	/**
-	 * 
+	 * getter for comment
 	 * @return comment
 	 */
 	public String getComment(){
@@ -65,7 +70,7 @@ public class Comment implements Serializable {
 	}
 	
 	/**
-	 * 
+	 * getter for user
 	 * @return user
 	 */
 	public String getUser(){
@@ -102,7 +107,9 @@ public class Comment implements Serializable {
 	
 	@Override
 	public String toString(){
-		return DateFormatPrinter.getInstance().getString(this.dateAndTime, this.user, this.comment);
+
+		SimpleDateFormat sdf = new SimpleDateFormat("h:mm a, MM/dd/yyyy");
+		return (sdf.format(dateAndTime) + "> " + this.user + ": " + this.comment);
 	}
 	
 
@@ -122,8 +129,6 @@ public class Comment implements Serializable {
 		return new Gson().toJson(this, Comment.class);
 	}
 	
-
-
 	/**
 	 * This returns a displayable comment in a JList<String>. It is used in the TaskEditView mainly, but could be applied elsewhere. 
 	 * 

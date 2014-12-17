@@ -116,7 +116,6 @@ public class ToolbarView extends GradientPanel implements IView {
 		});
 		
 		this.toggleSidebarButton.setHorizontalAlignment(SwingConstants.CENTER);
-		//this.toggleSidebarButton.setIcon(new ImageIcon(this.getClass().getResource("icon_right.png")));
 		this.toggleSidebarButton.setFont(font);
 		this.toggleSidebarButton.setBorder(border);
 		

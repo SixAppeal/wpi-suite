@@ -6,7 +6,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors: SixAppeal
+ * Contributors: Six-Appeal
  ******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.reports;
@@ -73,7 +73,7 @@ public class HistoryElement implements Comparable {
 	}
 
 	/**
-	 * The users who previosly contributed to this event
+	 * The users who previously contributed to this event
 	 * @return list of previous users
 	 */
 	public List<String> getUsers() {

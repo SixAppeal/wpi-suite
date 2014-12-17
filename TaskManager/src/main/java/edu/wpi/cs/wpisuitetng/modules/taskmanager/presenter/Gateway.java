@@ -29,10 +29,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
 public class Gateway implements Serializable {
 	
 	private static final long serialVersionUID = 984917443434525486L;
-	
-	/**
-	 * 
-	 */
+
 	HashMap<String, IPresenter> presenters;
 	HashMap<String, IView> views;
 	
