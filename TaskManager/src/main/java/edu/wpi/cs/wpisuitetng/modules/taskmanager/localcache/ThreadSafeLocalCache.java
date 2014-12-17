@@ -6,7 +6,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors: Nathan Hughes, Troy Hughes
+ * Contributors: Team Six-Appeal
  ******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache;
@@ -306,7 +306,6 @@ public class ThreadSafeLocalCache implements Cache {
 	public void updateReqs(String reqVal) {
 		Requirement[] reqs = new Gson().fromJson(reqVal, Requirement[].class);
 		this.requirements = reqs;
-//		this.gateway.toPresenter("TaskPresenter", "updateRequirements");
 	}
 
 

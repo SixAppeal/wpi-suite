@@ -6,7 +6,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors: Troy Hughes Dan Seaman, Ray Wang
+ * Contributors: Team Six-Appeal
  ******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.toolbar;
@@ -41,6 +41,7 @@ public class ToolbarView extends GradientPanel implements IView {
 	private Gateway gateway;
 	
 	private JButton createTaskButton;
+	private JButton helpButton;
 	private JButton toggleSidebarButton;
 	
 	@SuppressWarnings("unused")
@@ -52,7 +53,8 @@ public class ToolbarView extends GradientPanel implements IView {
 	 */
 	public ToolbarView() {
 		this.createTaskButton = new JButton("  Create Task");
-		this.toggleSidebarButton = new JButton("  Toggle Sidebar");
+		this.helpButton = new JButton();
+		this.toggleSidebarButton = new JButton("Toggle Sidebar");
 		this.click = true;
 		
 		this.createTaskButton.setHorizontalAlignment(SwingConstants.CENTER);
@@ -67,6 +69,19 @@ public class ToolbarView extends GradientPanel implements IView {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				gateway.toPresenter("TaskPresenter", "toolbarCreate");
+			}
+		});
+		
+		this.helpButton.setHorizontalAlignment(SwingConstants.CENTER);
+		this.helpButton.setIcon(new ImageIcon(this.getClass().getResource("icon_question.png")));
+		this.helpButton.setFont(font);
+		this.helpButton.setBorder(BorderFactory.createCompoundBorder(this.helpButton.getBorder(),
+				BorderFactory.createEmptyBorder(6, 6, 6, 6)));
+		
+		this.helpButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
 			}
 		});
 		
@@ -112,10 +127,14 @@ public class ToolbarView extends GradientPanel implements IView {
 		this.add(this.createTaskButton, gbc);
 		
 		gbc.anchor = GridBagConstraints.LAST_LINE_END;
-		gbc.insets.right = 20;
 		gbc.weightx = 1.0;
 		gbc.gridx = 1;
 		this.add(this.toggleSidebarButton, gbc);
+		
+		gbc.insets.right = 20;
+		gbc.gridx = 2;
+		gbc.weightx = 0;
+		this.add(this.helpButton, gbc);
 	}
 
 	/**

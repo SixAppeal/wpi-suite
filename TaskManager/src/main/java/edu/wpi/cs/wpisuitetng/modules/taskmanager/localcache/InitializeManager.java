@@ -6,7 +6,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors: Nathan Hughes
+ * Contributors: Team Six-Appeal
  ******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.localcache;
@@ -21,7 +21,7 @@ import edu.wpi.cs.wpisuitetng.network.models.IRequest;
 
 /**
  * Request Observer to first sync with every different entity manager upon startup of Janeway
- * @author nathan
+ * @author nhhughes
  *
  */
 public class InitializeManager implements RequestObserver{
@@ -64,11 +64,6 @@ public class InitializeManager implements RequestObserver{
 		if (splitPath[splitPath.length-1].equals("user")) {
 			String updateValue = iReq.getResponse().getBody();
 			((ThreadSafeLocalCache)this.localCache).updateMembers(updateValue);
-			this.initSync.release();
-		}
-		if (splitPath[splitPath.length-1].equals("requirements")) {
-			String reqVal = iReq.getResponse().getBody();
-			((ThreadSafeLocalCache)this.localCache).updateReqs(reqVal);
 			this.initSync.release();
 		}
 	}

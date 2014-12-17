@@ -7,14 +7,17 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors: Nathan Hughes, Alexander Shoop, Will Rensselaer, Thomas Meehan, Ryan Orlando, Troy Hughes, Nathan Hughes
+ * Contributors: Team Six-Appeal
  ******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Insets;
@@ -44,8 +47,9 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
  * @author srojas
  * @author thhughes
  * @author nhhughes
- * @author dpseaman
  * @author tmeehan
+ * @author dpseaman
+ * 
  */
 public class SidebarView extends JTabbedPane implements IView {
 	private static final long serialVersionUID = -9157611802121055998L;
@@ -245,10 +249,18 @@ public class SidebarView extends JTabbedPane implements IView {
 	public void passInRequirements(String requirements) {
 		Requirement[] requirementsArray = Requirement.fromJsonArray(requirements);
 		
+		//This is a band aid
+		ArrayList<Requirement> requirmentlist = new ArrayList<Requirement>();
+		for (Requirement r : requirementsArray) {
+			requirmentlist.add(r);
+		}
+		Set<Requirement> setR = new HashSet<Requirement>(requirmentlist);
+		Requirement[] requirementsArray2 = (Requirement[]) (setR).toArray(new Requirement[0]);
+		
 		// check if tab exists with the edit pane
 		for (IView view : viewList) {
 			if (view instanceof TaskEditView) {
-				((TaskEditView) view).getRequirements(requirementsArray);
+				((TaskEditView) view).getRequirements(requirementsArray2);
 			}
 		}
 	}
@@ -325,6 +337,7 @@ public class SidebarView extends JTabbedPane implements IView {
 	 */
 	public void setCache(ThreadSafeLocalCache cache) {
 		this.cache = cache;
+		this.statisticsView.setCache(cache);
 	}
 	
 	

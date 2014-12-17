@@ -6,7 +6,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors: William Temple
+ * Contributors: Team Six-Appeal
  ******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.model;
@@ -24,12 +24,14 @@ import com.google.gson.Gson;
 import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
 
 /**
- * @author wmtemple
+ * 
  *
  * This is a wrapper class for the ordered storage of Stages within our module.
  * 
  * This class allows us to store Stages in a list, and manipulate it as a collection just as in a LinkedList, but at the
  * same time it is a model for the database.
+ *
+ *@author wmtemple
  *
  */
 public class StageList extends AbstractModel implements List<Stage>, Queue<Stage> {

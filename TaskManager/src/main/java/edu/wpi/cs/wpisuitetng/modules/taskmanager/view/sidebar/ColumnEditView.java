@@ -6,7 +6,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors: Nathan Hughes, Santiago Rojas
+ * Contributors: Team Six-Appeal
  ******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar;
@@ -49,6 +49,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.FormField;
  * @author wmtemple
  * @author wavanrensselaer
  * @author thhughes
+ * @author tmeehan
  * @author srojas
  * @author dpseaman
  * @author tmeehan
@@ -72,7 +73,7 @@ public class ColumnEditView extends JPanel implements IView {
 	private JButton nameChange;
 	private JButton deleteBtn;
 	private Gateway gateway;
-
+ 
 	/**
 	 * Creates a sidebar view to change the edit view 
 	 */
@@ -98,16 +99,15 @@ public class ColumnEditView extends JPanel implements IView {
 		this.moveDnBtn.setPreferredSize(new Dimension(100, 25));
 		
 		// disable stage name editing and delete when there's no stage selected
+
+		if (stageJList.isSelectionEmpty()){
+			// Just checking 
+		}
+
 		this.addButton.setEnabled(false);
 		this.newName.setEnabled(false);
 		this.nameChange.setEnabled(false);
 		this.deleteBtn.setEnabled(false);
-		
-		if(!stageJList.isSelectionEmpty()) {
-			this.nameChange.setEnabled(false);
-			this.deleteBtn.setEnabled(true);
-			this.newName.setEnabled(true);
-		}
 
 		addButton.addActionListener( new ActionListener() {
 			@Override
@@ -155,18 +155,24 @@ public class ColumnEditView extends JPanel implements IView {
 
 			@Override
 			public void keyPressed(KeyEvent e) {
-			    if (e.getKeyCode() == KeyEvent.VK_ENTER ){
-			    	System.out.println("Fuck Swing!");
-			    	addStage();
-			    }
+				if (!TaskUtil.sanitizeInput(titleEntry.getText()).isEmpty()){
+					if (e.getKeyCode() == KeyEvent.VK_ENTER ){
+				    	System.out.println("Fuck Swing!");
+				    	addStage();
+				    }
+				}
+
 			}
 
 			@Override
 			public void keyReleased(KeyEvent e) {
-			    if (e.getKeyCode() == KeyEvent.VK_ENTER ){
-			    	System.out.println("Yeah fuck Swing!");
-			    	addStage();
-			    }
+				if (!TaskUtil.sanitizeInput(titleEntry.getText()).isEmpty()){
+					if (e.getKeyCode() == KeyEvent.VK_ENTER ){
+				    	System.out.println("Yeah Fuck Swing!");
+				    	addStage();
+				    }
+				}
+
 			}
 			
 
@@ -315,7 +321,9 @@ public class ColumnEditView extends JPanel implements IView {
 		gbc.insets = new Insets(10, 20, 10, 20);
 		gbc.fill = GridBagConstraints.BOTH;
 		this.add(stageJList, gbc);
-
+ 
+		
+		
 		gbc.gridwidth = 1;
 		gbc.gridx = 0;
 		gbc.gridy = 2;
@@ -352,8 +360,10 @@ public class ColumnEditView extends JPanel implements IView {
 		gbc.insets = new Insets(10, 20, 20, 20);
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		this.add(deleteBtn, gbc);
-		
+
 		this.setMinimumSize(new Dimension(300, 0));
+		
+
 	}
 
 	/**

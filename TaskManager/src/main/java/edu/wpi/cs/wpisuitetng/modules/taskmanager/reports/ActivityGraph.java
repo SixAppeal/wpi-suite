@@ -6,7 +6,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors: Nathan Hughes
+ * Contributors: SixAppeal
  ******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.reports;
 
@@ -22,7 +22,7 @@ import org.jscience.mathematics.vector.Float64Matrix;
 
 /**
  * G(V,E) and adjacency matrix representation of user activity over a specified time span
- * @author nathan
+ * @author nhhughes
  *
  */
 public class ActivityGraph {
@@ -88,8 +88,7 @@ public class ActivityGraph {
 	 * @return a double representing the edge weight between the source and destination
 	 */
 	private double someFunc(UserActivity source, UserActivity destination) {
-		double to_return = ((double)(source.getImportance()  + destination.getImportance()))/((double)(source.getImportance() + destination.getImportance()));
-		System.out.println(to_return);
+		double to_return = source.getImportance().get(destination.getName());
 		return to_return;
 	}
 

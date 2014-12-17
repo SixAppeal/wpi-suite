@@ -6,7 +6,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Contributors: Will Rensselaer, Thomas Meehan, Ryan Orlando
+ * Contributors: Team Six-Appeal
  ******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar;
@@ -14,6 +14,7 @@ package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
@@ -62,6 +63,9 @@ public class StageView extends JPanel implements IView {
 	 */
 	public StageView(Stage stage, Task[] tasks) {
 		this.nameLabel = new JLabel("", JLabel.CENTER);
+		Font font = this.nameLabel.getFont();
+		font = new Font(font.getName(), font.getStyle(), 14);
+		this.nameLabel.setFont(font);
 		this.container = new StageDragDropPanel(this);
 		
 		
