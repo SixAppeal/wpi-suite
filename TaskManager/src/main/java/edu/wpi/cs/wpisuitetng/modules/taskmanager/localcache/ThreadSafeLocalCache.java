@@ -26,9 +26,9 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Stage;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.StageList;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.trello.TrelloNetwork;
 import edu.wpi.cs.wpisuitetng.network.Network;
 import edu.wpi.cs.wpisuitetng.network.Request;
-import edu.wpi.cs.wpisuitetng.network.TrelloNetwork;
 import edu.wpi.cs.wpisuitetng.network.configuration.NetworkConfiguration;
 import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
 

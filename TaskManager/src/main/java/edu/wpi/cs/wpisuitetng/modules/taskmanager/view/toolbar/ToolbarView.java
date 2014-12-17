@@ -26,10 +26,10 @@ import javax.swing.SwingConstants;
 import javax.swing.border.CompoundBorder;
 
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.trello.TrelloNetwork;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.util.TaskManagerUtil;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.GradientPanel;
-import edu.wpi.cs.wpisuitetng.network.TrelloNetwork;
 
 /**
  * Sets up upper toolbar of RequirementManager tab
