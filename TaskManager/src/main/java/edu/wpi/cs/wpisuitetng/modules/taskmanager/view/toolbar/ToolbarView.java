@@ -12,12 +12,17 @@
 package edu.wpi.cs.wpisuitetng.modules.taskmanager.view.toolbar;
 
 import java.awt.Color;
+import java.awt.Desktop;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -102,6 +107,11 @@ public class ToolbarView extends GradientPanel implements IView {
 		this.helpButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				try {
+					openWebpage(new URL("http://users.wpi.edu/~wmtemple/wpi-suite-tm-docs/"));
+				} catch (MalformedURLException f) {
+					f.printStackTrace();
+				}
 
 			}
 		});
@@ -185,4 +195,24 @@ public class ToolbarView extends GradientPanel implements IView {
 		toggleSidebarButton.repaint();
 		click = true;
 	}
+	
+	public static void openWebpage(URI uri) {
+	    Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
+	    if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE)) {
+	        try {
+	            desktop.browse(uri);
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        }
+	    }
+	}
+
+	public static void openWebpage(URL url) {
+	    try {
+	        openWebpage(url.toURI());
+	    } catch (URISyntaxException e) {
+	        e.printStackTrace();
+	    }
+	}
 }
+

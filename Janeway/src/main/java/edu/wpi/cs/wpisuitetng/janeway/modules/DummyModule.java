@@ -14,7 +14,15 @@
 package edu.wpi.cs.wpisuitetng.janeway.modules;
 
 import java.awt.BorderLayout;
+import java.awt.Desktop;
 import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,27 +42,63 @@ public class DummyModule implements IJanewayModule {
 	/** The tabs used by this module */
 	private ArrayList<JanewayTabModel> tabs;
 	
+	private JButton manager;
+	private JButton food;
+	
 	/**
 	 * Construct a new DummyModule for demonstration purposes
 	 */
 	public DummyModule() {
 		
+		this.manager = new JButton("<html>View The God<br>     Manager</html>");
+		this.food = new JButton("<html>Request Food Of<br>    The Gods</html>");
+		
+		Font font = this.manager.getFont();
+		font = new Font(font.getName(), font.getStyle(), 26);
+		
+		this.manager.setFont(font);
+		this.food.setFont(font);
+		
 		// Setup button panel
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new FlowLayout());
-		buttonPanel.add(new JButton("Func FOO"));
-		buttonPanel.add(new JButton("A COOL BUTTON"));
+		buttonPanel.add(manager);
+		buttonPanel.add(food);
 		
 		// Setup the main panel
 		JPanel mainPanel = new JPanel();
 		mainPanel.setLayout(new BorderLayout());
-		mainPanel.add(new JLabel("Dummy Module"), BorderLayout.PAGE_START);
+		mainPanel.add(new JLabel("A Better Task Manager"), BorderLayout.PAGE_START);
 		mainPanel.add(new JTextField(), BorderLayout.CENTER);
 		mainPanel.add(new JTextField(), BorderLayout.CENTER);
 		
 		tabs = new ArrayList<JanewayTabModel>();
-		JanewayTabModel tab = new JanewayTabModel("Dummy Module", new ImageIcon(), buttonPanel, mainPanel);
+		JanewayTabModel tab = new JanewayTabModel("A Better Task Manager", new ImageIcon(), buttonPanel, mainPanel);
 		tabs.add(tab);
+		
+		this.manager.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					openWebpage(new URL("https://trello.com/home"));
+				} catch (MalformedURLException f) {
+					f.printStackTrace();
+				}
+
+			}
+		});
+		
+		this.food.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					openWebpage(new URL("https://order.dominos.com/en/"));
+				} catch (MalformedURLException f) {
+					f.printStackTrace();
+				}
+
+			}
+		});
 	}
 
 	/**
@@ -62,7 +106,7 @@ public class DummyModule implements IJanewayModule {
 	 */
 	@Override
 	public String getName() {
-		return "Dummy Module";
+		return "A Better Task Manager";
 	}
 
 	/**
@@ -83,5 +127,24 @@ public class DummyModule implements IJanewayModule {
 	public void cleanup() {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	public static void openWebpage(URI uri) {
+	    Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
+	    if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE)) {
+	        try {
+	            desktop.browse(uri);
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        }
+	    }
+	}
+
+	public static void openWebpage(URL url) {
+	    try {
+	        openWebpage(url.toURI());
+	    } catch (URISyntaxException e) {
+	        e.printStackTrace();
+	    }
 	}
 }
