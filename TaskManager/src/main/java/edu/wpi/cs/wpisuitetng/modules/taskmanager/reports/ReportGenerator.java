@@ -154,13 +154,9 @@ public class ReportGenerator {
 		for (Task toAnalyze : tasks) {
 			List<Activity> taskHistory = toAnalyze.getActivities();
 			for (Activity activityToAnalyze : taskHistory) {
-				//do stuff involving history
-				//activityToAnalyze.
 				
-				
-				/*
-				 * Create a history element for every piece of history, and the user that created it. True for history. Date: when it happened
-				 */
+				history.add(new HistoryElement(toAnalyze, activityToAnalyze.getUser(), true, activityToAnalyze.getDate()));
+		
 			}
 			List<Comment> taskComments = toAnalyze.getComments();
 			for (Comment commentToAnalyze : taskComments) {

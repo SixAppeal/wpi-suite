@@ -95,10 +95,22 @@ public class Activity {
 	}
 	
 	/**
+	 * returns the user of an activity 
 	 * 
-	 * @return
+	 * @return the user 
+	 * 
 	 */
 	public String getUser(){
 		return this.user;
+	}
+	
+	
+	/**
+	 * return the date an activity was created
+	 * 
+	 * @return the date
+	 */
+	public Date getDate(){
+		return this.dateAndTime;
 	}
 }
