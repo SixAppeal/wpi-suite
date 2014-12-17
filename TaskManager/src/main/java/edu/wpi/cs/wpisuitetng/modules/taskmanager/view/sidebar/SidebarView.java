@@ -122,6 +122,22 @@ public class SidebarView extends JTabbedPane implements IView {
 		
 	}
 	
+	public void selectComponent(IView view)
+	{
+		for(int i = 0; i < this.getTabCount(); i++)
+		{
+			Component k = this.getComponentAt(i);
+			if(k instanceof EmptyComponentHolder)
+			{
+				if(((EmptyComponentHolder) k).contents.equals(view))
+				{
+					this.setSelectedComponent(k);
+				}
+			}
+		}
+		
+	}
+	
 	/**
 	 * Uncompates the current file
 	 * and Compates all other files
@@ -166,7 +182,7 @@ public class SidebarView extends JTabbedPane implements IView {
 		for (IView view : viewList) {
 			if (view instanceof TaskCreateView) {
 				if (((TaskCreateView) view).isEmpty()) {
-					this.setSelectedComponent((TaskCreateView)view);
+					this.selectComponent((TaskCreateView)view);
 					return;
 				}
 			}
@@ -205,7 +221,7 @@ public class SidebarView extends JTabbedPane implements IView {
 		for (IView view : viewList) {
 			if (view instanceof TaskEditView) {
 				if (task.equals(((TaskEditView) view).getTask())) {
-					setSelectedComponent((TaskEditView)view);
+					this.selectComponent((TaskEditView)view);
 					((TaskEditView) view).getRequirements((Requirement[])cache.retrieve("requirements"));
 					return;
 				}
