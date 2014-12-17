@@ -104,15 +104,6 @@ public class ToolbarView extends GradientPanel implements IView {
 			public void actionPerformed(ActionEvent e) {
 
 			}
-		});			
-
-		this.importButton.setFont(font);
-		this.importButton.setBorder(border);
-		this.importButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				TrelloNetwork.getInstance().beginImport();
-			}
 		});
 		
 		this.toggleSidebarButton.setHorizontalAlignment(SwingConstants.CENTER);
