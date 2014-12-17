@@ -6,6 +6,9 @@ dependencies{
 	compile 'org.apache.lucene:lucene-analyzers-common:4.10.2'
 	compile 'org.apache.lucene:lucene-queryparser:4.10.2'
 	compile 'org.jscience:jscience:4.3.1'
+	compile 'com.google.oauth-client:google-oauth-client:1.18.0-rc'
+	compile 'com.google.oauth-client:google-oauth-client-java6:1.18.0-rc'
+
 	compile project(':Network')
 	compile project(':WPISuite-Interfaces')
 	compile project(':JanewayAPI')

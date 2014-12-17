@@ -27,6 +27,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.search.SearchException;
  * This key listener parses user input and passes it to the search engine
  * @author nhhughes
  * @author akshoop
+ * @author srojas
  */
 public class SearchUserInput implements KeyListener {
 	JTextField searchBox;
@@ -71,7 +72,7 @@ public class SearchUserInput implements KeyListener {
 					searchPanel.displayResults(toSearch.searchFor(searchBox
 							.getText() + "*"));
 				} else if (searchBox.getText().length() == 0) {
-					searchPanel.resultsBox.removeAll();
+					//searchPanel.resultsBox.removeAll();
 					searchPanel.revalidate();
 					searchPanel.repaint();
 				}
