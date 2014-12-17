@@ -171,6 +171,7 @@ public class TaskEditView extends JPanel implements IView {
 		
 		this.stageInput = new JComboBox<Stage>();
 		this.archiveButton = new JButton("Archive");
+		this.archiveButton.setEnabled(!this.task.isArchived());
 		this.closeButton = new JButton("Close");
 		
 		this.titleLabel.setOpaque(false);
