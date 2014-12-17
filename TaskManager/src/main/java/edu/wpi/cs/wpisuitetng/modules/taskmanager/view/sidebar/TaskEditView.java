@@ -77,6 +77,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.MemberButtonGr
  * @author akshoop
  * @author dpseaman
  * @author thhughes
+ * @author rnorlando
  */
 public class TaskEditView extends JPanel implements IView {
 	private static final long serialVersionUID = -8972626054612267276L;
@@ -171,6 +172,7 @@ public class TaskEditView extends JPanel implements IView {
 		
 		this.stageInput = new JComboBox<Stage>();
 		this.archiveButton = new JButton("Archive");
+		this.archiveButton.setEnabled(!this.task.isArchived());
 		this.closeButton = new JButton("Close");
 		
 		this.titleLabel.setOpaque(false);
@@ -447,24 +449,27 @@ public class TaskEditView extends JPanel implements IView {
 				),
 				new FormField("Assigned", this.assignedMembersScrollPane)
 			),
-			new FormField("Category", this.category),
 			new FormField("Associated Requirement", this.requirementsComboBox),
 			new ButtonGroup(
-				this.viewRequirement,
-				this.attachRequirement
+					this.viewRequirement,
+					this.attachRequirement
 			),
+
+			new FormField("Category", this.category),
+			new Form(),
+			new Form(),
 			new ButtonGroup(
-				this.archiveButton,
-				this.closeButton
+					this.archiveButton,
+					this.closeButton
 			)
 		);
-
 		
+
 		this.container.setBackground(SidebarView.SIDEBAR_COLOR);
 		this.container.setLayout(new MigLayout("fill, ins 20", "[260]"));
 		this.container.add(this.form, "grow");
 
-		this.scrollPane.setMinimumSize(new Dimension(300, 0));
+		this.scrollPane.setMinimumSize(new Dimension(320, 0));
 
 		this.setLayout(new MigLayout("fill, ins 0", "[300][300]"));
 		this.add(this.scrollPane, "grow");
@@ -580,6 +585,7 @@ public class TaskEditView extends JPanel implements IView {
 	public void updateEVTask(Task updatedTask){
 		//this.task.updateFrom(updatedTask);
 		this.task = updatedTask;
+		commentPanel.updateView(updatedTask);
 	}
 
 	/**
@@ -593,7 +599,7 @@ public class TaskEditView extends JPanel implements IView {
 		int size = this.requirementsComboBox.getItemCount();
 		boolean foundRequirement = false;
 		if (size < this.requirementTitles.size()) {
-			this.requirementsComboBox.removeAll();
+			this.requirementsComboBox.removeAllItems();
 			for (String s : this.requirementTitles) {
 				s = TaskManagerUtil.reduceString(s, 220, fm);
 				foundRequirement = false;
@@ -656,5 +662,25 @@ public class TaskEditView extends JPanel implements IView {
 		FontMetrics fm = this.requirementsComboBox.getFontMetrics((this.requirementsComboBox.getFont()));
 		String shortenedTitle = TaskManagerUtil.reduceString(aReq.getName(), 220, fm);
 		return shortenedTitle;
+	}
+	
+	@Override
+	public boolean equals(Object obj)
+	{
+		if(!obj.getClass().equals(this.getClass()))
+		{
+			return false;
+		}
+		
+		if (obj instanceof TaskEditView) 
+		{
+			TaskEditView that = (TaskEditView) obj;
+			if (this.task.equals(that.getTask())) 
+			{
+				return true;
+			}
+		}
+		
+		return false;
 	}
 }
