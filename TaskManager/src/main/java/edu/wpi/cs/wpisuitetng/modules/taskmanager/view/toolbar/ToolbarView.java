@@ -45,7 +45,6 @@ public class ToolbarView extends GradientPanel implements IView {
 	private JButton createTaskButton;
 
 	private JButton helpButton;
-
 	private JButton importButton;
 
 	private JButton toggleSidebarButton;
@@ -84,12 +83,19 @@ public class ToolbarView extends GradientPanel implements IView {
 			}
 		});
 		
+		this.importButton.setFont(font);
+		this.importButton.setBorder(border);
+		this.importButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				TrelloNetwork.getInstance().beginImport();
+			}
+		});
 
 		this.helpButton.setHorizontalAlignment(SwingConstants.CENTER);
 		this.helpButton.setIcon(new ImageIcon(this.getClass().getResource("icon_question.png")));
 		this.helpButton.setFont(font);
-		this.helpButton.setBorder(BorderFactory.createCompoundBorder(this.helpButton.getBorder(),
-				BorderFactory.createEmptyBorder(6, 6, 6, 6)));
+		this.helpButton.setBorder(border);
 		
 		this.helpButton.addActionListener(new ActionListener() {
 			@Override
@@ -156,7 +162,7 @@ public class ToolbarView extends GradientPanel implements IView {
 		this.add(this.toggleSidebarButton, gbc);
 		
 		gbc.insets.right = 20;
-		gbc.gridx = 2;
+		gbc.gridx = 3;
 		gbc.weightx = 0;
 		this.add(this.helpButton, gbc);
 	}
