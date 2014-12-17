@@ -60,6 +60,7 @@ public class HistoryView extends JPanel implements IView{
 		
 		//this.setLayout(new MigLayout("fill, ins 20", "[300]"));
 		this.setLayout(new BorderLayout(0,0));
+		
 		//this.setLayout(new GridBagLayout());
 
 		
@@ -97,7 +98,7 @@ public class HistoryView extends JPanel implements IView{
 		this.container.removeAll();
 		GridBagConstraints gbc = new GridBagConstraints();
 		
-		gbc.anchor = GridBagConstraints.PAGE_START;
+		gbc.anchor = GridBagConstraints.FIRST_LINE_START;
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.weightx = 0;
 		gbc.weighty = 0;
@@ -115,6 +116,7 @@ public class HistoryView extends JPanel implements IView{
 			
 			if (i == historyFields.size() - 1) {
 				gbc.insets.bottom = 20;
+				gbc.weighty = 1;
 			}
 			gbc.insets = new Insets(0,0,0,0);
 			this.container.add(j, gbc);
