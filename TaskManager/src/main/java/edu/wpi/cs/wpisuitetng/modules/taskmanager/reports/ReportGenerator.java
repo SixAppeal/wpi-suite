@@ -19,7 +19,9 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.PriorityQueue;
 
 import org.jfree.chart.ChartFactory;
@@ -65,9 +67,9 @@ public class ReportGenerator {
 		PriorityQueue<HistoryElement> allHistory = new PriorityQueue<HistoryElement>();
 		Task[] allTasks = (Task []) cache.retrieve("task");
 		List<String> titles = new ArrayList<String>();
-
+		Map<String, Double> actualEffort;
 		generateHistory(allHistory, allTasks);
-		generateCompletedTasks(titles, allTasks, startDate, endDate);
+		actualEffort = generateCompletedTasks(titles, allTasks, startDate, endDate);
 		generateReport(titles);
 	}
 
@@ -201,7 +203,19 @@ public class ReportGenerator {
 	 * @return
 	 */
 	public boolean isCompleted(Date start, Date end, Task toCheck) {
-		return true;
+		List<Activity> log = new ArrayList<Activity>();
+		for (int i = log.size() - 1; i >= 0; i--) {
+			Activity activityToCheck = log.get(i);
+			if (activityToCheck.getActivity().contains("Completed")) {
+				if (start.compareTo(activityToCheck.getDateAndTime()) == -1 && end.compareTo(activityToCheck.getDateAndTime()) == 1) {
+					return true;
+				}
+				else {
+					return false;
+				}
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -211,12 +225,22 @@ public class ReportGenerator {
 	 * @param start
 	 * @param end
 	 */
-	public void generateCompletedTasks(List<String> titles, Task[] tasks, Date start, Date end) {
+	public Map<String, Double> generateCompletedTasks(List<String> titles, Task[] tasks, Date start, Date end) {
+		Map<String, Double> toReturn = new HashMap<String, Double>();
 		for (Task toAnalyze : tasks ) {
 			if (isCompleted(start, end, toAnalyze)) {
 				titles.add(toAnalyze.getTitle());
+				for (String assignedMember : toAnalyze.getAssignedTo()) {
+					if (toReturn.containsKey(assignedMember)) {
+						toReturn.put(assignedMember, toReturn.get(assignedMember + toAnalyze.getActualEffort()));
+					}
+					else {
+						toReturn.put(assignedMember, (double)toAnalyze.getActualEffort());
+					}
+				}
 			}
 		}
+		return toReturn;
 	}
 
 	/**

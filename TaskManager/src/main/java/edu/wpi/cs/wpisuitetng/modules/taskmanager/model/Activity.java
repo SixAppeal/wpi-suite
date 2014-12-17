@@ -34,6 +34,22 @@ public class Activity {
 	Date dateAndTime;
 	
 	
+	public String getUser() {
+		return user;
+	}
+
+	public void setUser(String user) {
+		this.user = user;
+	}
+
+	public Date getDateAndTime() {
+		return dateAndTime;
+	}
+
+	public void setDateAndTime(Date dateAndTime) {
+		this.dateAndTime = dateAndTime;
+	}
+
 	public Activity(){
 		this.user = "";
 		this.activity = "";
