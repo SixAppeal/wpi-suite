@@ -38,6 +38,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.util.TaskManagerUtil;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
+import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.toolbar.ToolbarView;
 
 /**
  * The sidebar that will be the container for task creation, editing, and reading
@@ -124,6 +125,8 @@ public class SidebarView extends JTabbedPane implements IView {
 			}
 		});
 		
+		this.setVisible(false);
+		
 	}
 	
 	public void selectComponent(IView view)
@@ -181,6 +184,7 @@ public class SidebarView extends JTabbedPane implements IView {
 	 */
 	public void addCreatePanel() {
 		this.setVisible(true);
+		this.buttonSwap();
 		
 		// if there is a tab with the edit pane 
 		for (IView view : viewList) {
@@ -201,6 +205,7 @@ public class SidebarView extends JTabbedPane implements IView {
 	}
 	
 	/**
+	 * 
 	 * Removes a creation panel from the sidebar
 	 * @param createView The create panel to remove
 	 * Shows the default panel
@@ -220,6 +225,7 @@ public class SidebarView extends JTabbedPane implements IView {
 	 */
 	public void addEditPanel(Task task) {
 		this.setVisible(true);
+		this.buttonSwap();
 		
 		//if there is a tab with the edit pane 
 		for (IView view : viewList) {
@@ -385,4 +391,14 @@ public class SidebarView extends JTabbedPane implements IView {
 	public StatisticsView getStatsView() {
 		return this.statisticsView;
 	}
+	
+	public void buttonSwap() {
+		if (this.isVisible()) {
+			gateway.toView("ToolbarView", "switchToRight");
+		}
+		else {
+			gateway.toView("ToolbarView", "switchToLeft");
+		}
+	}
 }
+

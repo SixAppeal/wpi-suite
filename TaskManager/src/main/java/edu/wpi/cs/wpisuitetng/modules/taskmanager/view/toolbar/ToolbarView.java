@@ -67,7 +67,7 @@ public class ToolbarView extends GradientPanel implements IView {
 		this.toggleSidebarButton = new JButton("  Toggle Sidebar");
 
 
-		this.click = true;
+		this.click = false;
 		
 		this.createTaskButton.setHorizontalAlignment(SwingConstants.CENTER);
 		this.createTaskButton.setIcon(new ImageIcon(this.getClass().getResource("icon_plus.png")));
@@ -116,7 +116,7 @@ public class ToolbarView extends GradientPanel implements IView {
 		});
 		
 		this.toggleSidebarButton.setHorizontalAlignment(SwingConstants.CENTER);
-		//this.toggleSidebarButton.setIcon(new ImageIcon(this.getClass().getResource("icon_right.png")));
+		this.toggleSidebarButton.setIcon(new ImageIcon(this.getClass().getResource("icon_left.png")));
 		this.toggleSidebarButton.setFont(font);
 		this.toggleSidebarButton.setBorder(border);
 		
@@ -125,7 +125,7 @@ public class ToolbarView extends GradientPanel implements IView {
 			public void actionPerformed(ActionEvent e) {
 				gateway.toPresenter("TaskPresenter", "toolbarToggleSidebar");
 				
-				/**
+				
 				if (click == true){
 					toggleSidebarButton.setIcon(new ImageIcon(this.getClass().getResource("icon_left.png")));
 					toggleSidebarButton.revalidate();
@@ -139,7 +139,7 @@ public class ToolbarView extends GradientPanel implements IView {
 					toggleSidebarButton.repaint();
 					click = true;
 				}
-				**/
+				
 			}
 		});
 		
@@ -175,5 +175,23 @@ public class ToolbarView extends GradientPanel implements IView {
 	@Override
 	public void setGateway(Gateway gateway) {
 		this.gateway = gateway;
+	}
+	
+	public JButton getToggle() {
+		return this.toggleSidebarButton;
+	}
+	
+	public void switchToLeft() {
+		toggleSidebarButton.setIcon(new ImageIcon(this.getClass().getResource("icon_left.png")));
+		toggleSidebarButton.revalidate();
+		toggleSidebarButton.repaint();
+		click = false;
+	}
+	
+	public void switchToRight() {
+		toggleSidebarButton.setIcon(new ImageIcon(this.getClass().getResource("icon_right.png")));
+		toggleSidebarButton.revalidate();
+		toggleSidebarButton.repaint();
+		click = true;
 	}
 }
