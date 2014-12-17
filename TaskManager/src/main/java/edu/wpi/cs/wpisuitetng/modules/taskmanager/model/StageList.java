@@ -186,6 +186,10 @@ public class StageList extends AbstractModel implements List<Stage>, Queue<Stage
 	public boolean add(Stage e) {
 		return stageList.add(e);
 	}
+	
+	public boolean add(StageList e){
+		return stageList.addAll(e.getLL());
+	}
 
 	@Override
 	public boolean remove(Object o) {

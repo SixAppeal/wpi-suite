@@ -168,7 +168,14 @@ public class ThreadSafeLocalCache implements Cache {
 		if (!(request.split(":").length == 2 && request.split(":")[0].equals("stages"))) {
 			System.out.println("Bad Request");
 		}
-		this.stages = slToStore;
+		// If first time running: 
+		if(this.stages.size() == 0){
+			this.stages = slToStore;
+		}
+		else{
+			this.stages.add(slToStore);
+		}
+		
 		final Request networkRequest = Network.getInstance().makeRequest(
 				"taskmanager/stages", HttpMethod.PUT);
 		networkRequest.addObserver(new AddManager(this, request, gateway, request.split(":")[1]));

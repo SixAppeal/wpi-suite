@@ -124,6 +124,14 @@ public class TaskPresenter implements IPresenter{
 	}
 	
 	/**
+	 * updates the cache with everything new
+	 * @param sl
+	 */
+	public void publishStage(StageList sl) {
+		this.gateway.toPresenter("LocalCache", "store", "stages:testing", sl);
+	}
+	
+	/**
 	 * Updates local cache for search engine to search through.
 	 */
 	public void updateSearch() {
