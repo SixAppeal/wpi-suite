@@ -88,18 +88,18 @@ public class ReportGenerator {
 		}
 		this.actualEffortValues = actualMemberEfforts;
 		this.actualEffortMembers = actualMembers;
-		for (HistoryElement historyElement : historyLog) {
-			
-			for (String member : members) {
-				Map<String, Double> weights = new HashMap<String, Double>();
-				for (String member2 : members) {
+		for (String member : members) {
+			Map<String, Double> weights = new HashMap<String, Double>();
+			for (String member2 : members) {
+				weights.put(member2, 0.);
+				for (HistoryElement historyElement : historyLog) {
 					Double weight = historyElement.getScore(member, member2);
-					weights.put(member2, weight);
+					weights.put(member2, weights.get(member2) + weight);
 				}
-				UserActivity toAdd = new UserActivity(member);
-				toAdd.setImportance(weights);
-				userImportanceGraph.addNode(toAdd);
 			}
+			UserActivity toAdd = new UserActivity(member);
+			toAdd.setImportance(weights);
+			userImportanceGraph.addNode(toAdd);	
 		}
 		for (String member1 : members) {
 			for (String member2 : members) {
@@ -112,13 +112,37 @@ public class ReportGenerator {
 		}
 		List<Double> centralities = new ArrayList<Double>();
 		userImportanceGraph.calcAdjacencyMatrix();
+		
 		Float64Matrix adjacencyMatrix = userImportanceGraph.getAdjacencyMatrix();
+		System.out.println(adjacencyMatrix);
 		Float64Matrix communicabilityMatrix = Float64Matrix.valueOf(identity).minus(adjacencyMatrix.times(Float64.valueOf(0.1))).inverse();
-		for (int i = 0; i < members.size(); i++) {
-			System.out.println(communicabilityMatrix.get(i, i));
-			centralities.add(communicabilityMatrix.get(i, i).doubleValue());
+		System.out.println(communicabilityMatrix);
+		for (Entry<UserActivity, Integer> e : userImportanceGraph.getNodeOrders().entrySet()) {
+			System.out.println(e.getKey() + " : " + e.getValue());
 		}
-		generateReport(titles, centralities, userImportanceGraph.getNodeOrders());
+		double max_centrality = -1.;
+		for (int i = 0; i < members.size(); i++) {
+			double broadcast_centrality = 0.; 
+			
+			for (int j = 0; j < members.size(); j++) {
+				broadcast_centrality += communicabilityMatrix.get(i, j).doubleValue();
+			}
+			centralities.add(broadcast_centrality);
+			
+		}
+		List<Double> corrected_centralities = new ArrayList<Double>();
+		for (int i = 0; i < centralities.size(); i++) {
+			corrected_centralities.add(1 / centralities.get(i));
+			if (corrected_centralities.get(i) > max_centrality) {
+				max_centrality = corrected_centralities.get(i);
+			}
+		}
+		List<Double> normalized_centralities = new ArrayList<Double>();
+		for (int i = 0; i < centralities.size(); i++) {
+			normalized_centralities.add(corrected_centralities.get(i) / max_centrality);
+		}
+		 
+		generateReport(titles, normalized_centralities, userImportanceGraph.getNodeOrders());
 
 	}
 
@@ -130,10 +154,10 @@ public class ReportGenerator {
 		try {
 			PrintStream out = new PrintStream(file);
 			out.print("<link rel=\"stylesheet\" type=\"text/css\" href=\"report.css\"/>");
-			out.print("<html><body><h1>Task Manager Report:</h1><hr><br>");
+			out.print("<html><body><h1>Task Manager Report:</h1><hr>");
 			out.print("<h3>Start Date: </h3>" + start);
 			out.print("<br><h3>End Date: </h3>" + end);
-			out.print("<hr><br><br>");
+			out.print("<hr>");
 			out.print("<h3>Members Included</h3>");
 			printMembers(out);
 			out.println("<hr><h3>Tasks Completed During Time Period</h3>");
@@ -183,7 +207,7 @@ public class ReportGenerator {
 			
 			
 			CategoryDataset dataSet = createData(this.actualEffortValues, this.actualEffortMembers, "Actual Effort");
-			createChart(dataSet, path + "actualeffort.png", "Actual Effort");
+			createChart(dataSet, path + "actualeffort.png", "Actual Effort", "Units of Effort");
 			
 			List<String> sortedMembers = new ArrayList<String>();
 			for (int i = 0; i < order.size(); i++) {
@@ -202,7 +226,7 @@ public class ReportGenerator {
 			}
 			CategoryDataset dataSet2 = createData(centralities, sortedSelectedMembers, "Importance");
 			if (members.size() > 1) {
-				createChart(dataSet2, path + "estimatedimportance.png", "Importance");
+				createChart(dataSet2, path + "estimatedimportance.png", "Importance", "Katz Broadcast Centraliy");
 			}
 			
 			Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
@@ -316,28 +340,18 @@ public class ReportGenerator {
 	 */
 	public Map<String, Double> generateCompletedTasks(List<String> titles, Task[] tasks, Date start, Date end) {
 		Map<String, Double> toReturn = new HashMap<String, Double>();
-		for (Task t : tasks) {
-			System.out.println(t);
-		}
 		for (Task toAnalyze : tasks ) {
 			if (isCompleted(start, end, toAnalyze)) {
-				System.out.println(toAnalyze.getTitle());
 				titles.add(toAnalyze.getTitle());
 				for (String assignedMember : toAnalyze.getAssignedTo()) {
-					System.out.println("Doing stuff" + assignedMember);
 					if (toReturn.containsKey(assignedMember)) {
-						System.out.println("updated stuff!");
 						toReturn.put(assignedMember, toReturn.get(assignedMember) + toAnalyze.getActualEffort());
 					}
 					else {
-						System.out.println("didn't update stuff");
 						toReturn.put(assignedMember, (double)toAnalyze.getActualEffort());
 					}
 				}
 			}
-		}
-		for (Entry<String, Double> e : toReturn.entrySet()) {
-			System.out.println(e.getKey() + " :: " + e.getValue());
 		}
 		return toReturn;
 	}
@@ -348,11 +362,11 @@ public class ReportGenerator {
 	 * @param path file path to plot to
 	 * @param title title of plot
 	 */
-	private void createChart(CategoryDataset dataset, String path, String title) {
+	private void createChart(CategoryDataset dataset, String path, String title, String label) {
 		JFreeChart chart = ChartFactory.createBarChart(
 				title,         // chart title
-				"Name",               // domain axis label
-				"Temp",                  // range axis label
+				"",               // domain axis label
+				label,                  // range axis label
 				dataset,                  // data
 				PlotOrientation.VERTICAL, // orientation
 				true,                     // include legend
