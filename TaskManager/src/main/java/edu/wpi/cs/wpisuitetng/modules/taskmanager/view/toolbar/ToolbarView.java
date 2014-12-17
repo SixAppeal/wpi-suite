@@ -56,9 +56,11 @@ public class ToolbarView extends GradientPanel implements IView {
 	 */
 	public ToolbarView() {
 		this.createTaskButton = new JButton("  Create Task");
+
 		this.importButton = new JButton("Import");
 		this.helpButton = new JButton();
 		this.toggleSidebarButton = new JButton("Toggle Sidebar");
+
 		this.click = true;
 		
 		this.createTaskButton.setHorizontalAlignment(SwingConstants.CENTER);
@@ -94,7 +96,6 @@ public class ToolbarView extends GradientPanel implements IView {
 		this.helpButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
 			}
 		});
 		

@@ -77,6 +77,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.MemberButtonGr
  * @author akshoop
  * @author dpseaman
  * @author thhughes
+ * @author rnorlando
  */
 public class TaskEditView extends JPanel implements IView {
 	private static final long serialVersionUID = -8972626054612267276L;
@@ -663,5 +664,23 @@ public class TaskEditView extends JPanel implements IView {
 		return shortenedTitle;
 	}
 	
-	
+	@Override
+	public boolean equals(Object obj)
+	{
+		if(!obj.getClass().equals(this.getClass()))
+		{
+			return false;
+		}
+		
+		if (obj instanceof TaskEditView) 
+		{
+			TaskEditView that = (TaskEditView) obj;
+			if (this.task.equals(that.getTask())) 
+			{
+				return true;
+			}
+		}
+		
+		return false;
+	}
 }
