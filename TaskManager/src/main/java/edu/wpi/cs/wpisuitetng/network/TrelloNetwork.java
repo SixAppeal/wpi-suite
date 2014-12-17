@@ -12,6 +12,9 @@ package edu.wpi.cs.wpisuitetng.network;
 
 import javax.swing.SwingUtilities;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.WebBrowser;
 
 /**
@@ -32,9 +35,21 @@ public class TrelloNetwork extends Network {
 			public void run() {
 				WebBrowser browser = new WebBrowser();
 				browser.setVisible(true);
-				browser.load("http://google.com/");
+				browser.load("https://trello.com/1/authorize?key=418e452053382c690ed313f528950133&name=WPI+Suite+Task+Manager&expiration=30days&response_type=token");
 			}
 		});
+	}
+	
+	/**
+	 * Listener to find out when the user has recieved their token
+	 * @author wavanrensselaer
+	 * @param <String>
+	 */
+	private class TrelloChangeListener implements ChangeListener<String> {
+		@Override
+		public void changed(ObservableValue<? extends String> ov, String oldValue, final String newValue) {
+			
+		}
 	}
 
 	/**
