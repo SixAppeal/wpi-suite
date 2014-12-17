@@ -31,6 +31,7 @@ import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.ListModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -52,6 +53,7 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.components.FormField;
  * @author srojas
  * @author dpseaman
  * @author tmeehan
+ * @author rnorlando
  *
  */
 public class ColumnEditView extends JPanel implements IView {
@@ -365,6 +367,29 @@ public class ColumnEditView extends JPanel implements IView {
 	}
 
 	/**
+	 * reurns if the value is valid or not
+	 * @param s the string be checked
+	 * @return if it is valid
+	 */
+	protected boolean isValidValue(String s)
+	{
+		if(s.isEmpty())
+		{
+			return false;
+		}
+		ListModel <Stage> stageList = this.stageJList.getModel();
+		for(int i = 0; i < stageList.getSize(); i++)
+		{
+			Stage thisStage = stageList.getElementAt(i);
+			if(thisStage.getName().equals(s))
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	/**
 	 * Move stage up in the list
 	 */
 	protected void moveCurrentTaskUp() {
@@ -405,7 +430,7 @@ public class ColumnEditView extends JPanel implements IView {
 	 * update create text box
 	 */
 	private void updateTextBox() {
-		boolean valid = !TaskUtil.sanitizeInput(titleEntry.getText()).isEmpty();
+		boolean valid = isValidValue(titleEntry.getText());
 		titleEntry.setBorder(valid ? FormField.BORDER_NORMAL : FormField.BORDER_ERROR);
 		addButton.setEnabled(valid);
 	}
@@ -414,8 +439,8 @@ public class ColumnEditView extends JPanel implements IView {
 	 * update edit text box
 	 */
 	private void updateEditBox() {
-		boolean valid = !TaskUtil.sanitizeInput(newName.getText()).isEmpty();
-		titleEntry.setBorder(valid ? FormField.BORDER_NORMAL : FormField.BORDER_ERROR);
+		boolean valid = isValidValue(newName.getText());
+		newName.setBorder(valid ? FormField.BORDER_NORMAL : FormField.BORDER_ERROR);
 		nameChange.setEnabled(valid);
 	}
 

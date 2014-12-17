@@ -171,6 +171,7 @@ public class TaskEditView extends JPanel implements IView {
 		
 		this.stageInput = new JComboBox<Stage>();
 		this.archiveButton = new JButton("Archive");
+		this.archiveButton.setEnabled(!this.task.isArchived());
 		this.closeButton = new JButton("Close");
 		
 		this.titleLabel.setOpaque(false);
@@ -580,6 +581,7 @@ public class TaskEditView extends JPanel implements IView {
 	public void updateEVTask(Task updatedTask){
 		//this.task.updateFrom(updatedTask);
 		this.task = updatedTask;
+		commentPanel.updateView(updatedTask);
 	}
 
 	/**
@@ -657,4 +659,6 @@ public class TaskEditView extends JPanel implements IView {
 		String shortenedTitle = TaskManagerUtil.reduceString(aReq.getName(), 220, fm);
 		return shortenedTitle;
 	}
+	
+	
 }
