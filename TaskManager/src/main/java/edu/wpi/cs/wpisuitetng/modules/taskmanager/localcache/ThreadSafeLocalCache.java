@@ -26,6 +26,8 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
 import edu.wpi.cs.wpisuitetng.network.Network;
 import edu.wpi.cs.wpisuitetng.network.Request;
+import edu.wpi.cs.wpisuitetng.network.TrelloNetwork;
+import edu.wpi.cs.wpisuitetng.network.configuration.NetworkConfiguration;
 import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
 
 /**
@@ -55,6 +57,11 @@ public class ThreadSafeLocalCache implements Cache {
 	Requirement[] requirements;
 	Gateway gateway;
 
+	String secret_key = "";
+	String application_key = "";
+	String boardId = "";
+	String token = "";
+	
 	/**
 	 * Create a new instance of the cache
 	 */
@@ -63,7 +70,13 @@ public class ThreadSafeLocalCache implements Cache {
 		archives = new ArrayList<Task>(); 
 		members = new ArrayList<User>();
 		stages = new StageList();
+
+		TrelloNetwork networksetup = TrelloNetwork.getInstance(); 
+		NetworkConfiguration config = new NetworkConfiguration("https://api.trello.com/1");
+		networksetup.setDefaultNetworkConfiguration(config);
+
 		requirements = new Requirement[0];
+
 	}
 
 	/**
@@ -385,6 +398,23 @@ public class ThreadSafeLocalCache implements Cache {
 			final Request networkRequest = Network.getInstance().makeRequest("requirementmanager/requirement", HttpMethod.GET);
 			networkRequest.addObserver(syncer);
 			networkRequest.send();
+		}
+		if (request.equals("auth")) {
+
+			TrelloNetwork networksetup = TrelloNetwork.getInstance(); 
+			NetworkConfiguration config = new NetworkConfiguration("https://trello.com/1/OAuthGetRequestToken?key=" + application_key + "&secret=" + secret_key);
+			final Request networkRequest2 = TrelloNetwork.getInstance().makeRequest("", HttpMethod.GET);
+			networkRequest2.addObserver(new TrelloManager(this));
+			networkRequest2.send();
+//          Oauth Reqest Sequence   					
+//			https://trello.com/1/OAuthGetRequestToken
+//			https://trello.com/1/OAuthAuthorizeToken
+//			https://trello.com/1/OAuthGetAccessToken
+		}
+		if (request.equals("trello")) {
+			final Request networkRequest2 = TrelloNetwork.getInstance().makeRequest("board/" + boardId + "/cards?key=" + application_key + "&token=" + token + "&fields=name", HttpMethod.GET);
+			networkRequest2.addObserver(new TrelloManager(this));
+			networkRequest2.send();
 		}
 	}
 
