@@ -246,7 +246,11 @@ public class TaskCreateView extends JPanel implements IView {
 	 * @param sl stage lists to update from
 	 */
 	public void setStages(StageList sl) {
-		if( !stages.equals(sl) ) {
+		StageList slToCompare = new StageList();
+		for (int i = 0; i < stages.getItemCount(); i++) {
+			slToCompare.add(stages.getItemAt(i));
+		}
+		if( !slToCompare.equals(sl) ) {
 			Object pSelected = stages.getSelectedItem();
 			stages.removeAllItems();
 			for (Stage s : sl) stages.addItem(s);
