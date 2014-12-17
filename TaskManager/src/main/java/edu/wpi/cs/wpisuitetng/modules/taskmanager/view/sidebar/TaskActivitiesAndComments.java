@@ -18,7 +18,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -36,7 +35,6 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Comment;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.presenter.Gateway;
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
-import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar.histNcom.ActivityLabel;
 
 /**
  * A view for Task Details
@@ -75,6 +73,7 @@ public class TaskActivitiesAndComments extends JPanel implements IView {
 	JTextArea taskCommentArea;
 	
 	JButton saveCommentButton; //Saves the comment
+	
 	/**
 	 * Constructor
 	 */
@@ -222,6 +221,7 @@ public class TaskActivitiesAndComments extends JPanel implements IView {
 		updateView(t);
 		taskCommentArea.setText("");
 		saveCommentButton.setEnabled(false);
+		this.gateway.toPresenter("LocalCache", "update", "task:testing", this.t);
 	}
 	
 	/**

@@ -17,14 +17,12 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Insets;
 import java.io.IOException;
 
 import javax.swing.ImageIcon;
-import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
 import javax.swing.event.ChangeEvent;
@@ -116,7 +114,7 @@ public class SidebarView extends JTabbedPane implements IView {
 				statisticsView);
 		
 		
-		//This stuff is for make ing it not strech out more then it needs to
+		//This stuff is for making it not stretch out more then it needs to
 		this.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e)
@@ -129,6 +127,10 @@ public class SidebarView extends JTabbedPane implements IView {
 		
 	}
 	
+	/**
+	 * Selects component of SidebarView
+	 * @param view
+	 */
 	public void selectComponent(IView view)
 	{
 		for(int i = 0; i < this.getTabCount(); i++)
@@ -165,8 +167,7 @@ public class SidebarView extends JTabbedPane implements IView {
 			
 			
 		}
-		
-		//int currentIndex = this.getSelectedIndex();
+	
 		Component selected = this.getComponentAt(currentIndex);
 		try
 		{
@@ -174,7 +175,7 @@ public class SidebarView extends JTabbedPane implements IView {
 		}
 		catch(Exception e)
 		{
-			System.out.println("Fuck, you Swing");
+//			System.out.println("Fuck, you Swing");
 		}
 		
 	}
@@ -374,7 +375,6 @@ public class SidebarView extends JTabbedPane implements IView {
 	public void reflowTasks() {
 		/*
 		 * This method causes an infinite loop and crashes the server everytime I run it... Not sure what's up here. 
-		 * 
 		 */
 		Task[] reference = (Task[]) this.cache.retrieve("task");
 		for (int i = 0; i < this.getComponentCount(); i ++) {

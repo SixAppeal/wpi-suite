@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import com.google.gson.Gson;
 
 import edu.wpi.cs.wpisuitetng.exceptions.NotImplementedException;
@@ -154,7 +156,7 @@ public class ThreadSafeLocalCache implements Cache {
 		final Request networkRequest = Network.getInstance().makeRequest(
 				"taskmanager/task2", HttpMethod.POST);
 		networkRequest.setBody(newTask.toJson());
-		networkRequest.addObserver(new UpdateManager(this, request, gateway, request.split(":")[1]));
+		networkRequest.addObserver(new UpdateManager(request, gateway, request.split(":")[1]));
 		networkRequest.send();
 
 	}
@@ -188,7 +190,7 @@ public class ThreadSafeLocalCache implements Cache {
 		
 		final Request networkRequest = Network.getInstance().makeRequest(
 				"taskmanager/stages", HttpMethod.POST);
-		networkRequest.addObserver(new UpdateManager(this, request, gateway, request.split(":")[1]));
+		networkRequest.addObserver(new UpdateManager(request, gateway, request.split(":")[1]));
 		networkRequest.setBody(newSL.toJson());
 		networkRequest.send();
 	}
@@ -433,7 +435,7 @@ public class ThreadSafeLocalCache implements Cache {
 	}
 
 	/**
-	 * Makes inital stage list
+	 * Makes initial stage list
 	 */
 	@Override
 	public void initStageList() {
@@ -465,6 +467,7 @@ public class ThreadSafeLocalCache implements Cache {
 	 * @param stage The stage with tasks to archive
 	 */
 	public void archiveTasksForStage(Stage stage) {
+		boolean bInit = true;
 		for (Task task : this.tasks) {
 			if (task.getStage().equals(stage)) {
 				task.setArchived(true);

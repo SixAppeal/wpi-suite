@@ -29,12 +29,12 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.IView;
 
 import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.sidebar.histNcom.ActivityLabel;
 
-
+/**
+ * View class for the history of activities of tasks
+ * @author rwang3
+ *
+ */
 public class HistoryView extends JPanel implements IView{
-	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -2079867404332847272L;
 	@SuppressWarnings("unused")
 	private Gateway gateway;
@@ -58,10 +58,7 @@ public class HistoryView extends JPanel implements IView{
 		this.scrollpane.setMinimumSize(new Dimension(300, 0));
 		this.scrollpane.setMaximumSize(new Dimension(300, Integer.MAX_VALUE));
 		
-		//this.setLayout(new MigLayout("fill, ins 20", "[300]"));
 		this.setLayout(new BorderLayout(0,0));
-		
-		//this.setLayout(new GridBagLayout());
 
 		
 		this.add(this.scrollpane);
@@ -75,7 +72,7 @@ public class HistoryView extends JPanel implements IView{
 	 * @param task
 	 */
 	public void displayActivities(Task task){
-		if(!task.equals(internalTask)){
+		if(task.hasChanged(internalTask)){
 			List<Activity> activities = task.getActivities();
 			historyFields.clear();
 			
@@ -132,8 +129,4 @@ public class HistoryView extends JPanel implements IView{
 		this.gateway = gateway;
 		
 	}
-	
-	
-
-
 }

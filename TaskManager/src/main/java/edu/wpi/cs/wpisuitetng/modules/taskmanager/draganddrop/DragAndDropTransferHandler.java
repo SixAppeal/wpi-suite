@@ -30,11 +30,13 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.view.columnar.TaskView;
  * @author dpseaman
  *
  */
-
 public class DragAndDropTransferHandler extends TransferHandler implements DragSourceMotionListener{
 	
 	private static final long serialVersionUID = 7376701064237929995L;
 
+	/**
+	 * Default constructor
+	 */
 	public DragAndDropTransferHandler() {
 		super();
 	}
@@ -68,16 +70,6 @@ public class DragAndDropTransferHandler extends TransferHandler implements DragS
 		}
 		return TransferHandler.NONE;
 	}
-	
-//	/**
-//	 * @see  javax.swing.TransferHandler.exportAsDrag
-//	 */
-//	@Override 
-//	public void exportAsDrag(JComponent c, InputEvent e, int action) {
-//		// turn off server updates
-//		
-//		super.exportAsDrag(c, e, action);	
-//	}
 	
 	/**
 	 * @see  javax.swing.TransferHandler.exportDone

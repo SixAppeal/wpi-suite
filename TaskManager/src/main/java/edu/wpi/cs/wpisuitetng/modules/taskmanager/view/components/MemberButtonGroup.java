@@ -44,7 +44,6 @@ public class MemberButtonGroup extends FormElement {
 		gbc.gridx = 0;
 		
 		this.setOpaque(false);
-		//this.setLayout(new GridLayout(1, buttons.length, 10, 0));
 		
 		gbc.gridy = 0;
 		this.add(buttons[0], gbc);

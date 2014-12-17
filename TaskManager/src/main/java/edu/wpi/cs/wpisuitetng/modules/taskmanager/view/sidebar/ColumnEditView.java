@@ -30,8 +30,8 @@ import java.awt.event.MouseEvent;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ListModel;
 import javax.swing.event.ListSelectionEvent;
@@ -103,18 +103,11 @@ public class ColumnEditView extends JPanel implements IView {
 		this.moveUpBtn.setIcon(new ImageIcon(this.getClass().getResource("icon_up.png")));
 		this.moveDnBtn.setIcon(new ImageIcon(this.getClass().getResource("icon_down.png")));
 		
-		/*this.moveUpBtn.setPreferredSize(new Dimension(100, 25));
-		this.moveDnBtn.setPreferredSize(new Dimension(100, 25));*/
-		
 		this.moveUpBtn.setMinimumSize(new Dimension(100, 25));
 		this.moveDnBtn.setMinimumSize(new Dimension(100, 25));
 		
 		this.titleEntry.setMinimumSize(new Dimension(100, 25));
 		this.newName.setMinimumSize(new Dimension(100, 25));
-		
-		
-		
-		// disable stage name editing and delete when there's no stage selected
 
 		if (stageJList.isSelectionEmpty()){
 			// Just checking 
@@ -166,14 +159,13 @@ public class ColumnEditView extends JPanel implements IView {
 			@Override
 			public void keyTyped(KeyEvent e) {
 				// For some reason doesn't work for the below methods to add stuffs... Not sure. 
-			    
 			}
 
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if (!TaskUtil.sanitizeInput(titleEntry.getText()).isEmpty()){
 					if (e.getKeyCode() == KeyEvent.VK_ENTER ){
-				    	System.out.println("Fuck Swing!");
+//				    	System.out.println("Fuck Swing!");
 				    	addStage();
 				    }
 				}
@@ -184,7 +176,7 @@ public class ColumnEditView extends JPanel implements IView {
 			public void keyReleased(KeyEvent e) {
 				if (!TaskUtil.sanitizeInput(titleEntry.getText()).isEmpty()){
 					if (e.getKeyCode() == KeyEvent.VK_ENTER ){
-				    	System.out.println("Yeah Fuck Swing!");
+//				    	System.out.println("Yeah Fuck Swing!");
 				    	addStage();
 				    }
 				}
@@ -231,13 +223,7 @@ public class ColumnEditView extends JPanel implements IView {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if( e.getKeyCode() == KeyEvent.VK_DELETE && !stageJList.isSelectionEmpty()) {
-
-					if( stages.size() > 1 ) {
-						stages.remove(stageJList.getSelectedIndex());
-						updateJListAndPublish();
-					} else {
-						//TODO visual feedback when there is only one stage
-					}
+					deleteSelectedStage();
 				}
 			}
 
@@ -254,7 +240,7 @@ public class ColumnEditView extends JPanel implements IView {
 			public void valueChanged(ListSelectionEvent e) {
 				if (!stageJList.isSelectionEmpty()) {
 					newName.setEnabled(true);
-					deleteBtn.setEnabled(true);
+					deleteBtn.setEnabled(stages.size() > 1);
 				}else{
 					deleteBtn.setEnabled(false);
 					nameChange.setEnabled(false);
@@ -296,11 +282,7 @@ public class ColumnEditView extends JPanel implements IView {
 			public void actionPerformed(ActionEvent e) {
 				
 				if( !stageJList.isSelectionEmpty()) {
-					if( stages.size() > 1) {
-						Stage stage = stages.remove(stageJList.getSelectedIndex());
-						updateJListAndPublish();
-						gateway.toPresenter("LocalCache", "archiveTasksForStage", stage);
-					}
+					deleteSelectedStage();
 				}
 				
 				stageJList.setSelectedIndex(0);
@@ -333,7 +315,6 @@ public class ColumnEditView extends JPanel implements IView {
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		this.add(topLine, gbc);
 		
-		//gbc.gridwidth = 2;
 		gbc.gridy = 2;
 		gbc.weighty = 1;
 		gbc.insets = new Insets(10, 20, 10, 10);
@@ -353,9 +334,6 @@ public class ColumnEditView extends JPanel implements IView {
 
 		this.setMinimumSize(new Dimension(300, 0));
 		this.setPreferredSize(new Dimension(300, 0));
-//		this.topLine.setMinimumSize(new Dimension(300, 0));
-//		this.middleGroup.setMinimumSize(new Dimension(300, 0));
-
 	}
 
 	/**
@@ -379,6 +357,24 @@ public class ColumnEditView extends JPanel implements IView {
 			}
 		}
 		return true;
+	}
+	
+	/**
+	 * Deletes the task selected in the Task.
+	 */
+	protected void deleteSelectedStage() {
+		
+		if( stages.size() > 1) {
+			
+			if( JOptionPane.showConfirmDialog(this, "All tasks in this stage\nwill be archived.",
+				"Are you sure?",
+				JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION) return;
+			
+			Stage stage = stages.remove(stageJList.getSelectedIndex());
+			updateJListAndPublish();
+			gateway.toPresenter("LocalCache", "archiveTasksForStage", stage);
+		}
+		
 	}
 	
 	/**
@@ -416,6 +412,8 @@ public class ColumnEditView extends JPanel implements IView {
 			stageJList.setListData(stages.toArray(new Stage[0]));
 			if(pSelected != null && stages.contains(pSelected)) stageJList.setSelectedValue(pSelected, true);
 		}
+		
+		if( stages.size() <= 1 ) this.deleteBtn.setEnabled(false);
 	}
 
 	/**
@@ -448,9 +446,7 @@ public class ColumnEditView extends JPanel implements IView {
 	protected void changeNameStage(){
 		boolean valid = !TaskUtil.sanitizeInput(newName.getText()).isEmpty();
 		if (valid){
-			
-			//int index = stageJList.getSelectedIndex();	
-			//Stage stage = stageJList.getSelectedValue();
+
 			Stage stage;
 			
 			stage = stages.remove(stageJList.getSelectedIndex());
@@ -498,6 +494,7 @@ public class ColumnEditView extends JPanel implements IView {
 			
 		}else{
 			stages.add(new Stage(newStageName));
+			this.deleteBtn.setEnabled(true);
 			updateJListAndPublish();
 			titleEntry.setText("");
 			addButton.setEnabled(false);
@@ -509,6 +506,7 @@ public class ColumnEditView extends JPanel implements IView {
 	 * update the stage list with the values from the JList
 	 */
 	private void updateJListAndPublish() {
+		this.deleteBtn.setEnabled( stages.size() > 1);
 		Stage pS = stageJList.getSelectedValue();
 		stageJList.setListData(stages.toArray(new Stage[0]));
 		stageJList.setSelectedValue(pS, true);
@@ -517,7 +515,7 @@ public class ColumnEditView extends JPanel implements IView {
 	}
 
 	/**
-	 * Tell the cache that a change has occured
+	 * Tell the cache that a change has occurred
 	 */
 	private void publishStages() {
 		this.gateway.toPresenter("TaskPresenter", "publishChanges", stages);

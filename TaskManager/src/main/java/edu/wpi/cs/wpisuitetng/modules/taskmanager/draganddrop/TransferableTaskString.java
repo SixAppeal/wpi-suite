@@ -28,7 +28,6 @@ import edu.wpi.cs.wpisuitetng.modules.taskmanager.model.Task;
  * @author rnorlando
  *
  */
-
 public class TransferableTaskString implements Transferable  {
 
 	public static DataFlavor flavor = new DataFlavor(TransferableTaskString.class, "TransferableTaskString");
@@ -42,7 +41,6 @@ public class TransferableTaskString implements Transferable  {
 	 * constructor
 	 * @param s Json string
 	 */
-	
 	public TransferableTaskString(String jsonStringValue)
 	{
 		this.jsonTaskValue = jsonStringValue;

@@ -160,7 +160,7 @@ public class TaskEditView extends JPanel implements IView {
 		this.requirementTitles = new ArrayList<String>();
 		
 		this.category = new ColorComboBox();
-		this.category.setSelectedItem(this.task.getCategory());
+		this.category.setSelectedIndex(this.task.getCategory());
 
 		this.commentPanel.updateView(this.task);
 
@@ -559,8 +559,9 @@ public class TaskEditView extends JPanel implements IView {
 			MemberListHandler.getInstance().populateMembers(task.getAssignedTo());
 			this.updateMembers();
 			
-			if( ! this.category.getSelectedItem().equals(task.getCategory()) )
+			if( ! this.category.getSelectedItem().equals(task.getCategory()) ) {
 				this.category.setSelectedIndex(task.getCategory());
+			}
 			
 			if( !this.requirementsComboBox.getSelectedItem().equals(task.getCurrentRequirementName()) )
 					this.requirementsComboBox.setSelectedItem(task.getCurrentRequirementName());
@@ -656,7 +657,6 @@ public class TaskEditView extends JPanel implements IView {
 	 * @param updatedTask is the task that is set to the new task in the edit view. 
 	 */
 	public void updateEVTask(Task updatedTask){
-		//this.task.updateFrom(updatedTask);
 		this.task = updatedTask;
 		commentPanel.updateView(updatedTask);
 	}

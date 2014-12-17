@@ -20,24 +20,20 @@ import edu.wpi.cs.wpisuitetng.network.models.IRequest;
 /**
  * Request observer to track an add operation for the cache
  * @author nhhughes
- *
  */
 public class AddManager implements RequestObserver {
 
-	//private Cache localCache;
 	private String toUpdate;
 	private Gateway gateway;
 	private List<String> callbacks;
 	
 	/**
 	 * Initialize the observer with a copy of the cache and the gateway 
-	 * @param localCache cache to use
 	 * @param toUpdate type of object being added
 	 * @param gateway gateway to use
 	 * @param callbacks methods to be called upon success
 	 */
-	public AddManager(Cache localCache, String toUpdate, Gateway gateway, List<String> callbacks) {
-		//this.localCache = localCache;
+	public AddManager(String toUpdate, Gateway gateway, List<String> callbacks) {
 		this.toUpdate = toUpdate;
 		this.callbacks = callbacks;
 		this.gateway = gateway;
@@ -46,18 +42,14 @@ public class AddManager implements RequestObserver {
 
 	/**
 	 * Initialize the observer with a copy of the cache and the gateway plus a revocation callback
-	 * @param localCache cache to use
 	 * @param toUpdate type of object being added
 	 * @param gateway gateway to use
 	 * @param RevocationCallback callback method when something goes wrong
 	 */
 	public AddManager(Cache localCache, String toUpdate, Gateway gateway, String RevocationCallback) {
-		//this.localCache = localCache;
 		this.toUpdate = toUpdate;
 		this.callbacks = new ArrayList<String>();
-		//this.callbacks.add(RevocationCallback);
 		this.gateway = gateway; 
-		//TODO 
 	}
 	
 	@Override
